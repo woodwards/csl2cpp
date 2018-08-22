@@ -1,0 +1,5 @@
+Short guide to the csl2cpp project folders/files
+
+outstandings_issues.txt List of known issues 
+/docs/		miscellaneous background documents
+	

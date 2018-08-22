@@ -1,0 +1,8 @@
+Short list of known issues/to do
+
+Issues
+
+- acslx.exe can't build models if C:\Program Files\Git\bin\sh.exe is in the path
+- acslx.exe can't build models if C:\RTools\3.4\bin\sh.exe is in the path
+
+
