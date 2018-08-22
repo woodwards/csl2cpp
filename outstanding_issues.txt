@@ -1,0 +1,7 @@
+Short list of known issues/to do
+
+Issues
+
+- conflicts arise between ACSLX and C:\Program Files\Git\bin\sh.exe (linux shell simulator)
+- conflicts arise between ACSLX and C:\RTools\3.4\bin\sh.exe (linux shell simulator)
+
