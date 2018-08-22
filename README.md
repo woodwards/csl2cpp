@@ -1,6 +1,6 @@
 # csl2cpp
 
-### Scripts to convert CSL/ACSL/ACSLX code to C++/cpp/Rcpp using R/RStudio
+### Convert CSL/ACSL/ACSLX code to C++/cpp/Rcpp using R scripts in RStudio
 
 Since AEgis Technologies' ACSLX product is now defunct, legacy CSL models will need to be translated. 
 I chose C++ as the target language due to its wide use, speed, numerical integration capabilities via boost/odeint, and easy integration with R via Rcpp.
