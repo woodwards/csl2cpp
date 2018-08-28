@@ -1,5 +1,13 @@
 # csl2cpp_functions.r
 
+# convert object to string and back
+obj_to_str <- function(obj){
+  capture.output(dput(obj))
+}
+str_to_obj <- function(str){
+  eval(parse(text=str))
+}
+
 # split a line of code into tokens, strings, comments, etc
 code_split <- function(code){
   remaining <- code
@@ -9,7 +17,7 @@ code_split <- function(code){
     space="^[:blank:]+",
     comment="^!.*",
     token="^[:alpha:]+[[:alnum:]_]*",
-    assign="^\\=",
+    equals="^\\=",
     bracket="^\\(|^\\)",
     semicolon="^;",
     ampersand="^&",
@@ -26,7 +34,8 @@ code_split <- function(code){
     outlist[[outi]] <- "blank"
     outi <- outi + 1
     remaining <- ""
-  } else while (str_length(remaining) > 0){ # loop through elements
+  }
+  while (str_length(remaining) > 0){ # loop through elements
     next_match <- str_match(remaining, patterns)[,1]
     matchj <- which(!is.na(next_match))
     if (length(matchj) != 1){ # matches 0 or more than 1 pattern
@@ -44,6 +53,7 @@ code_split <- function(code){
   # return(capture.output(dput(compact(outlist)))) # return list as string
   return(compact(outlist)) # return list
 }
+# testing
 if (FALSE){
   code <- "sev55 = 1 + 1 !do something!''"
   x <- code_split(code)
