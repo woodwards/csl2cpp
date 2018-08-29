@@ -17,7 +17,8 @@ read_csl <- function(csl_file, silent=FALSE, drop_comments=FALSE){
     iconv(to="ASCII//TRANSLIT") %>% # remove accents
     as_tibble() %>%
     rename(code=value) %>%
-    mutate(line_number=as.double(seq(n())),
+    mutate(seq_number=as.double(seq(n())),
+           line_number=as.double(seq(n())),
            file_name=file_name)
 
   # find includes
@@ -31,14 +32,15 @@ read_csl <- function(csl_file, silent=FALSE, drop_comments=FALSE){
       cat(paste(thisi, csl$code[thisi], "\n"))
     file_name <- str_extract(csl$code[thisi], "[:alpha:]+[[:alnum:]_]*\\.csl")
     file_path <- paste(path_name, "/", file_name, sep="")
-    first <- csl$line_number[thisi]
-    last <- csl$line_number[thisi+1]
+    first <- csl$seq_number[thisi]
+    last <- csl$seq_number[thisi+1]
     # cat(file=stderr(), file_name, "\n")
     include_csl <- read_lines(file_path) %>%
       iconv(to="ASCII//TRANSLIT") %>% # remove accents
       as_tibble() %>%
       rename(code=value) %>%
-      mutate(line_number=first + as.double(seq(n())) / (n() + 1) * (last - first),
+      mutate(seq_number=first + as.double(seq(n())) / (n() + 1) * (last - first),
+             line_number=as.double(seq(n())),
              file_name=file_name)
 
     # append
@@ -51,7 +53,7 @@ read_csl <- function(csl_file, silent=FALSE, drop_comments=FALSE){
   }
 
   csl <- csl %>%
-    arrange(line_number)
+    arrange(seq_number)
 
   if (drop_comments){ # drop comments and blank lines
     csl <- csl %>%
