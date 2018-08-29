@@ -6,7 +6,8 @@ read_csl <- function(csl_file, silent=FALSE, drop_comments=FALSE){
   cat(file=stderr(), paste("reading", csl_file), "\n")
   cat(file=stderr(), paste("silent", silent), "\n")
   cat(file=stderr(), paste("drop_comments", drop_comments), "\n")
-  cat(file=stderr(), "WARNING: All INCLUDE files must be in the same directory *** paths ignored ***\n")
+  cat(file=stderr(), paste("ignore_path", TRUE), "\n")
+  # cat(file=stderr(), "WARNING: All INCLUDE files must be in the same directory *** paths ignored ***\n")
 
   # read file
   file_name <- str_extract(csl_file,  "[:alpha:]+[[:alnum:]_]*\\.csl")
