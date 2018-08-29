@@ -92,10 +92,11 @@ parse_csl <- function(csl, silent=FALSE){
 
   # control tokens
   declaration <- c("constant", "parameter", "cinterval", "integer", "logical", "doubleprecision")
-  control1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "else") # increase indent
+  control1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal") # increase indent
   control2 <- c("end", "endif") # decrease indent
   control3 <- c("termt", "schedule", "interval", "if") # no change to indent
-  control <- c(declaration, control1, control2, control3)
+  control4 <- c("else") # decrease and increase indent
+  control <- c(declaration, control1, control2, control3, control4)
 
   # prepare loop
   tokens      <- vector("character", 10000)
@@ -106,7 +107,7 @@ parse_csl <- function(csl, silent=FALSE){
   linei <- 1
   for (linei in 1:nrow(csl)){ # loop through lines
 
-    if (linei %% 500 == 500 %% 500 && !silent) cat(file=stderr(), linei, "\n")
+    if (linei %% 500 == 1 && !silent) cat(file=stderr(), linei, "of", nrow(csl), "\n")
 
     # parse next line
     code <- csl$code[linei]
@@ -125,8 +126,8 @@ parse_csl <- function(csl, silent=FALSE){
     csl$length[linei] <- length(parse_list) / 2
 
     # detect multi token controls
-    if_then <- str_detect(str_to_lower(parse_str), if_then_str)
     else_if_then <- str_detect(str_to_lower(parse_str), else_if_then_str)
+    if_then <- str_detect(str_to_lower(parse_str), if_then_str) && !else_if_then
     end_if <- str_detect(str_to_lower(parse_str), end_if_str)
 
     # identify line type
@@ -152,12 +153,16 @@ parse_csl <- function(csl, silent=FALSE){
     )
 
     # indent
-    if ((type1 == "token" && value1 %in% control1) || if_then || else_if_then){ # increase indent
+    if ((type1 == "token" && value1 %in% control1) || if_then){ # increase indent
       csl$indent[linei] <- indent
       indent <- indent + 1
     } else if ((type1 == "token" && value1 %in% control2) || end_if){ # decrease indent
       indent <- indent - 1
       csl$indent[linei] <- indent
+    } else if ((type1 == "token" && value1 %in% control4) || else_if_then){ # decrease and increase indent
+      indent <- indent - 1
+      csl$indent[linei] <- indent
+      indent <- indent + 1
     } else { # no change to indent
       csl$indent[linei] <- indent
     }

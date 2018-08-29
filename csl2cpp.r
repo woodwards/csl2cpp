@@ -29,9 +29,9 @@ plot1 <- ggplot() +
   scale_y_reverse()
 print(plot1)
 
-# split multiple statements on a line
+# multiple statements on a line, continuations
 # https://stackoverflow.com/questions/11561856/add-new-row-to-dataframe-at-specific-row-index-not-appended
-# or just leave them in
+# or just convert to the C++ syntax
 
 # output declarations, equations, comment, blank lines, identation
 
