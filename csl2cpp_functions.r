@@ -1,11 +1,30 @@
 # csl2cpp_functions.r
 
-# convert object to string and back
+# convert object to string
 obj_to_str <- function(obj){
   paste(capture.output(dput(obj)), collapse=" ") # paste avoids line breaks
 }
+
+# convert string to object
 str_to_obj <- function(str){
   eval(parse(text=str))
+}
+
+# return lines of csl with code matching pattern
+match_code <- function(csl, pattern, ignore_case=FALSE){
+  found <- str_detect(
+    str_replace(csl$code, ";?[:blank:]*(!.*)?$", ""), # ignore trailing ; and comments
+    regex(pattern, ignore_case=ignore_case)
+  )
+  return(which(found))
+}
+
+# insert row into dataframe
+# https://stackoverflow.com/questions/11561856/add-new-row-to-dataframe-at-specific-row-index-not-appended
+insert_row <- function(existingDF, newrow, r){
+  existingDF[seq(r+1,nrow(existingDF)+1),] <- existingDF[seq(r,nrow(existingDF)),]
+  existingDF[r,] <- newrow
+  existingDF
 }
 
 # split a line of code into tokens, strings, comments, etc
@@ -16,7 +35,8 @@ code_split <- function(code){
   patterns <- c(
     space="^[:blank:]+",
     comment="^!.*",
-    string=paste(c('^\\".*\\"', "^\\'.*\\'"), sep="", collapse="|"),
+    # string=paste(c('^\\".*\\"', "^\\'.*\\'"), sep="", collapse="|"),
+    string="^\\'.*\\'", # ACSL allows single quotes only
     token="^[:alpha:]+[[:alnum:]_]*",
     equals="^\\=",
     openbracket="^\\(",
@@ -27,13 +47,12 @@ code_split <- function(code){
     ampersand="^&",
     comma="^,",
     at="^\\.at\\.",
-    truefalse=paste("^\\.", c("true", "false"),
-                  "\\.", sep="", collapse="|"),
+    bool=paste("^\\.", c("true", "false"), "\\.", sep="", collapse="|"),
     logical=paste("^\\.", c("or", "and", "not", "eqv", "neqv", "ge", "gt", "le", "lt", "eq", "ne"),
                   "\\.", sep="", collapse="|"),
     # number="^[\\-\\+]?[0-9]*\\.?[0-9]+([ed][\\-\\+]?[0-9]+)?", # https://www.regular-expressions.info/floatingpoint.html
     number="^[0-9]*\\.?[0-9]+([ed][\\-\\+]?[0-9]+)?", # https://www.regular-expressions.info/floatingpoint.html
-    math="^[\\/\\*\\^\\-\\+]|^\\*\\*" # how to distinguish +/- from number? do this logic later
+    math="^[\\/\\*\\^\\-\\+]|^\\*\\*"
   )
   # whole line analysis
   if (str_detect(remaining, "^[:blank:]*$")){ # blank line
@@ -67,36 +86,50 @@ if (FALSE){
   obj_to_str(code_split(code))
   code = "xdd     =(-mass*-g - a*x)/mass"
   obj_to_str(code_split(code))
-  code = ""
+  code = "650.0 65 (65)"
   obj_to_str(code_split(code))
 }
 
 # parse csl$code for tokens and line types and indent
-parse_csl <- function(csl, silent=FALSE){
+parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
 
-  if (!silent) cat(file=stderr(), "parsing code for line type, tokens, indent", "\n")
+  if (!silent) cat(file=stderr(), "parsing code for tokens, line type, indent", "\n")
 
   # add columns to csl
   csl <- csl %>%
     mutate(
+      label = NA,
+      head = NA,
+      body = NA,
+      cont = NA,
+      tail = NA,
+      split = NA,
       parse_list = NA,
       line_type = NA,
       indent = NA,
       length = NA
     )
 
+  # start of line control tokens (e.g. not including INTEG, GO TO, etc)
+  declaration <- c("constant", "algorithm", "nsteps", "maxterval",
+                   "parameter", "cinterval", "integer", "logical", "doubleprecision")
+  control1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do") # increase indent
+  control2 <- c("end", "endif") # decrease indent
+  control3 <- c("termt", "schedule", "interval", "if", "goto") # no change to indent
+  control4 <- c("else") # decrease and increase indent
+  control <- c(declaration, control1, control2, control3, control4)
+
   # create regex strings for detection of multi token controls (crude)
   if_then_str <- "token.+if.+token.+then"
   else_if_then_str <- "token.+else.+token.+if.+token.+then"
-  end_if_str <- "token.+end.+token.+if"
 
-  # control tokens
-  declaration <- c("constant", "parameter", "cinterval", "integer", "logical", "doubleprecision")
-  control1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal") # increase indent
-  control2 <- c("end", "endif") # decrease indent
-  control3 <- c("termt", "schedule", "interval", "if") # no change to indent
-  control4 <- c("else") # decrease and increase indent
-  control <- c(declaration, control1, control2, control3, control4)
+  # other regex strings
+  label_str <- "^[:blank:]*[0-9]+[:blank:]*\\:|^[:blank:]*[:alpha:]+[[:alnum:]_]*[:blank:]*\\:"
+  control_str <- paste("^[:blank:]*", control, "(?![[:alnum:]_])", sep="", collapse="|")
+
+  # these statements can be split by comma
+  # splitwords <- c("constant", "integer", "logical")
+  # splittable <- FALSE
 
   # prepare loop
   tokens      <- vector("character", 10000)
@@ -105,20 +138,88 @@ parse_csl <- function(csl, silent=FALSE){
   indent <- 0
   continuation <- FALSE
   linei <- 1
-  for (linei in 1:nrow(csl)){ # loop through lines
+  while (linei <= nrow(csl)){ # loop through lines (this allows inserting rows into csl)
 
-    if (linei %% 500 == 1 && !silent) cat(file=stderr(), linei, "of", nrow(csl), "\n")
+    this_line <- csl[linei, ]
+    this_line_body <- this_line$code
+
+    # collapse various items
+    this_line_body <- str_replace(this_line_body, regex("\\$", ignore_case=TRUE), "")
+    this_line_body <- str_replace(this_line_body, regex("end[:blank:]*if", ignore_case=TRUE), "ENDIF")
+    this_line_body <- str_replace(this_line_body, regex("go[:blank:]*to", ignore_case=TRUE), "GOTO")
+
+    # use max() as a compact way to convert NA to ""
+    this_line_label <- max(str_extract(this_line_body, regex(label_str, ignore_case=TRUE)), "", na.rm=TRUE)
+    this_line_body <- str_replace(this_line_body, regex(label_str, ignore_case=TRUE), "") # strip label
+    this_line_head <- max(str_extract(this_line_body, regex(control_str, ignore_case=TRUE)), "", na.rm=TRUE)
+    this_line_body <- str_replace(this_line_body, regex(control_str, ignore_case=TRUE), "") # strip head
+    this_line_tail <- max(str_extract(this_line_body, "!.*$"), "", na.rm=TRUE)
+    this_line_body <- str_replace(this_line_body, "!.*$", "") # strip trailing comment
+    this_line_cont <- max(str_extract(this_line_body, "&[:blank:]*$"), "", na.rm=TRUE)
+    this_line_body <- str_replace(this_line_body, "&[:blank:]*$", "") # strip trailing &
+    this_line_body <- str_replace(this_line_body, ";[:blank:]*$", "") # strip trailing ;
+
+    csl$label[linei] <- this_line_label
+    csl$head[linei] <- this_line_head
+    csl$body[linei] <- this_line_body
+    csl$cont[linei] <- this_line_cont
+    csl$tail[linei] <- this_line_tail
+
+    # expand semicolon (easy in Molly)
+    pattern <- ";"
+    split_semicolon <- split_lines && (length(match_code(csl[linei, ], pattern)) == 1)
+    if (split_semicolon){
+      this_line <- csl[linei, ]
+      csl <- insert_row(csl, this_line, linei + 1) # duplicate this_line
+      temp <- str_split(this_line$code, pattern)[[1]]
+      csl$split[linei] <- temp[1]
+      csl$code[linei+1] <- "! semicolon split"
+      csl$split[linei+1] <- temp[2]
+    }
+
+    # # expand comma (more complicated)
+    # pattern <- ","
+    # if (!continuation){
+    #   str_detect_splitwords <- str_extract(csl$code[linei],
+    #                                        regex(paste("^[:blank:]*", splitwords, sep=""),
+    #                                              ignore_case=TRUE)
+    #                                        )
+    #   this_line_head <- str_detect_splitwords[!is.na(str_detect_splitwords)]
+    #   splittable <- any(!is.na(str_detect_splitwords))
+    #   split_comma <- split_lines && splittable
+    # } else{ # continuation
+    #   split_comma <- split_lines && splittable
+    # }
+    # if (split_comma){
+    #   # browser()
+    #   this_line <- csl[linei, ]
+    #   this_line_tail <- str_extract(this_line$code, ";?[:blank:]*&?[:blank:]*(!.*)?$")
+    #   this_line_body <- str_replace(this_line$code, ";?[:blank:]*&?[:blank:]*(!.*)?$", "")
+    #   this_line_body <- str_replace(this_line_body, regex(paste("^[:blank:]*", this_line_head, sep=""), ignore_case=TRUE), "")
+    #   # temp <- str_extract_all(this_line_body, "[[:alnum:][:space:]\\.\\-\\+]+\\=?[[:alnum:][:space:]\\.\\-\\+]*"  )[[1]] # look for assignments
+    #   temp <- str_split(this_line_body, pattern)[[1]] # look for commas (beware arrays)
+    #   # browser()
+    #   if (length(temp) > 1){
+    #     for (i in 1:length(temp)){
+    #       if (i == 1){
+    #         # csl$code[linei+(i-1)] <- # keep this for reference
+    #         csl$split[linei]       <- paste(this_line_head, temp[1], this_line_tail)
+    #       } else {
+    #         csl <- insert_row(csl, this_line, linei+(i-1)) # duplicate this_line
+    #         csl$code[linei+(i-1)] <- this_line_tail # carry &
+    #         csl$split[linei+(i-1)] <- paste(this_line_head, temp[i])
+    #       }
+    #     }
+    #   }
+    # }
+
+    # report progress
+    if (linei %% 200 == 1 && !silent) cat(file=stderr(), linei, "of", nrow(csl), "\n")
 
     # parse next line
-    code <- csl$code[linei]
-    parse_list <- code_split(code)
-
-    # handle semicolons not followed by comment
-    # semii <- str_detect(parse_list, "^semicolon\\s;$") & !lead(str_detect(parse_list, "^comment\\s!"), 1)
-    # stopifnot(sum(semii, na.rm=TRUE) <= 1)
-    # if (sum(semii) == 1){
-    #   cat(file=stderr(), code, "\n")
-    # }
+    # code <- csl$code[linei]
+    # parse_list <- code_split(code)
+    parse_list <- code_split(str_c(this_line_head, this_line_body))
 
     # convert parse list to string
     parse_str <- obj_to_str(parse_list)
@@ -128,7 +229,6 @@ parse_csl <- function(csl, silent=FALSE){
     # detect multi token controls
     else_if_then <- str_detect(str_to_lower(parse_str), else_if_then_str)
     if_then <- str_detect(str_to_lower(parse_str), if_then_str) && !else_if_then
-    end_if <- str_detect(str_to_lower(parse_str), end_if_str)
 
     # identify line type
     type1 <- parse_list[[1]] # get first item
@@ -144,7 +244,6 @@ parse_csl <- function(csl, silent=FALSE){
       continuation ~ "continuation",
       if_then ~ "ifthen", # drop _
       else_if_then ~ "elseifthen", # drop _
-      end_if ~ "endif", # drop _ to match token endif
       type1 == "token" && value1 %in% control ~ value1, # control word
       type1 == "comment" ~  "!", # comment
       type1 == "blank" ~  "", # blank line
@@ -156,15 +255,15 @@ parse_csl <- function(csl, silent=FALSE){
     if ((type1 == "token" && value1 %in% control1) || if_then){ # increase indent
       csl$indent[linei] <- indent
       indent <- indent + 1
-    } else if ((type1 == "token" && value1 %in% control2) || end_if){ # decrease indent
-      indent <- indent - 1
-      csl$indent[linei] <- indent
     } else if ((type1 == "token" && value1 %in% control4) || else_if_then){ # decrease and increase indent
       indent <- indent - 1
       csl$indent[linei] <- indent
       indent <- indent + 1
-    } else { # no change to indent
+    } else if ((type1 == "token" && value1 %in% control2) || label){ # decrease indent
+      indent <- indent - 1
       csl$indent[linei] <- indent
+    } else { # no change to indent
+      csl$indent[linei] <- indent + ifelse(continuation, 1, 0) # indent continuation
     }
 
     # gather tokens
@@ -196,18 +295,25 @@ parse_csl <- function(csl, silent=FALSE){
     }
 
     # continuation?
-    if ((type1 == "ampersand") || (prevtype1 == "ampersand" && type1 == "comment")) {
-      continuation <- TRUE
-    } else {
-      continuation <- FALSE
-    }
+    continuation <- this_line_cont != ""
 
-  }
+    # next line
+    linei <- linei + 1
+
+  } # end while
 
   # token table (use rownames)
   token_df <- data.frame(name = tokens, line = tokens_line, stringsAsFactors = FALSE) %>%
     filter(name > "") %>%
-    arrange(name)
+    mutate(lower = str_to_lower(name)) %>%
+    group_by(lower) %>%
+    summarise(
+      name = max(name),
+      lines = obj_to_str(line)
+      # lines = paste(line, collapse=",")
+    )
 
   return(list(csl=csl, tokens=token_df))
 }
+
+
