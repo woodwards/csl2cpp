@@ -93,7 +93,9 @@ if (FALSE){
 # parse csl$code for tokens and line types and indent
 parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
 
-  if (!silent) cat(file=stderr(), "parsing code for tokens, line type, indent", "\n")
+  if (!silent){
+    cat(file=stderr(), "parsing code for tokens, line type, indent", "\n")
+  }
 
   # add columns to csl
   csl <- csl %>%
@@ -119,11 +121,10 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
   control4 <- c("else") # decrease and increase indent
   control <- c(declaration, control1, control2, control3, control4)
 
-  # create regex strings for detection of multi token controls (crude)
+  # create regex strings for detection
+  integ_str <- "token.+integ"
   if_then_str <- "token.+if.+token.+then"
   else_if_then_str <- "token.+else.+token.+if.+token.+then"
-
-  # other regex strings
   label_str <- "^[:blank:]*[0-9]+[:blank:]*\\:|^[:blank:]*[:alpha:]+[[:alnum:]_]*[:blank:]*\\:"
   control_str <- paste("^[:blank:]*", control, "(?![[:alnum:]_])", sep="", collapse="|")
 
@@ -136,29 +137,57 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
   tokens_line <- vector("integer", 10000)
   tokeni <- 1
   indent <- 0
-  continuation <- FALSE
+  is_continuation <- FALSE
   linei <- 1
   while (linei <= nrow(csl)){ # loop through lines (this allows inserting rows into csl)
 
+    # report progress
+    if (linei %% 200 == 1 && !silent){
+      cat(file=stderr(), linei, "of", nrow(csl), "\n")
+    }
+
+    # get line
     this_line <- csl[linei, ]
     this_line_body <- this_line$code
 
-    # collapse various items
-    this_line_body <- str_replace(this_line_body, regex("\\$", ignore_case=TRUE), "")
-    this_line_body <- str_replace(this_line_body, regex("end[:blank:]*if", ignore_case=TRUE), "ENDIF")
-    this_line_body <- str_replace(this_line_body, regex("go[:blank:]*to", ignore_case=TRUE), "GOTO")
-
     # use max() as a compact way to convert NA to ""
-    this_line_label <- max(str_extract(this_line_body, regex(label_str, ignore_case=TRUE)), "", na.rm=TRUE)
-    this_line_body <- str_replace(this_line_body, regex(label_str, ignore_case=TRUE), "") # strip label
-    this_line_head <- max(str_extract(this_line_body, regex(control_str, ignore_case=TRUE)), "", na.rm=TRUE)
-    this_line_body <- str_replace(this_line_body, regex(control_str, ignore_case=TRUE), "") # strip head
-    this_line_tail <- max(str_extract(this_line_body, "!.*$"), "", na.rm=TRUE)
-    this_line_body <- str_replace(this_line_body, "!.*$", "") # strip trailing comment
-    this_line_cont <- max(str_extract(this_line_body, "&[:blank:]*$"), "", na.rm=TRUE)
-    this_line_body <- str_replace(this_line_body, "&[:blank:]*$", "") # strip trailing &
-    this_line_body <- str_replace(this_line_body, ";[:blank:]*$", "") # strip trailing ;
 
+    # label
+    this_line_label <- max(str_extract(this_line_body, label_str), "", na.rm=TRUE)
+    if (this_line_label > ""){
+      has_label <- TRUE
+      this_line_body <- str_replace(this_line_body, this_line_label, "") # strip label
+    } else {
+      has_label <- FALSE
+    }
+
+    # collapse various items
+    this_line_body <- str_replace(this_line_body, regex("end[:blank:]*if", ignore_case=TRUE), "ENDIF")
+    this_line_body <- str_replace(this_line_body, regex( "go[:blank:]*to", ignore_case=TRUE), "GOTO")
+
+    # head
+    this_line_head <- max(str_extract(this_line_body, regex(control_str, ignore_case=TRUE)), "", na.rm=TRUE)
+    if (this_line_head > ""){
+      this_line_body <- str_replace(this_line_body, this_line_head, "") # strip head
+    }
+
+    # tail
+    this_line_tail <- max(str_extract(this_line_body, "!.*$"), "", na.rm=TRUE)
+    if (this_line_tail > ""){
+      this_line_body <- str_replace(this_line_body, this_line_tail, "") # strip trailing comment
+    }
+
+    # continuation
+    this_line_cont <- max(str_extract(this_line_body, "&[:blank:]*$"), "", na.rm=TRUE)
+    if (this_line_cont > ""){
+      this_line_body <- str_replace(this_line_body, this_line_cont, "") # strip trailing &
+    }
+
+    # trailing ; or $
+    this_line_body <- str_replace(this_line_body, "\\$[:blank:]*$", "")
+    this_line_body <- str_replace(this_line_body,   ";[:blank:]*$", "")
+
+    # store
     csl$label[linei] <- this_line_label
     csl$head[linei] <- this_line_head
     csl$body[linei] <- this_line_body
@@ -179,7 +208,7 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
 
     # # expand comma (more complicated)
     # pattern <- ","
-    # if (!continuation){
+    # if (!is_continuation){
     #   str_detect_splitwords <- str_extract(csl$code[linei],
     #                                        regex(paste("^[:blank:]*", splitwords, sep=""),
     #                                              ignore_case=TRUE)
@@ -213,12 +242,7 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
     #   }
     # }
 
-    # report progress
-    if (linei %% 200 == 1 && !silent) cat(file=stderr(), linei, "of", nrow(csl), "\n")
-
     # parse next line
-    # code <- csl$code[linei]
-    # parse_list <- code_split(code)
     parse_list <- code_split(str_c(this_line_head, this_line_body))
 
     # convert parse list to string
@@ -227,6 +251,7 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
     csl$length[linei] <- length(parse_list) / 2
 
     # detect multi token controls
+    has_integ <- str_detect(str_to_lower(parse_str), integ_str)
     else_if_then <- str_detect(str_to_lower(parse_str), else_if_then_str)
     if_then <- str_detect(str_to_lower(parse_str), if_then_str) && !else_if_then
 
@@ -241,7 +266,8 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
       value2 <- ""
     }
     csl$line_type[linei] <- case_when(
-      continuation ~ "continuation",
+      has_integ ~ "integ",
+      is_continuation ~ "continuation",
       if_then ~ "ifthen", # drop _
       else_if_then ~ "elseifthen", # drop _
       type1 == "token" && value1 %in% control ~ value1, # control word
@@ -259,11 +285,11 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
       indent <- indent - 1
       csl$indent[linei] <- indent
       indent <- indent + 1
-    } else if ((type1 == "token" && value1 %in% control2) || label){ # decrease indent
+    } else if ((type1 == "token" && value1 %in% control2) || has_label){ # decrease indent
       indent <- indent - 1
       csl$indent[linei] <- indent
     } else { # no change to indent
-      csl$indent[linei] <- indent + ifelse(continuation, 1, 0) # indent continuation
+      csl$indent[linei] <- indent + ifelse(is_continuation, 1, 0) # indent continuation
     }
 
     # gather tokens
@@ -295,7 +321,7 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
     }
 
     # continuation?
-    continuation <- this_line_cont != ""
+    is_continuation <- this_line_cont != ""
 
     # next line
     linei <- linei + 1

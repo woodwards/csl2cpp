@@ -1,36 +1,38 @@
 # csl2cpp translator
 # Simon Woodward, DairyNZ Ltd, 2018
 
+# libraries
 library(tidyverse)
+
+# functions
 source("csl2cpp_functions.r")
 source("csl2cpp_read.r")
 
+# options
 options(warn=2) # raise warnings for testing
 
-# point to files
+# file names
 csl_file <- "spring/Spring.csl"
-csl_file <- "molly/Molly.csl"
-cpp_file <- "molly/output.cpp"
+# csl_file <- "molly/Molly.csl"
+file_name <- str_extract(csl_file,  "[:alpha:]+[[:alnum:]_]*\\.csl")
+path_name <- str_extract(csl_file, "^[:alpha:]+[[:alnum:]_]*") # fails if path has punctuation
+temp_file <- paste(path_name, "parse_results.rds", sep="/")
+cpp_file <- paste(path_name, "output.cpp", sep="/")
 
-# read lines
-csl <- read_csl(csl_file, silent=TRUE, drop_comments=TRUE)
+# read or load csl
+if (FALSE){ # read from source
+  cat(file=stderr(), "reading code", "\n")
+  csl <- read_csl(csl_file, silent=FALSE, drop_comments=FALSE)   # read lines
+  cat(file=stderr(), "parsing code", "\n")
+  temp <- parse_csl(csl, silent=FALSE, split_lines=FALSE) # parse lines, returns list(csl, tokens)
+  cat(file=stderr(), paste("saving", temp_file), "\n")
+  saveRDS(temp, file=temp_file) # save data
+} else { # read from preprocessed
+  cat(file=stderr(), paste("loading", temp_file), "\n")
+  temp <- readRDS(file=temp_file) # read prepocessed data
+}
 
-# split lines on ; (actually very easy for Molly)
-# pattern <- ";"
-# lines <- match_code(csl, pattern)
-# temp <- csl[lines, ] # for debugging
-# lines <- sort(lines, decreasing=TRUE) # avoids messing up line numbers
-# linei <- lines[1]
-# for (linei in lines){
-#   this_row <- csl[linei, ]
-#   csl <- insert_row(csl, this_row, linei + 1) # duplicate this_row
-#   temp <- str_split(this_row$code, pattern)[[1]]
-#   csl$code[linei] <- temp[1]
-#   csl$code[linei+1] <- temp[2]
-# }
-
-# parse lines
-temp <- parse_csl(csl, silent=FALSE, split_lines=FALSE) # returns list(csl, tokens)
+# split parse_csl output
 csl <- temp$csl
 tokens <- temp$tokens
 
