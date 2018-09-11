@@ -10,9 +10,12 @@ public:
 	// declare state_type
 	typedef boost::array< double , 3 > state_type;
 
+<<<<<<< HEAD
 	// container for variables
 //	std::unordered_map<std::string, double> d;
 
+=======
+>>>>>>> 1440ac92eea6b7ebe1cf5ffb52818575a8b19891
 	// generic system properties
 	double system_time;
 
