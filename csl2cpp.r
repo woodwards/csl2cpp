@@ -14,35 +14,28 @@ options(warn=2) # raise warnings for testing
 # file names
 csl_file <- "spring/Spring.csl"
 # csl_file <- "molly/Molly.csl"
+already_preprocessed <- TRUE
 file_name <- str_extract(csl_file,  "[:alpha:]+[[:alnum:]_]*\\.csl")
 path_name <- str_extract(csl_file, "^[:alpha:]+[[:alnum:]_]*") # fails if path has punctuation
 temp_file <- paste(path_name, "parse_results.rds", sep="/")
 cpp_file <- paste(path_name, "output.cpp", sep="/")
 
 # read or load csl
-if (FALSE){ # read from source
+if (!already_preprocessed){ # read from source
   cat(file=stderr(), "reading code", "\n")
   csl <- read_csl(csl_file, silent=FALSE, drop_comments=FALSE)   # read lines
   cat(file=stderr(), "parsing code", "\n")
   temp <- parse_csl(csl, silent=FALSE, split_lines=FALSE) # parse lines, returns list(csl, tokens)
+  csl <- temp$csl
+  tokens <- temp$tokens
   cat(file=stderr(), paste("saving", temp_file), "\n")
   saveRDS(temp, file=temp_file) # save data
 } else { # read from preprocessed
   cat(file=stderr(), paste("loading", temp_file), "\n")
   temp <- readRDS(file=temp_file) # read prepocessed data
+  csl <- temp$csl
+  tokens <- temp$tokens
 }
-
-# split parse_csl output
-csl <- temp$csl
-tokens <- temp$tokens
-
-# look at subset
-temp <- csl[match_code(csl, ";"), ]
-
-# analyse assignments
-
-# find code patterns (each line is a pattern?)
-# do I need to analyse them or just translate them to C++?
 
 # plot code!
 y <- 1:nrow(csl)
@@ -52,9 +45,15 @@ plot1 <- ggplot() +
   scale_y_reverse()
 print(plot1)
 
-# multiple statements on a line, continuations
-# https://stackoverflow.com/questions/11561856/add-new-row-to-dataframe-at-specific-row-index-not-appended
-# or just convert to the C++ syntax
+# look at subset
+# temp <- csl[match_code(csl, ";"), ]
+
+# analyse assignments
+
+# find code patterns (each line is a pattern?)
+# do I need to analyse them or just translate them to C++?
+
+# multiple statements on a line, continuations, or just convert to the C++ syntax
 
 # output declarations, equations, comment, blank lines, identation
 
