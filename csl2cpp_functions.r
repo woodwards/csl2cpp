@@ -174,13 +174,13 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
     # tail
     this_line_tail <- max(str_extract(this_line_body, "!.*$"), "", na.rm=TRUE)
     if (this_line_tail > ""){
-      this_line_body <- str_replace(this_line_body, this_line_tail, "") # strip trailing comment
+      this_line_body <- str_replace(this_line_body, "!.*$", "") # strip trailing comment
     }
 
     # continuation
     this_line_cont <- max(str_extract(this_line_body, "&[:blank:]*$"), "", na.rm=TRUE)
     if (this_line_cont > ""){
-      this_line_body <- str_replace(this_line_body, this_line_cont, "") # strip trailing &
+      this_line_body <- str_replace(this_line_body, "&[:blank:]*$", "") # strip trailing &
     }
 
     # trailing ; or $
