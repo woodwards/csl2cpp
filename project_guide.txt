@@ -1,5 +1,11 @@
 Short guide to the csl2cpp project folders/files
 
-outstandings_issues.txt List of known issues 
+outstandings_issues.txt List of known issues
+csl2cpp.r		R script for translating a CSL file to a C++ class
+csl2cpp_read.r	R functions for reading a CSL file to a dataframe
+csl2cpp_parse.r	R functions for parsing a CSL file in a dataframe
+csl2cpp_write.r	R functions for writing a C++ class from a parsed dataframe
 /docs/		miscellaneous background documents
-	
+/spring/		acslX spring example and equivalent C++ code
+/molly/		acslX Molly cow model and equivalent C++ code
+

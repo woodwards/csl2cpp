@@ -1,11 +1,9 @@
 #include <iostream>
 #include <fstream>
 
-#include "spring_extra.cpp"
+#include "spring.cpp"
 
-using namespace std;
-
-ofstream data("spring_cpp_output.tsv");
+std::ofstream data("spring_cpp_output.tsv");
 
 int main()
 {
@@ -14,22 +12,18 @@ int main()
     double time_step = 0.02; // default CINT = 0.1
     double end_time = 3.99;
 
-    spring_extra my_spring;
-    my_spring.initialise_time( start_time );
-    my_spring.initialise_state();
-	double a_time;
-	spring_extra::state_type a_state;
+    spring my_spring;
+    my_spring.initialise_model( start_time );
 
 	int nsteps;
 
     for( double time = start_time ; time < end_time ; time = time + time_step ){
 
-		nsteps = my_spring.advance( time , time_step / 10.0 ); // default NSTP = 10
-		a_time = my_spring.get_time();
-		a_state = my_spring.get_state();
+		nsteps = my_spring.advance_model( time , time_step / 10.0 ); // default NSTP = 10
+		my_spring.pull_variables_from_model();
 
-		cout << nsteps << '\t' << a_time << '\t' << a_state[0] << '\t' << a_state[1] << '\t' << a_state[2] << endl;
-		data << nsteps << '\t' << a_time << '\t' << a_state[0] << '\t' << a_state[1] << '\t' << a_state[2] << endl;
+		std::cout << nsteps << '\t' << my_spring.variable["system_time"] << '\t' << my_spring.variable["time"] << '\t' << my_spring.variable["xd"] << '\t' << my_spring.variable["x"] << std::endl;
+     	     data << nsteps << '\t' << my_spring.variable["system_time"] << '\t' << my_spring.variable["time"] << '\t' << my_spring.variable["xd"] << '\t' << my_spring.variable["x"] << std::endl;
 
     }
 

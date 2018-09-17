@@ -5,8 +5,8 @@
 library(tidyverse)
 
 # functions
-source("csl2cpp_functions.r")
 source("csl2cpp_read.r")
+source("csl2cpp_parse.r")
 
 # options
 options(warn=2) # raise warnings for testing

@@ -1,5 +1,7 @@
 # depslib dependency file v1.0
-1536631279 source:i:\simon\projects\molly translation\csl2cpp\spring\spring.cpp
+1536879588 source:i:\simon\projects\molly translation\csl2cpp\spring\spring.cpp
+	<unordered_map>
+	<string>
 	<boost/numeric/odeint.hpp>
 
 1513209400 c:\boost\boost_1_66_0\boost\algorithm\string.hpp
@@ -13191,12 +13193,14 @@
 	<sstream>
 	<boost/numeric/odeint.hpp>
 
-1536630594 source:i:\simon\projects\molly translation\csl2cpp\spring\main.cpp
+1536964016 source:i:\simon\projects\molly translation\csl2cpp\spring\main.cpp
 	<iostream>
 	<fstream>
-	"spring_extra.cpp"
+	"spring.cpp"
 
-1536632086 i:\simon\projects\molly translation\csl2cpp\spring\spring.cpp
+1536879588 i:\simon\projects\molly translation\csl2cpp\spring\spring.cpp
+	<unordered_map>
+	<string>
 	<boost/numeric/odeint.hpp>
 
 1536631538 i:\simon\projects\molly translation\csl2cpp\spring\spring_extra.cpp
@@ -13204,4 +13208,21 @@
 
 1536631323 source:i:\simon\projects\molly translation\csl2cpp\spring\spring_extra.cpp
 	"spring.cpp"
+
+1536958444 source:i:\simon\projects\molly_translation\csl2cpp\spring\spring.cpp
+	<unordered_map>
+	<string>
+	<boost/numeric/odeint.hpp>
+	<boost/array.hpp>
+
+1537215146 source:i:\simon\projects\molly_translation\csl2cpp\spring\main.cpp
+	<iostream>
+	<fstream>
+	"spring.cpp"
+
+1536958444 i:\simon\projects\molly_translation\csl2cpp\spring\spring.cpp
+	<unordered_map>
+	<string>
+	<boost/numeric/odeint.hpp>
+	<boost/array.hpp>
 
