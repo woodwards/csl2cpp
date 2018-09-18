@@ -7,6 +7,8 @@ library(tidyverse)
 # functions
 source("csl2cpp_read.r")
 source("csl2cpp_parse.r")
+source("csl2cpp_make.r")
+source("csl2cpp_write.r")
 
 # options
 options(warn=2) # raise warnings for testing
@@ -37,7 +39,7 @@ if (!already_preprocessed){ # read from source
   tokens <- temp$tokens
 }
 
-# plot code!
+# plot code for fun!
 y <- 1:nrow(csl)
 plot1 <- ggplot() +
   labs(title=csl_file, x="Width", y="Line Number") +
@@ -47,6 +49,13 @@ print(plot1)
 
 # look at subset
 # temp <- csl[match_code(csl, ";"), ]
+
+model_name <- path_name
+cat(file=stderr(), "making cpp code", "\n")
+cpp <- make_cpp(csl, model_name)
+cpp_df <- as_data_frame(cpp)
+cat(file=stderr(), "writing cpp code", "\n")
+write_cpp(cpp, path_name, model_name)
 
 # analyse assignments
 

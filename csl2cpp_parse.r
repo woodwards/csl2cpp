@@ -1,4 +1,4 @@
-# csl2cpp_functions.r
+# parse csl code and initial analysis
 
 # convert object to string
 obj_to_str <- function(obj){
