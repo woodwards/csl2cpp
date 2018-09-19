@@ -105,6 +105,7 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
       body = NA,
       cont = NA,
       tail = NA,
+      tail_loc = NA,
       parse_list = NA,
       line_type = NA,
       indent = NA,
@@ -141,7 +142,7 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
   while (linei <= nrow(csl)){ # loop through lines (this allows inserting rows into csl)
 
     # report progress
-    if (linei %% 200 == 1 && !silent){
+    if ((linei %% 200 == 1 || linei == nrow(csl)) && !silent){
       cat(file=stderr(), "line", linei, "of", nrow(csl), "\n")
     }
 
@@ -203,7 +204,7 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
       cat("line", linei, "dropping semicolon", "\n")
       this_line <- csl[linei, ]
       csl <- insert_row(csl, this_line, linei + 1) # duplicate this_line
-      temp <- str_split(this_line_body, pattern)[[1]]
+      temp <- str_split(this_line_body, ";")[[1]]
       this_line_body <- temp[1]
       csl$body[linei] <- this_line_body
       # create a false line containing  the remaining code
@@ -338,6 +339,11 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
   i <- 1
   for (i in 1:nrow(csl)){
 
+    # report progress
+    if ((i %% 200 == 1 || i == nrow(csl)) && !silent){
+      cat(file=stderr(), "line", linei, "of", nrow(csl), "\n")
+    }
+
     # identify major section
     if (csl$head[i] %in% major_sections){
       major_section <- csl$head[i]
@@ -440,7 +446,13 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
 
   } # end loop
 
-
+  # prepare comments
+  csl$tail <- str_trim(str_replace(csl$tail, "^! ?", "// "))
+  csl$tail_loc <- case_when(
+    csl$tail == "" & csl$line_type != "blank" ~ "",
+    !is.na(csl$init) ~ "init",
+    TRUE ~ "calc"
+  )
 
   # return result
   return(list(csl=csl, tokens=token_df))

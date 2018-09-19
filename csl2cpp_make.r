@@ -22,7 +22,7 @@ make_cpp <- function(csl, model_name, silent=FALSE){
 	n_variable <- length(variable)
 
 	# create an empty vector of strings
-	cpp <- vector("character", nrow(csl))
+	cpp <- vector("character", nrow(csl) + 200) # estimate output length
 	attr(cpp, "row") <- 0 # create an attribute for the row counter
 
 	# header
@@ -37,20 +37,17 @@ make_cpp <- function(csl, model_name, silent=FALSE){
 	cpp <- put_lines(cpp, 0, lines)
 
 	# class
-	cpp <- put_lines(cpp, 0, c(paste("class", model_name, "{"), ""))
-	cpp <- put_lines(cpp, 0, c("public:", ""))
-	lines <- c("// unordered_map gives user efficient access to variables by name",
-			   "std::unordered_map< std::string , double > variable;")
-	cpp <- put_lines(cpp, 1, lines)
-	cpp <- put_lines(cpp, 0, c("", "private:", ""))
-	lines <- c("// declare state_type and system_time",
-			   paste("typedef boost::array< double ,", n_state, "> state_type;"),
-			   "double system_time;", "",
-			   "// specify number of variables available to user",
-			   paste("static constexpr int system_variables =", n_variable,";"), "",
-			   "// declare boost::odeint stepper",
-			   "typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;",
-			   "stepper_type stepper;", "")
+	cpp <- put_lines(cpp, 0, c(paste("class", model_name, "{"), "",
+	                           "private:", ""))
+	lines <- c("// specify number of variables",
+              paste("static constexpr int n_state_variables =", n_state,";"),
+              paste("static constexpr int n_visible_variables =", n_variable,";"), "",
+              "// declare state_type and system_time",
+              paste("typedef boost::array< double , n_state_variables > state_type;"),
+              "double system_time;", "",
+              "// declare boost::odeint stepper",
+              "typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;",
+              "stepper_type stepper;", "")
 	cpp <- put_lines(cpp, 1, lines)
 
 	# declare state variables
@@ -63,28 +60,51 @@ make_cpp <- function(csl, model_name, silent=FALSE){
              paste("double", setdiff(variable, state), ";"), "")
   cpp <- put_lines(cpp, 1, lines)
 
+  # get state
+  cpp <- put_lines(cpp, 1, c("// get state",
+                             "state_type get_state ( ) {"))
+  cpp <- put_lines(cpp, 2, c("", "state_type a_state;", "", "// return current state"))
+  lines <- paste("a_state[", 0:(n_state-1), "] = ", state, ";", sep="")
+  cpp <- put_lines(cpp, 2, lines)
+  cpp <- put_lines(cpp, 2, c("", "return( a_state );"))
+  cpp <- put_lines(cpp, 1, c("", "}", ""))
+
+  # set state
+  cpp <- put_lines(cpp, 1, c("// set state",
+                             "void set_state ( state_type a_state ) {"))
+  cpp <- put_lines(cpp, 2, c("", "// set state"))
+  lines <- paste(state, " = a_state[", 0:(n_state-1), "];", sep="")
+  cpp <- put_lines(cpp, 2, lines)
+  cpp <- put_lines(cpp, 1, c("", "}"))
+
 	# constructor
 	cpp <- put_lines(cpp, 0, c("", "public:", ""))
+	lines <- c("// unordered_map gives user efficient access to variables by name",
+	           "std::unordered_map< std::string , double > variable;", "")
+	cpp <- put_lines(cpp, 1, lines)
 	lines <- c("// constructor",
 			   paste(model_name, "( ) {"), "")
 	cpp <- put_lines(cpp, 1, lines)
 	lines <- c("// reserve buckets to minimise storage and avoid rehashing",
-			   "variable.reserve( system_variables );")
+			   "variable.reserve( n_visible_variables );")
 	cpp <- put_lines(cpp, 2, lines)
-	cpp <- put_lines(cpp, 1, c("", "}"))
+	cpp <- put_lines(cpp, 1, c("", "}", ""))
 
 	# initialise model
-	cpp <- put_lines(cpp, 0, "")
-	cpp <- put_lines(cpp, 1, "void initialise_model ( double a_system_time ) {")
+	cpp <- put_lines(cpp, 1, c("void initialise_model ( double a_system_time ) {"))
 	cpp <- put_lines(cpp, 2, c("", "// initialise system_time",
 	                           "system_time = a_system_time;", "",
 	                           "// initialise model"))
-	lines <- paste(csl$init[!is.na(csl$init)], ";")
+	# lines <- paste(csl$init[!is.na(csl$init)], ";",
+	#                csl$tail[csl$tail_loc=="init"]) # with tail comments
+	rows <- !is.na(csl$init) | csl$tail_loc=="init"
+	lines <- paste(pmax(csl$init[rows], "", na.rm=TRUE),
+	               if_else(is.na(csl$init[rows]), "", ";"),
+	               csl$tail[rows], sep="") # with tail comments
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "}", ""))
 
 	# pull variables from model
-	cpp <- put_lines(cpp, 0, "")
 	cpp <- put_lines(cpp, 1, "void pull_variables_from_model ( ) {")
 	cpp <- put_lines(cpp, 2, c("", "// pull system time",
 	                           "variable[\"system_time\"] = system_time;", "",
@@ -94,7 +114,6 @@ make_cpp <- function(csl, model_name, silent=FALSE){
 	cpp <- put_lines(cpp, 1, c("", "}", ""))
 
 	# push variables to model
-	cpp <- put_lines(cpp, 0, "")
 	cpp <- put_lines(cpp, 1, "void push_variables_to_model ( ) {")
 	cpp <- put_lines(cpp, 2, c("", "// push system time",
 	                           "system_time = variable[\"system_time\"];", "",
@@ -103,27 +122,13 @@ make_cpp <- function(csl, model_name, silent=FALSE){
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "}", ""))
 
-	# get state
-	cpp <- put_lines(cpp, 0, c("", "private:", ""))
-	cpp <- put_lines(cpp, 1, "state_type get_state ( ) {")
-	cpp <- put_lines(cpp, 2, c("", "state_type a_state;", "", "// return current state"))
-	lines <- paste("a_state[", 0:(n_state-1), "] = ", state, ";", sep="")
-	cpp <- put_lines(cpp, 2, lines)
-	cpp <- put_lines(cpp, 2, c("", "return( a_state );"))
-	cpp <- put_lines(cpp, 1, c("", "}", ""))
-
-	# set state
-	cpp <- put_lines(cpp, 1, "void set_state ( state_type a_state ) {")
-	cpp <- put_lines(cpp, 2, c("", "// set state"))
-	lines <- paste(state, " = a_state[", 0:(n_state-1), "];", sep="")
-	cpp <- put_lines(cpp, 2, lines)
-	cpp <- put_lines(cpp, 1, c("", "}"))
-
 	# calculate rate
-	cpp <- put_lines(cpp, 0, c("", "public:", ""))
 	cpp <- put_lines(cpp, 1, "void calculate_rate ( ) {")
 	cpp <- put_lines(cpp, 2, c("", "// calculations"))
-	lines <- paste(csl$calc[!is.na(csl$calc)], ";")
+	rows <- !is.na(csl$calc) | csl$tail_loc=="calc"
+	lines <- paste(pmax(csl$calc[rows], "", na.rm=TRUE),
+	               if_else(is.na(csl$calc[rows]), "", ";"),
+	               csl$tail[rows], sep="") # with tail comments
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "}", ""))
 
@@ -139,10 +144,9 @@ make_cpp <- function(csl, model_name, silent=FALSE){
 	                           "// return rate"))
 	lines <- paste("a_rate[", 0:(n_state-1), "]", rate, ";", sep="")
 	cpp <- put_lines(cpp, 2, lines)
-	cpp <- put_lines(cpp, 1, c("", "}"))
+	cpp <- put_lines(cpp, 1, c("", "}", ""))
 
 	# close class
-	cpp <- put_lines(cpp, 0, c("", "public:", ""))
 	lines <- c("int advance_model ( double end_time , double time_step ) {", "")
 	cpp <- put_lines(cpp, 1, lines)
 	lines <- c("double a_time;",

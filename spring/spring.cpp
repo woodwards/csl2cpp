@@ -9,19 +9,15 @@
 
 class spring {
 
-public:
-
-	// unordered_map gives user efficient access to variables by name
-	std::unordered_map< std::string , double > variable;
-
 private:
 
-	// declare state_type and system_time
-	typedef boost::array< double , 3 > state_type;
-	double system_time;
+	// specify number of variables
+	static constexpr int n_state_variables = 3 ;
+	static constexpr int n_visible_variables = 12 ;
 	
-	// specify number of variables available to user
-	static constexpr int system_variables = 12 ;
+	// declare state_type and system_time
+	typedef boost::array< double , n_state_variables > state_type;
+	double system_time;
 	
 	// declare boost::odeint stepper
 	typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;
@@ -43,36 +39,61 @@ private:
 	double xdic ;
 	double tstp ;
 	
+	// get state
+	state_type get_state ( ) {
+		
+		state_type a_state;
+		
+		// return current state
+		a_state[0] = time;
+		a_state[1] = xd;
+		a_state[2] = x;
+		
+		return( a_state );
+	
+	}
+	
+	// set state
+	void set_state ( state_type a_state ) {
+		
+		// set state
+		time = a_state[0];
+		xd = a_state[1];
+		x = a_state[2];
+	
+	}
 
 public:
 
+	// unordered_map gives user efficient access to variables by name
+	std::unordered_map< std::string , double > variable;
+	
 	// constructor
 	spring ( ) {
 	
 		// reserve buckets to minimise storage and avoid rehashing
-		variable.reserve( system_variables );
+		variable.reserve( n_visible_variables );
 	
 	}
-
+	
 	void initialise_model ( double a_system_time ) {
 		
 		// initialise system_time
 		system_time = a_system_time;
 		
-		// initialisation
-		k = 0.12 ;
-		a = 1.0 ;
-		w = 1.0 ; g = 9.81 ;
-		mass = 0.03 ;
-		time = 0.0 ;
-		xic = 0.0 ; xdic = 0.0 ;
-		xd = xdic ;
-		x = xic ;
-		tstp = 3.99 ;
+		// initialise model
+		k = 0.12 ; // simon's comment
+		a = 1.0 ; // *** dropped semicolon
+		w = 1.0 ; g = 9.81 ; // simon's comment
+		mass = 0.03 ; // *** dropped semicolon
+		time = 0.0 ; // simon's comment
+		xic = 0.0 ; xdic = 0.0 ; // *** dropped semicolon
+		xd = xdic ; // simon's comment
+		x = xic ; // *** dropped semicolon
+		tstp = 3.99 ; // simon's comment
 	
 	}
 	
-
 	void pull_variables_from_model ( ) {
 		
 		// pull system time
@@ -94,7 +115,6 @@ public:
 	
 	}
 	
-
 	void push_variables_to_model ( ) {
 		
 		// push system time
@@ -116,37 +136,23 @@ public:
 	
 	}
 	
-
-private:
-
-	state_type get_state ( ) {
-		
-		state_type a_state;
-		
-		// return current state
-		a_state[0] = time;
-		a_state[1] = xd;
-		a_state[2] = x;
-		
-		return( a_state );
-	
-	}
-	
-	void set_state ( state_type a_state ) {
-		
-		// set state
-		time = a_state[0];
-		xd = a_state[1];
-		x = a_state[2];
-	
-	}
-
-public:
-
 	void calculate_rate ( ) {
 		
 		// calculations
-		xdd = ( mass * g - k * xd - a * x ) / mass ;
+		// -------spring damping problem. models releasing
+		//       mass from initial conditions of zero
+		//       velocity and displacement
+		
+		// -------define model default constants
+		// -------another way of changing the independent
+		//       variable
+		// -------calculate acceleration
+		xdd = ( mass * g - k * xd - a * x ) / mass;
+		// -------integrate accel for velocity and position
+		// -------specify termination condition
+		
+		// of derivative
+		// of program
 	
 	}
 	
@@ -168,9 +174,7 @@ public:
 		a_rate[2] = xd;
 	
 	}
-
-public:
-
+	
 	int advance_model ( double end_time , double time_step ) {
 	
 		double a_time;
