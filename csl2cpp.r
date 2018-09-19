@@ -16,7 +16,7 @@ options(warn=2) # raise warnings for testing
 # file names
 csl_file <- "spring/Spring.csl"
 # csl_file <- "molly/Molly.csl"
-already_preprocessed <- TRUE
+already_preprocessed <- FALSE
 file_name <- str_extract(csl_file,  "[:alpha:]+[[:alnum:]_]*\\.csl")
 path_name <- str_extract(csl_file, "^[:alpha:]+[[:alnum:]_]*") # fails if path has punctuation
 temp_file <- paste(path_name, "parse_results.rds", sep="/")
@@ -27,7 +27,7 @@ if (!already_preprocessed){ # read from source
   cat(file=stderr(), "reading code", "\n")
   csl <- read_csl(csl_file, silent=FALSE, drop_comments=FALSE)   # read lines
   cat(file=stderr(), "parsing code", "\n")
-  temp <- parse_csl(csl, silent=FALSE, split_lines=FALSE) # parse lines, returns list(csl, tokens)
+  temp <- parse_csl(csl, silent=FALSE, split_lines=TRUE) # parse lines, returns list(csl, tokens)
   csl <- temp$csl
   tokens <- temp$tokens
   cat(file=stderr(), paste("saving", temp_file), "\n")

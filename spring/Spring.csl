@@ -3,9 +3,10 @@ DERIVATIVE
       !-------spring damping problem. models releasing
       !       mass from initial conditions of zero
       !       velocity and displacement
+	  
       CINTERVAL      cint = 0.02
       !-------define model default constants
-      CONSTANT       k = 0.12     , a = 1.0      
+      CONSTANT       k = 0.12     ; a = 1.0      ! simon's comment
       CONSTANT       w = 1.0	  , g = 9.81
       Constant       mass = 0.03
       !-------another way of changing the independent

@@ -97,7 +97,7 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
     cat(file=stderr(), "parsing code for tokens, line type, indent", "\n")
   }
 
-  # add columns to csl
+  # first pass - split and gather tokens
   csl <- csl %>%
     mutate(
       label = NA,
@@ -105,7 +105,6 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
       body = NA,
       cont = NA,
       tail = NA,
-      split = NA,
       parse_list = NA,
       line_type = NA,
       indent = NA,
@@ -143,7 +142,7 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
 
     # report progress
     if (linei %% 200 == 1 && !silent){
-      cat(file=stderr(), linei, "of", nrow(csl), "\n")
+      cat(file=stderr(), "line", linei, "of", nrow(csl), "\n")
     }
 
     # get line
@@ -169,12 +168,16 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
     this_line_head <- max(str_extract(this_line_body, regex(control_str, ignore_case=TRUE)), "", na.rm=TRUE)
     if (this_line_head > ""){
       this_line_body <- str_replace(this_line_body, this_line_head, "") # strip head
+      this_line_head <- str_to_lower(this_line_head)
     }
 
     # tail
     this_line_tail <- max(str_extract(this_line_body, "!.*$"), "", na.rm=TRUE)
     if (this_line_tail > ""){
       this_line_body <- str_replace(this_line_body, "!.*$", "") # strip trailing comment
+      has_tail = TRUE
+    } else {
+	  has_tail = FALSE
     }
 
     # continuation
@@ -195,52 +198,21 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
     csl$tail[linei] <- this_line_tail
 
     # expand semicolon (easy in Molly)
-    pattern <- ";"
-    split_semicolon <- split_lines && (length(match_code(csl[linei, ], pattern)) == 1)
+    split_semicolon <- split_lines && str_detect(this_line_body, ";")
     if (split_semicolon){
+      cat("line", linei, "dropping semicolon", "\n")
       this_line <- csl[linei, ]
       csl <- insert_row(csl, this_line, linei + 1) # duplicate this_line
-      temp <- str_split(this_line$code, pattern)[[1]]
-      csl$split[linei] <- temp[1]
-      csl$code[linei+1] <- "! semicolon split"
-      csl$split[linei+1] <- temp[2]
+      temp <- str_split(this_line_body, pattern)[[1]]
+      this_line_body <- temp[1]
+      csl$body[linei] <- this_line_body
+      # create a false line containing  the remaining code
+      csl$code[linei+1] <- paste(this_line_label,
+                                 this_line_head,
+                                 paste(temp[-1], collapse=" ; "),
+                                 this_line_cont,
+                                 "! *** dropped semicolon")
     }
-
-    # # expand comma (more complicated)
-    # pattern <- ","
-    # if (!is_continuation){
-    #   str_detect_splitwords <- str_extract(csl$code[linei],
-    #                                        regex(paste("^[:blank:]*", splitwords, sep=""),
-    #                                              ignore_case=TRUE)
-    #                                        )
-    #   this_line_head <- str_detect_splitwords[!is.na(str_detect_splitwords)]
-    #   splittable <- any(!is.na(str_detect_splitwords))
-    #   split_comma <- split_lines && splittable
-    # } else{ # continuation
-    #   split_comma <- split_lines && splittable
-    # }
-    # if (split_comma){
-    #   # browser()
-    #   this_line <- csl[linei, ]
-    #   this_line_tail <- str_extract(this_line$code, ";?[:blank:]*&?[:blank:]*(!.*)?$")
-    #   this_line_body <- str_replace(this_line$code, ";?[:blank:]*&?[:blank:]*(!.*)?$", "")
-    #   this_line_body <- str_replace(this_line_body, regex(paste("^[:blank:]*", this_line_head, sep=""), ignore_case=TRUE), "")
-    #   # temp <- str_extract_all(this_line_body, "[[:alnum:][:space:]\\.\\-\\+]+\\=?[[:alnum:][:space:]\\.\\-\\+]*"  )[[1]] # look for assignments
-    #   temp <- str_split(this_line_body, pattern)[[1]] # look for commas (beware arrays)
-    #   # browser()
-    #   if (length(temp) > 1){
-    #     for (i in 1:length(temp)){
-    #       if (i == 1){
-    #         # csl$code[linei+(i-1)] <- # keep this for reference
-    #         csl$split[linei]       <- paste(this_line_head, temp[1], this_line_tail)
-    #       } else {
-    #         csl <- insert_row(csl, this_line, linei+(i-1)) # duplicate this_line
-    #         csl$code[linei+(i-1)] <- this_line_tail # carry &
-    #         csl$split[linei+(i-1)] <- paste(this_line_head, temp[i])
-    #       }
-    #     }
-    #   }
-    # }
 
     # parse next line
     parse_list <- code_split(str_c(this_line_head, this_line_body))
@@ -271,9 +243,9 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
       if_then ~ "ifthen", # drop _
       else_if_then ~ "elseifthen", # drop _
       type1 == "token" && value1 %in% control ~ value1, # control word
-      type1 == "comment" ~  "!", # comment
-      type1 == "blank" ~  "", # blank line
       type1 == "token" && type2 == "equals" ~  "assignment",
+      type1 == "blank" & has_tail ~  "comment", # comment only
+      type1 == "blank" ~  "blank", # blank line
       TRUE ~ "unknown" # other
     )
 
@@ -328,7 +300,7 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
 
   } # end while
 
-  # token table (use rownames)
+  # token table
   token_df <- data.frame(name = tokens, line = tokens_line, stringsAsFactors = FALSE) %>%
     filter(name > "") %>%
     mutate(lower = str_to_lower(name)) %>%
@@ -339,7 +311,138 @@ parse_csl <- function(csl, silent=FALSE, split_lines=FALSE){
       # lines = paste(line, collapse=",")
     )
 
+  # token lists
+  token_list <- setNames(token_df$name, token_df$lower)
+  reserved <- c("integ") # other reserved words
+  reserved <- c(control, reserved) # all reserved words
+  token_list[reserved] <- reserved # force reserved words to be lower case
+  token_decl_line <- setNames(rep(0L, length(token_list)), names(token_list))
+  token_set_line <- setNames(rep(0L, length(token_list)), names(token_list))
+  token_set_line[reserved] <- 1 # assume reserved words are set
+  token_used_line <- setNames(rep(0L, length(token_list)), names(token_list))
+
+  # second pass -
+  csl <- csl %>%
+  	mutate(
+  	  section = NA,
+  	  declare = NA,
+  	  init = NA,
+  	  calc = NA,
+  	  calc = NA,
+  	  integ = NA
+  	)
+
+  # loop through rows again
+  major_sections <- c("initial", "dynamic", "derivative", "discrete", "terminal")
+  major_section <- ""
+  i <- 1
+  for (i in 1:nrow(csl)){
+
+    # identify major section
+    if (csl$head[i] %in% major_sections){
+      major_section <- csl$head[i]
+    }
+    csl$section[i] <- major_section
+
+    # get tokens for this line, ensure case sensitive
+    parse_list <- unlist(str_to_obj(csl$parse_list[i]))
+    j <- which(str_detect(unlist(parse_list), "token")) + 1
+    if (length(j)>0){
+      parse_list[j] <- token_list[str_to_lower(parse_list[j])] # convert tokens to standard case
+    }
+    nitems <- length(parse_list) / 2
+
+    # handle various line_types, this is a bit complex!
+    if (csl$line_type[i] %in% c("constant", "integer", "doubleprecision", "logical", "parameter")){
+
+      # declaration
+      parse_list[1:2] <- c("comma", ",") # insert fake comma in place of keyword
+      k <- which( parse_list == "token" & lag(parse_list, 2) == "comma" ) + 1L
+      bad <- token_decl_line[parse_list[k]] != 0 # already declared
+      if (any(bad)){
+        cat("line", i, "redeclaration:", paste(parse_list[k][bad], collapse=" "), "\n")
+      }
+      csl$declare[i] <- paste(parse_list[k][!bad], collapse=" , ")
+      token_decl_line[parse_list[k][!bad]] <- i
+      # initialisation (no check for duplication)
+      k <- seq(4, nitems * 2, 2)
+      csl$init[i] <- str_replace(paste(parse_list[k], collapse=" "), ",", ";")
+      # which tokens set
+      k <- which(parse_list == "token" & lead(parse_list, 2) == "equals") + 1L
+      token_set_line[parse_list[k]] <- i
+      # which tokens used
+      k <- which( parse_list == "token" & lag(parse_list, 2) != "comma" ) + 1L
+      bad <- token_set_line[parse_list[k]] == 0 # not set
+      if (any(bad)){
+        cat("line", i, "uses unset token:", paste(parse_list[k][bad], collapse=" "), "\n")
+      }
+      token_used_line[parse_list[k]] <- i
+
+    } else if (csl$line_type[i] %in% c("integ")){
+
+      # warning only handles statements of the form, a = integ( b , c ), no expressions allowed
+      k <- c(4, 6, 8, 12, 16, 18)
+      if (str_to_lower(paste(parse_list[k], collapse="")) != "=integ(,)na"){
+        k <- seq(2, nitems * 2, 2)
+        cat("line", i, "unhandled form of integ:", paste(parse_list[k], collapse=" "), "\n")
+      }
+      j <- which(parse_list == "integ")
+      # declare state variable
+      if (token_decl_line[parse_list[j-4]] != 0){
+        cat("line", i, "use of previously declared variable for integ:", parse_list[j-4], "\n")
+      }
+      csl$declare[i] <- parse_list[j-4]
+      token_decl_line[parse_list[j-4]] <- i
+      # initial condition of state variable
+      csl$init[i] <- paste(parse_list[c(j-4, j-2, j+8)], collapse=" ")
+      token_set_line[parse_list[j-4]] <- i
+      if (parse_list[j+7] == "token"){ # could be a number
+        if (token_set_line[parse_list[j+8]] == 0){
+          cat("line", i, "undefined initial condition in integ:", parse_list[j+8], "\n")
+        }
+        token_used_line[parse_list[j+8]] <- i
+      }
+      # integration rate of state variable
+      csl$integ[i] <- paste(parse_list[c(j-4, j-2, j+4)], collapse=" ")
+      if (parse_list[j+3] == "token"){ # could be a number
+        token_used_line[parse_list[j+4]] <- i
+      }
+
+    } else if (csl$line_type[i] %in% c("assignment")){
+
+      # implicit declaration of lhs
+      k <- which( parse_list == "token" & lead(parse_list, 2) == "equals" ) + 1L
+      bad <- token_decl_line[parse_list[k]] != 0 # already declared (actually not bad)
+      if (!bad){
+        csl$declare[i] <- parse_list[k]
+        token_decl_line[parse_list[k]] <- i
+      }
+      # assignment
+      token_set_line[parse_list[k]] <- i
+      # initial section should not need sorting
+      k <- seq(2, nitems * 2, 2)
+      if (major_section == "initial"){
+        csl$init[i] <- paste(parse_list[k], collapse=" ")
+      } else {
+        # dynamic section might need sorting
+        csl$calc[i] <- paste(parse_list[k], collapse=" ")
+        k <- which(parse_list == "token" & lead(parse_list, 2) != "equals") + 1L
+        bad <- token_set_line[parse_list[k]] == 0
+        if (any(bad)){
+          cat("line", i, "uses unset token:", paste(parse_list[k][bad], collapse=" "), "\n")
+        }
+        token_used_line[parse_list[k][bad]] <- i
+      }
+
+    }
+
+    i <- i + 1
+
+  } # end loop
+
+
+
+  # return result
   return(list(csl=csl, tokens=token_df))
 }
-
 
