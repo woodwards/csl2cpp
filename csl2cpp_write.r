@@ -1,6 +1,6 @@
 # write cpp based on parsed csl
 
-write_cpp <- function(cpp, path_name, model_name, silent=FALSE){
+write_cpp <- function(cpp, path_name, model_name){
 
 	# open cpp file
 	cpp_file_name <- paste(path_name, "/", model_name, ".cpp", sep="")

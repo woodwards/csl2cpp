@@ -23,23 +23,18 @@ private:
 	typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;
 	stepper_type stepper;
 	
-	// state variables
+	// declare model variables
+	static constexpr double k = 0.12 ;
+	static constexpr double a = 1.0 ;
+	static constexpr double w = 1.0 , g = 9.81 ;
+	static constexpr double mass = 0.03 ;
 	double time ;
+	double xdd ;
+	static constexpr double xic = 0.0 , xdic = 0.0 ;
 	double xd ;
 	double x ;
+	static constexpr double Tstp = 3.99 ;
 	
-	// other variables
-	double k ;
-	double a ;
-	double w ;
-	double g ;
-	double mass ;
-	double xdd ;
-	double xic ;
-	double xdic ;
-	double tstp ;
-	
-	// get state
 	state_type get_state ( ) {
 		
 		state_type a_state;
@@ -51,9 +46,8 @@ private:
 		
 		return( a_state );
 	
-	}
+	} // end get_state
 	
-	// set state
 	void set_state ( state_type a_state ) {
 		
 		// set state
@@ -61,7 +55,7 @@ private:
 		xd = a_state[1];
 		x = a_state[2];
 	
-	}
+	} // end set_state
 
 public:
 
@@ -74,7 +68,7 @@ public:
 		// reserve buckets to minimise storage and avoid rehashing
 		variable.reserve( n_visible_variables );
 	
-	}
+	} // end constructor
 	
 	void initialise_model ( double a_system_time ) {
 		
@@ -82,17 +76,11 @@ public:
 		system_time = a_system_time;
 		
 		// initialise model
-		k = 0.12 ; // simon's comment
-		a = 1.0 ; // *** dropped semicolon
-		w = 1.0 ; g = 9.81 ; // simon's comment
-		mass = 0.03 ; // *** dropped semicolon
-		time = 0.0 ; // simon's comment
-		xic = 0.0 ; xdic = 0.0 ; // *** dropped semicolon
-		xd = xdic ; // simon's comment
-		x = xic ; // *** dropped semicolon
-		tstp = 3.99 ; // simon's comment
+		time = 0.0; 
+		xd = xdic; 
+		x = xic; 
 	
-	}
+	} // end initialise_model
 	
 	void pull_variables_from_model ( ) {
 		
@@ -100,20 +88,12 @@ public:
 		variable["system_time"] = system_time;
 		
 		// pull model variables
-		variable["k"] = k;
-		variable["a"] = a;
-		variable["w"] = w;
-		variable["g"] = g;
-		variable["mass"] = mass;
 		variable["time"] = time;
 		variable["xdd"] = xdd;
-		variable["xic"] = xic;
-		variable["xdic"] = xdic;
 		variable["xd"] = xd;
 		variable["x"] = x;
-		variable["tstp"] = tstp;
 	
-	}
+	} // end pull_variables_from_model
 	
 	void push_variables_to_model ( ) {
 		
@@ -121,20 +101,12 @@ public:
 		system_time = variable["system_time"];
 		
 		// push model variables
-		k = variable["k"];
-		a = variable["a"];
-		w = variable["w"];
-		g = variable["g"];
-		mass = variable["mass"];
 		time = variable["time"];
 		xdd = variable["xdd"];
-		xic = variable["xic"];
-		xdic = variable["xdic"];
 		xd = variable["xd"];
 		x = variable["x"];
-		tstp = variable["tstp"];
 	
-	}
+	} // end push_variables_to_model
 	
 	void calculate_rate ( ) {
 		
@@ -144,17 +116,19 @@ public:
 		//       velocity and displacement
 		
 		// -------define model default constants
+		// simon's comment
+		// *** semicolon ***
 		// -------another way of changing the independent
 		//       variable
 		// -------calculate acceleration
-		xdd = ( mass * g - k * xd - a * x ) / mass;
+		xdd = ( mass * g - k * xd - a * x ) / mass; 
 		// -------integrate accel for velocity and position
 		// -------specify termination condition
 		
 		// of derivative
 		// of program
 	
-	}
+	} // end calculate_rate
 	
 	// called by boost::odeint::integrate()
 	void operator()( const state_type &a_state , state_type &a_rate, double a_time ){
@@ -169,11 +143,11 @@ public:
 		calculate_rate();
 		
 		// return rate
-		a_rate[0] = 1.0;
-		a_rate[1] = xdd;
-		a_rate[2] = xd;
+		a_rate[0]= 1.0;
+		a_rate[1]= xdd;
+		a_rate[2]= xd;
 	
-	}
+	} // end operator
 	
 	int advance_model ( double end_time , double time_step ) {
 	
@@ -191,7 +165,7 @@ public:
 		calculate_rate();
 		return( nsteps );
 	
-	}
+	} // end advance_model
 
 }; // end class
 

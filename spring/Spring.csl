@@ -19,7 +19,7 @@ DERIVATIVE
       xd      = INTEG(xdd, xdic)
       x       = INTEG(xd , xic )
       !-------specify termination condition
-      CONSTANT       tstp = 3.99
+      CONSTANT       Tstp = 3.99
       TERMT(t.GE.tstp, 'Time Limit')
 
 END ! of derivative

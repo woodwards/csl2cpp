@@ -1,10 +1,10 @@
 # read csl file and includes
 
-read_csl <- function(csl_file, silent=FALSE, drop_comments=FALSE){
+read_csl <- function(csl_file){
 
   #
+  drop_comments=FALSE
   cat(file=stderr(), paste("reading", csl_file), "\n")
-  cat(file=stderr(), paste("silent", silent), "\n")
   cat(file=stderr(), paste("drop_comments", drop_comments), "\n")
   cat(file=stderr(), paste("ignore_path", TRUE), "\n")
   # cat(file=stderr(), "WARNING: All INCLUDE files must be in the same directory *** paths ignored ***\n")
@@ -28,8 +28,7 @@ read_csl <- function(csl_file, silent=FALSE, drop_comments=FALSE){
 
     # read file
     thisi <- incli[1]
-    if (!silent)
-      cat(paste(thisi, csl$code[thisi], "\n"))
+    cat(paste(thisi, csl$code[thisi], "\n"))
     file_name <- str_extract(csl$code[thisi], "[:alpha:]+[[:alnum:]_]*\\.csl")
     file_path <- paste(path_name, "/", file_name, sep="")
     first <- csl$seq_number[thisi]

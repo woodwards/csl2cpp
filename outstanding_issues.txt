@@ -9,3 +9,8 @@ Issues
 - asclX code may not be in order
 - IMPLC, IMPVC implicit systems not handled
 - Assume Runge-Kutta-4 integration method
+
+# then add functionality to spring, e.g. event queue, start stop query
+# Add features to spring eg events
+# Molly token sorting analysis
+
