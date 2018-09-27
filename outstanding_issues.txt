@@ -5,12 +5,15 @@ Issues
 - acslx.exe can't build models if C:\Program Files\Git\bin\sh.exe is in the path
 - acslx.exe can't build models if C:\RTools\3.4\bin\sh.exe is in the path
 - this translation project actually only covers a small subset of ACSL functionality
-- integer and logical variables currently stored as doubles
+- integer and logical variables are stored as doubles
 - asclX code may not be in order
 - IMPLC, IMPVC implicit systems not handled
-- Assume Runge-Kutta-4 integration method
+- Assume Runge-Kutta-4 integration method (easy to change)
 
-# then add functionality to spring, e.g. event queue, start stop query
-# Add features to spring eg events
-# Molly token sorting analysis
+To Do
+
+- Handle GOTO
+- Handle arrays
+- Simplify parsing code to make it easier to understand and maintain
+- Put comments in the right place
 

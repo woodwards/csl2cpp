@@ -1,13 +1,22 @@
 # make cpp based on parsed csl
 
+vrep <- function(what, times){ # vectorised string rep
+  sapply(times, function(x) paste(rep(what, x), collapse=""))
+}
+
 put_lines <- function(cpp, indent, lines){
 	first_row <- attr(cpp, "row") + 1
 	last_row <- first_row+length(lines)-1
-	tab <- paste(rep("\t", indent), sep="", collapse="")
+	tab <- vrep("\t", indent)
 	cpp[first_row:last_row] <- paste(tab, lines, "\n", sep="") # multiple lines
-	# cpp[first_row:last_row] <- paste(tab, lines, sep="") # multiple lines
 	attr(cpp, "row") <- last_row
 	return(cpp)
+}
+
+smoosh <- function(...){
+  # like paste but remove excess spaces
+  str_c(..., sep=" ") %>%
+    str_squish()
 }
 
 make_cpp <- function(csl, model_name){
@@ -39,32 +48,37 @@ make_cpp <- function(csl, model_name){
 			   "#include <boost/array.hpp>", "")
 	cpp <- put_lines(cpp, 0, lines)
 
+	# header comments
+	rows <- csl$section == "header"
+	lines <- csl$tail[rows]
+	cpp <- put_lines(cpp, 0, lines)
+
 	# class
-	cpp <- put_lines(cpp, 0, c(paste("class", model_name, "{"), "",
+	cpp <- put_lines(cpp, 0, c("", paste("class", model_name, "{"), "",
 	                           "private:", ""))
+
+	# class properties
 	lines <- c("// specify number of variables",
               paste("static constexpr int n_state_variables =", n_state,";"),
-              paste("static constexpr int n_visible_variables =", n_variable,";"), "",
-              "// declare state_type and system_time",
+              paste("static constexpr int n_visible_variables =", n_variable,"; // FIXME"), "",
+              "// declare state_type and t",
               paste("typedef boost::array< double , n_state_variables > state_type;"),
-              "double system_time;", "",
+              "double t;", "",
               "// declare boost::odeint stepper",
               "typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;",
               "stepper_type stepper;", "")
 	cpp <- put_lines(cpp, 1, lines)
 
   # declare model variables
-  rows <- csl$decl > 0
-  lines <- c("// declare model variables",
-             paste(if_else(csl$line_type[rows] %in% c("constant", "parameter"),
-                           "static constexpr double ",
-                           "double "),
-                   csl$decl[rows], " ;", sep=""),
-             "") # no comments in decl section
+	cpp <- put_lines(cpp, 1, "// declare model variables")
+	rows <- csl$decl > ""
+	lines <- if_else(csl$decl[rows] > "",
+	                 smoosh(csl$static[rows], csl$type[rows], csl$decl[rows], csl$delim[rows], csl$tail[rows]),
+	                 csl$tail[rows])
   cpp <- put_lines(cpp, 1, lines)
 
   # get state
-  cpp <- put_lines(cpp, 1, c("state_type get_state ( ) {"))
+  cpp <- put_lines(cpp, 1, c("", "state_type get_state ( ) {"))
   cpp <- put_lines(cpp, 2, c("", "state_type a_state;", "", "// return current state"))
   lines <- paste("a_state[", 0:(n_state-1), "] = ", state, ";", sep="")
   cpp <- put_lines(cpp, 2, lines)
@@ -92,21 +106,24 @@ make_cpp <- function(csl, model_name){
 	cpp <- put_lines(cpp, 1, c("", "} // end constructor", ""))
 
 	# initialise model
-	cpp <- put_lines(cpp, 1, c("void initialise_model ( double a_system_time ) {"))
-	cpp <- put_lines(cpp, 2, c("", "// initialise system_time",
-	                           "system_time = a_system_time;", "",
-	                           "// initialise model"))
-	rows <- csl$init>"" | csl$tail_loc=="init"
-	lines <- paste(csl$init[rows],
-	               if_else(csl$init[rows]>"", "; ", ""),
-	               csl$tail[rows], sep="") # with tail comments
-	cpp <- put_lines(cpp, 2, lines)
-	cpp <- put_lines(cpp, 1, c("", "} // end initialise_model", ""))
+	cpp <- put_lines(cpp, 1, c("void initialise_model ( double a_time ) {"))
+	cpp <- put_lines(cpp, 2, c("", "// initialise t", "t = a_time;", ""))
+	rows <- csl$section == "initial"
+  if (any(rows)){
+  	cpp <- put_lines(cpp, 2, "// initialise model")
+  	lines <- if_else(csl$init[rows] > "",
+  	                 smoosh(csl$init[rows], csl$delim[rows], csl$tail[rows]),
+  	                 csl$tail[rows])
+  	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 1)
+  	cpp <- put_lines(cpp, indent, lines)
+  	cpp <- put_lines(cpp, 2, "")
+  }
+	cpp <- put_lines(cpp, 1, c("} // end initialise_model", ""))
 
 	# pull variables from model (and constants?)
 	cpp <- put_lines(cpp, 1, "void pull_variables_from_model ( ) {")
 	cpp <- put_lines(cpp, 2, c("", "// pull system time",
-	                           "variable[\"system_time\"] = system_time;", "",
+	                           "variable[\"t\"] = t;", "",
 	                           "// pull model variables"))
 	# pulling constant values is risky so require user to un-constant them
 	lines <- paste("variable[\"", variable[!constant], "\"] = ", variable[!constant], ";", sep="")
@@ -116,7 +133,7 @@ make_cpp <- function(csl, model_name){
 	# push variables to model
 	cpp <- put_lines(cpp, 1, "void push_variables_to_model ( ) {")
 	cpp <- put_lines(cpp, 2, c("", "// push system time",
-	                           "system_time = variable[\"system_time\"];", "",
+	                           "t = variable[\"t\"];", "",
 	                           "// push model variables"))
 	lines <- paste(variable[!constant], " = variable[\"", variable[!constant], "\"];", sep="")
 	cpp <- put_lines(cpp, 2, lines)
@@ -125,18 +142,19 @@ make_cpp <- function(csl, model_name){
 	# calculate rate
 	cpp <- put_lines(cpp, 1, "void calculate_rate ( ) {")
 	cpp <- put_lines(cpp, 2, c("", "// calculations"))
-	rows <- csl$calc>"" | csl$tail_loc=="calc"
-	lines <- paste(csl$calc[rows],
-	               if_else(csl$calc[rows]>"", "; ", ""),
-	               csl$tail[rows], sep="") # with tail comments
-	cpp <- put_lines(cpp, 2, lines)
+	rows <- csl$section == "derivative"
+	lines <- if_else(csl$calc[rows] > "",
+	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
+	                 csl$tail[rows])
+	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 2)
+	cpp <- put_lines(cpp, indent, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end calculate_rate", ""))
 
 	# rate operator
 	cpp <- put_lines(cpp, 1, c("// called by boost::odeint::integrate()",
 	                           "void operator()( const state_type &a_state , state_type &a_rate, double a_time ){"))
 	cpp <- put_lines(cpp, 2, c("", "// set state",
-	                           "system_time = a_time;"))
+	                           "t = a_time;"))
 	lines <- paste(state, " = a_state[", 0:(n_state-1), "];", sep="")
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 2, c("", "// calculate rate",
@@ -152,11 +170,11 @@ make_cpp <- function(csl, model_name){
 	lines <- c("double a_time;",
 			   "state_type a_state;",
 			   "int nsteps;",
-			   "a_time = system_time;",
+			   "a_time = t;",
 			   "a_state = get_state();","",
 			   "// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class",
 			   "nsteps = boost::numeric::odeint::integrate_const( stepper , *this , a_state, a_time , end_time , time_step );", "",
-			   "system_time = end_time;",
+			   "t = end_time;",
 			   "set_state( a_state );",
 			   "calculate_rate();",
 			   "return( nsteps );")

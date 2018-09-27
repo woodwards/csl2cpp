@@ -7,6 +7,8 @@
 #include <boost/numeric/odeint.hpp>
 #include <boost/array.hpp>
 
+// program spring 
+
 class spring {
 
 private:
@@ -15,25 +17,25 @@ private:
 	static constexpr int n_state_variables = 3 ;
 	static constexpr int n_visible_variables = 12 ;
 	
-	// declare state_type and system_time
+	// declare state_type and t
 	typedef boost::array< double , n_state_variables > state_type;
-	double system_time;
+	double t;
 	
 	// declare boost::odeint stepper
 	typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;
 	stepper_type stepper;
 	
 	// declare model variables
-	static constexpr double k = 0.12 ;
-	static constexpr double a = 1.0 ;
-	static constexpr double w = 1.0 , g = 9.81 ;
-	static constexpr double mass = 0.03 ;
-	double time ;
+	static constexpr double k = 0.12 ; // constant k = 0.12 // simon's comment
+	static constexpr double a = 1.0 ; // constant a = 1.0
+	static constexpr double w = 1.0 , g = 9.81 ; // constant w = 1.0 , g = 9.81
+	static constexpr double mass = 0.03 ; // constant mass = 0.03
+	double time ; // time = integ ( 1.0 , 0.0 )
 	double xdd ;
-	static constexpr double xic = 0.0 , xdic = 0.0 ;
-	double xd ;
-	double x ;
-	static constexpr double Tstp = 3.99 ;
+	static constexpr double xic = 0.0 , xdic = 0.0 ; // constant xic = 0.0 , xdic = 0.0
+	double xd ; // xd = integ ( xdd , xdic )
+	double x ; // x = integ ( xd , xic )
+	static constexpr double Tstp = 3.99 ; // constant Tstp = 3.99
 	
 	state_type get_state ( ) {
 		
@@ -70,22 +72,17 @@ public:
 	
 	} // end constructor
 	
-	void initialise_model ( double a_system_time ) {
+	void initialise_model ( double a_time ) {
 		
-		// initialise system_time
-		system_time = a_system_time;
+		// initialise t
+		t = a_time;
 		
-		// initialise model
-		time = 0.0; 
-		xd = xdic; 
-		x = xic; 
-	
 	} // end initialise_model
 	
 	void pull_variables_from_model ( ) {
 		
 		// pull system time
-		variable["system_time"] = system_time;
+		variable["t"] = t;
 		
 		// pull model variables
 		variable["time"] = time;
@@ -98,7 +95,7 @@ public:
 	void push_variables_to_model ( ) {
 		
 		// push system time
-		system_time = variable["system_time"];
+		t = variable["t"];
 		
 		// push model variables
 		time = variable["time"];
@@ -111,22 +108,32 @@ public:
 	void calculate_rate ( ) {
 		
 		// calculations
+		// derivative 
 		// -------spring damping problem. models releasing
 		//       mass from initial conditions of zero
 		//       velocity and displacement
 		
+		
 		// -------define model default constants
-		// simon's comment
-		// *** semicolon ***
+		// constant k = 0.12 // simon's comment
+		// constant a = 1.0 
+		// constant w = 1.0 , g = 9.81 
+		// constant mass = 0.03 
 		// -------another way of changing the independent
 		//       variable
+		// time = integ ( 1.0 , 0.0 ) 
 		// -------calculate acceleration
-		xdd = ( mass * g - k * xd - a * x ) / mass; 
+		xdd = ( mass * g - k * xd - a * x ) / mass ;
 		// -------integrate accel for velocity and position
+		// constant xic = 0.0 , xdic = 0.0 
+		// xd = integ ( xdd , xdic ) 
+		// x = integ ( xd , xic ) 
 		// -------specify termination condition
+		// constant Tstp = 3.99 
 		
-		// of derivative
-		// of program
+		
+		// end of derivative // of derivative
+		// end of program // of program
 	
 	} // end calculate_rate
 	
@@ -134,7 +141,7 @@ public:
 	void operator()( const state_type &a_state , state_type &a_rate, double a_time ){
 		
 		// set state
-		system_time = a_time;
+		t = a_time;
 		time = a_state[0];
 		xd = a_state[1];
 		x = a_state[2];
@@ -154,13 +161,13 @@ public:
 		double a_time;
 		state_type a_state;
 		int nsteps;
-		a_time = system_time;
+		a_time = t;
 		a_state = get_state();
 		
 		// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class
 		nsteps = boost::numeric::odeint::integrate_const( stepper , *this , a_state, a_time , end_time , time_step );
 		
-		system_time = end_time;
+		t = end_time;
 		set_state( a_state );
 		calculate_rate();
 		return( nsteps );
