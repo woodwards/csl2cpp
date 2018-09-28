@@ -38,13 +38,16 @@ read_csl <- function(csl_file){
       iconv(to="ASCII//TRANSLIT") %>% # remove accents
       as_tibble() %>%
       rename(code=value) %>%
-      mutate(seq_number=first + as.double(seq(n())) / (n() + 1) * (last - first),
+      mutate(seq_number=first + as.double(seq(n())) / (n() + 2) * (last - first),
              line_number=as.double(seq(n())),
              file_name=file_name)
+    closing <- csl[thisi, ] %>%
+      mutate(seq_number=first + (nrow(include_csl) + 1) / (nrow(include_csl) + 2) * (last - first),
+             code=paste("! END ", code))
+    csl$code[thisi] <- paste("! BEGIN ", csl$code[thisi]) # comment out include statement
 
     # append
-    csl <- rbind(csl, include_csl)
-    csl$code[thisi] <- paste("! DONE ", csl$code[thisi]) # comment out include statement
+    csl <- rbind(csl, include_csl, closing)
 
     # find includes
     incli <- which(str_detect(str_to_lower(csl$code), "^[:blank:]*include[:blank:]+")) # find include statements

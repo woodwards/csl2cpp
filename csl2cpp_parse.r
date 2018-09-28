@@ -32,10 +32,11 @@ code_split <- function(code){
   remaining <- code
   outlist <- vector("list", 50)
   outi <- 1
+  # metacharacters are . \ | ( ) [ { ^ $ * + ?
+  # inside character classes also ^ - \ ]
   patterns <- c(
     space="^[:blank:]+",
     comment="^!.*",
-    # string=paste(c('^\\".*\\"', "^\\'.*\\'"), sep="", collapse="|"),
     string="^\\'.*\\'", # ACSL allows single quotes only
     token="^[:alpha:]+[[:alnum:]_]*",
     equals="^\\=",
@@ -51,10 +52,9 @@ code_split <- function(code){
                          "or", "and", "not", "eqv", "neqv",
                          "ge", "gt", "le", "lt", "eq", "ne"),
                   "\\.", sep="", collapse="|"),
-    # number="^[\\-\\+]?[0-9]*\\.?[0-9]+([ed][\\-\\+]?[0-9]+)?", # https://www.regular-expressions.info/floatingpoint.html
     number="^[\\-\\+]?[0-9]*\\.?[0-9]+([edED][\\-\\+]?[0-9]+)?", # https://www.regular-expressions.info/floatingpoint.html
-    math="^[\\-\\+](?![[0-9]\\.])|^[\\/\\*]",
-    power="^\\*\\*|^\\^"
+    mathop  ="^[\\-\\+](?![[0-9]\\.])|^\\/|^\\*(?![:blank:]*\\*)",
+    power="^\\*[:blank:]*\\*|^\\^"
   )
   # whole line analysis
   if (str_detect(remaining, "^[:blank:]*$")){ # blank line
@@ -77,6 +77,7 @@ code_split <- function(code){
       outi <- outi + 1
     }
     remaining <- str_replace(remaining, regex(patterns[matchj], ignore_case=TRUE), "")
+
   }
   return(compact(outlist)) # drop NULLs from list
 }

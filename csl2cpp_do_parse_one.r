@@ -5,7 +5,7 @@
 # parse each line into a list of recognised parts (drop whitespace and tidy up a bit)
 # calculate indent and connect begin and end markers (using stack)
 
-temp_file <- paste(path_name, "parse_checkpoint1.RData", sep="/")
+temp_file <- paste(path_name, "checkpoint_after_read.RData", sep="/")
 load(file=temp_file) # recover progress
 
 cat(file=stderr(), "parsing code for tokens, line type, indent", "\n")
@@ -28,11 +28,11 @@ csl <- csl %>%
   )
 
 # start of line keywords (e.g. not including INTEG, GO TO, etc)
-declaration <- c("constant", "algorithm", "nsteps", "maxterval",
+declaration <- c("constant", "algorithm", "nsteps", "maxterval", "character",
                  "parameter", "cinterval", "integer", "logical", "doubleprecision")
 keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do") # if_then, if_goto, increase indent
 keyword2 <- c("end", "endif") # has_label, decrease indent
-keyword3 <- c("termt", "schedule", "interval", "if", "goto") # no change to indent
+keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue") # no change to indent
 keyword4 <- c("else") # else_if_then, decrease and increase indent
 keyword <- c(declaration, keyword1, keyword2, keyword3, keyword4)
 
@@ -40,12 +40,13 @@ keyword <- c(declaration, keyword1, keyword2, keyword3, keyword4)
 stack <- c()
 
 # create regex strings for detection
-integ_str <- "token.+equals.+integ.+openbracket"
-if_then_str <- "token.+if.+token.+then"
-if_goto_str <- "token.+if.+token.+goto"
-else_if_then_str <- "token.+else.+token.+if.+token.+then"
+integ_str <- "token.+equals.+integ.+openbracket.+closebracket"
+if_then_str <- "token.+if.+openbracket.+closebracket.+token.+then"
+if_goto_str <- "token.+if.+openbracket.+closebracket.+token.+goto"
+else_if_then_str <- "token.+else.+token.+if.+openbracket.+closebracket.+token.+then"
 label_str <- "^[:blank:]*[0-9]+[:blank:]*\\:|^[:blank:]*[:alpha:]+[[:alnum:]_]*[:blank:]*\\:"
 keyword_str <- paste("^[:blank:]*", keyword, "(?![[:alnum:]_])", sep="", collapse="|")
+array_assign_str <- "token.+openbracket.+closebracket.+equals"
 
 # prepare loop
 token      <- vector("character", 10000)
@@ -133,7 +134,8 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
   }
 
   # parse line into recognised pieces
-  parse_list <- code_split(str_c(this_line_head, this_line_body))
+  code <- str_c(this_line_head, this_line_body)
+  parse_list <- code_split(code)
 
   # convert parse list to string
   parse_str <- obj_to_str(parse_list)
@@ -145,6 +147,7 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
   else_if_then <- str_detect(str_to_lower(parse_str), else_if_then_str)
   if_then <- str_detect(str_to_lower(parse_str), if_then_str) && !else_if_then
   if_goto <- str_detect(str_to_lower(parse_str), if_goto_str)
+  array_assign <- str_detect(str_to_lower(parse_str), array_assign_str)
 
   # identify line type from first 1-2 items
   type1 <- parse_list[[1]] # get first item
@@ -157,15 +160,16 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
     value2 <- ""
   }
   csl$line_type[i] <- case_when(
-    has_integ ~ "integ",
     is_continuation ~ "continuation", # i.e. same as previous line
-    if_then ~ "ifthen", # drop _
-    if_goto ~ "ifgoto", # drop _
-    else_if_then ~ "elseifthen", # drop _
+    has_integ ~ "integ",
+    if_then ~ "ifthen",
+    if_goto ~ "ifgoto",
+    else_if_then ~ "elseifthen",
     type1 == "token" && value1 %in% keyword ~ value1, # keyword
-    type1 == "token" && type2 == "equals" ~  "assignment",
-    type1 == "blank" & has_tail ~  "comment", # comment only
-    type1 == "blank" ~  "blank", # blank line
+    type1 == "blank" & has_tail ~ "comment", # comment only
+    type1 == "blank" ~ "blank", # blank line
+    type1 == "token" && type2 == "equals" ~  "assign",
+    array_assign ~ "arrayassign",
     TRUE ~ "unknown" # other
   )
 
@@ -235,3 +239,6 @@ tokens <- data.frame(name = token, line = token_line, stringsAsFactors = FALSE) 
     # lines = paste(line, collapse=",")
   )
 
+# save progress
+temp_file <- paste(path_name, "checkpoint_after_parse_one.RData", sep="/")
+save.image(temp_file)

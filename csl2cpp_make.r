@@ -45,7 +45,9 @@ make_cpp <- function(csl, model_name){
 			   "#include <string>",
 			   "#define BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE",
 			   "#include <boost/numeric/odeint.hpp>",
-			   "#include <boost/array.hpp>", "")
+			   # "#include <boost/array.hpp>", # try std::array instead as recommended by boost
+			   "#include <array>",
+			   "")
 	cpp <- put_lines(cpp, 0, lines)
 
 	# header comments
@@ -62,8 +64,9 @@ make_cpp <- function(csl, model_name){
               paste("static constexpr int n_state_variables =", n_state,";"),
               paste("static constexpr int n_visible_variables =", n_variable,"; // FIXME"), "",
               "// declare state_type and t",
-              paste("typedef boost::array< double , n_state_variables > state_type;"),
-              "double t;", "",
+	           # paste("typedef boost::array< double , n_state_variables > state_type;"),
+	           paste("typedef std::array< double , n_state_variables > state_type;"),
+	           "double t;", "",
               "// declare boost::odeint stepper",
               "typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;",
               "stepper_type stepper;", "")
@@ -108,7 +111,7 @@ make_cpp <- function(csl, model_name){
 	# initialise model
 	cpp <- put_lines(cpp, 1, c("void initialise_model ( double a_time ) {"))
 	cpp <- put_lines(cpp, 2, c("", "// initialise t", "t = a_time;", ""))
-	rows <- csl$section == "initial"
+	rows <- csl$section == "initial" | csl$init > "" # include init lines from other places
   if (any(rows)){
   	cpp <- put_lines(cpp, 2, "// initialise model")
   	lines <- if_else(csl$init[rows] > "",
