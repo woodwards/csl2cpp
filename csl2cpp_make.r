@@ -19,16 +19,15 @@ smoosh <- function(...){
     str_squish()
 }
 
-make_cpp <- function(csl, model_name){
+make_cpp <- function(csl, tokens, model_name){
 
 	# count variables
 	integ <- str_split(paste(csl$integ[csl$integ > ""], collapse=","), ",", simplify=TRUE)
 	state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
 	rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
 	n_state <- length(state)
-	decl <- str_trim(str_split(paste(csl$decl[csl$decl > ""], collapse=","), ",", simplify=TRUE))
-	constant <- str_detect(decl, "=")
-	variable <- str_match(decl, "^[:alpha:]+[[:alnum:]_]*")[,1]
+	constant <- tokens$constant[tokens$constant>""]
+	variable <- tokens$variable[tokens$variable>"" & tokens$decl_type!="char"]
 	n_variable <- length(variable)
 
 	# browser()
@@ -128,8 +127,7 @@ make_cpp <- function(csl, model_name){
 	cpp <- put_lines(cpp, 2, c("", "// pull system time",
 	                           "variable[\"t\"] = t;", "",
 	                           "// pull model variables"))
-	# pulling constant values is risky so require user to un-constant them
-	lines <- paste("variable[\"", variable[!constant], "\"] = ", variable[!constant], ";", sep="")
+	lines <- paste("variable[\"", variable, "\"] = ", variable, ";", sep="") # implicit type conversion
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end pull_variables_from_model", ""))
 
@@ -138,7 +136,7 @@ make_cpp <- function(csl, model_name){
 	cpp <- put_lines(cpp, 2, c("", "// push system time",
 	                           "t = variable[\"t\"];", "",
 	                           "// push model variables"))
-	lines <- paste(variable[!constant], " = variable[\"", variable[!constant], "\"];", sep="")
+	lines <- paste(variable, " = variable[\"", variable, "\"];", sep="") # implicit type conversion
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end push_variables_to_model", ""))
 

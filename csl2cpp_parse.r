@@ -29,7 +29,7 @@ insert_row <- function(existingDF, newrow, r){
 
 # split a line of code into tokens, strings, comments, etc
 code_split <- function(code){
-  remaining <- code
+  remaining <- str_trim(code)
   outlist <- vector("list", 50)
   outi <- 1
   # metacharacters are . \ | ( ) [ { ^ $ * + ?
@@ -76,7 +76,7 @@ code_split <- function(code){
       outlist[[outi]] <- next_match[matchj]
       outi <- outi + 1
     }
-    remaining <- str_replace(remaining, regex(patterns[matchj], ignore_case=TRUE), "")
+    remaining <- str_trim(str_replace(remaining, regex(patterns[matchj], ignore_case=TRUE), ""))
 
   }
   return(compact(outlist)) # drop NULLs from list

@@ -16,28 +16,34 @@ split_lines=TRUE
 csl <- csl %>%
   mutate(
     line_type = NA,
+    indent = NA,
+    stack = NA,
+    block = "",
+    length = NA,
     label = NA,
     head = NA,
     body = NA,
     cont = NA,
     tail = NA,
-    parse_list = NA,
-    indent = NA,
-    stack = NA,
-    length = NA
+    parse_list = NA
   )
 
-# start of line keywords (e.g. not including INTEG, GO TO, etc)
+# start of line keywords (e.g. not including INTEG)
+# don't try to handle indenting for do, has_label, goto, if_goto
+# (these structures must be protected from sorting by being placed inside procedurals)
 declaration <- c("constant", "algorithm", "nsteps", "maxterval", "character",
                  "parameter", "cinterval", "integer", "logical", "doubleprecision")
-keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do") # if_then, if_goto, increase indent
-keyword2 <- c("end", "endif") # has_label, decrease indent
-keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue") # no change to indent
-keyword4 <- c("else") # else_if_then, decrease and increase indent
+keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal") # +if_then, increase indent
+keyword2 <- c("end", "endif") # decrease indent
+keyword3 <- c("termt", "schedule", "interval", "if", "do", "goto", "continue") # + has_label + if_goto, no change to indent
+keyword4 <- c("else") # +else_if_then, decrease and increase indent
 keyword <- c(declaration, keyword1, keyword2, keyword3, keyword4)
 
 # stack for matching line numbers of keyword1/ifthen and keyword2(end/endif) (FIXME what about goto?)
 stack <- c()
+indent <- 0 # current indent level
+max_indent <- 10
+block <- rep(0, max_indent) # ids for blocks at different indent levels
 
 # create regex strings for detection
 integ_str <- "token.+equals.+integ.+openbracket.+closebracket"
@@ -52,7 +58,6 @@ array_assign_str <- "token.+openbracket.+closebracket.+equals"
 token      <- vector("character", 10000)
 token_line <- vector("integer", 10000)
 tokeni <- 1
-indent <- 0
 is_continuation <- FALSE
 i <- 1
 while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into csl)
@@ -64,7 +69,7 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
 
   # get line
   this_line <- csl[i, ]
-  this_line_body <- this_line$code
+  this_line_body <- str_trim(this_line$code)
 
   # use max() as a compact way to convert NA to ""
 
@@ -92,7 +97,7 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
   this_line_tail <- max(str_extract(this_line_body, "!.*$"), "", na.rm=TRUE)
   if (this_line_tail > ""){
     this_line_body <- str_replace(this_line_body, "!.*$", "") # strip trailing comment
-    this_line_tail <- str_trim(this_line_tail) # trim trailing spaces
+    this_line_tail <- this_line_tail
     has_tail = TRUE
   } else {
     has_tail = FALSE
@@ -116,6 +121,7 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
   csl$tail[i] <- this_line_tail
 
   # split semicolon lines (easy in Molly)
+  # this avoids multiple assignments on one line
   split_semicolon <- split_lines && str_detect(this_line_body, ";")
   if (split_semicolon){
     cat("line", i, "dropping semicolon", "\n")
@@ -173,23 +179,33 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
     TRUE ~ "unknown" # other
   )
 
-  # indent FIXME not working correctly
-  if ((type1 == "token" && value1 %in% keyword1) || if_then || if_goto){ # increase indent
+  # indent FIXME not working correctly because of tangled GOTO statements
+  if ((type1 == "token" && value1 %in% keyword1) || if_then){ # increase indent
     csl$indent[i] <- indent
     indent <- indent + 1
     stack <- c(i, stack)
+    block[indent] <- block[indent] + 1
+    block[(indent+1):max_indent] <- 0
+    csl$block[i] <- paste(block[1:indent], collapse="-")
   } else if ((type1 == "token" && value1 %in% keyword4) || else_if_then){ # decrease and increase indent
     indent <- indent - 1
     csl$indent[i] <- indent
     indent <- indent + 1
-  } else if ((type1 == "token" && value1 %in% keyword2 || has_label)){ # decrease indent
+    csl$block[i] <- paste(block[1:indent], collapse="-")
+  } else if (type1 == "token" && value1 %in% keyword2){ # decrease indent
+    csl$block[i] <- paste(block[1:indent], collapse="-")
     indent <- indent - 1
+    if (indent<0){
+      print("FIXME: indent < 0")
+      indent <- indent + 1
+    }
     csl$indent[i] <- indent
     csl$stack[i] <- stack[1]
     csl$stack[stack[1]] <- i
     stack <- tail(stack, -1) # removes first item
   } else { # no permanent change to indent
-    csl$indent[i] <- indent + ifelse(is_continuation, 1, 0)
+    csl$indent[i] <- indent + ifelse(is_continuation, 1, 0) + ifelse(has_label, -1, 0)
+    csl$block[i] <- paste(block[1:indent], collapse="-")
   }
 
   # gather tokens

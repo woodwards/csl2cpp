@@ -33,6 +33,9 @@ source("csl2cpp_parse.r") # load functions
 source("csl2cpp_do_parse_one.r")
 source("csl2cpp_do_parse_two.r")
 
+temp_file <- paste(path_name, "checkpoint_after_parse_two.RData", sep="/")
+load(temp_file)
+
 # plot code for fun!
 y <- 1:nrow(csl)
 plot1 <- ggplot() +
@@ -43,7 +46,7 @@ print(plot1)
 
 cat(file=stderr(), "making cpp code", "\n")
 source("csl2cpp_make.r") # load functions
-cpp <- make_cpp(csl, model_name)
+cpp <- make_cpp(csl, tokens, model_name)
 cpp_df <- as_data_frame(cpp)
 
 cat(file=stderr(), "writing cpp code", "\n")
