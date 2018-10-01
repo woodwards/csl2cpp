@@ -41,7 +41,9 @@ make_cpp <- function(csl, tokens, model_name){
 			   "// this module is automatically generated from an R script",
 			   "// *******************************************************",
 			   "#include <unordered_map>",
+			   "#include <map>",
 			   "#include <string>",
+			   "#include <cmath>",
 			   "#define BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE",
 			   "#include <boost/numeric/odeint.hpp>",
 			   # "#include <boost/array.hpp>", # try std::array instead as recommended by boost
@@ -61,11 +63,14 @@ make_cpp <- function(csl, tokens, model_name){
 	# class properties
 	lines <- c("// specify number of variables",
               paste("static constexpr int n_state_variables =", n_state,";"),
-              paste("static constexpr int n_visible_variables =", n_variable,"; // FIXME"), "",
+              paste("static constexpr int n_visible_variables =", n_variable,";"), "",
               "// declare state_type and t",
 	           # paste("typedef boost::array< double , n_state_variables > state_type;"),
 	           paste("typedef std::array< double , n_state_variables > state_type;"),
 	           "double t;", "",
+	           "// event queue",
+	           paste("std::map< double , std::string > event_queue;"),
+	           "",
               "// declare boost::odeint stepper",
               "typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;",
               "stepper_type stepper;", "")
@@ -140,14 +145,25 @@ make_cpp <- function(csl, tokens, model_name){
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end push_variables_to_model", ""))
 
+	# do events
+	cpp <- put_lines(cpp, 1, "void do_event ( ) {")
+	cpp <- put_lines(cpp, 2, c("", "// find event"))
+	rows <- csl$section %in% c("discrete")
+	lines <- if_else(csl$disc[rows] > "",
+	                 smoosh(csl$disc[rows], csl$delim[rows], csl$tail[rows]),
+	                 csl$tail[rows])
+	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 1)
+	cpp <- put_lines(cpp, indent, lines)
+	cpp <- put_lines(cpp, 1, c("", "} // end do_event", ""))
+
 	# calculate rate
 	cpp <- put_lines(cpp, 1, "void calculate_rate ( ) {")
 	cpp <- put_lines(cpp, 2, c("", "// calculations"))
-	rows <- csl$section == "derivative"
+	rows <- csl$section %in% c("dynamic", "derivative")
 	lines <- if_else(csl$calc[rows] > "",
 	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
 	                 csl$tail[rows])
-	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 2)
+	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 1)
 	cpp <- put_lines(cpp, indent, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end calculate_rate", ""))
 

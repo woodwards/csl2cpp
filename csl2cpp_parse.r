@@ -32,12 +32,11 @@ code_split <- function(code){
   remaining <- str_trim(code)
   outlist <- vector("list", 50)
   outi <- 1
-  # metacharacters are . \ | ( ) [ { ^ $ * + ?
-  # inside character classes also ^ - \ ]
+  # regex metacharacters are . \ | ( ) [ { ^ $ * + ?
+  # regex inside character classes also ^ - \ ]
   patterns <- c(
-    space="^[:blank:]+",
     comment="^!.*",
-    string="^\\'.*\\'", # ACSL allows single quotes only
+    string="^\\'.*\\'", # ACSL allows single quotes only, C++ double quotes for strings
     token="^[:alpha:]+[[:alnum:]_]*",
     equals="^\\=",
     openbracket="^\\(",
@@ -57,25 +56,22 @@ code_split <- function(code){
     power="^\\*[:blank:]*\\*|^\\^"
   )
   # whole line analysis
-  if (str_detect(remaining, "^[:blank:]*$")){ # blank line
+  if (str_detect(remaining, "")){ # blank line
     outlist[[outi]] <- "blank"
     outi <- outi + 1
     outlist[[outi]] <- ""
     outi <- outi + 1
-    remaining <- ""
   }
   # next item analysis
   while (str_length(remaining) > 0){ # loop through elements
     next_match <- str_match(remaining, regex(patterns, ignore_case=TRUE))[,1]
-    matchj <- which(!is.na(next_match)) # all matching patterns
-    stopifnot(length(matchj) == 1) # only match one pattern
+    matchj <- which(!is.na(next_match)) # compare to all patterns
+    stopifnot(length(matchj) == 1) # only one pattern should match
     matchj <- matchj[[1]] # take first pattern if stopifnot() disabled
-    if (names(patterns)[matchj] != "space"){ # don't save space
-      outlist[[outi]] <- names(patterns)[matchj]
-      outi <- outi + 1
-      outlist[[outi]] <- next_match[matchj]
-      outi <- outi + 1
-    }
+    outlist[[outi]] <- names(patterns)[matchj]
+    outi <- outi + 1
+    outlist[[outi]] <- next_match[matchj]
+    outi <- outi + 1
     remaining <- str_trim(str_replace(remaining, regex(patterns[matchj], ignore_case=TRUE), ""))
 
   }

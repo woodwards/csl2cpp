@@ -4,7 +4,8 @@ outstandings_issues.txt List of known issues
 csl2cpp.r		R script for translating a CSL file to a C++ class
 csl2cpp_read.r	R functions for reading a CSL file to a dataframe
 csl2cpp_parse.r	R functions for parsing
-csl2cpp_do_parse.r	R script for parsing a CSL file in a dataframe
+csl2cpp_do_parse_one.r	R script for parsing a CSL file in a dataframe
+csl2cpp_do_parse_two.r	R script for parsing a CSL file in a dataframe
 csl2cpp_make.r	R functions for building a C++ class from a parsed dataframe
 csl2cpp_write.r	R functions for writing a C++ class
 /docs/		miscellaneous background documents

@@ -24,6 +24,7 @@ csl <- csl %>%
     type = "",
     decl = "",
     init = "",
+    disc = "",
     calc = "",
     integ = "",
     delim = ""
@@ -32,15 +33,17 @@ csl <- csl %>%
 # change all comments to C++ style
 csl$tail <- str_trim(str_replace(csl$tail, "^! ?", "// "))
 
-# seems to be easier to access named lists than tibble rows
-# token_list is used to standardise case of user token
+# seems to be easier to access named lists than dataframe rows
+# token_list is used to standardise case of user tokens
 # token_list is also used to translate some language keywords
 token_list <- setNames(tokens$name, tokens$lower) # indexed by lower case
-reserved <- c(keyword, "aint", "t", "cos",
-              "integ", "sin", "max", "exp", "min", "acos", "asin", "atan", "log") # convert these keywords to lower case
+reserved <- c(keyword, "t", "integ",
+              "max", "exp", "min", "log", "sqrt",
+              "cos", "sin", "acos", "asin", "tan", "atan") # convert these keywords to lower case
 token_list[names(token_list) %in% reserved] <- str_to_lower(token_list[names(token_list) %in% reserved])
 token_list[c("then", "end", "endif")] <- c("{", "}", "}") # translate these
-token_list[c("integer", "logical", "doubleprecision", "real", "character")] <- c("int", "bool", "double", "double", "char") # translate these
+token_list[c("mod", "aint")] <- c("fmod", "floor") # translate these
+token_list[c("integer", "logical", "doubleprecision", "real", "character")] <- c("int", "bool", "double", "double", "string") # translate these
 
 # keeping track of tokens
 token_decl_line <- setNames(rep(0L, length(token_list)), token_list)
@@ -61,8 +64,8 @@ bool_list <- setNames(c("true", "false", "||", "&&", "~", ">=", ">", "<=", "<", 
 arrays <- ""
 
 # loop through rows again
-major_section <- "header"
 major_sections <- c("initial", "dynamic", "derivative", "discrete", "terminal")
+major_section_stack <- c("header") # current section is at position 1
 i <- 1
 for (i in 1:nrow(csl)){
 
@@ -72,8 +75,20 @@ for (i in 1:nrow(csl)){
   }
 
   # identify major section
-  if (csl$head[i] %in% major_sections){
-    major_section <- csl$head[i]
+  if (csl$line_type[i] %in% major_sections){
+    # new major section
+    major_section_stack <- c(csl$line_type[i], major_section_stack)
+    major_section <- major_section_stack[1]
+  } else if (csl$line_type[i] == "end" ){
+    # check for end of major section
+    if (csl$line_type[csl$stack[i]] %in% major_sections){
+      major_section <- major_section_stack[1]
+      major_section_stack <- tail(major_section_stack, -1)
+    } else {
+      major_section <- major_section_stack[1]
+    }
+  } else {
+    major_section <- major_section_stack[1]
   }
   csl$section[i] <- major_section
 
@@ -87,7 +102,7 @@ for (i in 1:nrow(csl)){
   if (length(j)>0){
     parse_list[j+1] <- token_list[str_to_lower(parse_list[j+1])] # convert tokens to standard case
   }
-  # convert CSL bool (e.g. .GE.) to C++
+  # convert CSL bool (e.g. .GE.) to C++ (e.g. >=)
   odds <- seq(1, length(parse_list)-1, 2)
   j <- which(parse_list[odds] == "bool") * 2 - 1
   if (length(j)>0){
@@ -112,7 +127,7 @@ for (i in 1:nrow(csl)){
   parse_str <- paste(parse_list[odds+1], collapse=" ")
 
   #### find specific line ####
-  # stopifnot((csl$line_type[i] %in% c("procedural"))==FALSE)
+  # stopifnot(i<1787)
 
   #### begin handling line types ####
 
@@ -132,7 +147,7 @@ for (i in 1:nrow(csl)){
     csl$type[i] <- "auto"
     csl$decl[i] <- paste(parse_list[setdiff(odds+1, 2)], collapse=" ")
     csl$delim[i] <- ";"
-    csl$tail[i] <- paste("//", paste(parse_list[odds+1], collapse=" "), csl$tail[i]) # put original in tail
+    csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
 
     # deal with previous declaration of variable
     bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
@@ -290,14 +305,19 @@ for (i in 1:nrow(csl)){
       }
       token_used_line[parse_list[k+1][!bad]] <- i
       # initialise variables
-      # find the bits of the parse_list that are not declaration-only
-      k <- seq(4, length(parse_list), 2) # all code
-      j <- which( parse_list == "token" & lag(parse_list, 2) == "comma" &
-                    ( lead(parse_list, 2) != "equals" | is.na(lead(parse_list, 2)) ) ) + 1L # decl code
-      k <- setdiff(k, union(j, j-2)) # remove decl code, keep rest
-      csl$init[i] <- str_replace_all( paste( parse_list[k], collapse=" "), ",", ";") # initial assignment
-      csl$delim[i] <- ";"
-      csl$handled[i] <- TRUE
+      if (csl$line_type[i] == "character"){
+        # declaration only
+        csl$handled[i] <- TRUE
+      } else {
+        # find the bits of the parse_list that are not declaration-only
+        k <- seq(4, length(parse_list), 2) # all code
+        j <- which( parse_list == "token" & lag(parse_list, 2) == "comma" &
+                      ( lead(parse_list, 2) != "equals" | is.na(lead(parse_list, 2)) ) ) + 1L # decl code
+        k <- setdiff(k, union(j, j-2)) # remove decl code, keep rest
+        csl$init[i] <- str_replace_all( paste( parse_list[k], collapse=" "), ",", ";") # initial assignment
+        csl$delim[i] <- ";"
+        csl$handled[i] <- TRUE
+      }
 
     } # end non-array declaration and initialisation
 
@@ -446,6 +466,12 @@ for (i in 1:nrow(csl)){
     } else if (major_section == "initial"){
       csl$init[i] <- temp
       csl$delim[i] <- ";"
+    } else if (major_section == "discrete"){ # discrete section
+      csl$disc[i] <- temp
+      csl$delim[i] <- ";"
+      odds <- seq(1, length(parse_list)-1, 2)
+      k <- which(parse_list[odds] == "token" & !(lead(parse_list[odds], 1) %in% c("equals", "openbracket"))) * 2 - 1 # FIXME not quite right for arrays
+      token_used_line[parse_list[k+1]] <- i
     } else { # dynamic section
       csl$calc[i] <- temp
       csl$delim[i] <- ";"
@@ -456,8 +482,8 @@ for (i in 1:nrow(csl)){
     csl$handled[i] <- TRUE
 
   }
-  #### handle constant ####
-  if (csl$line_type[i] %in% c("constant")){
+  #### handle constant, algorithm, nsteps, maxterval, cinterval, minterval ####
+  if (csl$line_type[i] %in% c("constant", "algorithm", "nsteps", "maxterval", "cinterval", "minterval")){
 
     # note: a CSL CONSTANT is just an initialiser, values can be changed later!!!
     # CONSTANT is used to
@@ -508,14 +534,18 @@ for (i in 1:nrow(csl)){
       token_decl_line[parse_list[k+1][!bad]] <- i
       token_decl_type[parse_list[k+1][!bad]] <- csl$type[i]
     }
+    # fix string delimiter FIXME only handles simple cases
+    odds <- seq(1, length(parse_list)-1, 2)
+    k <- which( parse_list[odds] == "string" ) * 2 - 1
+    parse_list[k+1] <- str_replace_all(parse_list[k+1], "\'", "\"")
     # initialise
     if (!is_array){ # easy, just copy line and convert , to ;
       odds <- seq(1, length(parse_list)-1, 2)
-      k <- which( parse_list[odds+1] != "constant" ) * 2 - 1
+      k <- which( !(parse_list[odds+1] %in% c("constant", "algorithm", "nsteps", "maxterval", "cinterval", "minterval")) ) * 2 - 1
       csl$init[i] <- str_replace(str_replace_all( paste( parse_list[k+1], collapse=" "), ",", ";"), ";$", "")
       csl$delim[i] <- ";"
-      if (major_section != "initial"){
-        csl$tail[i] <- paste("//", paste(parse_list[odds+1], collapse=" "), csl$tail[i]) # put original in tail
+      if (major_section %in% c("header")){
+        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
       }
       csl$handled[i] <- TRUE
     } else if (!is_continuation){ # array first line FIXME assumes each line is a row of data
@@ -524,11 +554,11 @@ for (i in 1:nrow(csl)){
       if (max(parse_list[10], "", na.rm=TRUE) == "*"){ # replicator format for 1d array e.g. MamCellsF = MaxHerds * 0.0
         temp <- paste(rep(parse_list[12], this_array_dim1), collapse=" , ")
         temp <- paste(parse_list[4], " = { { ", temp, " } } ", sep="")
-        print(temp)
+        # print(temp) # print array parsing
         csl$init[i] <- temp
         csl$delim[i] <- ""
         if (major_section != "initial"){
-          csl$tail[i] <- paste("//", paste(parse_list[odds+1], collapse=" "), csl$tail[i]) # put original in tail
+          csl$tail[i] <- paste("//", paste_str, csl$tail[i]) # put original in tail
         }
         if (this_array_dim2 > 1){
           stop("illegal array initialisation")
@@ -552,14 +582,14 @@ for (i in 1:nrow(csl)){
           temp <- paste(parse_list[k], collapse=" ")
           temp <- paste(parse_list[4], " = ", outer, " { ", temp, " } ", ender, sep="")
         }
-        print(temp)
+        # print(temp) # print array parsing
         csl$init[i] <- temp
         csl$delim[i] <- ""
         if (major_section != "initial"){
-          csl$tail[i] <- paste("//", paste(parse_list[odds+1], collapse=" "), csl$tail[i]) # put original in tail
+          csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
         }
         if (this_array_row == this_array_dim2 & will_continue){
-          stop("should not continue")
+          stop("array should not continue")
         } else {
           this_array_row <- this_array_row + 1
         }
@@ -577,11 +607,11 @@ for (i in 1:nrow(csl)){
       }
       temp <- paste(parse_list[k], collapse=" ")
       temp <- paste(" { ", temp, " } ", ender, sep="")
-      print(temp)
+      # print(temp) # print array parsing
       csl$init[i] <- temp
       csl$delim[i] <- ";"
       if (major_section != "initial"){
-        csl$tail[i] <- paste("//", paste(parse_list[odds+1], collapse=" "), csl$tail[i]) # put original in tail
+        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
       }
       if (this_array_row == this_array_dim2 & will_continue){
         stop("wrong number of rows")
@@ -599,6 +629,9 @@ for (i in 1:nrow(csl)){
     if (major_section == "initial"){
       csl$init[i] <- paste(parse_list[odds+1], collapse=" ")
       csl$delim[i] <- ";"
+    } else if (major_section == "discrete"){
+      csl$disc[i] <- paste(parse_list[odds+1], collapse=" ")
+      csl$delim[i] <- ";"
     } else {
       csl$calc[i] <- paste(parse_list[odds+1], collapse=" ")
       csl$delim[i] <- ";"
@@ -606,15 +639,25 @@ for (i in 1:nrow(csl)){
     csl$handled[i] <- TRUE
 
   }
-  #### handle line_type = ifthen, endif ####
-  if (csl$line_type[i] %in% c("ifthen", "endif")){
+  #### handle line_type = ifthen, endif, discrete ####
+  if (csl$line_type[i] %in% c("ifthen", "endif", "discrete")){
 
-    odds <- seq(1, length(parse_list)-1, 2)
+    if (csl$line_type[i] == "discrete"){
+      # if (event_queue.begin()->second=="event1"){
+      # event_queue.erase(event_queue.begin()) // do this elsewhere to avoid accidental trigger
+      temp <- paste("if ( event_queue.begin()->second == \"", parse_list[4], "\" ) { ", sep="")
+    } else {
+      odds <- seq(1, length(parse_list)-1, 2)
+      temp <- paste(parse_list[odds+1], collapse=" ")
+    }
     if (major_section == "initial"){
-      csl$init[i] <- paste(parse_list[odds+1], collapse=" ")
+      csl$init[i] <- temp
+      # no delimiter!
+    } else if (major_section == "discrete"){
+      csl$disc[i] <- temp
       # no delimiter!
     } else {
-      csl$calc[i] <- paste(parse_list[odds+1], collapse=" ")
+      csl$calc[i] <- temp
       # no delimiter!
     }
     csl$handled[i] <- TRUE
@@ -625,6 +668,9 @@ for (i in 1:nrow(csl)){
 
     if (major_section == "initial"){
       csl$init[i] <- "} else {"
+      # no delimiter!
+    } else if (major_section == "discrete"){
+      csl$disc[i] <- "} else {"
       # no delimiter!
     } else {
       csl$calc[i] <- "} else {"
@@ -639,6 +685,9 @@ for (i in 1:nrow(csl)){
     odds <- seq(1, length(parse_list)-1, 2)
     if (major_section == "initial"){
       csl$init[i] <- paste("}", paste(parse_list[odds+1], collapse=" "))
+      # no delimiter!
+    } else if (major_section == "discrete"){
+      csl$disc[i] <- paste("}", paste(parse_list[odds+1], collapse=" "))
       # no delimiter!
     } else {
       csl$calc[i] <- paste("}", paste(parse_list[odds+1], collapse=" "))
@@ -660,12 +709,17 @@ for (i in 1:nrow(csl)){
       stop("illegal operation after label of do loop")
     }
     csl$indent[(i+1):(labeli-1)] <- csl$indent[(i+1):(labeli-1)] + 1 # increase indent
+    temp <- paste("for ( int", parse_list[6], "=", parse_list[10], ";", parse_list[6], "<=", parse_list[14], "; ++", parse_list[6], ") {", collapse=" ")
     if (major_section == "initial"){
-      csl$init[i] <- paste("for ( int", parse_list[6], "=", parse_list[10], ";", parse_list[6], "<=", parse_list[14], "; ++", parse_list[6], ") {", collapse=" ")
+      csl$init[i] <- temp
       csl$init[labeli] <- "}"
       # no delimiter!
+    } else if (major_section == "discrete"){
+      csl$disc[i] <- temp
+      csl$disc[labeli] <- "}"
+      # no delimiter!
     } else {
-      csl$calc[i] <- paste("for ( int", parse_list[6], "=", parse_list[10], ";", parse_list[6], "<=", parse_list[14], "; ++", parse_list[6], ") {", collapse=" ")
+      csl$calc[i] <- temp
       csl$calc[labeli] <- "}"
       # no delimiter!
     }
@@ -693,6 +747,10 @@ for (i in 1:nrow(csl)){
       csl$init[i] <- temp
       csl$delim[i] <- ";"
       csl$init[labeli] <- paste(new_label, ":", sep="") # replaces continue statement
+    } else if (major_section == "discrete"){
+      csl$disc[i] <- temp
+      csl$delim[i] <- ";"
+      csl$disc[labeli] <- paste(new_label, ":", sep="") # replaces continue statement
     } else {
       csl$calc[i] <- temp
       csl$delim[i] <- ";"
@@ -710,27 +768,53 @@ for (i in 1:nrow(csl)){
    csl$handled[i] <- TRUE
 
   }
+  #### handle line_type = schedule ####
+  if (csl$line_type[i] %in% c("schedule")){
+
+    # event_queue[t+x] <- name
+    k <- seq(7, length(parse_list)-1, 2)
+    temp <- paste(parse_list[k+1], collapse=" " )
+    temp <- paste("event_queue [ t + ", temp, " ] = \"", parse_list[4], "\"", sep="")
+    if (major_section == "initial"){
+      csl$init[i] <- temp
+      csl$delim[i] <- ";"
+      csl$handled[i] <- TRUE
+    } else if (major_section == "discrete"){
+      csl$disc[i] <- temp
+      csl$delim[i] <- ";"
+      csl$handled[i] <- TRUE
+    } else {
+      stop("schedule not allowed in derivative section")
+    }
+
+  }
   #### handle line_type = end ####
   if (csl$line_type[i] %in% c("end")){
 
     # see what it matches
     j <- csl$stack[i]
-    if (csl$line_type[j] %in% c("program", "initial", "derivative", "discrete", "dynamic", "terminal", "procedural")){
+    if (csl$line_type[j] %in% c("program", "initial", "derivative", "dynamic", "terminal", "procedural")){
 
+      # } not needed
       csl$tail[i] <- paste("// end of", csl$line_type[j], csl$tail[i])
+      csl$handled[i] <- TRUE
 
-    } else { # closes an ifthen
+    } else { # closes an ifthen or discrete
 
       if (major_section == "initial"){
         csl$init[i] <- "}"
+        # no delimiter!
+      } else if (major_section == "discrete"){
+        csl$disc[i] <- "}"
         # no delimiter!
       } else {
         csl$calc[i] <- "}"
         # no delimiter!
       }
+      csl$tail[i] <- paste("// end of", csl$line_type[j], csl$tail[i])
+      csl$handled[i] <- TRUE
 
     }
-    csl$handled[i] <- TRUE
 
   }
   #### handle line_type = comment, blank ####
@@ -775,8 +859,9 @@ save.image(temp_file)
 # [26] "interval"        "logical"         "maxterval"       "nsteps"          "parameter"
 # [31] "procedural"      "program"         "schedule"        "termt"
 if (FALSE){
-  View(filter(csl, line_type=="goto"))
+  View(filter(csl, line_type=="schedule"))
   View(filter(csl, handled==FALSE))
+  View(filter(csl, section=="schedule"))
   View(filter(csl, label>""))
   View(filter(csl, !is.na(stack)))
 }

@@ -5,15 +5,18 @@ Issues
 - acslx.exe can't build models if C:\Program Files\Git\bin\sh.exe is in the path
 - acslx.exe can't build models if C:\RTools\3.4\bin\sh.exe is in the path
 - this translation project actually only covers a small subset of ACSL functionality
-- integer and logical variables are stored as doubles
-- asclX code may not be in order
+- asclX code in dynamic section may not be in order
 - IMPLC, IMPVC implicit systems not handled
-- Assume Runge-Kutta-4 integration method (easy to change)
+- Assumes Runge-Kutta-4 integration method (easy to change)
+- power operator needs to be manually translated (^ is converted to **)
+- arrays and strings are not visible to user
+- does not handle TERMINAL section
+- SCHEDULE must be on its own line
 
 To Do
 
-- Handle GOTO
-- Handle arrays
-- Simplify parsing code to make it easier to understand and maintain
-- Put comments in the right place
-
+- schedule command
+- discrete events
+- line sorting in calc section
+- Molly compilation testing
+- Molly runtime testing
