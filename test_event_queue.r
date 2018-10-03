@@ -8,6 +8,7 @@ sourceCpp(code='
 #include <map>
 #include <cmath>
 #include <string>
+#include <array>
 #include <Rcpp.h>
 
 
@@ -17,6 +18,8 @@ sourceCpp(code='
 // [[Rcpp::export]]
 void hello()
 {
+
+  std::array< double, 3 > a = {1,2,3};
 
   using namespace std;
 

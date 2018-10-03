@@ -5,6 +5,14 @@ vrep <- function(what, times){ # vectorised string rep
 }
 
 put_lines <- function(cpp, indent, lines){
+  # find lines not surrounded by blanks
+  i <- lines != "" | lag(lines,1) != "" # | lead(lines,1) != ""
+  i[is.na(i)] <- TRUE
+  lines <- lines[i]
+  if (length(indent)>1){ # indent is not a constant
+    indent <- indent[i]
+  }
+  # insert rows
 	first_row <- attr(cpp, "row") + 1
 	last_row <- first_row+length(lines)-1
 	tab <- vrep("\t", indent)
@@ -51,7 +59,7 @@ make_cpp <- function(csl, tokens, model_name){
 			   "",
 			   "using namespace std; // needed for math functions",
 			   "")
-cpp <- put_lines(cpp, 0, lines)
+	cpp <- put_lines(cpp, 0, lines)
 
 	# header comments
 	rows <- csl$section == "header"
@@ -82,9 +90,10 @@ cpp <- put_lines(cpp, 0, lines)
 	cpp <- put_lines(cpp, 1, "// declare model variables")
 	rows <- csl$decl > ""
 	lines <- if_else(csl$decl[rows] > "",
-	                 smoosh(csl$static[rows], csl$type[rows], csl$decl[rows], ";", csl$tail[rows]),
+	                 smoosh(csl$static[rows], csl$type[rows], csl$decl[rows], csl$dend[rows], csl$tail[rows]),
 	                 csl$tail[rows])
-  cpp <- put_lines(cpp, 1, lines)
+	indent <- if_else(str_detect(lines, "^\\{"), 2, 1) # indent array initialisation lines
+	cpp <- put_lines(cpp, indent, lines)
 
   # get state
   cpp <- put_lines(cpp, 1, c("", "state_type get_state ( ) {"))
@@ -123,7 +132,7 @@ cpp <- put_lines(cpp, 0, lines)
   	lines <- if_else(csl$init[rows] > "",
   	                 smoosh(csl$init[rows], csl$delim[rows], csl$tail[rows]),
   	                 csl$tail[rows])
-  	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 1)
+  	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
   	cpp <- put_lines(cpp, indent, lines)
   	cpp <- put_lines(cpp, 2, "")
   }
@@ -148,14 +157,14 @@ cpp <- put_lines(cpp, 0, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end push_variables_to_model", ""))
 
 	####  do events ####
-	cpp <- put_lines(cpp, 1, c("void do_event ( ) {", ""))
+	cpp <- put_lines(cpp, 1, c("void do_event ( string next_event ) {", ""))
 	rows <- csl$section %in% c("discrete")
 	if (any(rows)){
 	  cpp <- put_lines(cpp, 2, c("// find event"))
 	  lines <- if_else(csl$disc[rows] > "",
   	                 smoosh(csl$disc[rows], csl$delim[rows], csl$tail[rows]),
   	                 csl$tail[rows])
-  	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 1)
+	  indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
 	  cpp <- put_lines(cpp, indent, lines)
 	  cpp <- put_lines(cpp, 2, "")
 	}
@@ -173,7 +182,7 @@ cpp <- put_lines(cpp, 0, lines)
 	lines <- if_else(csl$calc[rows] > "",
 	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
 	                 csl$tail[rows])
-	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 1)
+	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
 	cpp <- put_lines(cpp, indent, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end calculate_rate", ""))
 
@@ -184,19 +193,16 @@ cpp <- put_lines(cpp, 0, lines)
 	# lines <- if_else(csl$calc[rows] > "",
 	#                  smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
 	#                  csl$tail[rows])
-	# indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 1)
+	# indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
 	# cpp <- put_lines(cpp, indent, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end post_processing", ""))
 
 	# rate operator
 	cpp <- put_lines(cpp, 1, c("// called by boost::odeint::integrate()",
-	                           "void operator()( const state_type &a_state , state_type &a_rate, double a_time ){"))
-	cpp <- put_lines(cpp, 2, c("", "// set state",
-	                           "t = a_time;"))
-	# lines <- paste(state, " = a_state[", 0:(n_state-1), "];", sep="")
-	lines <- "set_state( a_state );"
-	cpp <- put_lines(cpp, 2, lines)
-	cpp <- put_lines(cpp, 2, c("", "// calculate rate",
+	                           "void operator()( const state_type &a_state , state_type &a_rate, double a_time ){", ""))
+	cpp <- put_lines(cpp, 2, c("// calculate rate",
+	                           "t = a_time;",
+	                           "set_state( a_state );",
 	                           "calculate_rate();", "",
 	                           "// return rate"))
 	lines <- paste("a_rate[", 0:(n_state-1), "]", rate, ";", sep="")
@@ -222,7 +228,7 @@ cpp <- put_lines(cpp, 0, lines)
 	  "\t\t\tschedule.erase( schedule.begin() );",
 	  "\t\t\tnext_time = t - 1;",
 	  "\t\t} else if ( schedule.begin()->first == t ) {",
-	  "\t\t\tdo_event();",
+	  "\t\t\tdo_event( schedule.begin()->second );",
 	  "\t\t\tschedule.erase( schedule.begin() );",
 	  "\t\t\tnext_time = t - 1;",
 	  "\t\t} else if ( schedule.begin()->first > t ) {",

@@ -27,7 +27,8 @@ csl <- csl %>%
     disc = "",
     calc = "",
     integ = "",
-    delim = ""
+    dend = "", # declaration section end of line delimiter
+    delim = "" # other section end of line delimiter
   )
 
 # change all comments to C++ style
@@ -95,23 +96,61 @@ for (i in 1:nrow(csl)){
   # get tokens for this line
   parse_list <- unlist(str_to_obj(csl$parse_list[i]))
 
-  # general tidy up
+  #### general code translation ####
+  # note can these slow the loop down a lot
+
   # convert user tokens to case sensitive, and translate CSL to C++ keywords
   odds <- seq(1, length(parse_list)-1, 2)
   j <- which(parse_list[odds] == "token") * 2 - 1
   if (length(j)>0){
     parse_list[j+1] <- token_list[str_to_lower(parse_list[j+1])] # convert tokens to standard case
   }
+
   # convert CSL bool (e.g. .GE.) to C++ (e.g. >=)
   odds <- seq(1, length(parse_list)-1, 2)
   j <- which(parse_list[odds] == "bool") * 2 - 1
   if (length(j)>0){
     parse_list[j+1] <- bool_list[str_to_lower(parse_list[j+1])] # convert bool
   }
+
+  # make concatenated version of original line for use in messages
+  odds <- seq(1, length(parse_list)-1, 2)
+  parse_str <- paste(parse_list[odds+1], collapse=" ")
+
   # consistently mark power as *pow(1,1)* (user will need to change this later) since C++ uses ^ for pointer
   odds <- seq(1, length(parse_list)-1, 2)
   k <- which( parse_list[odds] == "power" ) * 2 - 1
   parse_list[k+1] <- "*pow(1,1)*"
+
+  # change array brackets from (,) to [][]
+  # FIXME only works if array access all on one line, no brackets or commas inside access
+  odds <- seq(1, length(parse_list)-1, 2)
+  k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) == "openbracket" ) * 2 - 1
+  for (j in k){
+    # detect array
+    this_array <- max(arrays[str_detect(arrays, paste("^double", parse_list[j+1], "\\(", sep="[:blank:]+"))], "")
+    if (this_array > ""){
+      temp <- str_split(this_array, "\\s")[[1]]
+      this_array_dims <- if_else(temp[5] == ",", 2, 1)
+      jj <- j + 2
+      parse_list[jj+1] <- "["
+      if (this_array_dims==2){
+        odds <- seq(jj+2, length(parse_list)-1, 2)
+        jj <- odds[which( parse_list[odds] == "comma" )[1]]
+        parse_list[jj+1] <- "]["
+      }
+      odds <- seq(jj+2, length(parse_list)-1, 2)
+      jj <- odds[which( parse_list[odds] == "closebracket" )[1]]
+      parse_list[jj+1] <- "]"
+    }
+  }
+
+  # fix string delimiter FIXME only handles simple cases
+  odds <- seq(1, length(parse_list)-1, 2)
+  k <- which( parse_list[odds] == "string" ) * 2 - 1
+  if (length(k)>0){
+    parse_list[k+1] <- str_replace_all(parse_list[k+1], "\'", "\"")
+  }
 
   #### identify continuation ####
   is_continuation <- csl$line_type[i] %in% c("continuation")
@@ -122,11 +161,7 @@ for (i in 1:nrow(csl)){
     }
   }
 
-  # make concatenated version of original
-  odds <- seq(1, length(parse_list)-1, 2)
-  parse_str <- paste(parse_list[odds+1], collapse=" ")
-
-  #### find specific line ####
+  #### pause at specific line ####
   # stopifnot(i<2325)
 
   #### begin handling line types ####
@@ -146,7 +181,8 @@ for (i in 1:nrow(csl)){
     csl$static[i] <- "static constexpr"
     csl$type[i] <- "auto"
     csl$decl[i] <- paste(parse_list[setdiff(odds+1, 2)], collapse=" ")
-    csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+    csl$dend[i] <- ";"
+    # csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
 
     # deal with previous declaration of variable
     bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
@@ -166,6 +202,7 @@ for (i in 1:nrow(csl)){
           csl$type[i] <- csl$type[token_decl_line[j]] # get type (for parameter)
           csl$type[token_decl_line[j]] <- ""
           csl$decl[token_decl_line[j]] <- "" # delete decl
+          csl$dend[token_decl_line[j]] <- ""
         }
         # cat("removed declaration of", j, "on line", token_decl_line[j], "\n")
       }
@@ -197,7 +234,7 @@ for (i in 1:nrow(csl)){
 
         # https://www.learncpp.com/cpp-tutorial/6-15-an-introduction-to-stdarray/
         # std::array<int,2> a ; // 2 elements
-        # a = {{ 13, 18 }} ; // note std::array requires one pair of extra outer braces
+        # std::array<int,2> a = {{ 13, 18 }} ; // note std::array requires one pair of extra outer braces
         # a[0] // base zero
         # single dimension fixed size array
         message <- paste("detected array:", parse_str)
@@ -206,7 +243,8 @@ for (i in 1:nrow(csl)){
         csl$static[i] <- ""
         csl$type[i] <- paste("std::array< double ,", parse_list[8], "> ")
         csl$decl[i] <- parse_list[4]
-        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+        csl$dend[i] <- ";"
+        # csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
         # token_variable[parse_list[4]] <- parse_list[4] # FIXME currently not visible
         token_decl_line[parse_list[4]] <- i
         token_decl_type[parse_list[4]] <- csl$type[i]
@@ -217,7 +255,7 @@ for (i in 1:nrow(csl)){
         # https://stackoverflow.com/questions/17759757/multidimensional-stdarray
         # https://en.cppreference.com/w/cpp/container/array/operator_at
         # std::array<std::array<int,3>,2> a ; // 2 rows, 3 columns
-        # a = {{{1,2,3}, {4,5,6}}} ; // note std::array requires one pair of extra outer braces
+        # std::array<std::array<int,3>,2> a = {{{1,2,3}, {4,5,6}}} ; // note std::array requires one pair of extra outer braces
         # a[2-1][3-1] // note axis order
         # two dimensional fixed size array
         message <- paste("detected 2d array:", parse_str)
@@ -226,7 +264,8 @@ for (i in 1:nrow(csl)){
         csl$static[i] <- ""
         csl$type[i] <- paste("std::array< std::array< double ,", parse_list[12], "> ,", parse_list[8], "> ") # need to reverse indices
         csl$decl[i] <- parse_list[4]
-        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+        csl$dend[i] <- ";"
+        # csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
         # token_variable[parse_list[4]] <- parse_list[4] # FIXME currently not visible
         token_decl_line[parse_list[4]] <- i
         token_decl_type[parse_list[4]] <- csl$type[i]
@@ -244,9 +283,9 @@ for (i in 1:nrow(csl)){
     #### (b) non-array declaration and intialisation ####
     if (!is_array){
 
-      #
+      # FIXME does not work for is_continuation
       this_type <- parse_list[2] # C++ type
-      parse_list[1:2] <- c("comma" , ",") # put fake comma at start of list to make it easier to parse FIXME does not work for continuation
+      parse_list[1:2] <- c("comma" , ",") # put fake comma at start of list to make it easier to parse
 
       # declare variables
       odds <- seq(1, length(parse_list)-1, 2)
@@ -254,6 +293,8 @@ for (i in 1:nrow(csl)){
       csl$static[i] <- ""
       csl$type[i] <- this_type
       csl$decl[i] <- paste(parse_list[k+1], collapse=" , ") # variable list
+      csl$dend[i] <- ";"
+
       # deal with previous declarations of these variables
       bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
       if (any(bad)){
@@ -272,6 +313,7 @@ for (i in 1:nrow(csl)){
             csl$type[i] <- csl$type[token_decl_line[j]] # get type FIXME ?
             csl$type[token_decl_line[j]] <- ""
             csl$decl[token_decl_line[j]] <- "" # delete decl
+            csl$dend[token_decl_line[j]] <- ""
           }
           # cat("removed declaration of", j, "on line", token_decl_line[j], "\n")
         }
@@ -289,6 +331,7 @@ for (i in 1:nrow(csl)){
         cat("line", i, message, "\n")
       }
       token_set_line[parse_list[k+1]] <- i
+
       # which tokens get used (any not preceeded by comma) really the compiler can handle this
       odds <- seq(1, length(parse_list)-1, 2)
       k <- which( parse_list[odds] == "token" & lag(parse_list[odds], 1) != "comma" ) * 2 - 1
@@ -298,6 +341,7 @@ for (i in 1:nrow(csl)){
         cat("line", i, message, "\n")
       }
       token_used_line[parse_list[k+1][!bad]] <- i
+
       # initialise variables
       if (csl$line_type[i] == "character"){
         # declaration only
@@ -335,6 +379,7 @@ for (i in 1:nrow(csl)){
         csl$static[i] <- ""
         csl$type[i] <- "double" # state vars are double
         csl$decl[i] <- jj
+        csl$dend[i] <- ";"
         token_variable[jj] <- jj
         token_decl_line[jj] <- i
         token_decl_type[jj] <- csl$type[i]
@@ -370,6 +415,7 @@ for (i in 1:nrow(csl)){
         csl$static[i] <- ""
         csl$type[i] <- "double" # state vars are double
         csl$decl[i] <- jj
+        csl$dend[i] <- ";"
         token_variable[jj] <- jj
         token_decl_line[jj] <- i
         token_decl_type[jj] <- csl$type[i]
@@ -417,38 +463,16 @@ for (i in 1:nrow(csl)){
           csl$static[i] <- ""
           csl$type[i] <- "double"
           csl$decl[i] <- jj
+          csl$dend[i] <- ";"
           token_variable[jj] <- jj
           token_decl_line[jj] <- i
           token_decl_type[jj] <- csl$type[i]
         }
       }
     }
-    # change array brackets from (,) to [][]
-    # FIXME only works if array access all on one line, no brackets or commas inside access
-    odds <- seq(1, length(parse_list)-1, 2)
-    k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) == "openbracket" ) * 2 - 1
-    for (j in k){
-      # detect array
-      this_array <- arrays[str_detect(arrays, paste("^double", parse_list[j+1], "\\(", sep="[:blank:]+"))]
-      if (max(this_array, "") > ""){
-          temp <- str_split(this_array, "\\s")[[1]]
-          this_array_dims <- if_else(temp[5] == ",", 2, 1)
-          jj <- j + 2
-          parse_list[jj+1] <- "["
-          if (this_array_dims==2){
-            odds <- seq(jj+2, length(parse_list)-1, 2)
-            jj <- odds[which( parse_list[odds] == "comma" )[1]]
-            parse_list[jj+1] <- "]["
-          }
-          odds <- seq(jj+2, length(parse_list)-1, 2)
-          jj <- odds[which( parse_list[odds] == "closebracket" )[1]]
-          parse_list[jj+1] <- "]"
-      }
-    }
     # some assignments have labels
     if (csl$label[i]>""){
       new_label <- paste("label_", csl$label[i], " ", sep="")
-      csl$indent[i] <- csl$indent[i] - 1
     } else {
       new_label=""
     }
@@ -485,10 +509,11 @@ for (i in 1:nrow(csl)){
     # (b) initialise a declared array (single = on first line)
     # both of these can have continuation
     # FIXME can't handle simple initialisations that break across lines
-    # declare
-    odds <- seq(1, length(parse_list)-1, 2)
-    k <- which( parse_list[odds] == "token" &  lead(parse_list[odds], 1) == "equals" ) * 2 - 1
+
+    # get array size (array will/must be already declared)
     if (!is_continuation){
+      odds <- seq(1, length(parse_list)-1, 2)
+      k <- which( parse_list[odds] == "token" &  lead(parse_list[odds], 1) == "equals" ) * 2 - 1
       is_array <- length(k) == 1 && any(str_detect(arrays, paste("^double", parse_list[k+1], "\\(", sep="[:blank:]+")))
       if (is_array){ # set array details
         this_array <- arrays[str_detect(arrays, paste("^double", parse_list[k+1], "\\(", sep="[:blank:]+"))]
@@ -514,20 +539,20 @@ for (i in 1:nrow(csl)){
         this_array <- ""
       }
     }
-    token_set_line[parse_list[k+1]] <- i
-    bad <- token_decl_line[parse_list[k+1]] != 0 # already declared
-    if (any(!bad)){ # declare these ones
+    # declare all variables if needed (arrays are already declared)
+    odds <- seq(1, length(parse_list)-1, 2)
+    k <- which( parse_list[odds] == "token" &  lead(parse_list[odds], 1) == "equals" ) * 2 - 1
+    bad <- token_decl_line[parse_list[k+1]] == 0 # not declared
+    if (any(bad)){ # declare these ones
       csl$static[i] <- ""
       csl$type[i] <- "double"
-      csl$decl[i] <- paste(parse_list[k+1][!bad], collapse=" , ")
-      token_variable[parse_list[k+1][!bad]] <- parse_list[k+1][!bad]
-      token_decl_line[parse_list[k+1][!bad]] <- i
-      token_decl_type[parse_list[k+1][!bad]] <- csl$type[i]
+      csl$decl[i] <- paste(parse_list[k+1][bad], collapse=" , ")
+      csl$dend[i] <- ";"
+      token_variable[parse_list[k+1][bad]] <- parse_list[k+1][bad]
+      token_decl_line[parse_list[k+1][bad]] <- i
+      token_decl_type[parse_list[k+1][bad]] <- csl$type[i]
     }
-    # fix string delimiter FIXME only handles simple cases
-    odds <- seq(1, length(parse_list)-1, 2)
-    k <- which( parse_list[odds] == "string" ) * 2 - 1
-    parse_list[k+1] <- str_replace_all(parse_list[k+1], "\'", "\"")
+    token_set_line[parse_list[k+1]] <- i
 
     # initialise non-array variables
     if (!is_array){ # easy, just copy line and convert , to ;
@@ -539,16 +564,24 @@ for (i in 1:nrow(csl)){
         csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
       }
       csl$handled[i] <- TRUE
-    } else if (!is_continuation){ # set array first line FIXME assumes each line is an exact row of data
-      #
+    } else if (!is_continuation){ # set array first line
+      # FIXME assumes each line is an exact row of data
+      # https://en.cppreference.com/w/cpp/container/array
       # a = {{1,2,3}} ; // note std::array requires one pair of extra outer braces
       # a = {{{1,2,3}, {4,5,6}}} ; // note std::array requires one pair of extra outer braces
-      if (max(parse_list[10], "", na.rm=TRUE) == "*"){ # replicator format for 1d array e.g. MamCellsF = MaxHerds * 0.0
+      # get type definition
+      decli <- token_decl_line[this_array_name]
+      csl$type[i] <- csl$type[decli]
+      csl$type[decli] <- ""
+      csl$decl[decli] <- ""
+      csl$dend[decli] <- ""
+      if (max(parse_list[10], "", na.rm=TRUE) == "*"){
+        # replicator format for 1d array e.g. MamCellsF = MaxHerds * 0.0
         temp <- paste(rep(parse_list[12], this_array_dim1), collapse=" , ")
         temp <- paste(parse_list[4], " = { { ", temp, " } } ", sep="")
         # print(temp) # print array parsing
-        csl$init[i] <- temp
-        csl$delim[i] <- ";"
+        csl$decl[i] <- temp
+        csl$dend[i] <- ";"
         if (major_section != "initial"){
           csl$tail[i] <- paste("//", paste_str, csl$tail[i]) # put original in tail
         }
@@ -556,7 +589,8 @@ for (i in 1:nrow(csl)){
           stop("illegal array initialisation")
         }
         csl$handled[i] <- TRUE
-      } else { # normal array fill
+      } else {
+        # explicit array initialisation
         if (length(parse_list) == 6 & will_continue){ # handle empty first lines e.g. CONSTANT Event = &
           temp <- paste(parse_list[4], " = { { ", sep="")
           this_array_row <- this_array_row - 1 # this line doesn't count
@@ -574,11 +608,8 @@ for (i in 1:nrow(csl)){
           temp <- paste(parse_list[4], " = ", outer, " { ", temp, " } ", ender, sep="")
         }
         # print(temp) # print array parsing
-        csl$init[i] <- temp
-        csl$delim[i] <- ifelse(will_continue, "", ";")
-        if (major_section != "initial"){
-          csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
-        }
+        csl$decl[i] <- temp
+        csl$dend[i] <- ifelse(will_continue, "", ";")
         if (this_array_row == this_array_dim2 & will_continue){
           stop("array should not continue")
         } else {
@@ -586,10 +617,12 @@ for (i in 1:nrow(csl)){
         }
         csl$handled[i] <- TRUE
       }
-    } else { # set array continuation FIXME assumes each line is an exact row of data
+    } else {
+      # set array continuation FIXME assumes each line is an exact row of data
       ender <- if_else(will_continue, ",", "} }")
       k <- seq(2, length(parse_list), 2)
       if (parse_list[tail(k,1)] == ","){
+        # remove trailing comma
         k <- seq(2, length(parse_list)-2, 2)
       }
       if ((length(k)+1)/2 != this_array_dim1){
@@ -598,11 +631,8 @@ for (i in 1:nrow(csl)){
       temp <- paste(parse_list[k], collapse=" ")
       temp <- paste(" { ", temp, " } ", ender, sep="")
       # print(temp) # print array parsing
-      csl$init[i] <- temp
-      csl$delim[i] <- ifelse(will_continue, "", ";")
-      if (major_section != "initial"){
-        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
-      }
+      csl$decl[i] <- temp
+      csl$dend[i] <- ifelse(will_continue, "", ";")
       if (this_array_row == this_array_dim2 & will_continue){
         stop("wrong number of rows")
       } else {
@@ -615,28 +645,6 @@ for (i in 1:nrow(csl)){
   #### handle line_type = if ####
   if (csl$line_type[i] %in% c("if")){
 
-    # change array brackets from (,) to [][]
-    # FIXME only works if array access all on one line, no brackets or commas inside access
-    odds <- seq(1, length(parse_list)-1, 2)
-    k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) == "openbracket" ) * 2 - 1
-    for (j in k){
-      # detect array
-      this_array <- arrays[str_detect(arrays, paste("^double", parse_list[j+1], "\\(", sep="[:blank:]+"))]
-      if (max(this_array, "") > ""){
-        temp <- str_split(this_array, "\\s")[[1]]
-        this_array_dims <- if_else(temp[5] == ",", 2, 1)
-        jj <- j + 2
-        parse_list[jj+1] <- "["
-        if (this_array_dims==2){
-          odds <- seq(jj+2, length(parse_list)-1, 2)
-          jj <- odds[which( parse_list[odds] == "comma" )[1]]
-          parse_list[jj+1] <- "]["
-        }
-        odds <- seq(jj+2, length(parse_list)-1, 2)
-        jj <- odds[which( parse_list[odds] == "closebracket" )[1]]
-        parse_list[jj+1] <- "]"
-      }
-    }
     odds <- seq(1, length(parse_list)-1, 2)
     if (major_section == "initial"){
       csl$init[i] <- paste(parse_list[odds+1], collapse=" ")
@@ -654,33 +662,11 @@ for (i in 1:nrow(csl)){
   #### handle line_type = ifthen, endif, discrete ####
   if (csl$line_type[i] %in% c("ifthen", "endif", "discrete")){
 
-    # change array brackets from (,) to [][]
-    # FIXME only works if array access all on one line, no brackets or commas inside access
-    odds <- seq(1, length(parse_list)-1, 2)
-    k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) == "openbracket" ) * 2 - 1
-    for (j in k){
-      # detect array
-      this_array <- arrays[str_detect(arrays, paste("^double", parse_list[j+1], "\\(", sep="[:blank:]+"))]
-      if (max(this_array, "") > ""){
-        temp <- str_split(this_array, "\\s")[[1]]
-        this_array_dims <- if_else(temp[5] == ",", 2, 1)
-        jj <- j + 2
-        parse_list[jj+1] <- "["
-        if (this_array_dims==2){
-          odds <- seq(jj+2, length(parse_list)-1, 2)
-          jj <- odds[which( parse_list[odds] == "comma" )[1]]
-          parse_list[jj+1] <- "]["
-        }
-        odds <- seq(jj+2, length(parse_list)-1, 2)
-        jj <- odds[which( parse_list[odds] == "closebracket" )[1]]
-        parse_list[jj+1] <- "]"
-      }
-    }
     if (csl$line_type[i] == "discrete"){
-      # if (schedule.begin()->second=="event1"){
+      # if ( next_event == "event1" ){
       # schedule.erase(schedule.begin()) // do this elsewhere to avoid accidental trigger
-      temp <- paste("if ( schedule.begin()->second == \"", parse_list[4], "\" ) { ", sep="")
-      discrete_block <- parse_list[4]
+      temp <- paste("if ( next_event == \"", parse_list[4], "\" ) { ", sep="")
+      discrete_block <- parse_list[4] # need to know for INTERVAL command
     } else {
       odds <- seq(1, length(parse_list)-1, 2)
       temp <- paste(parse_list[odds+1], collapse=" ")
@@ -717,28 +703,6 @@ for (i in 1:nrow(csl)){
   #### handle line_type = elseif ####
   if (csl$line_type[i] %in% c("elseifthen")){
 
-    # change array brackets from (,) to [][]
-    # FIXME only works if array access all on one line, no brackets or commas inside access
-    odds <- seq(1, length(parse_list)-1, 2)
-    k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) == "openbracket" ) * 2 - 1
-    for (j in k){
-      # detect array
-      this_array <- arrays[str_detect(arrays, paste("^double", parse_list[j+1], "\\(", sep="[:blank:]+"))]
-      if (max(this_array, "") > ""){
-        temp <- str_split(this_array, "\\s")[[1]]
-        this_array_dims <- if_else(temp[5] == ",", 2, 1)
-        jj <- j + 2
-        parse_list[jj+1] <- "["
-        if (this_array_dims==2){
-          odds <- seq(jj+2, length(parse_list)-1, 2)
-          jj <- odds[which( parse_list[odds] == "comma" )[1]]
-          parse_list[jj+1] <- "]["
-        }
-        odds <- seq(jj+2, length(parse_list)-1, 2)
-        jj <- odds[which( parse_list[odds] == "closebracket" )[1]]
-        parse_list[jj+1] <- "]"
-      }
-    }
     odds <- seq(1, length(parse_list)-1, 2)
     if (major_section == "initial"){
       csl$init[i] <- paste("}", paste(parse_list[odds+1], collapse=" "))
@@ -758,6 +722,7 @@ for (i in 1:nrow(csl)){
 
     # for (int i = 1; i <= n; ++i) {
     # }
+    # handle label line
     labeli <- which(str_detect(csl$label, paste("^", parse_list[4], "\\:$", sep=""))) # label line
     if (labeli <= i){
       stop("illegal reference to earlier label in do loop")
@@ -765,7 +730,9 @@ for (i in 1:nrow(csl)){
     if (csl$line_type[labeli]  != "continue"){
       stop("illegal operation after label of do loop")
     }
+    csl$label[labeli] <- "" # remove label
     csl$indent[(i+1):(labeli-1)] <- csl$indent[(i+1):(labeli-1)] + 1 # increase indent
+    # construct loop
     temp <- paste("for ( int", parse_list[6], "=", parse_list[10], ";", parse_list[6], "<=", parse_list[14], "; ++", parse_list[6], ") {", collapse=" ")
     if (major_section == "initial"){
       csl$init[i] <- temp
@@ -792,38 +759,15 @@ for (i in 1:nrow(csl)){
   #### handle line_type = goto, ifgoto ####
   if (csl$line_type[i] %in% c("goto", "ifgoto")){
 
-    # change array brackets from (,) to [][]
-    # FIXME only works if array access all on one line, no brackets or commas inside access
-    odds <- seq(1, length(parse_list)-1, 2)
-    k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) == "openbracket" ) * 2 - 1
-    for (j in k){
-      # detect array
-      this_array <- arrays[str_detect(arrays, paste("^double", parse_list[j+1], "\\(", sep="[:blank:]+"))]
-      if (max(this_array, "") > ""){
-        temp <- str_split(this_array, "\\s")[[1]]
-        this_array_dims <- if_else(temp[5] == ",", 2, 1)
-        jj <- j + 2
-        parse_list[jj+1] <- "["
-        if (this_array_dims==2){
-          odds <- seq(jj+2, length(parse_list)-1, 2)
-          jj <- odds[which( parse_list[odds] == "comma" )[1]]
-          parse_list[jj+1] <- "]["
-        }
-        odds <- seq(jj+2, length(parse_list)-1, 2)
-        jj <- odds[which( parse_list[odds] == "closebracket" )[1]]
-        parse_list[jj+1] <- "]"
-      }
-    }
     # unique(csl$label)
     k <- which( parse_list == "goto" )
     label <- parse_list[k+2]
     labeli <- which(str_detect(csl$label, paste("^", label, "\\:$", sep=""))) # label line
     if (csl$line_type[labeli] %in% c("assign", "continue") == FALSE){
-      stop("goto target is not assign or continue")
+      stop("goto target is not assign or continue") # catch unhandled cases
     }
     new_label <- paste("label_", label, sep="")
     parse_list[k+2] <- new_label
-    csl$indent[i] <- csl$indent[i] - 1
     odds <- seq(1, length(parse_list)-1, 2)
     temp <- paste(parse_list[odds+1], collapse=" ")
     if (major_section == "initial"){
@@ -847,8 +791,19 @@ for (i in 1:nrow(csl)){
 
   }
   #### handle line_type = program, derivative, initial, discrete, dynamic, terminal, procedural ####
-  if (csl$line_type[i] %in% c("program", "initial", "derivative", "discrete", "dynamic", "terminal",
-                              "procedural", "algorithm", "nsteps", "maxterval", "termt")){
+  if (csl$line_type[i] %in% c("program", "initial", "derivative", "discrete", "dynamic", "terminal", "procedural")){
+
+    # these blocks are not needed in C++
+    if (!is_continuation && csl$line_type[i] %in% c("program", "initial", "derivative", "dynamic", "terminal", "procedural")){
+      endi <- csl$stack[i]
+      csl$indent[(i+1):(endi-1)] <- csl$indent[(i+1):(endi-1)] - 1 # remove indent
+    }
+    csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+    csl$handled[i] <- TRUE
+
+  }
+  #### handle line_type = termt ####
+  if (csl$line_type[i] %in% c("termt")){
 
     # these lines are not needed in C++
     csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail

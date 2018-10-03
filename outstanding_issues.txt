@@ -9,7 +9,7 @@ Issues
 - IMPLC, IMPVC implicit systems not handled
 - Assumes Runge-Kutta-4 integration method (easy to change)
 - power operator needs to be manually translated (^ is converted to *pow(1,1)*)
-- integer constants in min and max functions need to be manually converted to doubles
+- C++ min and max functions can't mix int and double, need to fix manually
 - strings are not visible to user
 - arrays are not visible to user
 - does not handle TERMINAL section
