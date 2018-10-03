@@ -22,12 +22,12 @@ smoosh <- function(...){
 make_cpp <- function(csl, tokens, model_name){
 
 	# count variables
-	integ <- str_split(paste(csl$integ[csl$integ > ""], collapse=","), ",", simplify=TRUE)
-	state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
+  integ <- csl$integ[csl$integ > ""]
+  state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
 	rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
 	n_state <- length(state)
 	constant <- tokens$constant[tokens$constant>""]
-	variable <- tokens$variable[tokens$variable>"" & tokens$decl_type!="char"]
+	variable <- tokens$variable[tokens$variable>"" & tokens$decl_type!="string" & tokens$constant==""]
 	n_variable <- length(variable)
 
 	# browser()
@@ -48,8 +48,10 @@ make_cpp <- function(csl, tokens, model_name){
 			   "#include <boost/numeric/odeint.hpp>",
 			   # "#include <boost/array.hpp>", # try std::array instead as recommended by boost
 			   "#include <array>",
+			   "",
+			   "using namespace std; // needed for math functions",
 			   "")
-	cpp <- put_lines(cpp, 0, lines)
+cpp <- put_lines(cpp, 0, lines)
 
 	# header comments
 	rows <- csl$section == "header"
@@ -69,18 +71,18 @@ make_cpp <- function(csl, tokens, model_name){
 	           paste("typedef std::array< double , n_state_variables > state_type;"),
 	           "double t;", "",
 	           "// event queue",
-	           paste("std::map< double , std::string > event_queue;"),
+	           paste("std::map< double , std::string > schedule;"),
 	           "",
               "// declare boost::odeint stepper",
               "typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;",
               "stepper_type stepper;", "")
 	cpp <- put_lines(cpp, 1, lines)
 
-  # declare model variables
+  #### declare model variables ####
 	cpp <- put_lines(cpp, 1, "// declare model variables")
 	rows <- csl$decl > ""
 	lines <- if_else(csl$decl[rows] > "",
-	                 smoosh(csl$static[rows], csl$type[rows], csl$decl[rows], csl$delim[rows], csl$tail[rows]),
+	                 smoosh(csl$static[rows], csl$type[rows], csl$decl[rows], ";", csl$tail[rows]),
 	                 csl$tail[rows])
   cpp <- put_lines(cpp, 1, lines)
 
@@ -112,7 +114,7 @@ make_cpp <- function(csl, tokens, model_name){
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end constructor", ""))
 
-	# initialise model
+	#### initialise model ####
 	cpp <- put_lines(cpp, 1, c("void initialise_model ( double a_time ) {"))
 	cpp <- put_lines(cpp, 2, c("", "// initialise t", "t = a_time;", ""))
 	rows <- csl$section == "initial" | csl$init > "" # include init lines from other places
@@ -145,18 +147,26 @@ make_cpp <- function(csl, tokens, model_name){
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end push_variables_to_model", ""))
 
-	# do events
-	cpp <- put_lines(cpp, 1, "void do_event ( ) {")
-	cpp <- put_lines(cpp, 2, c("", "// find event"))
+	####  do events ####
+	cpp <- put_lines(cpp, 1, c("void do_event ( ) {", ""))
 	rows <- csl$section %in% c("discrete")
-	lines <- if_else(csl$disc[rows] > "",
-	                 smoosh(csl$disc[rows], csl$delim[rows], csl$tail[rows]),
-	                 csl$tail[rows])
-	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 1)
-	cpp <- put_lines(cpp, indent, lines)
-	cpp <- put_lines(cpp, 1, c("", "} // end do_event", ""))
+	if (any(rows)){
+	  cpp <- put_lines(cpp, 2, c("// find event"))
+	  lines <- if_else(csl$disc[rows] > "",
+  	                 smoosh(csl$disc[rows], csl$delim[rows], csl$tail[rows]),
+  	                 csl$tail[rows])
+  	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 1)
+	  cpp <- put_lines(cpp, indent, lines)
+	  cpp <- put_lines(cpp, 2, "")
+	}
+	cpp <- put_lines(cpp, 1, c("} // end do_event", ""))
 
-	# calculate rate
+	#### derivt function ####
+	cpp <- put_lines(cpp, 1, c("double derivt( double dx0, double x ) {", "",
+	                           "\treturn( x / t ) ;", "",
+	                           "}", ""))
+
+	#### calculate rate ####
 	cpp <- put_lines(cpp, 1, "void calculate_rate ( ) {")
 	cpp <- put_lines(cpp, 2, c("", "// calculations"))
 	rows <- csl$section %in% c("dynamic", "derivative")
@@ -167,12 +177,24 @@ make_cpp <- function(csl, tokens, model_name){
 	cpp <- put_lines(cpp, indent, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end calculate_rate", ""))
 
+	#### post processing ####
+	cpp <- put_lines(cpp, 1, "void post_processing ( ) {")
+	# cpp <- put_lines(cpp, 2, c("", "// calculations"))
+	# rows <- csl$section %in% c("dynamic", "derivative")
+	# lines <- if_else(csl$calc[rows] > "",
+	#                  smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
+	#                  csl$tail[rows])
+	# indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]) - 1)
+	# cpp <- put_lines(cpp, indent, lines)
+	cpp <- put_lines(cpp, 1, c("", "} // end post_processing", ""))
+
 	# rate operator
 	cpp <- put_lines(cpp, 1, c("// called by boost::odeint::integrate()",
 	                           "void operator()( const state_type &a_state , state_type &a_rate, double a_time ){"))
 	cpp <- put_lines(cpp, 2, c("", "// set state",
 	                           "t = a_time;"))
-	lines <- paste(state, " = a_state[", 0:(n_state-1), "];", sep="")
+	# lines <- paste(state, " = a_state[", 0:(n_state-1), "];", sep="")
+	lines <- "set_state( a_state );"
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 2, c("", "// calculate rate",
 	                           "calculate_rate();", "",
@@ -184,17 +206,42 @@ make_cpp <- function(csl, tokens, model_name){
 	# close class
 	lines <- c("int advance_model ( double end_time , double time_step ) {", "")
 	cpp <- put_lines(cpp, 1, lines)
-	lines <- c("double a_time;",
-			   "state_type a_state;",
-			   "int nsteps;",
-			   "a_time = t;",
-			   "a_state = get_state();","",
-			   "// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class",
-			   "nsteps = boost::numeric::odeint::integrate_const( stepper , *this , a_state, a_time , end_time , time_step );", "",
-			   "t = end_time;",
-			   "set_state( a_state );",
-			   "calculate_rate();",
-			   "return( nsteps );")
+	lines <- c(
+	  "double next_time;",
+	  "state_type a_state;",
+	  "double a_time;",
+	  "int nsteps = 0;", "",
+	  "while ( t < end_time ) {", "",
+	  "\t// do current events",
+	  "\tdo {",
+	  "\t\tif ( schedule.begin() == schedule.end() ){",
+	  "\t\t\t// no events",
+	  "\t\t\tnext_time = end_time + 1;",
+	  "\t\t} else if ( schedule.begin()->first < t ) {",
+	  "\t\t\t// missed event",
+	  "\t\t\tschedule.erase( schedule.begin() );",
+	  "\t\t\tnext_time = t - 1;",
+	  "\t\t} else if ( schedule.begin()->first == t ) {",
+	  "\t\t\tdo_event();",
+	  "\t\t\tschedule.erase( schedule.begin() );",
+	  "\t\t\tnext_time = t - 1;",
+	  "\t\t} else if ( schedule.begin()->first > t ) {",
+	  "\t\t\t// next event",
+	  "\t\t\tnext_time = schedule.begin()->first;",
+	  "\t\t}",
+	  "\t} while ( next_time <= t) ;", "",
+	  "\t// advance model to next event or end_time",
+	  "\ta_state = get_state();",
+	  "\ta_time = t;",
+	  "\tnext_time = std::min( end_time, next_time );",
+	  "\t// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class",
+	  "\tnsteps += boost::numeric::odeint::integrate_const( stepper , *this , a_state, a_time , next_time , time_step );",
+	  "\tset_state( a_state );",
+	  "\tt = next_time;", "",
+	  "}", "",
+	  "calculate_rate();",
+	  "post_processing();",
+	  "return( nsteps );")
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end advance_model"))
 	cpp <- put_lines(cpp, 0, c("", "}; // end class", ""))

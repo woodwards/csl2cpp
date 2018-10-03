@@ -8,15 +8,17 @@ Issues
 - asclX code in dynamic section may not be in order
 - IMPLC, IMPVC implicit systems not handled
 - Assumes Runge-Kutta-4 integration method (easy to change)
-- power operator needs to be manually translated (^ is converted to **)
-- arrays and strings are not visible to user
+- power operator needs to be manually translated (^ is converted to *pow(1,1)*)
+- integer constants in min and max functions need to be manually converted to doubles
+- strings are not visible to user
+- arrays are not visible to user
 - does not handle TERMINAL section
 - SCHEDULE must be on its own line
+- doesn't handle DERIVT function (which you should try to avoid anyway)
 
 To Do
 
-- schedule command
-- discrete events
 - line sorting in calc section
 - Molly compilation testing
 - Molly runtime testing
+- separate rate calculation and post processing code

@@ -1,0 +1,26 @@
+PROGRAM spring
+DERIVATIVE
+      !-------spring damping problem. models releasing
+      !       mass from initial conditions of zero
+      !       velocity and displacement
+	  
+      CINTERVAL      cint = 0.02
+      !-------define model default constants
+      CONSTANT       k = 0.12     ; a = 1.0      ! simon's comment
+      CONSTANT       w = 1.0	  , g = 9.81
+      Constant       mass = 0.03
+      !-------another way of changing the independent
+      !       variable
+      time    = INTEG(1.0, 0.0)
+      !-------calculate acceleration
+      xdd     =(mass*g - k*xd - a*x)/mass
+      !-------integrate accel for velocity and position
+      CONSTANT       xic = 0.0    , xdic = 0.0
+      xd      = INTEG(xdd, xdic)
+      x       = INTEG(xd , xic )
+      !-------specify termination condition
+      CONSTANT       Tstp = 3.99
+      TERMT(t.GE.tstp, 'Time Limit')
+
+END ! of derivative
+END ! of program

@@ -29,7 +29,6 @@ save.image(temp_file) # save progress
 
 # parse code
 cat(file=stderr(), "parsing code", "\n")
-source("csl2cpp_parse.r") # load functions
 source("csl2cpp_do_parse_one.r")
 source("csl2cpp_do_parse_two.r")
 

@@ -10,6 +10,8 @@ load(file=temp_file) # recover progress
 
 cat(file=stderr(), "parsing code for tokens, line type, indent", "\n")
 
+source("csl2cpp_parse.r") # load functions
+
 silent=FALSE
 split_lines=TRUE
 
@@ -204,7 +206,7 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
     csl$stack[stack[1]] <- i
     stack <- tail(stack, -1) # removes first item
   } else { # no permanent change to indent
-    csl$indent[i] <- indent + ifelse(is_continuation, 1, 0) + ifelse(has_label, -1, 0)
+    csl$indent[i] <- indent + ifelse(is_continuation, 1, 0)
     csl$block[i] <- paste(block[1:indent], collapse="-")
   }
 

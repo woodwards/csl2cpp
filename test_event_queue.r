@@ -6,8 +6,10 @@ sourceCpp(code='
 
 #include <unordered_map>
 #include <map>
+#include <cmath>
 #include <string>
 #include <Rcpp.h>
+
 
 // Enable C++11 via this plugin (Rcpp 0.10.3 or later)
 // [[Rcpp::plugins(cpp11)]]
@@ -15,6 +17,9 @@ sourceCpp(code='
 // [[Rcpp::export]]
 void hello()
 {
+
+  using namespace std;
+
   std::map< double, std::string > event_queue;
   std::string output;
 

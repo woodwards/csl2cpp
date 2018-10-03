@@ -34,6 +34,7 @@ code_split <- function(code){
   outi <- 1
   # regex metacharacters are . \ | ( ) [ { ^ $ * + ?
   # regex inside character classes also ^ - \ ]
+  # we must ensure only one pattern is matched (not easy!)
   patterns <- c(
     comment="^!.*",
     string="^\\'.*\\'", # ACSL allows single quotes only, C++ double quotes for strings
@@ -51,12 +52,14 @@ code_split <- function(code){
                          "or", "and", "not", "eqv", "neqv",
                          "ge", "gt", "le", "lt", "eq", "ne"),
                   "\\.", sep="", collapse="|"),
-    number="^[\\-\\+]?[0-9]*\\.?[0-9]+([edED][\\-\\+]?[0-9]+)?", # https://www.regular-expressions.info/floatingpoint.html
+    int="^[\\-\\+]?[0-9]+(?![[0-9]\\.edED])", # https://www.regular-expressions.info/floatingpoint.html
+    double="^[\\-\\+]?([0-9]+\\.[0-9]+|[0-9]+\\.|\\.[0-9]+)([edED][\\-\\+]?[0-9]+)?|^[\\-\\+]?[0-9]+([edED][\\-\\+]?[0-9]+)", # https://www.regular-expressions.info/floatingpoint.html
+    # number="^[\\-\\+]?[0-9]*\\.?[0-9]+([edED][\\-\\+]?[0-9]+)?", # https://www.regular-expressions.info/floatingpoint.html
     mathop  ="^[\\-\\+](?![[0-9]\\.])|^\\/|^\\*(?![:blank:]*\\*)",
     power="^\\*[:blank:]*\\*|^\\^"
   )
   # whole line analysis
-  if (str_detect(remaining, "")){ # blank line
+  if (str_detect(remaining, "^$")){ # blank line
     outlist[[outi]] <- "blank"
     outi <- outi + 1
     outlist[[outi]] <- ""
