@@ -22,3 +22,5 @@ To Do
 - Molly compilation testing
 - Molly runtime testing
 - separate rate calculation and post processing code
+- fix event schedule since map doesn't allow duplicate keys and float keys are a problem
+

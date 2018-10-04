@@ -7,6 +7,7 @@ library(tidyverse)
 # source
 csl_file <- "spring/Spring.csl"
 csl_file <- "molly/Molly.csl"
+csl_file <- "molly/Molly2.csl"
 
 # split file names
 file_name <- str_extract(csl_file,  "[:alpha:]+[[:alnum:]_]*\\.csl")
@@ -17,13 +18,16 @@ model_name <- path_name
 cat(file=stderr(), "reading code", "\n")
 source("csl2cpp_read.r") # load functions
 csl <- read_csl(csl_file) # read lines
-if (csl_file == "molly/Molly.csl"){ # comment out first INITIAL section, this is header
-  csl$code[9] <- paste("!", csl$code[9])
-  csl$code[594] <- paste("!", csl$code[594])
+
+# write aggregated raw csl
+if (csl_file == "molly/Molly.csl"){
+  csl2 <- paste(csl$code, "\n", sep="")
+  csl2 <- str_replace_all(csl2, "(?<=([0-9]\\.0{0,5}[1-9]))[0-9]+", "555") # jitter
+  source("csl2cpp_write.r") # load functions
+  write_cpp(csl2, path_name, paste(model_name, "2", sep=""), "csl") # write aggregated raw csl
 }
-source("csl2cpp_write.r") # load functions
-csl2 <- paste(csl$code, "\n", sep="")
-write_cpp(csl2, path_name, model_name, "csl2") # write aggregated raw csl
+
+# checkpoint
 temp_file <- paste(path_name, "checkpoint_after_read.RData", sep="/")
 save.image(temp_file) # save progress
 

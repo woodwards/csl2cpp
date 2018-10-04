@@ -10,5 +10,5 @@ csl2cpp_make.r	R functions for building a C++ class from a parsed dataframe
 csl2cpp_write.r	R functions for writing a C++ class
 /docs/		miscellaneous background documents
 /spring/		acslX spring example and equivalent C++ code
-/molly/		acslX Molly cow model and equivalent C++ code
+/molly/		acslX Molly cow model and equivalent C++ code (original code not shared)
 
