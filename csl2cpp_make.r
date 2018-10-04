@@ -5,13 +5,6 @@ vrep <- function(what, times){ # vectorised string rep
 }
 
 put_lines <- function(cpp, indent, lines){
-  # find lines not surrounded by blanks
-  i <- lines != "" | lag(lines,1) != "" # | lead(lines,1) != ""
-  i[is.na(i)] <- TRUE
-  lines <- lines[i]
-  if (length(indent)>1){ # indent is not a constant
-    indent <- indent[i]
-  }
   # insert rows
 	first_row <- attr(cpp, "row") + 1
 	last_row <- first_row+length(lines)-1
@@ -110,18 +103,33 @@ make_cpp <- function(csl, tokens, model_name){
   cpp <- put_lines(cpp, 2, lines)
   cpp <- put_lines(cpp, 1, c("", "} // end set_state"))
 
-	# constructor
+	# constructor head
 	cpp <- put_lines(cpp, 0, c("", "public:", ""))
 	lines <- c("// unordered_map gives user efficient access to variables by name",
 	           "std::unordered_map< std::string , double > variable;", "")
 	cpp <- put_lines(cpp, 1, lines)
-	lines <- c("// constructor",
-			   paste(model_name, "( ) {"), "")
+	lines <- c("// constructor head",
+	           paste(model_name, "( ) :"), "")
 	cpp <- put_lines(cpp, 1, lines)
-	lines <- c("// reserve buckets to minimise storage and avoid rehashing",
-			   "variable.reserve( n_visible_variables );")
-	cpp <- put_lines(cpp, 2, lines)
-	cpp <- put_lines(cpp, 1, c("", "} // end constructor", ""))
+
+	# array initialisation list (class constructor list)
+	cpp <- put_lines(cpp, 2, c("// array initialisation list",
+	                           "// warning: these are executed in the order of the member declarations"))
+	rows <- csl$ccl > ""
+	csl$dend[max(which(rows))] <- "" # remove last comma
+	lines <- if_else(csl$ccl[rows] > "",
+	                 smoosh(csl$ccl[rows], csl$dend[rows], csl$tail[rows]),
+	                 csl$tail[rows])
+	indent <- if_else(str_detect(lines, "^\\{"), 3, 2) # indent array initialisation lines
+	cpp <- put_lines(cpp, indent, lines)
+
+	# constructor body
+	lines <- c("", "// constructor body",
+	           "{", "",
+	           "\t// reserve buckets to minimise storage and avoid rehashing",
+	           "\tvariable.reserve( n_visible_variables );", "",
+	           "} // end constructor", "")
+	cpp <- put_lines(cpp, 1, lines)
 
 	#### initialise model ####
 	cpp <- put_lines(cpp, 1, c("void initialise_model ( double a_time ) {"))
@@ -213,7 +221,7 @@ make_cpp <- function(csl, tokens, model_name){
 	lines <- c("int advance_model ( double end_time , double time_step ) {", "")
 	cpp <- put_lines(cpp, 1, lines)
 	lines <- c(
-	  "double next_time;",
+	  "double next_time = 0;",
 	  "state_type a_state;",
 	  "double a_time;",
 	  "int nsteps = 0;", "",

@@ -8,8 +8,13 @@ write_cpp <- function(cpp, path_name, model_name, ext_name){
 	close(cpp_file)
 	cpp_file <- file(cpp_file_name, open='a') # open file for writing
 
+	# remove some blank lines
+	blank <- str_detect(cpp, "^[:blank:]*\\n")
+	keeps <- !blank | !lag(blank,1)
+	keeps[is.na(keeps)] <- TRUE
+
 	# write lines
-	cat(file=cpp_file, cpp, sep="")
+	cat(file=cpp_file, cpp[keeps], sep="")
 
 	# close cpp file
 	close(cpp_file)

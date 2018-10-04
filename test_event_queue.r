@@ -19,7 +19,9 @@ sourceCpp(code='
 void hello()
 {
 
-  std::array< double, 3 > a = {1,2,3};
+  std::array< double , 2 > a = {{1e4,2}};
+  std::array< std::array< double , 3 > , 2 > b = {{{1,2,3},
+      {4,5,6}}};
 
   using namespace std;
 

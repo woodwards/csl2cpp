@@ -23,6 +23,7 @@ csl <- csl %>%
     static = "",
     type = "",
     decl = "",
+    ccl = "", # C++11 class constructor list
     init = "",
     disc = "",
     calc = "",
@@ -123,6 +124,7 @@ for (i in 1:nrow(csl)){
   parse_list[k+1] <- "*pow(1,1)*"
 
   # change array brackets from (,) to [][]
+  # warning CSL has 1-indexing and C++ has 0-indexing
   # FIXME only works if array access all on one line, no brackets or commas inside access
   odds <- seq(1, length(parse_list)-1, 2)
   k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) == "openbracket" ) * 2 - 1
@@ -137,11 +139,11 @@ for (i in 1:nrow(csl)){
       if (this_array_dims==2){
         odds <- seq(jj+2, length(parse_list)-1, 2)
         jj <- odds[which( parse_list[odds] == "comma" )[1]]
-        parse_list[jj+1] <- "]["
+        parse_list[jj+1] <- "- 1 ]["
       }
       odds <- seq(jj+2, length(parse_list)-1, 2)
       jj <- odds[which( parse_list[odds] == "closebracket" )[1]]
-      parse_list[jj+1] <- "]"
+      parse_list[jj+1] <- "- 1 ]"
     }
   }
 
@@ -233,6 +235,9 @@ for (i in 1:nrow(csl)){
       if (length(j) == 0){
 
         # https://www.learncpp.com/cpp-tutorial/6-15-an-introduction-to-stdarray/
+        # std::arrays can only be initialized in the C++11 class constructor list
+        # // https://stackoverflow.com/questions/10694689/how-to-initialize-an-array-in-c-objects
+        # // https://stackoverflow.com/questions/33714866/initialize-stdarray-of-classes-in-a-class-constructor
         # std::array<int,2> a ; // 2 elements
         # std::array<int,2> a = {{ 13, 18 }} ; // note std::array requires one pair of extra outer braces
         # a[0] // base zero
@@ -258,11 +263,12 @@ for (i in 1:nrow(csl)){
         # std::array<std::array<int,3>,2> a = {{{1,2,3}, {4,5,6}}} ; // note std::array requires one pair of extra outer braces
         # a[2-1][3-1] // note axis order
         # two dimensional fixed size array
+        # https://stackoverflow.com/questions/11610338/how-to-initialise-a-member-array-of-class-in-the-constructor
         message <- paste("detected 2d array:", parse_str)
         arrays <- c(arrays, parse_str)
         cat("line", i, message, "\n")
         csl$static[i] <- ""
-        csl$type[i] <- paste("std::array< std::array< double ,", parse_list[12], "> ,", parse_list[8], "> ") # need to reverse indices
+        csl$type[i] <- paste("std::array< std::array< double ,", parse_list[8], "> ,", parse_list[12], "> ") # need to reverse indices
         csl$decl[i] <- parse_list[4]
         csl$dend[i] <- ";"
         # csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
@@ -567,24 +573,17 @@ for (i in 1:nrow(csl)){
     } else if (!is_continuation){ # set array first line
       # FIXME assumes each line is an exact row of data
       # https://en.cppreference.com/w/cpp/container/array
+      # // https://stackoverflow.com/questions/10694689/how-to-initialize-an-array-in-c-objects
+      # // https://stackoverflow.com/questions/33714866/initialize-stdarray-of-classes-in-a-class-constructor
       # a = {{1,2,3}} ; // note std::array requires one pair of extra outer braces
       # a = {{{1,2,3}, {4,5,6}}} ; // note std::array requires one pair of extra outer braces
-      # get type definition
-      decli <- token_decl_line[this_array_name]
-      csl$type[i] <- csl$type[decli]
-      csl$type[decli] <- ""
-      csl$decl[decli] <- ""
-      csl$dend[decli] <- ""
       if (max(parse_list[10], "", na.rm=TRUE) == "*"){
         # replicator format for 1d array e.g. MamCellsF = MaxHerds * 0.0
         temp <- paste(rep(parse_list[12], this_array_dim1), collapse=" , ")
-        temp <- paste(parse_list[4], " = { { ", temp, " } } ", sep="")
+        temp <- paste(parse_list[4], " { { ", temp, " } } ", sep="")
         # print(temp) # print array parsing
-        csl$decl[i] <- temp
-        csl$dend[i] <- ";"
-        if (major_section != "initial"){
-          csl$tail[i] <- paste("//", paste_str, csl$tail[i]) # put original in tail
-        }
+        csl$ccl[i] <- temp
+        csl$dend[i] <- ","
         if (this_array_dim2 > 1){
           stop("illegal array initialisation")
         }
@@ -592,7 +591,7 @@ for (i in 1:nrow(csl)){
       } else {
         # explicit array initialisation
         if (length(parse_list) == 6 & will_continue){ # handle empty first lines e.g. CONSTANT Event = &
-          temp <- paste(parse_list[4], " = { { ", sep="")
+          temp <- paste(parse_list[4], " { { ", sep="")
           this_array_row <- this_array_row - 1 # this line doesn't count
         } else { # first line contains a whole row
           outer <- if_else(this_array_dims == 2, "{ {", "{")
@@ -605,11 +604,11 @@ for (i in 1:nrow(csl)){
             stop("wrong number of elements")
           }
           temp <- paste(parse_list[k], collapse=" ")
-          temp <- paste(parse_list[4], " = ", outer, " { ", temp, " } ", ender, sep="")
+          temp <- paste(parse_list[4], " ", outer, " { ", temp, " } ", ender, sep="")
         }
         # print(temp) # print array parsing
-        csl$decl[i] <- temp
-        csl$dend[i] <- ifelse(will_continue, "", ";")
+        csl$ccl[i] <- temp
+        csl$dend[i] <- ifelse(will_continue, "", ",")
         if (this_array_row == this_array_dim2 & will_continue){
           stop("array should not continue")
         } else {
@@ -631,8 +630,8 @@ for (i in 1:nrow(csl)){
       temp <- paste(parse_list[k], collapse=" ")
       temp <- paste(" { ", temp, " } ", ender, sep="")
       # print(temp) # print array parsing
-      csl$decl[i] <- temp
-      csl$dend[i] <- ifelse(will_continue, "", ";")
+      csl$ccl[i] <- temp
+      csl$dend[i] <- ifelse(will_continue, "", ",")
       if (this_array_row == this_array_dim2 & will_continue){
         stop("wrong number of rows")
       } else {
