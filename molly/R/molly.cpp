@@ -624,8 +624,15 @@ private:
 	typedef std::array< double , n_state_variables > state_type;
 	double t;
 	
-	// event queue
-	std::map< double , std::string > schedule;
+	// event list
+	std::multimap< double , std::string > event_list;
+	
+	// add event
+	void schedule( double event_time, std::string event_name ){
+	
+		event_list.insert( std::make_pair( event_time , event_name ) );
+	
+	}
 	
 	// declare boost::odeint stepper
 	typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;
@@ -2686,14 +2693,14 @@ public:
 		
 		// The InitCond array = Animal ibw iBCS EventStartPos NumberofEvents
 		
-		FirstEvent = InitCond [ 4 - 1 ][ Animal - 1 ] ;
+		FirstEvent = InitCond [ Animal - 1 ][ 4 - 1 ] ;
 		
-		LastEvent = FirstEvent + ( InitCond [ 5 - 1 ][ Animal - 1 ] -1 ) ;
+		LastEvent = FirstEvent + ( InitCond [ Animal - 1 ][ 5 - 1 ] -1 ) ;
 		CurrentEvent = FirstEvent ;
 		PreviousEvent = FirstEvent ;
 		
-		iBW = InitCond [ 2 - 1 ][ Animal - 1 ] ;
-		iBCS = InitCond [ 3 - 1 ][ Animal - 1 ] ;
+		iBW = InitCond [ Animal - 1 ][ 2 - 1 ] ;
+		iBCS = InitCond [ Animal - 1 ][ 3 - 1 ] ;
 		
 		// ******* Genetic Scalars ******
 		iHerd = 1.0 ;
@@ -2826,12 +2833,12 @@ public:
 			fAiFd = fAiFdBase ; // average insoluble Ash contents Gil Sep 2014 this is no longer a contsant
 			
 			//  Feed Nitrogen
-			fCPFd = Event [ IngrCP - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+			fCPFd = Event [ CurrentFeed - 1 ][ IngrCP - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
 			// fCPFd=Event(IngrCP,CurrentFeed)/100;	!Original equation not corrected for bias in the input data
-			FCPsFd = fCPFd * IngrProtComp [ IngrCPs - 1 ][ CurrentFeed - 1 ] / 100 ; // includes NPN sources
-			FUrFd = fCPFd * IngrProtComp [ IngrUr - 1 ][ CurrentFeed - 1 ] / 100 / 2.8555 ; // IngrUr is in CP equivalents. Changed to urea mass here
-			FNPNFd = fCPFd * IngrProtComp [ IngrNPN - 1 ][ CurrentFeed - 1 ] / 100 ; // CP equivalents including that from urea
-			FRUPFd = fCPFd * IngrProtComp [ IngrRUP - 1 ][ CurrentFeed - 1 ] / 100 ;
+			FCPsFd = fCPFd * IngrProtComp [ CurrentFeed - 1 ][ IngrCPs - 1 ] / 100 ; // includes NPN sources
+			FUrFd = fCPFd * IngrProtComp [ CurrentFeed - 1 ][ IngrUr - 1 ] / 100 / 2.8555 ; // IngrUr is in CP equivalents. Changed to urea mass here
+			FNPNFd = fCPFd * IngrProtComp [ CurrentFeed - 1 ][ IngrNPN - 1 ] / 100 ; // CP equivalents including that from urea
+			FRUPFd = fCPFd * IngrProtComp [ CurrentFeed - 1 ][ IngrRUP - 1 ] / 100 ;
 			FPsFd = FCPsFd - FNPNFd ;
 			fPiFd = fCPFd - FCPsFd ;
 			if ( fPiFd <= 0 ) { // This should not happen, but just in case a bad number gets entered
@@ -2842,42 +2849,42 @@ public:
 			if ( fNnFd < 0 ) fNnFd = 0 ;
 			
 			// Feed Lipid
-			FCFatFd = Event [ IngrFat - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+			FCFatFd = Event [ CurrentFeed - 1 ][ IngrFat - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
 			// 	fCFatFd=Event(IngrFat,CurrentFeed) / 100
 			
 			fLiFd = fEndogLiFd ;
 			fFatFd = FCFatFd - fEndogLiFd ;
 			
 			// Feed Ash
-			fAshFd = Event [ IngrAsh - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+			fAshFd = Event [ CurrentFeed - 1 ][ IngrAsh - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
 			// 	fAshFd=Event(IngrAsh,CurrentFeed)/100
 			fAsFd = fAshFd - fAiFd ;
 			
 			// Feed Carbohydrate
-			fNDFFd = Event [ IngrNDF - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
-			fADFFd = Event [ IngrADF - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+			fNDFFd = Event [ CurrentFeed - 1 ][ IngrNDF - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+			fADFFd = Event [ CurrentFeed - 1 ][ IngrADF - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
 			// 	fNdfFd=Event(IngrNDF,CurrentFeed)/100
 			// 	fAdfFd=Event(IngrADF,CurrentFeed)/100
 			if ( fADFFd == 0 ) fADFFd = 1e-12 ;
-			fRuAdfFd = fADFFd * IngrCHOComp [ IngrRUAdf - 1 ][ CurrentFeed - 1 ] / 100 ;
+			fRuAdfFd = fADFFd * IngrCHOComp [ CurrentFeed - 1 ][ IngrRUAdf - 1 ] / 100 ;
 			if ( fRuAdfFd > fADFFd ) fRuAdfFd = fADFFd -1e-12 ;
 			
-			fLgFd = Event [ IngrLg - 1 ][ CurrentFeed - 1 ] / 100 ;
+			fLgFd = Event [ CurrentFeed - 1 ][ IngrLg - 1 ] / 100 ;
 			fHcFd = fNDFFd - fADFFd ;
 			fCeFd = fADFFd - fLgFd - fAiFd ;
 			fOmFd = 1.0 - fAshFd ;
 			
-			fStFd = Event [ IngrSt - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+			fStFd = Event [ CurrentFeed - 1 ][ IngrSt - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
 			// 	fStFd=Event(IngrSt,CurrentFeed) / 100
 			if ( fStFd <= 0 ) fStFd = 1.0e-12 ;
-			FStsFd = fStFd * IngrCHOComp [ IngrStS - 1 ][ CurrentFeed - 1 ] / 100 ;
+			FStsFd = fStFd * IngrCHOComp [ CurrentFeed - 1 ][ IngrStS - 1 ] / 100 ;
 			if ( FStsFd <= 0 ) FStsFd = 0.0 ;
-			fRUStFd = fStFd * IngrCHOComp [ IngrRUSt - 1 ][ CurrentFeed - 1 ] / 100 ;
+			fRUStFd = fStFd * IngrCHOComp [ CurrentFeed - 1 ][ IngrRUSt - 1 ] / 100 ;
 			if ( fRUStFd > fStFd ) fRUStFd = fStFd -1e-12 ;
 			
 			if ( fFatFd < 0 ) { // trap negative values for fFatFd
 				fFatFd = 0 ;
-				fLiFd = ( Event [ IngrFat - 1 ][ CurrentFeed - 1 ] / 100 ) ;
+				fLiFd = ( Event [ CurrentFeed - 1 ][ IngrFat - 1 ] / 100 ) ;
 			}
 			
 			PartFd = fPiFd + FPsFd + fNnFd + FUrFd + fAcFd + FLaFd + fBuFd + fPeFd + fOaFd +
@@ -2888,8 +2895,8 @@ public:
 			if ( fScFd < 0 ) {
 				if ( fStFd > - fScFd ) {
 					fStFd = fStFd + fScFd ;
-					FStsFd = fStFd * IngrCHOComp [ IngrStS - 1 ][ CurrentFeed - 1 ] / 100 ;
-					fRUStFd = fRUStFd * IngrCHOComp [ IngrRUSt - 1 ][ CurrentFeed - 1 ] / 100 ;
+					FStsFd = fStFd * IngrCHOComp [ CurrentFeed - 1 ][ IngrStS - 1 ] / 100 ;
+					fRUStFd = fRUStFd * IngrCHOComp [ CurrentFeed - 1 ][ IngrRUSt - 1 ] / 100 ;
 					fScFd = 0 ;
 				} else {
 					fStFd = 1.0e-12 ;
@@ -2899,12 +2906,12 @@ public:
 				}
 			}
 			StSol = FStsFd / fStFd ;
-			SpeciesFactor = Event [ IngrEaseOfBreakdown - 1 ][ CurrentFeed - 1 ] ;
+			SpeciesFactor = Event [ CurrentFeed - 1 ][ IngrEaseOfBreakdown - 1 ] ;
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			// END  Include '../Molly_ProximateExpand_Conversion.csl' ! the included code converts the Ingr* to f*Fd
-			Ingr [ IngrSc - 1 ][ i - 1 ] = fScFd * 100.0 ;
-			Ingr [ IngrHc - 1 ][ i - 1 ] = fHcFd * 100.0 ;
-			Ingr [ IngrPeNdf - 1 ][ i - 1 ] = Event [ IngrNDF - 1 ][ i - 1 ] * ( 1.0 - Event [ IngrPsf - 1 ][ i - 1 ] ) ;
+			Ingr [ i - 1 ][ IngrSc - 1 ] = fScFd * 100.0 ;
+			Ingr [ i - 1 ][ IngrHc - 1 ] = fHcFd * 100.0 ;
+			Ingr [ i - 1 ][ IngrPeNdf - 1 ] = Event [ i - 1 ][ IngrNDF - 1 ] * ( 1.0 - Event [ i - 1 ][ IngrPsf - 1 ] ) ;
 		} // AnotherLoop: Continue
 		CurrentEvent = 1 ;
 		// end of procedural 
@@ -3428,10 +3435,10 @@ public:
 		MilkingFrequency = 1 / MilkInt ;
 		
 		NextMilkingT = -1.0 ;
-		schedule [ t + 0.01 ] = "NewDay" ; // This happens after midnight every day and sets the first milking every day she is in milk
+		schedule ( t + 0.01 , "NewDay" ) ; // This happens after midnight every day and sets the first milking every day she is in milk
 		MilkSW = 0.0 ;
 		
-		schedule [ t + 0.0 ] = "DailySummary" ; // Gil July 2012 changed to from 1 to 0, to make many graphs work OK before T=1
+		schedule ( t + 0.0 , "DailySummary" ) ; // Gil July 2012 changed to from 1 to 0, to make many graphs work OK before T=1
 		
 		// BEGIN  INCLUDE 'Intermittent_Eating_Init.csl'
 		
@@ -3728,7 +3735,7 @@ public:
 		RQEQ = 1.0 ;
 		AaFvCd = 1.2555 ;
 		MwtCd = 44 ;
-			schedule [ t + 1.0 ] = "breakpoint4debug" ; // --- this is the interval that this discrete section will be executed.
+			schedule ( t + 1.0 , "breakpoint4debug" ) ; // --- this is the interval that this discrete section will be executed.
 		
 	} // end initialise_model
 	
@@ -7317,7 +7324,7 @@ public:
 			MilkingIndex = MilkingIndex +1 ;
 			NextMilkingT = floor ( t ) + MilkingHours [ MilkingIndex + 1 - 1 ] / 24.0 ;
 			if ( MilkingIndex < MilkingFrequency ) {
-				schedule [ t + NextMilkingT ] = "MilkOut" ; // Schedule the next milking within that day
+				schedule ( t + NextMilkingT , "MilkOut" ) ; // Schedule the next milking within that day
 			}
 			MilkSW = 1.0 ;
 		} // end of discrete // Discrete MilkOut
@@ -7325,12 +7332,12 @@ public:
 			MilkingIndex = 0 ;
 			NextMilkingT = floor ( t ) + MilkingHours [ 1 - 1 ] / 24.0 ;
 			if ( DayMilk >= 0 ) { // SCHEDULE must be at start of line
-				schedule [ t + NextMilkingT ] = "MilkOut" ;
+				schedule ( t + NextMilkingT , "MilkOut" ) ;
 			}
-			schedule [ t + ( floor ( t ) + 1.01 ) ] = "NewDay" ; // Schedule the next daily summary, just before midnight, so WFM "midnight" samplings would always occure AFTER the summary
+			schedule ( t + ( floor ( t ) + 1.01 ) , "NewDay" ) ; // Schedule the next daily summary, just before midnight, so WFM "midnight" samplings would always occure AFTER the summary
 		} // end of discrete
 		if ( next_event == "DailySummary" ) { // discrete DailySummary // Summarize items at the end of the day
-			schedule [ t + ( floor ( t + 1.1 ) - 2 * MAXT ) ] = "DailySummary" ; // Schedule the next daily summary, just before midnight, so WFM "midnight" samplings would always occure AFTER the summary
+			schedule ( t + ( floor ( t + 1.1 ) - 2 * MAXT ) , "DailySummary" ) ; // Schedule the next daily summary, just before midnight, so WFM "midnight" samplings would always occure AFTER the summary
 			
 			IntakeDay = IntakeTotal - IntakeYest ;
 			IntakeYest = IntakeTotal ;
@@ -7365,7 +7372,7 @@ public:
 			
 		} // end of discrete
 		if ( next_event == "breakpoint4debug" ) { // discrete breakpoint4debug // ---
-			schedule [ t + 1.0 ] = "breakpoint4debug" ; // --- this is the interval that this discrete section will be executed.
+			schedule ( t + 1.0 , "breakpoint4debug" ) ; // --- this is the interval that this discrete section will be executed.
 			Somedummyvariable = t ; // --- use this dummy assignment statement to set a debug breakpoint. Can equal any variable or number.
 		} // end of discrete
 		
@@ -7525,9 +7532,9 @@ public:
 			fPeFd = PcPeFd / 100 ;
 			fOaFd = fPeFd * fOaPe ; // Oa = Pe*.2 is an Unsupported Estimate
 			
-			fRoughageFd = Event [ IngrFor - 1 ][ CurrentEvent - 1 ] / 100 ;
+			fRoughageFd = Event [ CurrentEvent - 1 ][ IngrFor - 1 ] / 100 ;
 			
-			fDMFd = Event [ IngrDM - 1 ][ CurrentEvent - 1 ] / 100 ;
+			fDMFd = Event [ CurrentEvent - 1 ][ IngrDM - 1 ] / 100 ;
 			
 			if ( SupplementOnOffer <= NumberOfFeeds ) {
 				// BEGIN  Include '../Molly_ProximateExpand_Conversion.csl'
@@ -7539,12 +7546,12 @@ public:
 				fAiFd = fAiFdBase ; // average insoluble Ash contents Gil Sep 2014 this is no longer a contsant
 				
 				//  Feed Nitrogen
-				fCPFd = Event [ IngrCP - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+				fCPFd = Event [ CurrentFeed - 1 ][ IngrCP - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
 				// fCPFd=Event(IngrCP,CurrentFeed)/100;	!Original equation not corrected for bias in the input data
-				FCPsFd = fCPFd * IngrProtComp [ IngrCPs - 1 ][ CurrentFeed - 1 ] / 100 ; // includes NPN sources
-				FUrFd = fCPFd * IngrProtComp [ IngrUr - 1 ][ CurrentFeed - 1 ] / 100 / 2.8555 ; // IngrUr is in CP equivalents. Changed to urea mass here
-				FNPNFd = fCPFd * IngrProtComp [ IngrNPN - 1 ][ CurrentFeed - 1 ] / 100 ; // CP equivalents including that from urea
-				FRUPFd = fCPFd * IngrProtComp [ IngrRUP - 1 ][ CurrentFeed - 1 ] / 100 ;
+				FCPsFd = fCPFd * IngrProtComp [ CurrentFeed - 1 ][ IngrCPs - 1 ] / 100 ; // includes NPN sources
+				FUrFd = fCPFd * IngrProtComp [ CurrentFeed - 1 ][ IngrUr - 1 ] / 100 / 2.8555 ; // IngrUr is in CP equivalents. Changed to urea mass here
+				FNPNFd = fCPFd * IngrProtComp [ CurrentFeed - 1 ][ IngrNPN - 1 ] / 100 ; // CP equivalents including that from urea
+				FRUPFd = fCPFd * IngrProtComp [ CurrentFeed - 1 ][ IngrRUP - 1 ] / 100 ;
 				FPsFd = FCPsFd - FNPNFd ;
 				fPiFd = fCPFd - FCPsFd ;
 				if ( fPiFd <= 0 ) { // This should not happen, but just in case a bad number gets entered
@@ -7555,42 +7562,42 @@ public:
 				if ( fNnFd < 0 ) fNnFd = 0 ;
 				
 				// Feed Lipid
-				FCFatFd = Event [ IngrFat - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+				FCFatFd = Event [ CurrentFeed - 1 ][ IngrFat - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
 				// 	fCFatFd=Event(IngrFat,CurrentFeed) / 100
 				
 				fLiFd = fEndogLiFd ;
 				fFatFd = FCFatFd - fEndogLiFd ;
 				
 				// Feed Ash
-				fAshFd = Event [ IngrAsh - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+				fAshFd = Event [ CurrentFeed - 1 ][ IngrAsh - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
 				// 	fAshFd=Event(IngrAsh,CurrentFeed)/100
 				fAsFd = fAshFd - fAiFd ;
 				
 				// Feed Carbohydrate
-				fNDFFd = Event [ IngrNDF - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
-				fADFFd = Event [ IngrADF - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+				fNDFFd = Event [ CurrentFeed - 1 ][ IngrNDF - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+				fADFFd = Event [ CurrentFeed - 1 ][ IngrADF - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
 				// 	fNdfFd=Event(IngrNDF,CurrentFeed)/100
 				// 	fAdfFd=Event(IngrADF,CurrentFeed)/100
 				if ( fADFFd == 0 ) fADFFd = 1e-12 ;
-				fRuAdfFd = fADFFd * IngrCHOComp [ IngrRUAdf - 1 ][ CurrentFeed - 1 ] / 100 ;
+				fRuAdfFd = fADFFd * IngrCHOComp [ CurrentFeed - 1 ][ IngrRUAdf - 1 ] / 100 ;
 				if ( fRuAdfFd > fADFFd ) fRuAdfFd = fADFFd -1e-12 ;
 				
-				fLgFd = Event [ IngrLg - 1 ][ CurrentFeed - 1 ] / 100 ;
+				fLgFd = Event [ CurrentFeed - 1 ][ IngrLg - 1 ] / 100 ;
 				fHcFd = fNDFFd - fADFFd ;
 				fCeFd = fADFFd - fLgFd - fAiFd ;
 				fOmFd = 1.0 - fAshFd ;
 				
-				fStFd = Event [ IngrSt - 1 ][ CurrentFeed - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
+				fStFd = Event [ CurrentFeed - 1 ][ IngrSt - 1 ] / 100 ; // These are currently only defined for the Bate NRC data set
 				// 	fStFd=Event(IngrSt,CurrentFeed) / 100
 				if ( fStFd <= 0 ) fStFd = 1.0e-12 ;
-				FStsFd = fStFd * IngrCHOComp [ IngrStS - 1 ][ CurrentFeed - 1 ] / 100 ;
+				FStsFd = fStFd * IngrCHOComp [ CurrentFeed - 1 ][ IngrStS - 1 ] / 100 ;
 				if ( FStsFd <= 0 ) FStsFd = 0.0 ;
-				fRUStFd = fStFd * IngrCHOComp [ IngrRUSt - 1 ][ CurrentFeed - 1 ] / 100 ;
+				fRUStFd = fStFd * IngrCHOComp [ CurrentFeed - 1 ][ IngrRUSt - 1 ] / 100 ;
 				if ( fRUStFd > fStFd ) fRUStFd = fStFd -1e-12 ;
 				
 				if ( fFatFd < 0 ) { // trap negative values for fFatFd
 					fFatFd = 0 ;
-					fLiFd = ( Event [ IngrFat - 1 ][ CurrentFeed - 1 ] / 100 ) ;
+					fLiFd = ( Event [ CurrentFeed - 1 ][ IngrFat - 1 ] / 100 ) ;
 				}
 				
 				PartFd = fPiFd + FPsFd + fNnFd + FUrFd + fAcFd + FLaFd + fBuFd + fPeFd + fOaFd +
@@ -7601,8 +7608,8 @@ public:
 				if ( fScFd < 0 ) {
 					if ( fStFd > - fScFd ) {
 						fStFd = fStFd + fScFd ;
-						FStsFd = fStFd * IngrCHOComp [ IngrStS - 1 ][ CurrentFeed - 1 ] / 100 ;
-						fRUStFd = fRUStFd * IngrCHOComp [ IngrRUSt - 1 ][ CurrentFeed - 1 ] / 100 ;
+						FStsFd = fStFd * IngrCHOComp [ CurrentFeed - 1 ][ IngrStS - 1 ] / 100 ;
+						fRUStFd = fRUStFd * IngrCHOComp [ CurrentFeed - 1 ][ IngrRUSt - 1 ] / 100 ;
 						fScFd = 0 ;
 					} else {
 						fStFd = 1.0e-12 ;
@@ -7612,7 +7619,7 @@ public:
 					}
 				}
 				StSol = FStsFd / fStFd ;
-				SpeciesFactor = Event [ IngrEaseOfBreakdown - 1 ][ CurrentFeed - 1 ] ;
+				SpeciesFactor = Event [ CurrentFeed - 1 ][ IngrEaseOfBreakdown - 1 ] ;
 				// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				// END  Include '../Molly_ProximateExpand_Conversion.csl'
 			}
@@ -7756,7 +7763,7 @@ public:
 		
 		// procedural ( fBinFd = CurrentFeed , CurrStrat , iBinFd ) 
 		for ( int i = 1 ; i <= MaxFdScreens ; ++ i ) { // DO binLoop4 i = 1, maxFdScreens
-			fBinFd [ i - 1 ] = iBinFd [ i +1 - 1 ][ CurrentFeed - 1 ] / 100.0 ;
+			fBinFd [ i - 1 ] = iBinFd [ CurrentFeed - 1 ][ i +1 - 1 ] / 100.0 ;
 		} // binLoop4: CONTINUE
 		// end of procedural 
 		// END  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
@@ -10013,7 +10020,8 @@ public:
 	
 	int advance_model ( double end_time , double time_step ) {
 	
-		double next_time = 0;
+		double next_time;
+		static constexpr double eps = 0.00001;
 		state_type a_state;
 		double a_time;
 		int nsteps = 0;
@@ -10022,22 +10030,22 @@ public:
 		
 			// do current events
 			do {
-				if ( schedule.begin() == schedule.end() ){
+				if ( event_list.begin() == event_list.end() ){
 					// no events
 					next_time = end_time + 1;
-				} else if ( schedule.begin()->first < t ) {
+				} else if ( event_list.begin()->first < t - eps ) {
 					// missed event
-					schedule.erase( schedule.begin() );
+					event_list.erase( event_list.begin() );
 					next_time = t - 1;
-				} else if ( schedule.begin()->first == t ) {
-					do_event( schedule.begin()->second );
-					schedule.erase( schedule.begin() );
+				} else if ( event_list.begin()->first < t + eps ) {
+					do_event( event_list.begin()->second );
+					event_list.erase( event_list.begin() );
 					next_time = t - 1;
-				} else if ( schedule.begin()->first > t ) {
+				} else {
 					// next event
-					next_time = schedule.begin()->first;
+					next_time = event_list.begin()->first;
 				}
-			} while ( next_time <= t) ;
+			} while ( next_time < t + eps ) ;
 		
 			// advance model to next event or end_time
 			a_state = get_state();

@@ -76,15 +76,17 @@ for (i in 1:nrow(csl)){
     cat(file=stderr(), "line", i, "of", nrow(csl), "\n")
   }
 
-  # identify major section
+  ##### identify major section ####
   if (csl$line_type[i] %in% major_sections){
     # new major section
     major_section_stack <- c(csl$line_type[i], major_section_stack)
     major_section <- major_section_stack[1]
+    cat("line", i, "major section starts:", major_section, "\n")
   } else if (csl$line_type[i] == "end" ){
     # check for end of major section
     if (csl$line_type[csl$stack[i]] %in% major_sections){
       major_section <- major_section_stack[1]
+      cat("line", i, "major section ends:", major_section, "\n")
       major_section_stack <- tail(major_section_stack, -1)
     } else {
       major_section <- major_section_stack[1]
@@ -125,6 +127,17 @@ for (i in 1:nrow(csl)){
 
   # change array brackets from (,) to [][]
   # warning CSL has 1-indexing and C++ has 0-indexing
+  # also index order is reversed
+  # CSL
+  # DoublePrecision InitCond(MaxInitValues,MaxAnimals) ! (5,2)
+  # Constant InitCond=	1.0,550,3.5,1,4, &
+  #                     2.0,625,3.5,5,4
+  # FirstEvent=InitCond(4,Animal)
+  # C++
+  #	std::array< std::array< double , MaxInitValues > , MaxAnimals > InitCond ;
+  #	InitCond { { { 1.0 , 550 , 3.5 , 1 , 4 } ,
+  #              { 2.0 , 625 , 3.5 , 5 , 4 } } }
+  # FirstEvent = InitCond [ Animal - 1 ][ 4 - 1 ] ;
   # FIXME only works if array access all on one line, no brackets or commas inside access
   odds <- seq(1, length(parse_list)-1, 2)
   k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) == "openbracket" ) * 2 - 1
@@ -136,14 +149,37 @@ for (i in 1:nrow(csl)){
       this_array_dims <- if_else(temp[5] == ",", 2, 1)
       jj <- j + 2
       parse_list[jj+1] <- "["
-      if (this_array_dims==2){
+      if (this_array_dims == 1){
         odds <- seq(jj+2, length(parse_list)-1, 2)
-        jj <- odds[which( parse_list[odds] == "comma" )[1]]
-        parse_list[jj+1] <- "- 1 ]["
+        jj1 <- odds[which( parse_list[odds] == "closebracket" )[1]]
+        parse_list[jj1+1] <- "- 1 ]"
+      } else if (this_array_dims == 2){
+        odds <- seq(jj+2, length(parse_list)-1, 2)
+        jj1 <- odds[which( parse_list[odds] == "comma" )[1]]
+        parse_list[jj1+1] <- "- 1 ]["
+        odds <- seq(jj1+2, length(parse_list)-1, 2)
+        jj2 <- odds[which( parse_list[odds] == "closebracket" )[1]]
+        parse_list[jj2+1] <- "- 1 ]"
+        # check for unhandled cases
+        odds <- seq(jj+2, jj2-2, 2)
+        k <- which( parse_list[odds] == "openbracket" )
+        if (length(k)>0){
+          stop("can't handle brackets in array reference")
+        }
+        # have to reverse indices
+        temp <- parse_list # old parse_list
+        # stopifnot(i<2160)
+        jj3 <- jj+(jj2-jj1) # new comma position
+        from <- seq(jj1+2, jj2-1) # second index becomes the first
+        to <- seq(jj+2, jj+2+length(from)-1)
+        parse_list[to] <- temp[from]
+        from <- seq(jj1, jj1+1) # move comma
+        to <- seq(jj3, jj3+1)
+        parse_list[to] <- temp[from]
+        from <- seq(jj+2, jj1-1) # first index becomes the second
+        to <- seq(jj3+2, jj3+2+length(from)-1)
+        parse_list[to] <- temp[from]
       }
-      odds <- seq(jj+2, length(parse_list)-1, 2)
-      jj <- odds[which( parse_list[odds] == "closebracket" )[1]]
-      parse_list[jj+1] <- "- 1 ]"
     }
   }
 
@@ -206,11 +242,12 @@ for (i in 1:nrow(csl)){
           csl$decl[token_decl_line[j]] <- "" # delete decl
           csl$dend[token_decl_line[j]] <- ""
         }
-        # cat("removed declaration of", j, "on line", token_decl_line[j], "\n")
+        cat("removed declaration of", j, "on line", token_decl_line[j], "\n")
       }
     }
     token_decl_line[parse_list[k+1]] <- i
     token_decl_type[parse_list[k+1]] <- csl$type[i]
+    token_variable[parse_list[k+1]] <- ""
     token_constant[parse_list[k+1]] <- parse_list[k+1]
     token_constant_value[parse_list[k+1]] <- as.numeric(parse_list[k+5])
     csl$handled[i] <- TRUE
@@ -321,7 +358,7 @@ for (i in 1:nrow(csl)){
             csl$decl[token_decl_line[j]] <- "" # delete decl
             csl$dend[token_decl_line[j]] <- ""
           }
-          # cat("removed declaration of", j, "on line", token_decl_line[j], "\n")
+          cat("removed declaration of", j, "on line", token_decl_line[j], "\n")
         }
       }
       token_variable[parse_list[k+1]] <- parse_list[k+1]
@@ -462,6 +499,9 @@ for (i in 1:nrow(csl)){
     if (is_continuation == FALSE & csl$line_type[i] %in% c("assign")){
       odds <- seq(1, length(parse_list)-1, 2)
       k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) == "equals" ) * 2 - 1
+      if (length(k)>1){
+        stop("multiple assignments on a line should have been separated")
+      }
       token_set_line[parse_list[k+1]] <- i
       bad <- token_decl_line[parse_list[k+1]] != 0 # already declared (actually not bad)
       if (any(!bad)){ # declare these ones
@@ -601,7 +641,7 @@ for (i in 1:nrow(csl)){
             k <- seq(8, length(parse_list)-2, 2)
           }
           if ((length(k)+1)/2 != this_array_dim1){
-            stop("wrong number of elements")
+            stop("wrong number of elements in row")
           }
           temp <- paste(parse_list[k], collapse=" ")
           temp <- paste(parse_list[4], " ", outer, " { ", temp, " } ", ender, sep="")
@@ -610,7 +650,7 @@ for (i in 1:nrow(csl)){
         csl$ccl[i] <- temp
         csl$dend[i] <- ifelse(will_continue, "", ",")
         if (this_array_row == this_array_dim2 & will_continue){
-          stop("array should not continue")
+          stop("too many rows")
         } else {
           this_array_row <- this_array_row + 1
         }
@@ -625,7 +665,7 @@ for (i in 1:nrow(csl)){
         k <- seq(2, length(parse_list)-2, 2)
       }
       if ((length(k)+1)/2 != this_array_dim1){
-        stop("wrong number of elements")
+        stop("wrong number of elements in row")
       }
       temp <- paste(parse_list[k], collapse=" ")
       temp <- paste(" { ", temp, " } ", ender, sep="")
@@ -633,7 +673,7 @@ for (i in 1:nrow(csl)){
       csl$ccl[i] <- temp
       csl$dend[i] <- ifelse(will_continue, "", ",")
       if (this_array_row == this_array_dim2 & will_continue){
-        stop("wrong number of rows")
+        stop("too many rows")
       } else {
         this_array_row <- this_array_row + 1
       }
@@ -665,7 +705,7 @@ for (i in 1:nrow(csl)){
       # if ( next_event == "event1" ){
       # schedule.erase(schedule.begin()) // do this elsewhere to avoid accidental trigger
       temp <- paste("if ( next_event == \"", parse_list[4], "\" ) { ", sep="")
-      discrete_block <- parse_list[4] # need to know for INTERVAL command
+      discrete_block <- parse_list[4] # need to know this for INTERVAL command
     } else {
       odds <- seq(1, length(parse_list)-1, 2)
       temp <- paste(parse_list[odds+1], collapse=" ")
@@ -816,11 +856,11 @@ for (i in 1:nrow(csl)){
     if (csl$line_type[i] == "interval"){
       k <- seq(7, length(parse_list)-1, 2)
       temp <- paste(parse_list[k+1], collapse=" " )
-      temp <- paste("schedule [ t + ", temp, " ] = \"", discrete_block, "\"", sep="")
+      temp <- paste("schedule ( t + ", temp, " , \"", discrete_block, "\" )", sep="")
     } else {
       k <- seq(7, length(parse_list)-1, 2)
       temp <- paste(parse_list[k+1], collapse=" " )
-      temp <- paste("schedule [ t + ", temp, " ] = \"", parse_list[4], "\"", sep="")
+      temp <- paste("schedule ( t + ", temp, " , \"", parse_list[4],  "\" )", sep="")
     }
     if (major_section == "initial"){
       csl$init[i] <- temp
