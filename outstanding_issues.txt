@@ -10,11 +10,12 @@ Issues
 - Assumes Runge-Kutta-4 integration method (easy to change)
 - power operator needs to be manually translated (^ is converted to *pow(1,1)*)
 - C++ min and max functions can't mix int and double, need to fix manually
-- strings are not visible to user
+- strings are not visible to user, string functions not handled
 - arrays are not visible to user
 - does not handle TERMINAL section
 - SCHEDULE must be on its own line
 - doesn't handle DERIVT function (which you should try to avoid anyway)
+- logic identifying set and used variables may not be very robust
 
 To Do
 

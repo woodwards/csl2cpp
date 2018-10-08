@@ -53,7 +53,7 @@ load(temp_file)
 # sort dynamic section
 source("csl2cpp_do_parse_three.r")
 
-# maike C++ code
+# make C++ code
 cat(file=stderr(), "making cpp code", "\n")
 source("csl2cpp_make.r") # load functions
 cpp <- make_cpp(csl, tokens, model_name)
