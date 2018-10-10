@@ -20,16 +20,20 @@ smoosh <- function(...){
     str_squish()
 }
 
-make_cpp <- function(csl, tokens, model_name){
+make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
+
+  cat("delay post processing :", delay_post, "\n")
 
 	# count variables
   integ <- csl$integ[csl$integ > ""]
   state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
-	rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
+	rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", "")) # rate expressions
 	n_state <- length(state)
 	constant <- tokens$constant[tokens$constant>""]
 	variable <- tokens$variable[tokens$variable>"" & tokens$decl_type!="string" & tokens$constant==""]
 	n_variable <- length(variable)
+	cat("n state :", n_state, "\n")
+	cat("n visible :", n_variable, "\n")
 
 	# browser()
 
@@ -58,6 +62,7 @@ make_cpp <- function(csl, tokens, model_name){
 	rows <- csl$section == "header"
 	lines <- csl$tail[rows]
 	cpp <- put_lines(cpp, 0, lines)
+	cat("header comments :", sum(rows), "\n")
 
 	# class
 	cpp <- put_lines(cpp, 0, c("", paste("class", model_name, "{"), "",
@@ -88,6 +93,7 @@ make_cpp <- function(csl, tokens, model_name){
 	                 csl$tail[rows])
 	indent <- if_else(str_detect(lines, "^\\{"), 2, 1) # indent array initialisation lines
 	cpp <- put_lines(cpp, indent, lines)
+	cat("declaration lines :", sum(rows), "\n")
 
   # get state
   cpp <- put_lines(cpp, 1, c("", "state_type get_state ( ) {"))
@@ -123,6 +129,7 @@ make_cpp <- function(csl, tokens, model_name){
 	                 csl$tail[rows])
 	indent <- if_else(str_detect(lines, "^\\{"), 3, 2) # indent array initialisation lines
 	cpp <- put_lines(cpp, indent, lines)
+	cat("array initialisation lines :", sum(rows), "\n")
 
 	# constructor body
 	lines <- c("", "// constructor body",
@@ -146,6 +153,7 @@ make_cpp <- function(csl, tokens, model_name){
   	cpp <- put_lines(cpp, 2, "")
   }
 	cpp <- put_lines(cpp, 1, c("} // end initialise_model", ""))
+	cat("initialisation lines :", sum(rows), "\n")
 
 	# pull variables from model (and constants?)
 	cpp <- put_lines(cpp, 1, "void pull_variables_from_model ( ) {")
@@ -178,6 +186,7 @@ make_cpp <- function(csl, tokens, model_name){
 	  cpp <- put_lines(cpp, 2, "")
 	}
 	cpp <- put_lines(cpp, 1, c("} // end do_event", ""))
+	cat("event lines :", sum(rows), "\n")
 
 	#### derivt function ####
 	cpp <- put_lines(cpp, 1, c("double derivt( double dx0, double x ) {", "",
@@ -186,25 +195,55 @@ make_cpp <- function(csl, tokens, model_name){
 
 	#### calculate rate ####
 	cpp <- put_lines(cpp, 1, "void calculate_rate ( ) {")
-	cpp <- put_lines(cpp, 2, c("", "// calculations"))
-	rows <- csl$section %in% c("dynamic", "derivative")
+	cpp <- put_lines(cpp, 2, c("", "// derivative calculations"))
+	# rows <- csl$section %in% c("derivative") # unsorted (wrong)
+	# using derivative section sorting index
+	incl <- which(delay_post==FALSE | index$set!=index$notused) # which index blocks to include
+	rows <- vector("integer", sum(index$end[incl] - index$begin[incl] + 1))
+	pos <- 1
+	for (i in incl){
+	  lines <- index$begin[i]:index$end[i]
+	  pend <- pos + length(lines) - 1
+    rows[pos:pend] <- lines
+    pos <- pend + 1
+	}
 	lines <- if_else(csl$calc[rows] > "",
 	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
 	                 csl$tail[rows])
 	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
 	cpp <- put_lines(cpp, indent, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end calculate_rate", ""))
+	cat("calculate rate lines :", length(rows), "\n")
 
 	#### post processing ####
 	cpp <- put_lines(cpp, 1, "void post_processing ( ) {")
-	# cpp <- put_lines(cpp, 2, c("", "// calculations"))
-	# rows <- csl$section %in% c("dynamic", "derivative")
-	# lines <- if_else(csl$calc[rows] > "",
-	#                  smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
-	#                  csl$tail[rows])
-	# indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
-	# cpp <- put_lines(cpp, indent, lines)
+	cpp <- put_lines(cpp, 2, c("", "// post processing calculations from derivative"))
+	# using derivative section sorting index
+	incl <- which(delay_post==TRUE & index$set==index$notused) # which index blocks to include
+	rows <- vector("integer", sum(index$end[incl] - index$begin[incl] + 1))
+	pos <- 1
+	for (i in incl){
+	  lines <- index$begin[i]:index$end[i]
+	  pend <- pos + length(lines) - 1
+	  rows[pos:pend] <- lines
+	  pos <- pend + 1
+	}
+	lines <- if_else(csl$calc[rows] > "",
+	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
+	                 csl$tail[rows])
+	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
+	cpp <- put_lines(cpp, indent, lines)
+	cat("post processing 1 lines :", length(rows), "\n")
+	# and also dynamic section
+	cpp <- put_lines(cpp, 2, c("", "// post processing calculations from dynamic"))
+	rows <- which(csl$section %in% c("dynamic"))
+	lines <- if_else(csl$calc[rows] > "",
+	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
+	                 csl$tail[rows])
+	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
+	cpp <- put_lines(cpp, indent, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end post_processing", ""))
+	cat("post processing 2 lines :", length(rows), "\n")
 
 	# rate operator
 	cpp <- put_lines(cpp, 1, c("// called by boost::odeint::integrate()",
@@ -261,6 +300,9 @@ make_cpp <- function(csl, tokens, model_name){
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end advance_model"))
 	cpp <- put_lines(cpp, 0, c("", "}; // end class", ""))
+
+	cat("total lines :", length(cpp), "\n")
+
 	return(cpp)
 
 }

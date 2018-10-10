@@ -16,8 +16,8 @@ end_time <- 4.0
 initialise_model( start_time )
 
 pull_variables_from_model()
-x <- get_molly_variables()
-View(x)
+x0 <- get_molly_variables()
+View(x0)
 
 out_times <- seq( start_time , end_time , time_step )
 
@@ -37,7 +37,7 @@ print(Sys.time() - start_timer)
 xx <- bind_rows(xx)
 
 pull_variables_from_model()
-x <- get_molly_variables()
+x1 <- get_molly_variables()
 
 # p1 <- ggplot() +
 # 	geom_point(data=cpp, mapping=aes(x=x, y=xd), colour="blue") +

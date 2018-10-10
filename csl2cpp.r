@@ -46,11 +46,7 @@ print(plot1)
 # translate to C++
 source("csl2cpp_do_parse_two.r")
 
-# write C++
-temp_file <- paste(path_name, "checkpoint_after_parse_two.RData", sep="/")
-load(temp_file)
-
-# sort dynamic section
+# sort lines
 source("csl2cpp_do_parse_three.r")
 
 # make C++ code

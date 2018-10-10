@@ -3745,1720 +3745,75 @@ public:
 		variable["t"] = t;
 		
 		// pull model variables
-		variable["version"] = version;
-		variable["numVersion"] = numVersion;
-		variable["MyPi"] = MyPi;
-		variable["MwtOa"] = MwtOa;
-		variable["MwtPe"] = MwtPe;
-		variable["MwtSc"] = MwtSc;
-		variable["MwtSt"] = MwtSt;
-		variable["MwtFl"] = MwtFl;
-		variable["MwtGy"] = MwtGy;
-		variable["MwtHc"] = MwtHc;
-		variable["MwtLiFd"] = MwtLiFd;
-		variable["MwtCe"] = MwtCe;
-		variable["MwtNn"] = MwtNn;
-		variable["MwtPi"] = MwtPi;
-		variable["MwtPs"] = MwtPs;
-		variable["MwtAc"] = MwtAc;
-		variable["MwtBu"] = MwtBu;
-		variable["MwtPr"] = MwtPr;
-		variable["MwtVa"] = MwtVa;
-		variable["MwtCh"] = MwtCh;
-		variable["MwtCs"] = MwtCs;
-		variable["MwtRumAa"] = MwtRumAa;
-		variable["MwtUr"] = MwtUr;
-		variable["MwtAm"] = MwtAm;
-		variable["MwtAs"] = MwtAs;
-		variable["MwtFa"] = MwtFa;
-		variable["MwtLa"] = MwtLa;
-		variable["MwtCH4"] = MwtCH4;
-		variable["MwtFaFd"] = MwtFaFd;
-		variable["MwtN"] = MwtN;
-		variable["MwtPOth"] = MwtPOth;
-		variable["MwtAa"] = MwtAa;
-		variable["MwtLm"] = MwtLm;
-		variable["MwtTm"] = MwtTm;
-		variable["MwtTs"] = MwtTs;
-		variable["MwtPVis"] = MwtPVis;
-		variable["F1"] = F1;
-		variable["test"] = test;
-		variable["HcombCH4"] = HcombCH4;
-		variable["HcombAc"] = HcombAc;
-		variable["HcombPr"] = HcombPr;
-		variable["HcombBu"] = HcombBu;
-		variable["HcombGl"] = HcombGl;
-		variable["HcombGy"] = HcombGy;
-		variable["HcombFl"] = HcombFl;
-		variable["HcombFa"] = HcombFa;
-		variable["HcombCs"] = HcombCs;
-		variable["HcombHc"] = HcombHc;
-		variable["HcombPs"] = HcombPs;
-		variable["HcombNn"] = HcombNn;
-		variable["HcombCh"] = HcombCh;
-		variable["HcombUr"] = HcombUr;
-		variable["HcombOa"] = HcombOa;
-		variable["HcombLiFd"] = HcombLiFd;
-		variable["HcombLa"] = HcombLa;
-		variable["HcombTg"] = HcombTg;
-		variable["HcombLm"] = HcombLm;
-		variable["HcombAa"] = HcombAa;
-		variable["HcombTp"] = HcombTp;
-		variable["HcombMi"] = HcombMi;
-		variable["HcombLg"] = HcombLg;
-		variable["HcombMiLi"] = HcombMiLi;
-		variable["MatBW"] = MatBW;
-		variable["AmCor"] = AmCor;
-		variable["CsCor"] = CsCor;
-		variable["HaCor"] = HaCor;
-		variable["RumAaCor"] = RumAaCor;
-		variable["HbCor"] = HbCor;
-		variable["RumAcCor"] = RumAcCor;
-		variable["RumBuCor"] = RumBuCor;
-		variable["RumLaCor"] = RumLaCor;
-		variable["RumPrCor"] = RumPrCor;
-		variable["LPartCor"] = LPartCor;
-		variable["ASCor"] = ASCor;
-		variable["IndigFdCor"] = IndigFdCor;
-		variable["MICor"] = MICor;
-		variable["PICor"] = PICor;
-		variable["FLCor"] = FLCor;
-		variable["MiHaCor"] = MiHaCor;
-		variable["MIHbCor"] = MIHbCor;
-		variable["AaCor"] = AaCor;
-		variable["AcCor"] = AcCor;
-		variable["BldUrCor"] = BldUrCor;
-		variable["FaCor"] = FaCor;
-		variable["CeCor"] = CeCor;
-		variable["HcCor"] = HcCor;
-		variable["GlCor"] = GlCor;
-		variable["CurrentEvent"] = CurrentEvent;
-		variable["PreviousEvent"] = PreviousEvent;
-		variable["i"] = i;
-		variable["j"] = j;
-		variable["jj"] = jj;
-		variable["GlobalDMIEqn"] = GlobalDMIEqn;
 		variable["Expt"] = Expt;
-		variable["ilogNewEvent"] = ilogNewEvent;
+		variable["GlobalDMIEqn"] = GlobalDMIEqn;
+		variable["jj"] = jj;
 		variable["logCriteria1"] = logCriteria1;
-		variable["logNewEvent"] = logNewEvent;
-		variable["McalToMJ"] = McalToMJ;
-		variable["dMilkVol"] = dMilkVol;
-		variable["dMilkProd"] = dMilkProd;
-		variable["MilkProdDiel"] = MilkProdDiel;
-		variable["dLmProd"] = dLmProd;
-		variable["dPmProd"] = dPmProd;
-		variable["dTmProd"] = dTmProd;
-		variable["TVolMilk"] = TVolMilk;
-		variable["TVolMilkYest"] = TVolMilkYest;
-		variable["dNep"] = dNep;
-		variable["tNep"] = tNep;
-		variable["tNepYest"] = tNepYest;
-		variable["MastJawMoveBolus"] = MastJawMoveBolus;
-		variable["Rest"] = Rest;
-		variable["STFLAG"] = STFLAG;
-		variable["IntakeYest"] = IntakeYest;
-		variable["TransitSW"] = TransitSW;
-		variable["FdDMIn"] = FdDMIn;
-		variable["DrnkWa"] = DrnkWa;
-		variable["DrnkWaTot"] = DrnkWaTot;
-		variable["DrnkWaDiel"] = DrnkWaDiel;
-		variable["DrnkWaYest"] = DrnkWaYest;
-		variable["DrinkSW"] = DrinkSW;
-		variable["WaUrineYest"] = WaUrineYest;
-		variable["UrinationCount"] = UrinationCount;
-		variable["UrinationCountYest"] = UrinationCountYest;
-		variable["UrinationCountDiel"] = UrinationCountDiel;
-		variable["UrinationVol"] = UrinationVol;
-		variable["UrinationVolYest"] = UrinationVolYest;
-		variable["UrinationVolDiel"] = UrinationVolDiel;
-		variable["iKHaCs"] = iKHaCs;
-		variable["refIngrKHaCs"] = refIngrKHaCs;
-		variable["iKCeCs"] = iKCeCs;
-		variable["iKHcCs"] = iKHcCs;
-		variable["refIngrKAdfDeg"] = refIngrKAdfDeg;
-		variable["iKPiAa"] = iKPiAa;
-		variable["refIngrKPiAa"] = refIngrKPiAa;
-		variable["iAnimal"] = iAnimal;
-		variable["Animal"] = Animal;
-		variable["iDayOfYear"] = iDayOfYear;
-		variable["DayofYear"] = DayofYear;
-		variable["iParity"] = iParity;
-		variable["Parity"] = Parity;
-		variable["DaysDry"] = DaysDry;
-		variable["DaysOpen"] = DaysOpen;
-		variable["GestLength"] = GestLength;
-		variable["StartDayGest"] = StartDayGest;
-		variable["StartDIM"] = StartDIM;
-		variable["AbortPregNow"] = AbortPregNow;
-		variable["ConceiveNow"] = ConceiveNow;
-		variable["DryOffNow"] = DryOffNow;
-		variable["iAgeInYears"] = iAgeInYears;
-		variable["WtConcBreedFactor"] = WtConcBreedFactor;
-		variable["BCSBase"] = BCSBase;
-		variable["AgeInYears"] = AgeInYears;
-		variable["WtConcAgeFactor"] = WtConcAgeFactor;
-		variable["iStartDayGest"] = iStartDayGest;
-		variable["iDayGestDMI"] = iDayGestDMI;
-		variable["iStartDIM"] = iStartDIM;
-		variable["ConceiveNowVariable"] = ConceiveNowVariable;
-		variable["DryOffNowVariable"] = DryOffNowVariable;
-		variable["AbortPregNowVariable"] = AbortPregNowVariable;
-		variable["tAtConception"] = tAtConception;
-		variable["DayGestBasic"] = DayGestBasic;
-		variable["DayGest"] = DayGest;
-		variable["tAtCalving"] = tAtCalving;
-		variable["DayMilk"] = DayMilk;
-		variable["fHeifers"] = fHeifers;
-		variable["FirstEvent"] = FirstEvent;
-		variable["LastEvent"] = LastEvent;
-		variable["iBW"] = iBW;
-		variable["iBCS"] = iBCS;
-		variable["iHerd"] = iHerd;
-		variable["Herd"] = Herd;
-		variable["fPUter"] = fPUter;
-		variable["iWtUter"] = iWtUter;
-		variable["kUterSyn"] = kUterSyn;
-		variable["kUterDeg"] = kUterDeg;
-		variable["kUterSynDecay"] = kUterSynDecay;
-		variable["iWtConc"] = iWtConc;
-		variable["kConcSyn"] = kConcSyn;
-		variable["kConcSynDecay"] = kConcSynDecay;
-		variable["iWtPConc"] = iWtPConc;
-		variable["kPConcSyn"] = kPConcSyn;
-		variable["kPConcSynDecay"] = kPConcSynDecay;
-		variable["Preg"] = Preg;
-		variable["NonPreg"] = NonPreg;
-		variable["WtUterPart"] = WtUterPart;
-		variable["WtUter"] = WtUter;
-		variable["WtPUter"] = WtPUter;
-		variable["PUter"] = PUter;
-		variable["WtConc"] = WtConc;
-		variable["WtGrvUter"] = WtGrvUter;
-		variable["fEndogLiFd"] = fEndogLiFd;
-		variable["fAiFdBase"] = fAiFdBase;
-		variable["afAiFd"] = afAiFd;
-		variable["SecondsPerDay"] = SecondsPerDay;
-		variable["CurrentFeed"] = CurrentFeed;
-		variable["CurrentSupplement"] = CurrentSupplement;
-		variable["Silage"] = Silage;
-		variable["NumberOfFeeds"] = NumberOfFeeds;
-		variable["fAiFd"] = fAiFd;
-		variable["fCPFd"] = fCPFd;
-		variable["FCPsFd"] = FCPsFd;
-		variable["FUrFd"] = FUrFd;
-		variable["FNPNFd"] = FNPNFd;
-		variable["FRUPFd"] = FRUPFd;
-		variable["FPsFd"] = FPsFd;
-		variable["fPiFd"] = fPiFd;
-		variable["fNnFd"] = fNnFd;
-		variable["FCFatFd"] = FCFatFd;
-		variable["fLiFd"] = fLiFd;
-		variable["fFatFd"] = fFatFd;
-		variable["fAshFd"] = fAshFd;
-		variable["fAsFd"] = fAsFd;
-		variable["fNDFFd"] = fNDFFd;
-		variable["fADFFd"] = fADFFd;
-		variable["fRuAdfFd"] = fRuAdfFd;
-		variable["fLgFd"] = fLgFd;
-		variable["fHcFd"] = fHcFd;
-		variable["fCeFd"] = fCeFd;
-		variable["fOmFd"] = fOmFd;
-		variable["fStFd"] = fStFd;
-		variable["FStsFd"] = FStsFd;
-		variable["fRUStFd"] = fRUStFd;
-		variable["PartFd"] = PartFd;
-		variable["fScFd"] = fScFd;
-		variable["StSol"] = StSol;
-		variable["SpeciesFactor"] = SpeciesFactor;
-		variable["LPartSize"] = LPartSize;
-		variable["MPartSize"] = MPartSize;
-		variable["CappingForIntake"] = CappingForIntake;
-		variable["IntakeVersion"] = IntakeVersion;
-		variable["GrowthPerDay"] = GrowthPerDay;
-		variable["OnceADayMilkingAdjustment"] = OnceADayMilkingAdjustment;
-		variable["OnceADay2YearsOldAdjustment"] = OnceADay2YearsOldAdjustment;
-		variable["IntakeDeclineSlope"] = IntakeDeclineSlope;
-		variable["EnergyForDryCowMaintenancePower"] = EnergyForDryCowMaintenancePower;
-		variable["EnergyForDryCowMaintenanceFactor"] = EnergyForDryCowMaintenanceFactor;
-		variable["EnergyForMilkingCowMaintenancePower"] = EnergyForMilkingCowMaintenancePower;
-		variable["EnergyForMilkingCowMaintenanceFactor"] = EnergyForMilkingCowMaintenanceFactor;
-		variable["EnergyForMilkFactor"] = EnergyForMilkFactor;
-		variable["EnergyForMilkPower"] = EnergyForMilkPower;
-		variable["EnergyForPregnancyFactor"] = EnergyForPregnancyFactor;
-		variable["PeakIntakeDay"] = PeakIntakeDay;
-		variable["kEnergyCompensation"] = kEnergyCompensation;
-		variable["xOadIntakeTadIntake"] = xOadIntakeTadIntake;
-		variable["SmoothingPeriodDays"] = SmoothingPeriodDays;
-		variable["FeedInFlag"] = FeedInFlag;
-		variable["FdRatWFM"] = FdRatWFM;
-		variable["MaxEnergyForMilk"] = MaxEnergyForMilk;
-		variable["iFdRat"] = iFdRat;
-		variable["NonUterEBW"] = NonUterEBW;
-		variable["NonUterEbwTarget"] = NonUterEbwTarget;
-		variable["EnergyForActivity"] = EnergyForActivity;
-		variable["EnergyForPregnancy"] = EnergyForPregnancy;
-		variable["EnergyForGrowth"] = EnergyForGrowth;
-		variable["EnergyCompensation"] = EnergyCompensation;
-		variable["EnergyForMaintenance"] = EnergyForMaintenance;
-		variable["EnergyForMilk"] = EnergyForMilk;
-		variable["RequiredEnergy"] = RequiredEnergy;
-		variable["FdCapMolly"] = FdCapMolly;
-		variable["FdRat"] = FdRat;
-		variable["fd1"] = fd1;
-		variable["fd2"] = fd2;
-		variable["fd3"] = fd3;
-		variable["EnergyCompenstaion"] = EnergyCompenstaion;
-		variable["iNonUterEbwTarget"] = iNonUterEbwTarget;
-		variable["iNonUterEBW"] = iNonUterEBW;
-		variable["IntakeDay"] = IntakeDay;
-		variable["iTotMeals"] = iTotMeals;
-		variable["TotMeals"] = TotMeals;
-		variable["TotMealsYest"] = TotMealsYest;
-		variable["TNdfIn"] = TNdfIn;
-		variable["TNdfInYest"] = TNdfInYest;
-		variable["iAaF"] = iAaF;
-		variable["iAcF"] = iAcF;
-		variable["iFaF"] = iFaF;
-		variable["iGlF"] = iGlF;
-		variable["iVolAaF"] = iVolAaF;
-		variable["iVolAcF"] = iVolAcF;
-		variable["iVolFaF"] = iVolFaF;
-		variable["iVolGlF"] = iVolGlF;
-		variable["iCeF"] = iCeF;
-		variable["iHaF"] = iHaF;
-		variable["iHcF"] = iHcF;
-		variable["iIndigFdF"] = iIndigFdF;
-		variable["iPiF"] = iPiF;
-		variable["iHbF"] = iHbF;
-		variable["iLPartF"] = iLPartF;
-		variable["ifMPartRum"] = ifMPartRum;
-		variable["ifSPartRum"] = ifSPartRum;
-		variable["iMPartF"] = iMPartF;
-		variable["iSPartF"] = iSPartF;
-		variable["iAmF"] = iAmF;
-		variable["iAsF"] = iAsF;
-		variable["iCsF"] = iCsF;
-		variable["iFlF"] = iFlF;
-		variable["iMiF"] = iMiF;
-		variable["iRumAaF"] = iRumAaF;
-		variable["iRumAcF"] = iRumAcF;
-		variable["iRumBuF"] = iRumBuF;
-		variable["iRumPrF"] = iRumPrF;
-		variable["iBldUrF"] = iBldUrF;
-		variable["iMiHaF"] = iMiHaF;
-		variable["iMiHbF"] = iMiHbF;
-		variable["iVolBldUrF"] = iVolBldUrF;
-		variable["iRumLaF"] = iRumLaF;
-		variable["iOthDnaF"] = iOthDnaF;
-		variable["iVisDnaF"] = iVisDnaF;
-		variable["kInitRumVol"] = kInitRumVol;
-		variable["MaxRumVol"] = MaxRumVol;
-		variable["RumVol"] = RumVol;
-		variable["RumDM"] = RumDM;
-		variable["iRumLiqVol"] = iRumLiqVol;
-		variable["RumLiqVol"] = RumLiqVol;
-		variable["iotGutCont"] = iotGutCont;
-		variable["iEBW"] = iEBW;
-		variable["iWtAdip"] = iWtAdip;
-		variable["iWtCytAdip"] = iWtCytAdip;
-		variable["iWtTsAdip"] = iWtTsAdip;
-		variable["iNonFatEBW"] = iNonFatEBW;
-		variable["iNonFatNonUterEBW"] = iNonFatNonUterEBW;
-		variable["iWtOth"] = iWtOth;
-		variable["iWtVis"] = iWtVis;
-		variable["BWF"] = BWF;
-		variable["iotWtOth"] = iotWtOth;
-		variable["iotWtVis"] = iotWtVis;
-		variable["ifDWt"] = ifDWt;
-		variable["iPOth"] = iPOth;
-		variable["iPVis"] = iPVis;
-		variable["iTsAdip"] = iTsAdip;
-		variable["iabsEAve"] = iabsEAve;
-		variable["iGl"] = iGl;
-		variable["iVolGl"] = iVolGl;
-		variable["iFa"] = iFa;
-		variable["iVolFa"] = iVolFa;
-		variable["iAc"] = iAc;
-		variable["iVolAc"] = iVolAc;
-		variable["iAa"] = iAa;
-		variable["iVolAa"] = iVolAa;
-		variable["iBldUr"] = iBldUr;
-		variable["iVolBldUr"] = iVolBldUr;
-		variable["iHa"] = iHa;
-		variable["iLPart"] = iLPart;
-		variable["iMPart"] = iMPart;
-		variable["iHc"] = iHc;
-		variable["iCe"] = iCe;
-		variable["iHb"] = iHb;
-		variable["iPi"] = iPi;
-		variable["iIndigFd"] = iIndigFd;
-		variable["iSPart"] = iSPart;
-		variable["iRumLa"] = iRumLa;
-		variable["iCs"] = iCs;
-		variable["iAs"] = iAs;
-		variable["iAm"] = iAm;
-		variable["iMi"] = iMi;
-		variable["iFl"] = iFl;
-		variable["iRumAc"] = iRumAc;
-		variable["iRumPr"] = iRumPr;
-		variable["iRumBu"] = iRumBu;
-		variable["iRumAa"] = iRumAa;
-		variable["iMiHa"] = iMiHa;
-		variable["iMiHb"] = iMiHb;
-		variable["iOthDna"] = iOthDna;
-		variable["iVisDna"] = iVisDna;
-		variable["iVmAcTs"] = iVmAcTs;
-		variable["SolDM"] = SolDM;
-		variable["TotWaUrineLast"] = TotWaUrineLast;
-		variable["TotNurLast"] = TotNurLast;
-		variable["BladderVol"] = BladderVol;
-		variable["NurConcentration"] = NurConcentration;
-		variable["MamMilkCor"] = MamMilkCor;
-		variable["TAveMilkMam"] = TAveMilkMam;
-		variable["THETA5"] = THETA5;
-		variable["iLHorF"] = iLHorF;
-		variable["iMamMilkAveF"] = iMamMilkAveF;
-		variable["iMamTmF"] = iMamTmF;
-		variable["LHorBase"] = LHorBase;
-		variable["iLHor"] = iLHor;
-		variable["iMamLmF"] = iMamLmF;
-		variable["iMamPmF"] = iMamPmF;
-		variable["iMilkAve"] = iMilkAve;
-		variable["TAveMilk"] = TAveMilk;
-		variable["CumulativeLowMfDays"] = CumulativeLowMfDays;
-		variable["DailyMfDiff"] = DailyMfDiff;
-		variable["InMilk"] = InMilk;
-		variable["iMamCells"] = iMamCells;
-		variable["iMamCellsA"] = iMamCellsA;
-		variable["iMamCellsQ"] = iMamCellsQ;
-		variable["iMamCellsS"] = iMamCellsS;
-		variable["dWtAdipNew"] = dWtAdipNew;
-		variable["BcsTarget"] = BcsTarget;
-		variable["dLwExclUterGutAndGrowth"] = dLwExclUterGutAndGrowth;
-		variable["MilkingFrequencyLag"] = MilkingFrequencyLag;
-		variable["derivMilkingFrequencyLag"] = derivMilkingFrequencyLag;
-		variable["iRumVol"] = iRumVol;
-		variable["BST"] = BST;
-		variable["INS"] = INS;
-		variable["T3"] = T3;
-		variable["kRetMilkI"] = kRetMilkI;
-		variable["MilkMax"] = MilkMax;
-		variable["KMilkI"] = KMilkI;
-		variable["iMamMilkAve"] = iMamMilkAve;
-		variable["iMamTm"] = iMamTm;
-		variable["iMamPm"] = iMamPm;
-		variable["iMamLm"] = iMamLm;
-		variable["TotEatingYest"] = TotEatingYest;
-		variable["TotRumntnYest"] = TotRumntnYest;
-		variable["TotRestYest"] = TotRestYest;
-		variable["dEating"] = dEating;
-		variable["dRumntn"] = dRumntn;
-		variable["dRest"] = dRest;
-		variable["MilkInt"] = MilkInt;
-		variable["PResidMamMilk"] = PResidMamMilk;
-		variable["MilkingIndex"] = MilkingIndex;
-		variable["MilkingFrequency"] = MilkingFrequency;
-		variable["NextMilkingT"] = NextMilkingT;
-		variable["MilkSW"] = MilkSW;
-		variable["EatingSupplementsSW"] = EatingSupplementsSW;
-		variable["SupplementOnOffer"] = SupplementOnOffer;
-		variable["HMM"] = HMM;
-		variable["RUMNTNEQ"] = RUMNTNEQ;
-		variable["WaPool"] = WaPool;
-		variable["WaPoolTarget"] = WaPoolTarget;
-		variable["EatingSW"] = EatingSW;
-		variable["AcquisitionJawMovesCurrent"] = AcquisitionJawMovesCurrent;
-		variable["BolusWeightTotalCurrent"] = BolusWeightTotalCurrent;
-		variable["MaxBolusWeight"] = MaxBolusWeight;
-		variable["EatSW5"] = EatSW5;
-		variable["CurrStrat"] = CurrStrat;
-		variable["CurrHerbage"] = CurrHerbage;
-		variable["StandardBw"] = StandardBw;
-		variable["StandardMetabolicBw"] = StandardMetabolicBw;
-		variable["BwCorrected"] = BwCorrected;
-		variable["BwCorrection"] = BwCorrection;
-		variable["ResidMamMilk"] = ResidMamMilk;
-		variable["dNdfIn"] = dNdfIn;
-		variable["MealsDay"] = MealsDay;
-		variable["SunriseToday"] = SunriseToday;
-		variable["SunsetToday"] = SunsetToday;
-		variable["TMilkLmYest"] = TMilkLmYest;
-		variable["TMilkPmYest"] = TMilkPmYest;
-		variable["TMilkTmYest"] = TMilkTmYest;
-		variable["FdRatDiel"] = FdRatDiel;
-		variable["IALG"] = IALG;
-		variable["NSTP"] = NSTP;
-		variable["CINT"] = CINT;
-		variable["MAXT"] = MAXT;
-		variable["TSTP"] = TSTP;
-		variable["TIME"] = TIME;
-		variable["LastEv"] = LastEv;
-		variable["LastSu"] = LastSu;
-		variable["LastSw"] = LastSw;
-		variable["LastEA"] = LastEA;
-		variable["fAcSilage"] = fAcSilage;
-		variable["fLaSilage"] = fLaSilage;
-		variable["PcSilage"] = PcSilage;
-		variable["PcPeFd"] = PcPeFd;
-		variable["fBuAc"] = fBuAc;
-		variable["fOaPe"] = fOaPe;
-		variable["fAcFd"] = fAcFd;
-		variable["FLaFd"] = FLaFd;
-		variable["fBuSilage"] = fBuSilage;
-		variable["fBuFd"] = fBuFd;
-		variable["fPeFd"] = fPeFd;
-		variable["fOaFd"] = fOaFd;
-		variable["fRoughageFd"] = fRoughageFd;
-		variable["fDMFd"] = fDMFd;
-		variable["PiMeanRRT"] = PiMeanRRT;
-		variable["HaMeanRRT"] = HaMeanRRT;
-		variable["CeMeanRRT"] = CeMeanRRT;
-		variable["FKRuP"] = FKRuP;
-		variable["FKRuSt"] = FKRuSt;
-		variable["FKRuAdf"] = FKRuAdf;
-		variable["FHcCs1"] = FHcCs1;
-		variable["slpKRuAdf"] = slpKRuAdf;
-		variable["slpKRUP"] = slpKRUP;
-		variable["slpKRUST"] = slpKRUST;
-		variable["KPiAa"] = KPiAa;
-		variable["KHaCs"] = KHaCs;
-		variable["KCeCs1"] = KCeCs1;
-		variable["KHcCs1"] = KHcCs1;
-		variable["fRupCp"] = fRupCp;
-		variable["fPiCp"] = fPiCp;
-		variable["fPsCp"] = fPsCp;
-		variable["fNnCp"] = fNnCp;
-		variable["fUrCp"] = fUrCp;
-		variable["fRuStSt"] = fRuStSt;
-		variable["fStSSt"] = fStSSt;
-		variable["fRuAdfAdf"] = fRuAdfAdf;
-		variable["fLgAdf"] = fLgAdf;
-		variable["RestSa"] = RestSa;
-		variable["RestWa"] = RestWa;
-		variable["RumntnSa"] = RumntnSa;
-		variable["EatSa"] = EatSa;
-		variable["SaIn"] = SaIn;
-		variable["EatWa"] = EatWa;
-		variable["otGutCont"] = otGutCont;
-		variable["OsMolF"] = OsMolF;
-		variable["RumLiqVolEQ"] = RumLiqVolEQ;
-		variable["WaIn"] = WaIn;
-		variable["RumOsMol"] = RumOsMol;
-		variable["OsWaInt"] = OsWaInt;
-		variable["OsWaSlp"] = OsWaSlp;
-		variable["OsWa"] = OsWa;
-		variable["fRumDM"] = fRumDM;
-		variable["WaOut"] = WaOut;
-		variable["dRumLiqVol"] = dRumLiqVol;
-		variable["DilRate"] = DilRate;
-		variable["KWaFeces"] = KWaFeces;
-		variable["kMilkAsh"] = kMilkAsh;
-		variable["kWaRespir"] = kWaRespir;
-		variable["kWaSweat"] = kWaSweat;
-		variable["WaFeces"] = WaFeces;
-		variable["WaMilk"] = WaMilk;
-		variable["WaRespir"] = WaRespir;
-		variable["WaSweat"] = WaSweat;
-		variable["WaUrine"] = WaUrine;
-		variable["WaConsumed"] = WaConsumed;
-		variable["TotWaConsumed"] = TotWaConsumed;
-		variable["TotWaUrine"] = TotWaUrine;
-		variable["MaxBladderVol"] = MaxBladderVol;
-		variable["MilkDen"] = MilkDen;
-		variable["TVolMilkVol"] = TVolMilkVol;
-		variable["CountDownDays"] = CountDownDays;
-		variable["IntakeTotal"] = IntakeTotal;
-		variable["kMastication"] = kMastication;
-		variable["kAcquisition"] = kAcquisition;
-		variable["kSpecies"] = kSpecies;
-		variable["kComminuteOralMin"] = kComminuteOralMin;
-		variable["kComminuteOralMax"] = kComminuteOralMax;
-		variable["MasticationSteps"] = MasticationSteps;
 		variable["Old"] = Old;
-		variable["SumBinFd"] = SumBinFd;
-		variable["MeanParticleSize"] = MeanParticleSize;
-		variable["MedianParticleSize"] = MedianParticleSize;
-		variable["fSPartSwal"] = fSPartSwal;
-		variable["fMPartSwal"] = fMPartSwal;
-		variable["fLPartSwal"] = fLPartSwal;
-		variable["fLPartMPartSwal"] = fLPartMPartSwal;
-		variable["PsF"] = PsF;
-		variable["fParticulateFd"] = fParticulateFd;
-		variable["iDMilk"] = iDMilk;
-		variable["iFCM4Z"] = iFCM4Z;
-		variable["iME"] = iME;
-		variable["iOxup"] = iOxup;
-		variable["iAtAdh"] = iAtAdh;
-		variable["ifPm"] = ifPm;
-		variable["ifTm"] = ifTm;
-		variable["icAc"] = icAc;
-		variable["icFa"] = icFa;
-		variable["icGl"] = icGl;
-		variable["iTCH4"] = iTCH4;
-		variable["iDEi"] = iDEi;
-		variable["iMEi"] = iMEi;
-		variable["VmAcTsAdip"] = VmAcTsAdip;
-		variable["rtPOx"] = rtPOx;
-		variable["fTm"] = fTm;
-		variable["FCM4Z"] = FCM4Z;
-		variable["AtAdHT"] = AtAdHT;
-		variable["ME"] = ME;
-		variable["OXUP1"] = OXUP1;
-		variable["MamMilkAve2"] = MamMilkAve2;
-		variable["EBW"] = EBW;
-		variable["BW"] = BW;
-		variable["VolGl"] = VolGl;
-		variable["VolFa"] = VolFa;
-		variable["VolAc"] = VolAc;
-		variable["VolAa"] = VolAa;
-		variable["BldUrVol"] = BldUrVol;
-		variable["DMilk"] = DMilk;
-		variable["TFCM4z"] = TFCM4z;
-		variable["WtCytAdip"] = WtCytAdip;
-		variable["otWtOth"] = otWtOth;
-		variable["otWtVis"] = otWtVis;
-		variable["fPm"] = fPm;
-		variable["ObsCH4"] = ObsCH4;
-		variable["ObsDE"] = ObsDE;
-		variable["ObsEUr"] = ObsEUr;
-		variable["ObsME"] = ObsME;
-		variable["FatAdd"] = FatAdd;
-		variable["InfPrt"] = InfPrt;
-		variable["CWC"] = CWC;
-		variable["GE1Fd"] = GE1Fd;
-		variable["GE2Fd"] = GE2Fd;
-		variable["GE3Fd"] = GE3Fd;
-		variable["GEFd"] = GEFd;
-		variable["HcCeCe"] = HcCeCe;
-		variable["LaScSc"] = LaScSc;
-		variable["LiScSC"] = LiScSC;
-		variable["OaScSC"] = OaScSC;
-		variable["PeScSC"] = PeScSC;
-		variable["FaScFd"] = FaScFd;
-		variable["fLPartNutIng"] = fLPartNutIng;
-		variable["fLPartSt"] = fLPartSt;
-		variable["fLPartHc"] = fLPartHc;
-		variable["fLPartCe"] = fLPartCe;
-		variable["fLPartPi"] = fLPartPi;
-		variable["fLPartLg"] = fLPartLg;
-		variable["fLPartAi"] = fLPartAi;
-		variable["fIndigFd"] = fIndigFd;
-		variable["fLPartIndigFd"] = fLPartIndigFd;
-		variable["fLgIndigFd"] = fLgIndigFd;
-		variable["fAiIndigFd"] = fAiIndigFd;
-		variable["fLPartADF"] = fLPartADF;
-		variable["fLPartNDF"] = fLPartNDF;
-		variable["fMPartNutIng"] = fMPartNutIng;
-		variable["fSPartNutIng"] = fSPartNutIng;
-		variable["OaSc"] = OaSc;
-		variable["PeSc"] = PeSc;
-		variable["LiSc"] = LiSc;
-		variable["FatSc"] = FatSc;
-		variable["fScTFd"] = fScTFd;
-		variable["totFd"] = totFd;
-		variable["DailyDMin"] = DailyDMin;
-		variable["TotDMin"] = TotDMin;
-		variable["OminFd"] = OminFd;
-		variable["NdfinFd"] = NdfinFd;
-		variable["AdfinFd"] = AdfinFd;
-		variable["RuAdfinFd"] = RuAdfinFd;
-		variable["LginFd"] = LginFd;
-		variable["RuStinFd"] = RuStinFd;
-		variable["ScinFd"] = ScinFd;
-		variable["CPinFd"] = CPinFd;
-		variable["CPsinFd"] = CPsinFd;
-		variable["RUPinFd"] = RUPinFd;
-		variable["NpninFd"] = NpninFd;
-		variable["NninFd"] = NninFd;
-		variable["CFatinFd"] = CFatinFd;
-		variable["AshinFd"] = AshinFd;
-		variable["DAY"] = DAY;
-		variable["CWCF"] = CWCF;
-		variable["RumntnF"] = RumntnF;
-		variable["MinLPRumntnF"] = MinLPRumntnF;
-		variable["AMP1FT"] = AMP1FT;
-		variable["AMP2FT"] = AMP2FT;
-		variable["MEAN1"] = MEAN1;
-		variable["MEAN2"] = MEAN2;
-		variable["MinLPRumntn"] = MinLPRumntn;
-		variable["Eating"] = Eating;
-		variable["Rumntn"] = Rumntn;
-		variable["TotRumntn"] = TotRumntn;
-		variable["TotEating"] = TotEating;
-		variable["TotRest"] = TotRest;
-		variable["AaFvAc"] = AaFvAc;
-		variable["AaFvPr"] = AaFvPr;
-		variable["AaFvBu"] = AaFvBu;
-		variable["LaAcAc"] = LaAcAc;
-		variable["LaPrPr"] = LaPrPr;
-		variable["AaFvFat"] = AaFvFat;
-		variable["CONSET"] = CONSET;
-		variable["FORSET"] = FORSET;
-		variable["MIXSET"] = MIXSET;
-		variable["ScAcAc"] = ScAcAc;
-		variable["ScPrPr"] = ScPrPr;
-		variable["ScBuBu"] = ScBuBu;
-		variable["ScLaLa"] = ScLaLa;
-		variable["StAcAc"] = StAcAc;
-		variable["StPrPr"] = StPrPr;
-		variable["StBuBu"] = StBuBu;
-		variable["StLaLa"] = StLaLa;
-		variable["HcAcAc"] = HcAcAc;
-		variable["HcPrPr"] = HcPrPr;
-		variable["HcBuBu"] = HcBuBu;
-		variable["CeAcAc"] = CeAcAc;
-		variable["CePrPr"] = CePrPr;
-		variable["CeBuBu"] = CeBuBu;
-		variable["ScAc"] = ScAc;
-		variable["ScPr"] = ScPr;
-		variable["ScBu"] = ScBu;
-		variable["ScLa"] = ScLa;
-		variable["StAc"] = StAc;
-		variable["StPr"] = StPr;
-		variable["StBu"] = StBu;
-		variable["StLa"] = StLa;
-		variable["FIXDpH"] = FIXDpH;
-		variable["RumpHBase"] = RumpHBase;
-		variable["RumpHCON"] = RumpHCON;
-		variable["vfaeff"] = vfaeff;
-		variable["RumpH"] = RumpH;
-		variable["TVFA"] = TVFA;
-		variable["cVFA"] = cVFA;
-		variable["KSPartP"] = KSPartP;
-		variable["KWAP"] = KWAP;
-		variable["KLPartRed"] = KLPartRed;
-		variable["dLPart"] = dLPart;
-		variable["LPartSwal"] = LPartSwal;
-		variable["LPartRed"] = LPartRed;
-		variable["LPart"] = LPart;
-		variable["LPart1"] = LPart1;
-		variable["KMPartSPart"] = KMPartSPart;
-		variable["pLPartMPartComm"] = pLPartMPartComm;
-		variable["KMPartP"] = KMPartP;
-		variable["dMPart"] = dMPart;
-		variable["MPartSwal"] = MPartSwal;
-		variable["LPartMPart"] = LPartMPart;
-		variable["MPartSPart"] = MPartSPart;
-		variable["MPartDeg"] = MPartDeg;
-		variable["MPartP"] = MPartP;
-		variable["MPart"] = MPart;
-		variable["LPartplusMPart"] = LPartplusMPart;
-		variable["dSPart"] = dSPart;
-		variable["SPartSwal"] = SPartSwal;
-		variable["LPartSPart"] = LPartSPart;
-		variable["SPartDeg"] = SPartDeg;
-		variable["SPartP"] = SPartP;
-		variable["SPart"] = SPart;
-		variable["fLPart"] = fLPart;
-		variable["fMPart"] = fMPart;
-		variable["fLPartplusMPart"] = fLPartplusMPart;
-		variable["fSPart"] = fSPart;
-		variable["fMPart1"] = fMPart1;
-		variable["fSPart1"] = fSPart1;
-		variable["RumPartSizeSlp"] = RumPartSizeSlp;
-		variable["RumPartSizeInt"] = RumPartSizeInt;
-		variable["PartWidth"] = PartWidth;
-		variable["PartThick"] = PartThick;
-		variable["kSurfaceArea"] = kSurfaceArea;
-		variable["RumPartSizeMean"] = RumPartSizeMean;
-		variable["RumLpMpSizeMean"] = RumLpMpSizeMean;
-		variable["RumLPartSizeMean"] = RumLPartSizeMean;
-		variable["RumMPartSizeMean"] = RumMPartSizeMean;
-		variable["RumSPartSizeMean"] = RumSPartSizeMean;
-		variable["MPartSA"] = MPartSA;
-		variable["MPartVol"] = MPartVol;
-		variable["SPartSA"] = SPartSA;
-		variable["SPartVol"] = SPartVol;
-		variable["fSPartSA"] = fSPartSA;
-		variable["fMPartSA"] = fMPartSA;
-		variable["fPartSA"] = fPartSA;
-		variable["fPartP"] = fPartP;
-		variable["KMiHa"] = KMiHa;
-		variable["KMiHb"] = KMiHb;
-		variable["VmMiHa"] = VmMiHa;
-		variable["KMiHaF"] = KMiHaF;
-		variable["KMiHbF"] = KMiHbF;
-		variable["VmMiHb"] = VmMiHb;
-		variable["Csin"] = Csin;
-		variable["fCsHa"] = fCsHa;
-		variable["fCsHb"] = fCsHb;
-		variable["HaMiP"] = HaMiP;
-		variable["HbMiP"] = HbMiP;
-		variable["IndigFdMiP"] = IndigFdMiP;
-		variable["PiMiP"] = PiMiP;
-		variable["SPartMiPi"] = SPartMiPi;
-		variable["CsMiG"] = CsMiG;
-		variable["HaMiG"] = HaMiG;
-		variable["HbMiG"] = HbMiG;
-		variable["cMiHa"] = cMiHa;
-		variable["cMiHb"] = cMiHb;
-		variable["SPartMiHa"] = SPartMiHa;
-		variable["SPartMiHb"] = SPartMiHb;
-		variable["HaMiRum"] = HaMiRum;
-		variable["HbMiRum"] = HbMiRum;
-		variable["HaMiF"] = HaMiF;
-		variable["HbMiF"] = HbMiF;
-		variable["MiHaMi"] = MiHaMi;
-		variable["MiHbMi"] = MiHbMi;
-		variable["dHaMi"] = dHaMi;
-		variable["dHbMi"] = dHbMi;
-		variable["HaMi"] = HaMi;
-		variable["HbMi"] = HbMi;
-		variable["dHa"] = dHa;
-		variable["StinFd"] = StinFd;
-		variable["StCsFd"] = StCsFd;
-		variable["StHaFd"] = StHaFd;
-		variable["LPartStHa"] = LPartStHa;
-		variable["SPartHaCs"] = SPartHaCs;
-		variable["HaP"] = HaP;
-		variable["HaPT"] = HaPT;
-		variable["Ha"] = Ha;
-		variable["KFatHb"] = KFatHb;
-		variable["KHcCs"] = KHcCs;
-		variable["KCeCs"] = KCeCs;
-		variable["dHc"] = dHc;
-		variable["Hcin"] = Hcin;
-		variable["RumHcin"] = RumHcin;
-		variable["LPartHcHc"] = LPartHcHc;
-		variable["SPartHcCs"] = SPartHcCs;
-		variable["HcP"] = HcP;
-		variable["Hc"] = Hc;
-		variable["dCe"] = dCe;
-		variable["RumCein"] = RumCein;
-		variable["Cein"] = Cein;
-		variable["LPartCeCe"] = LPartCeCe;
-		variable["SPartCeCs"] = SPartCeCs;
-		variable["CeP"] = CeP;
-		variable["Ce"] = Ce;
-		variable["dHb"] = dHb;
-		variable["Hbin"] = Hbin;
-		variable["LPartHbHb"] = LPartHbHb;
-		variable["SPartHbCs"] = SPartHbCs;
-		variable["HbP"] = HbP;
-		variable["Hb"] = Hb;
-		variable["KFatPi"] = KFatPi;
-		variable["dPi"] = dPi;
-		variable["PiPiFd"] = PiPiFd;
-		variable["LPartPiPi"] = LPartPiPi;
-		variable["SPartPiAa"] = SPartPiAa;
-		variable["PiP"] = PiP;
-		variable["TPRTin"] = TPRTin;
-		variable["Pi"] = Pi;
-		variable["dIndigFd"] = dIndigFd;
-		variable["IndigFdFd"] = IndigFdFd;
-		variable["LPartIndigFdIndigFd"] = LPartIndigFdIndigFd;
-		variable["IndigFdP"] = IndigFdP;
-		variable["LgP"] = LgP;
-		variable["AiP"] = AiP;
-		variable["IndigFd"] = IndigFd;
-		variable["RumLg"] = RumLg;
-		variable["KCsFv"] = KCsFv;
-		variable["VmCsFv"] = VmCsFv;
-		variable["dCs"] = dCs;
-		variable["cCs"] = cCs;
-		variable["ScTCs"] = ScTCs;
-		variable["StCs"] = StCs;
-		variable["HaCs"] = HaCs;
-		variable["HcCs"] = HcCs;
-		variable["CeCs"] = CeCs;
-		variable["CsFv"] = CsFv;
-		variable["CsMi"] = CsMi;
-		variable["CsP"] = CsP;
-		variable["Cs"] = Cs;
-		variable["cSaPs"] = cSaPs;
-		variable["KRumAaFv"] = KRumAaFv;
-		variable["VmRumAaFv"] = VmRumAaFv;
-		variable["dRumAa"] = dRumAa;
-		variable["cRumAa"] = cRumAa;
-		variable["PsAaFd"] = PsAaFd;
-		variable["PiAa"] = PiAa;
-		variable["RumAaP"] = RumAaP;
-		variable["SaPsAa"] = SaPsAa;
-		variable["RumAaFv"] = RumAaFv;
-		variable["RumAaMi"] = RumAaMi;
-		variable["RumAa"] = RumAa;
-		variable["AaFvAm"] = AaFvAm;
-		variable["KAmabs"] = KAmabs;
-		variable["NnAmAM"] = NnAmAM;
-		variable["UrAmAm"] = UrAmAm;
-		variable["KBldUrAm"] = KBldUrAm;
-		variable["KiAm"] = KiAm;
-		variable["VmBldUrAm"] = VmBldUrAm;
-		variable["dAm"] = dAm;
-		variable["UrAmFd"] = UrAmFd;
-		variable["NnAmFd"] = NnAmFd;
-		variable["AaAm"] = AaAm;
-		variable["SaNnAm"] = SaNnAm;
-		variable["BldUrAm"] = BldUrAm;
-		variable["absRumAm"] = absRumAm;
-		variable["AmMi"] = AmMi;
-		variable["AM2"] = AM2;
-		variable["AM"] = AM;
-		variable["Am1"] = Am1;
-		variable["cAm"] = cAm;
-		variable["cBldUr"] = cBldUr;
-		variable["fSaAs"] = fSaAs;
-		variable["KAsabs"] = KAsabs;
-		variable["InfNaBicarb"] = InfNaBicarb;
-		variable["InfNaCl"] = InfNaCl;
-		variable["dAs"] = dAs;
-		variable["AsAsFd"] = AsAsFd;
-		variable["SaAs"] = SaAs;
-		variable["InfAs"] = InfAs;
-		variable["AsP"] = AsP;
-		variable["AshP"] = AshP;
-		variable["absRumAs"] = absRumAs;
-		variable["cAs"] = cAs;
-		variable["As"] = As;
-		variable["FaFlFd"] = FaFlFd;
-		variable["LiChFd"] = LiChFd;
-		variable["LiFlFd"] = LiFlFd;
-		variable["dFl"] = dFl;
-		variable["FlFd"] = FlFd;
-		variable["Fl1Fd"] = Fl1Fd;
-		variable["FlMi"] = FlMi;
-		variable["FaP"] = FaP;
-		variable["LipidP"] = LipidP;
-		variable["Fl"] = Fl;
-		variable["KabsAc"] = KabsAc;
-		variable["KabsBu"] = KabsBu;
-		variable["KabsLa"] = KabsLa;
-		variable["KabsPr"] = KabsPr;
-		variable["dRumAc"] = dRumAc;
-		variable["FvAcFd"] = FvAcFd;
-		variable["CsAc"] = CsAc;
-		variable["CsFvAc"] = CsFvAc;
-		variable["fScCs"] = fScCs;
-		variable["fStCs"] = fStCs;
-		variable["fHcCs"] = fHcCs;
-		variable["FCeCs"] = FCeCs;
-		variable["RumLaAc"] = RumLaAc;
-		variable["RumAaAc"] = RumAaAc;
-		variable["absRumAc"] = absRumAc;
-		variable["RumAcSynth"] = RumAcSynth;
-		variable["cRumAc"] = cRumAc;
-		variable["RumAcP"] = RumAcP;
-		variable["RumAc"] = RumAc;
-		variable["RumAc1"] = RumAc1;
-		variable["MPcAc"] = MPcAc;
-		variable["InfRumPr"] = InfRumPr;
-		variable["dRumPr"] = dRumPr;
-		variable["CsPr"] = CsPr;
-		variable["RumLaPr"] = RumLaPr;
-		variable["CsFvPr"] = CsFvPr;
-		variable["RumAaPr"] = RumAaPr;
-		variable["RumPrP"] = RumPrP;
-		variable["RumPrSynth"] = RumPrSynth;
-		variable["cRumPr"] = cRumPr;
-		variable["absRumPr"] = absRumPr;
-		variable["RumPr"] = RumPr;
-		variable["RumPr1"] = RumPr1;
-		variable["MPcPr"] = MPcPr;
-		variable["dRumBu"] = dRumBu;
-		variable["CsBu"] = CsBu;
-		variable["CsFvBu"] = CsFvBu;
-		variable["RumAaBu"] = RumAaBu;
-		variable["FvBuFd"] = FvBuFd;
-		variable["absRumBu"] = absRumBu;
-		variable["RumBuP"] = RumBuP;
-		variable["RumBuSynth"] = RumBuSynth;
-		variable["cRumBu"] = cRumBu;
-		variable["RumBU"] = RumBU;
-		variable["RumBu1"] = RumBu1;
-		variable["MPcBu"] = MPcBu;
-		variable["KLaFv"] = KLaFv;
-		variable["dRumLa"] = dRumLa;
-		variable["CsLa"] = CsLa;
-		variable["CsFvLa"] = CsFvLa;
-		variable["FvLaFd"] = FvLaFd;
-		variable["RumLaP"] = RumLaP;
-		variable["cRumLa"] = cRumLa;
-		variable["RumLaFv"] = RumLaFv;
-		variable["absRumLa"] = absRumLa;
-		variable["RumLa"] = RumLa;
-		variable["RumLa1"] = RumLa1;
-		variable["KFGAm"] = KFGAm;
-		variable["KYAtAa"] = KYAtAa;
-		variable["LaFvAt"] = LaFvAt;
-		variable["RumYAtp"] = RumYAtp;
-		variable["KFatFG"] = KFatFG;
-		variable["AaFvAt"] = AaFvAt;
-		variable["CsFvAt"] = CsFvAt;
-		variable["AmMiG1"] = AmMiG1;
-		variable["CdMiG1"] = CdMiG1;
-		variable["CsMiG1"] = CsMiG1;
-		variable["HyMiG1"] = HyMiG1;
-		variable["FlMiG"] = FlMiG;
-		variable["AaMiG2"] = AaMiG2;
-		variable["AmMiG2"] = AmMiG2;
-		variable["CsMiG2"] = CsMiG2;
+		variable["Silage"] = Silage;
 		variable["HyMiG2"] = HyMiG2;
-		variable["CdMiG2"] = CdMiG2;
-		variable["MiHaHA"] = MiHaHA;
-		variable["MiLiLI"] = MiLiLI;
-		variable["MiNnNn"] = MiNnNn;
-		variable["MiPiPI"] = MiPiPI;
-		variable["MiLiBu"] = MiLiBu;
-		variable["MiLiCh"] = MiLiCh;
-		variable["MiLiFA"] = MiLiFA;
-		variable["MiLiGl"] = MiLiGl;
-		variable["MiLiPr"] = MiLiPr;
-		variable["MwtMiLi"] = MwtMiLi;
-		variable["MiMaAd"] = MiMaAd;
-		variable["dMi"] = dMi;
-		variable["MiG"] = MiG;
-		variable["AtpG"] = AtpG;
-		variable["AtpF"] = AtpF;
-		variable["AtpC"] = AtpC;
-		variable["AtpM"] = AtpM;
-		variable["FGAm"] = FGAm;
-		variable["FGFa"] = FGFa;
-		variable["YAtp"] = YAtp;
-		variable["YAtpAp"] = YAtpAp;
-		variable["G1"] = G1;
-		variable["G2"] = G2;
-		variable["MiP"] = MiP;
-		variable["SPartMiP"] = SPartMiP;
-		variable["WaMiP"] = WaMiP;
-		variable["LPartMi"] = LPartMi;
-		variable["SPartMi"] = SPartMi;
-		variable["WaMi"] = WaMi;
-		variable["cMiSPart"] = cMiSPart;
-		variable["cMiWa"] = cMiWa;
-		variable["Mi"] = Mi;
-		variable["RumNit"] = RumNit;
-		variable["RumCP"] = RumCP;
-		variable["ADFIn"] = ADFIn;
-		variable["NDFIn"] = NDFIn;
-		variable["RumADF"] = RumADF;
-		variable["RumNDF"] = RumNDF;
-		variable["RumOM"] = RumOM;
-		variable["fLPartNDF_NDF"] = fLPartNDF_NDF;
-		variable["fMPartNDF_NDF"] = fMPartNDF_NDF;
-		variable["fSPartNDF_NDF"] = fSPartNDF_NDF;
-		variable["ADFP"] = ADFP;
-		variable["MPartADFP"] = MPartADFP;
-		variable["SPartADFP"] = SPartADFP;
-		variable["NDFP"] = NDFP;
-		variable["MPartNDFP"] = MPartNDFP;
-		variable["SPartNDFP"] = SPartNDFP;
-		variable["NitP"] = NitP;
-		variable["MiNP"] = MiNP;
-		variable["CpP"] = CpP;
-		variable["NANP"] = NANP;
-		variable["MiPP"] = MiPP;
-		variable["NANMNP"] = NANMNP;
-		variable["MetabPP"] = MetabPP;
-		variable["SolOmP"] = SolOmP;
-		variable["DCMiLi"] = DCMiLi;
-		variable["DCMiPi"] = DCMiPi;
-		variable["LgutDCHa"] = LgutDCHa;
-		variable["LgutDCHb"] = LgutDCHb;
-		variable["LgutDCAi"] = LgutDCAi;
-		variable["LgutDCAs"] = LgutDCAs;
-		variable["LgutDCFa"] = LgutDCFa;
-		variable["LgutDCPi"] = LgutDCPi;
-		variable["DMP"] = DMP;
-		variable["ChChFd"] = ChChFd;
-		variable["LgutHaGl"] = LgutHaGl;
-		variable["MiGl"] = MiGl;
-		variable["MiAa"] = MiAa;
-		variable["MiLiDg"] = MiLiDg;
-		variable["MiFa"] = MiFa;
-		variable["LgutFaDg"] = LgutFaDg;
-		variable["MiBu"] = MiBu;
-		variable["MiPr"] = MiPr;
-		variable["MiLGl"] = MiLGl;
-		variable["MiCh"] = MiCh;
-		variable["LgutHcFv"] = LgutHcFv;
-		variable["LgutHcAc"] = LgutHcAc;
-		variable["LgutHcPr"] = LgutHcPr;
-		variable["LgutHcBu"] = LgutHcBu;
-		variable["LgutCeFv"] = LgutCeFv;
-		variable["LgutCeAc"] = LgutCeAc;
-		variable["LgutCePr"] = LgutCePr;
-		variable["LgutCeBu"] = LgutCeBu;
-		variable["LgutPiAa"] = LgutPiAa;
-		variable["LgutAs"] = LgutAs;
-		variable["LgutAi"] = LgutAi;
-		variable["FecHa"] = FecHa;
-		variable["FecMiHa"] = FecMiHa;
-		variable["FecHaT"] = FecHaT;
-		variable["FecHb"] = FecHb;
-		variable["FecHC"] = FecHC;
-		variable["FecCe"] = FecCe;
-		variable["FecADF"] = FecADF;
-		variable["FecNDF"] = FecNDF;
-		variable["FecLg"] = FecLg;
-		variable["FecFa"] = FecFa;
-		variable["FecMiLi"] = FecMiLi;
-		variable["FecLipid"] = FecLipid;
-		variable["FecMiPi"] = FecMiPi;
-		variable["FecMiNn"] = FecMiNn;
-		variable["FecPi"] = FecPi;
-		variable["FecPiT"] = FecPiT;
-		variable["FecPiTN"] = FecPiTN;
-		variable["FecAsh"] = FecAsh;
-		variable["FecCh"] = FecCh;
-		variable["FecOm"] = FecOm;
-		variable["FecENG"] = FecENG;
-		variable["FecDM"] = FecDM;
-		variable["FecMPart"] = FecMPart;
-		variable["FecSPart"] = FecSPart;
-		variable["FecFMPart"] = FecFMPart;
-		variable["FecFSPart"] = FecFSPart;
-		variable["SolDMP"] = SolDMP;
-		variable["TOmP"] = TOmP;
-		variable["TTOmP"] = TTOmP;
-		variable["OmPt"] = OmPt;
-		variable["OmPa"] = OmPa;
-		variable["RumDCOm"] = RumDCOm;
-		variable["RumDCOmA"] = RumDCOmA;
-		variable["RumDCPrt"] = RumDCPrt;
-		variable["RumDCN"] = RumDCN;
-		variable["RumDCndf"] = RumDCndf;
-		variable["RumDCadf"] = RumDCadf;
-		variable["RumDCHa"] = RumDCHa;
-		variable["RumDCHaT"] = RumDCHaT;
-		variable["RumDCHc"] = RumDCHc;
-		variable["RumDCCe"] = RumDCCe;
-		variable["RumDCHb"] = RumDCHb;
-		variable["RumDCLiA"] = RumDCLiA;
-		variable["RumDCLiT"] = RumDCLiT;
-		variable["DCDM"] = DCDM;
-		variable["DCOm"] = DCOm;
-		variable["DCPrt"] = DCPrt;
-		variable["DCHa"] = DCHa;
-		variable["DCLipid"] = DCLipid;
-		variable["DCndf"] = DCndf;
-		variable["DCadf"] = DCadf;
-		variable["DCHb"] = DCHb;
-		variable["DCLg"] = DCLg;
-		variable["TStin"] = TStin;
-		variable["FdGEin"] = FdGEin;
-		variable["AccGEi"] = AccGEi;
-		variable["TDE"] = TDE;
-		variable["appDE"] = appDE;
-		variable["DEI"] = DEI;
-		variable["DE"] = DE;
-		variable["AccDEi"] = AccDEi;
-		variable["CH4E"] = CH4E;
-		variable["EUr"] = EUr;
-		variable["MEI"] = MEI;
-		variable["AccMEi"] = AccMEi;
-		variable["ME1"] = ME1;
-		variable["GE"] = GE;
-		variable["HFerm"] = HFerm;
-		variable["CorMEi"] = CorMEi;
-		variable["CorME"] = CorME;
-		variable["DCCe"] = DCCe;
-		variable["Nintake"] = Nintake;
-		variable["Nan"] = Nan;
-		variable["Ndiff"] = Ndiff;
-		variable["MiPrOm"] = MiPrOm;
-		variable["MirOma"] = MirOma;
-		variable["MiNOm"] = MiNOm;
-		variable["MiNOma"] = MiNOma;
-		variable["absGl"] = absGl;
-		variable["AbsAa"] = AbsAa;
-		variable["absAc"] = absAc;
-		variable["absPr"] = absPr;
-		variable["absBu"] = absBu;
-		variable["AbsAm"] = AbsAm;
-		variable["absFa"] = absFa;
-		variable["absAs"] = absAs;
-		variable["absLa"] = absLa;
-		variable["AbsAcE"] = AbsAcE;
-		variable["absPrE"] = absPrE;
-		variable["absBuE"] = absBuE;
-		variable["absFaE"] = absFaE;
-		variable["absAaE"] = absAaE;
-		variable["absGlE"] = absGlE;
-		variable["absLaE"] = absLaE;
-		variable["AbsE"] = AbsE;
-		variable["Latitude"] = Latitude;
-		variable["DaylightSavingShift"] = DaylightSavingShift;
-		variable["DaylengthP1"] = DaylengthP1;
-		variable["DayTwlengthP2"] = DayTwlengthP2;
-		variable["DayTwLength"] = DayTwLength;
-		variable["DaylengthP2"] = DaylengthP2;
-		variable["DayLength"] = DayLength;
-		variable["Sunlight"] = Sunlight;
-		variable["Sunrise"] = Sunrise;
-		variable["SunSet"] = SunSet;
-		variable["SunsetTodayTemp"] = SunsetTodayTemp;
-		variable["kAHorGl"] = kAHorGl;
-		variable["Theta2"] = Theta2;
-		variable["kAHor1Gl"] = kAHor1Gl;
-		variable["Theta3"] = Theta3;
-		variable["kCHorGl"] = kCHorGl;
-		variable["Theta4"] = Theta4;
-		variable["kCHor1Gl"] = kCHor1Gl;
-		variable["AHor"] = AHor;
-		variable["AHor1"] = AHor1;
-		variable["CHor"] = CHor;
-		variable["CHor1"] = CHor1;
-		variable["dWtUter"] = dWtUter;
-		variable["dWtPUter"] = dWtPUter;
-		variable["WtUterSyn"] = WtUterSyn;
-		variable["WtPUterSyn"] = WtPUterSyn;
-		variable["WtUterDeg"] = WtUterDeg;
-		variable["WtPUterDeg"] = WtPUterDeg;
-		variable["AaPUter"] = AaPUter;
-		variable["PUterAa"] = PUterAa;
-		variable["WtConcSyn"] = WtConcSyn;
-		variable["WtPConc"] = WtPConc;
-		variable["WtPConcSyn"] = WtPConcSyn;
-		variable["AaPConc"] = AaPConc;
-		variable["kAaGlGest"] = kAaGlGest;
-		variable["WtPGrvUter"] = WtPGrvUter;
-		variable["WtPGrvUterSyn"] = WtPGrvUterSyn;
-		variable["dWtGrvUter"] = dWtGrvUter;
-		variable["dWtPGrvUter"] = dWtPGrvUter;
-		variable["AaPGest"] = AaPGest;
-		variable["AaGlGest"] = AaGlGest;
-		variable["KMilk"] = KMilk;
-		variable["MilkProductionAgeAdjustment"] = MilkProductionAgeAdjustment;
-		variable["MamCellsPerKgMs270"] = MamCellsPerKgMs270;
-		variable["MamCellsPerKgMsAdjustment"] = MamCellsPerKgMsAdjustment;
-		variable["KgMilkSolidsExpectedIn270Days"] = KgMilkSolidsExpectedIn270Days;
-		variable["MamCellsPart"] = MamCellsPart;
-		variable["K1MamCells"] = K1MamCells;
-		variable["uTMamCells"] = uTMamCells;
-		variable["lambdaMamCells"] = lambdaMamCells;
-		variable["kMamAQBase"] = kMamAQBase;
-		variable["kMamCellsDeclineBase"] = kMamCellsDeclineBase;
-		variable["kMamCellsQAPrePeak"] = kMamCellsQAPrePeak;
-		variable["kMamCellsQAPostPeak"] = kMamCellsQAPostPeak;
-		variable["kMamCellsQAStart"] = kMamCellsQAStart;
-		variable["kMamCellsQAKickStartDecay"] = kMamCellsQAKickStartDecay;
-		variable["kMamCellsTransitionDim"] = kMamCellsTransitionDim;
-		variable["kMamCellsTransitionSteepness"] = kMamCellsTransitionSteepness;
-		variable["MamCellsDecayRateOfSenescence"] = MamCellsDecayRateOfSenescence;
-		variable["BaseMamCellsTurnOver"] = BaseMamCellsTurnOver;
-		variable["MamCellsProliferationDecayRate"] = MamCellsProliferationDecayRate;
-		variable["kMamCellsUsMfDecay"] = kMamCellsUsMfDecay;
-		variable["MilkIntPowerForFMamCelsQA1"] = MilkIntPowerForFMamCelsQA1;
-		variable["MaxLossDueToLowMf"] = MaxLossDueToLowMf;
-		variable["PreCalvingMamCells"] = PreCalvingMamCells;
-		variable["PostCalvingMamCells"] = PostCalvingMamCells;
-		variable["MamCells"] = MamCells;
-		variable["MEinMJ"] = MEinMJ;
-		variable["LW"] = LW;
-		variable["fMamCellsQA"] = fMamCellsQA;
-		variable["fMamCellsPA"] = fMamCellsPA;
-		variable["fMamCellsUS"] = fMamCellsUS;
-		variable["fMamCellsAS"] = fMamCellsAS;
-		variable["fMamCellsQS"] = fMamCellsQS;
-		variable["fMamCellsAQ"] = fMamCellsAQ;
-		variable["dMamCellsA"] = dMamCellsA;
-		variable["dMamCellsQ"] = dMamCellsQ;
-		variable["dMamCellsS"] = dMamCellsS;
-		variable["MamCellsA"] = MamCellsA;
-		variable["MamCellsQ"] = MamCellsQ;
-		variable["MamCellsS"] = MamCellsS;
-		variable["MamCellsQaKickStartFactor"] = MamCellsQaKickStartFactor;
-		variable["MamCellsQaPreToPostFactor"] = MamCellsQaPreToPostFactor;
-		variable["kMamCellsQA"] = kMamCellsQA;
-		variable["kMamCellsQaMfAdjustment"] = kMamCellsQaMfAdjustment;
-		variable["LowMfDecay"] = LowMfDecay;
-		variable["IncreasedUsDueToLowMf"] = IncreasedUsDueToLowMf;
-		variable["dNonUterEBW"] = dNonUterEBW;
-		variable["WtAdipNew"] = WtAdipNew;
-		variable["LhorTurnoverDays"] = LhorTurnoverDays;
-		variable["kLHorSensAa"] = kLHorSensAa;
-		variable["kLHorSensGl"] = kLHorSensGl;
-		variable["wLHorSensAa"] = wLHorSensAa;
-		variable["wLHorSensAdip"] = wLHorSensAdip;
-		variable["wLHorSensGl"] = wLHorSensGl;
-		variable["xLHorSensAa"] = xLHorSensAa;
-		variable["xLHorSensAdip"] = xLHorSensAdip;
-		variable["xLHorSensGl"] = xLHorSensGl;
-		variable["cAaBase"] = cAaBase;
-		variable["cGlBase"] = cGlBase;
-		variable["KDayLength"] = KDayLength;
-		variable["FixedLhorSW"] = FixedLhorSW;
-		variable["cGlTarget"] = cGlTarget;
-		variable["LHor"] = LHor;
-		variable["LHor1"] = LHor1;
-		variable["dLHor"] = dLHor;
-		variable["VmLHorSyn"] = VmLHorSyn;
-		variable["LHorSyn1"] = LHorSyn1;
-		variable["LHorSyn"] = LHorSyn;
-		variable["LHorDeg"] = LHorDeg;
-		variable["kLHor"] = kLHor;
-		variable["LhorAa"] = LhorAa;
-		variable["LhorGl"] = LhorGl;
-		variable["LhorAdip"] = LhorAdip;
-		variable["KLHorPP"] = KLHorPP;
-		variable["BcsTargetNadir"] = BcsTargetNadir;
-		variable["BcsTargetDecay"] = BcsTargetDecay;
-		variable["BcsTargetFactor"] = BcsTargetFactor;
-		variable["WtAdipTarget"] = WtAdipTarget;
-		variable["CorrectedBW"] = CorrectedBW;
-		variable["PMamEnzCell"] = PMamEnzCell;
-		variable["MamEnz"] = MamEnz;
-		variable["kMilkingFrequencyLagUp"] = kMilkingFrequencyLagUp;
-		variable["kMilkingFrequencyLagDown"] = kMilkingFrequencyLagDown;
-		variable["MilkingFrequencyAdjusted"] = MilkingFrequencyAdjusted;
-		variable["MilkingFrequencyBaseAdjustment"] = MilkingFrequencyBaseAdjustment;
-		variable["OnceADay2YearsOldAdjustment1"] = OnceADay2YearsOldAdjustment1;
-		variable["MilkingFrequencyAgeAdjustment"] = MilkingFrequencyAgeAdjustment;
-		variable["MilkSolids270MfAdjusted"] = MilkSolids270MfAdjusted;
-		variable["ikMilkInh"] = ikMilkInh;
-		variable["KMilkInhDeg"] = KMilkInhDeg;
-		variable["dKMilkInh"] = dKMilkInh;
-		variable["MilkInhSyn"] = MilkInhSyn;
-		variable["MilkInhDeg"] = MilkInhDeg;
-		variable["KMinh"] = KMinh;
-		variable["AcAcTs"] = AcAcTs;
-		variable["KTsFaAdip"] = KTsFaAdip;
-		variable["TgFaFa"] = TgFaFa;
-		variable["VmTsFaAdip"] = VmTsFaAdip;
-		variable["Theta1"] = Theta1;
-		variable["K1FaTs"] = K1FaTs;
-		variable["K1TsFa"] = K1TsFa;
-		variable["KFaTsAdip"] = KFaTsAdip;
-		variable["KFaTmVis"] = KFaTmVis;
-		variable["VmFaTmVis"] = VmFaTmVis;
-		variable["VmFaTsAdip"] = VmFaTsAdip;
-		variable["AcTgTg"] = AcTgTg;
-		variable["FaTgTg"] = FaTgTg;
-		variable["K1FaTm"] = K1FaTm;
-		variable["P1"] = P1;
-		variable["EXP10"] = EXP10;
-		variable["dTsAdip"] = dTsAdip;
-		variable["TsFaAdip"] = TsFaAdip;
-		variable["cTs"] = cTs;
-		variable["FaTsF1"] = FaTsF1;
-		variable["AcTsF1"] = AcTsF1;
-		variable["WtAdip"] = WtAdip;
-		variable["dWtTsAdip"] = dWtTsAdip;
-		variable["WtTsAdip"] = WtTsAdip;
-		variable["TsAdip"] = TsAdip;
-		variable["dBCS"] = dBCS;
-		variable["BCS"] = BCS;
-		variable["BCS_NZ"] = BCS_NZ;
-		variable["dFa"] = dFa;
-		variable["FaTsAdip"] = FaTsAdip;
-		variable["cFa"] = cFa;
-		variable["TsFaF1"] = TsFaF1;
-		variable["FaTmVis"] = FaTmVis;
-		variable["Fa"] = Fa;
-		variable["K1VAct"] = K1VAct;
-		variable["K2VAct"] = K2VAct;
-		variable["dVmAcTs"] = dVmAcTs;
-		variable["VmAcTs2"] = VmAcTs2;
-		variable["VmAcTs"] = VmAcTs;
-		variable["KAcTmVis"] = KAcTmVis;
-		variable["KAcTsAdip"] = KAcTsAdip;
-		variable["VmAcTmVis"] = VmAcTmVis;
-		variable["AaGlAc"] = AaGlAc;
-		variable["K1AcTm"] = K1AcTm;
-		variable["K1AcTs"] = K1AcTs;
-		variable["dAc"] = dAc;
-		variable["AaAcV1"] = AaAcV1;
-		variable["AcTsAdip"] = AcTsAdip;
-		variable["cAc"] = cAc;
-		variable["AcTmVis"] = AcTmVis;
-		variable["Ac"] = Ac;
-		variable["WtAcTm"] = WtAcTm;
-		variable["WtFaTm"] = WtFaTm;
-		variable["dTm"] = dTm;
-		variable["dMamTm"] = dMamTm;
-		variable["dMilkTm"] = dMilkTm;
-		variable["MamTm"] = MamTm;
-		variable["TMilkTm"] = TMilkTm;
-		variable["PcTmFromScfa"] = PcTmFromScfa;
-		variable["ExpOth2"] = ExpOth2;
-		variable["ExpV2"] = ExpV2;
-		variable["KDnaOth"] = KDnaOth;
-		variable["KDnaVis"] = KDnaVis;
-		variable["OthDnaMx"] = OthDnaMx;
-		variable["VisDnaMx"] = VisDnaMx;
-		variable["dOthDna"] = dOthDna;
-		variable["dVisDna"] = dVisDna;
-		variable["OthDna"] = OthDna;
-		variable["VisDna"] = VisDna;
-		variable["VmAaPOthOth"] = VmAaPOthOth;
-		variable["KAaPOthOth"] = KAaPOthOth;
-		variable["KAaPVisVis"] = KAaPVisVis;
-		variable["VmAaPVisVis"] = VmAaPVisVis;
-		variable["KAaGlVis"] = KAaGlVis;
-		variable["VmAaGlVis"] = VmAaGlVis;
-		variable["VmAaPmVis"] = VmAaPmVis;
-		variable["fDWt"] = fDWt;
-		variable["KPOthAaOth"] = KPOthAaOth;
-		variable["KPVisAaVis"] = KPVisAaVis;
-		variable["AaGlUr"] = AaGlUr;
-		variable["KAaPmVis"] = KAaPmVis;
-		variable["VsizF"] = VsizF;
-		variable["dAa"] = dAa;
-		variable["dPOth"] = dPOth;
-		variable["dPVis"] = dPVis;
-		variable["POthAaOth"] = POthAaOth;
-		variable["PVisAaVis"] = PVisAaVis;
-		variable["cPOth"] = cPOth;
-		variable["cPVis"] = cPVis;
-		variable["WtPOth"] = WtPOth;
-		variable["WtPVis"] = WtPVis;
-		variable["WtOth"] = WtOth;
-		variable["dWtOth"] = dWtOth;
-		variable["WtVis"] = WtVis;
-		variable["dWtVis"] = dWtVis;
-		variable["AaPOthOth"] = AaPOthOth;
-		variable["AaPVisVis"] = AaPVisVis;
-		variable["AaGlVis"] = AaGlVis;
-		variable["POthfSr"] = POthfSr;
-		variable["PVisfSr"] = PVisfSr;
-		variable["POthfDr"] = POthfDr;
-		variable["PVisfDr"] = PVisfDr;
-		variable["AaPmVis"] = AaPmVis;
-		variable["cAa"] = cAa;
-		variable["PVis"] = PVis;
-		variable["POth"] = POth;
-		variable["AA1"] = AA1;
 		variable["AA"] = AA;
-		variable["AmUrUr"] = AmUrUr;
-		variable["KBldUrU"] = KBldUrU;
-		variable["dBldUr"] = dBldUr;
-		variable["AaUrVis"] = AaUrVis;
-		variable["AaUrGest"] = AaUrGest;
-		variable["AmUr"] = AmUr;
-		variable["BldUrRumAm"] = BldUrRumAm;
-		variable["SaNRumAm"] = SaNRumAm;
-		variable["dUrea"] = dUrea;
-		variable["BldUr1"] = BldUr1;
-		variable["BldUr"] = BldUr;
-		variable["cPun"] = cPun;
-		variable["cMun"] = cMun;
-		variable["BldUrMUN"] = BldUrMUN;
-		variable["dPm"] = dPm;
-		variable["dMamPm"] = dMamPm;
-		variable["dMilkPm"] = dMilkPm;
-		variable["MamPm"] = MamPm;
-		variable["TMilkPm"] = TMilkPm;
-		variable["AaGlGl"] = AaGlGl;
-		variable["GyGlGl"] = GyGlGl;
-		variable["LaGlGl"] = LaGlGl;
-		variable["PrGlGl"] = PrGlGl;
-		variable["KGlLmVis"] = KGlLmVis;
-		variable["VmGlTpAdip"] = VmGlTpAdip;
-		variable["fLaCdAdip"] = fLaCdAdip;
-		variable["KGlTpAdip"] = KGlTpAdip;
-		variable["KGlTpVis"] = KGlTpVis;
-		variable["VmGlTpVis"] = VmGlTpVis;
-		variable["fLaCdOth"] = fLaCdOth;
-		variable["GlGlHy"] = GlGlHy;
-		variable["KGlLaOth"] = KGlLaOth;
-		variable["VmGlLaOth"] = VmGlLaOth;
-		variable["fPrGl"] = fPrGl;
-		variable["GlLaLa"] = GlLaLa;
-		variable["pGlHyAdip"] = pGlHyAdip;
-		variable["pGlHyVis"] = pGlHyVis;
-		variable["TgGyGy"] = TgGyGy;
-		variable["GlGyGY"] = GlGyGY;
-		variable["GlHyTp"] = GlHyTp;
-		variable["GlTpTp"] = GlTpTp;
-		variable["KAaLmVis"] = KAaLmVis;
-		variable["TpTpTs"] = TpTpTs;
-		variable["TpTpTm"] = TpTpTm;
-		variable["dGl"] = dGl;
-		variable["upGl"] = upGl;
+		variable["AA1"] = AA1;
+		variable["AaAcV1"] = AaAcV1;
+		variable["AaAm"] = AaAm;
+		variable["AaFvFat"] = AaFvFat;
+		variable["AaGlGest"] = AaGlGest;
+		variable["AaGlHt"] = AaGlHt;
 		variable["AaGlV1"] = AaGlV1;
-		variable["PrGlV1"] = PrGlV1;
-		variable["PrGlVis"] = PrGlVis;
-		variable["LaGlV1"] = LaGlV1;
-		variable["RumLaGl"] = RumLaGl;
-		variable["gGlLa"] = gGlLa;
-		variable["GyGlVis"] = GyGlVis;
-		variable["GyGlV1"] = GyGlV1;
-		variable["VmGlLmVisPart"] = VmGlLmVisPart;
-		variable["kVmGlLmDecay"] = kVmGlLmDecay;
-		variable["kVmGlLmDeg"] = kVmGlLmDeg;
-		variable["kVmGlLmSyn"] = kVmGlLmSyn;
-		variable["VmGlLm1Vis"] = VmGlLm1Vis;
-		variable["GLLmVis"] = GLLmVis;
-		variable["GlHyAdip"] = GlHyAdip;
-		variable["GlHyVis"] = GlHyVis;
-		variable["fGlHyAdip"] = fGlHyAdip;
-		variable["fGlHyVis"] = fGlHyVis;
-		variable["GlTpAdip"] = GlTpAdip;
-		variable["GlTpVis"] = GlTpVis;
-		variable["GlLaOth"] = GlLaOth;
-		variable["TpinAdip"] = TpinAdip;
-		variable["GlTpF1"] = GlTpF1;
-		variable["TpinVis"] = TpinVis;
-		variable["GlTpV1"] = GlTpV1;
-		variable["LainOth"] = LainOth;
-		variable["GlLaB1"] = GlLaB1;
-		variable["TpLaAdip"] = TpLaAdip;
-		variable["TpCdVis"] = TpCdVis;
-		variable["TpTsAdip"] = TpTsAdip;
-		variable["TpTmVis"] = TpTmVis;
-		variable["AcTmV1"] = AcTmV1;
-		variable["FaTmV1"] = FaTmV1;
-		variable["LaCdAdip"] = LaCdAdip;
-		variable["LaGlAdip"] = LaGlAdip;
-		variable["GlGyT"] = GlGyT;
-		variable["LaCdOth"] = LaCdOth;
-		variable["LaGlOth"] = LaGlOth;
-		variable["Gl"] = Gl;
-		variable["cGl"] = cGl;
-		variable["fLm"] = fLm;
-		variable["GlLmLm"] = GlLmLm;
-		variable["dLm"] = dLm;
-		variable["dMamLm"] = dMamLm;
-		variable["dMilkLm"] = dMilkLm;
-		variable["MamLm"] = MamLm;
-		variable["TMilkLm"] = TMilkLm;
-		variable["MamMilk"] = MamMilk;
-		variable["dMamMilkAve"] = dMamMilkAve;
-		variable["MamMilkAve"] = MamMilkAve;
-		variable["AcCdAt"] = AcCdAt;
-		variable["FaCdAt"] = FaCdAt;
-		variable["GlCdAt"] = GlCdAt;
-		variable["GyGlAt"] = GyGlAt;
-		variable["GlLaAt"] = GlLaAt;
-		variable["LaCdAt"] = LaCdAt;
-		variable["PrCdAt"] = PrCdAt;
-		variable["TpCdAt"] = TpCdAt;
-		variable["TpLaAt"] = TpLaAt;
-		variable["BuCdAt"] = BuCdAt;
-		variable["HyAtAt"] = HyAtAt;
-		variable["AaPxAD"] = AaPxAD;
-		variable["GlHyAD"] = GlHyAD;
-		variable["GlTpAD"] = GlTpAD;
-		variable["LaGlAd"] = LaGlAd;
-		variable["AcFaAd"] = AcFaAd;
-		variable["GlLmAd"] = GlLmAd;
-		variable["PrGlAd"] = PrGlAd;
-		variable["TcHyAd"] = TcHyAd;
-		variable["TpTgAD"] = TpTgAD;
-		variable["absAaAd"] = absAaAd;
-		variable["absGlAd"] = absGlAd;
-		variable["OxAcCd"] = OxAcCd;
-		variable["OxBuCd"] = OxBuCd;
-		variable["OxGlCd"] = OxGlCd;
-		variable["OxLaCd"] = OxLaCd;
-		variable["OxPrCd"] = OxPrCd;
-		variable["OxFaCd"] = OxFaCd;
-		variable["OxPrGl"] = OxPrGl;
-		variable["OxTpCd"] = OxTpCd;
-		variable["AcCdCd"] = AcCdCd;
-		variable["BuCdCd"] = BuCdCd;
-		variable["GlCdCd"] = GlCdCd;
-		variable["GlHyCd"] = GlHyCd;
-		variable["PrCdCd"] = PrCdCd;
-		variable["FaCdCd"] = FaCdCd;
-		variable["LaCdCd"] = LaCdCd;
-		variable["TpCdCd"] = TpCdCd;
-		variable["TAveabsE"] = TAveabsE;
-		variable["dabsEAve"] = dabsEAve;
+		variable["AaGlVis"] = AaGlVis;
+		variable["AaPConc"] = AaPConc;
+		variable["AaPGest"] = AaPGest;
+		variable["AaPmHt"] = AaPmHt;
+		variable["AaPmVis"] = AaPmVis;
+		variable["AaPOthHt"] = AaPOthHt;
+		variable["AaPOthOth"] = AaPOthOth;
+		variable["AaPUter"] = AaPUter;
+		variable["AaPVisVis"] = AaPVisVis;
+		variable["AaTO"] = AaTO;
+		variable["AaUrGest"] = AaUrGest;
+		variable["AaUrVis"] = AaUrVis;
+		variable["AbortPregNow"] = AbortPregNow;
+		variable["AbortPregNowVariable"] = AbortPregNowVariable;
+		variable["AbsAa"] = AbsAa;
+		variable["absAaE"] = absAaE;
+		variable["absAaHt"] = absAaHt;
+		variable["absAc"] = absAc;
+		variable["AbsAcE"] = AbsAcE;
+		variable["AbsAm"] = AbsAm;
+		variable["absAs"] = absAs;
+		variable["absBu"] = absBu;
+		variable["absBuE"] = absBuE;
+		variable["AbsE"] = AbsE;
 		variable["absEAve"] = absEAve;
 		variable["absEF"] = absEF;
-		variable["EBW1"] = EBW1;
-		variable["dEBW1"] = dEBW1;
-		variable["BW1"] = BW1;
-		variable["NonFatEBW"] = NonFatEBW;
-		variable["NonFatNonUterEBW"] = NonFatNonUterEBW;
-		variable["AaGlH"] = AaGlH;
-		variable["HyAcFa"] = HyAcFa;
-		variable["KNaOth"] = KNaOth;
-		variable["KbasOth"] = KbasOth;
-		variable["eerActivityAtp"] = eerActivityAtp;
-		variable["AtAd"] = AtAd;
-		variable["AdAt"] = AdAt;
-		variable["AtAdOth"] = AtAdOth;
-		variable["AtAdB1"] = AtAdB1;
-		variable["basalOth"] = basalOth;
-		variable["OldBasalOth"] = OldBasalOth;
-		variable["KNaAtOth"] = KNaAtOth;
-		variable["AdAtOth"] = AdAtOth;
-		variable["AdAtB1"] = AdAtB1;
-		variable["AdAtB2"] = AdAtB2;
-		variable["basHtOth"] = basHtOth;
-		variable["AaPOthHt"] = AaPOthHt;
-		variable["MHtOth"] = MHtOth;
-		variable["KbasAdip"] = KbasAdip;
-		variable["KNaAdip"] = KNaAdip;
-		variable["AtAdAdip"] = AtAdAdip;
-		variable["basalAdip"] = basalAdip;
-		variable["KNaAtAdip"] = KNaAtAdip;
-		variable["AtAdF1"] = AtAdF1;
-		variable["AtAdF2"] = AtAdF2;
-		variable["AtAdF3"] = AtAdF3;
-		variable["AtAdF4"] = AtAdF4;
-		variable["AdAtAdip"] = AdAtAdip;
-		variable["AdAtF1"] = AdAtF1;
-		variable["AdAtF2"] = AdAtF2;
-		variable["basHtAdip"] = basHtAdip;
-		variable["HtF2"] = HtF2;
-		variable["HtF3"] = HtF3;
-		variable["MHtAdip"] = MHtAdip;
-		variable["HrtWrk"] = HrtWrk;
-		variable["KbasVis"] = KbasVis;
-		variable["KidWrk"] = KidWrk;
-		variable["KNaVis"] = KNaVis;
-		variable["ResWrk"] = ResWrk;
-		variable["AtAmUr"] = AtAmUr;
-		variable["AtAdVis"] = AtAdVis;
-		variable["basalVis"] = basalVis;
-		variable["KNaAtVis"] = KNaAtVis;
-		variable["AtAdV1"] = AtAdV1;
-		variable["AtAdV2"] = AtAdV2;
-		variable["AtAdV3"] = AtAdV3;
-		variable["AtAdV4"] = AtAdV4;
-		variable["AtAdV5"] = AtAdV5;
-		variable["AtAdV6"] = AtAdV6;
-		variable["AtAdV7"] = AtAdV7;
-		variable["AtAdV8"] = AtAdV8;
-		variable["LaGlVis"] = LaGlVis;
-		variable["AtAdV9"] = AtAdV9;
-		variable["AtAd10"] = AtAd10;
-		variable["AtAd11"] = AtAd11;
-		variable["AtAd12"] = AtAd12;
-		variable["AtAd13"] = AtAd13;
-		variable["AtAd14"] = AtAd14;
-		variable["ATAd15"] = ATAd15;
-		variable["AdAtVis"] = AdAtVis;
-		variable["AdAtV1"] = AdAtV1;
-		variable["AdAtV2"] = AdAtV2;
-		variable["AdAtV3"] = AdAtV3;
-		variable["AdAtV4"] = AdAtV4;
-		variable["PrCdVis"] = PrCdVis;
-		variable["BuCdVis"] = BuCdVis;
-		variable["AdAtV5"] = AdAtV5;
-		variable["basHtVis"] = basHtVis;
-		variable["HtV2"] = HtV2;
-		variable["HtV3"] = HtV3;
-		variable["HtV4"] = HtV4;
-		variable["HtV5"] = HtV5;
-		variable["HtV6"] = HtV6;
-		variable["HtV7"] = HtV7;
-		variable["HiV8"] = HiV8;
-		variable["MHtVis"] = MHtVis;
-		variable["fGrvUterTO"] = fGrvUterTO;
-		variable["AtAdGestGrth"] = AtAdGestGrth;
-		variable["AtAdGestTO"] = AtAdGestTO;
-		variable["AtAdGest"] = AtAdGest;
-		variable["MHtGestGrth"] = MHtGestGrth;
-		variable["MHtGestTO"] = MHtGestTO;
-		variable["MHtGest"] = MHtGest;
-		variable["EGrvUterCLF"] = EGrvUterCLF;
-		variable["KAcCd"] = KAcCd;
-		variable["KFaCd"] = KFaCd;
-		variable["KGlCd"] = KGlCd;
-		variable["ndAt"] = ndAt;
-		variable["ndOx"] = ndOx;
-		variable["rtOx1"] = rtOx1;
-		variable["rtOx2"] = rtOx2;
-		variable["GlCd"] = GlCd;
-		variable["FaCd"] = FaCd;
+		variable["absFa"] = absFa;
+		variable["absFaE"] = absFaE;
+		variable["absGl"] = absGl;
+		variable["absGlE"] = absGlE;
+		variable["absGlHt"] = absGlHt;
+		variable["absLa"] = absLa;
+		variable["absLaE"] = absLaE;
+		variable["absPr"] = absPr;
+		variable["absPrE"] = absPrE;
+		variable["absRumAc"] = absRumAc;
+		variable["absRumAm"] = absRumAm;
+		variable["absRumAs"] = absRumAs;
+		variable["absRumBu"] = absRumBu;
+		variable["absRumLa"] = absRumLa;
+		variable["absRumPr"] = absRumPr;
+		variable["Ac"] = Ac;
 		variable["AcCd"] = AcCd;
-		variable["rtPO"] = rtPO;
-		variable["TcHyAdip"] = TcHyAdip;
-		variable["TcHyVis"] = TcHyVis;
-		variable["dOx"] = dOx;
-		variable["AtHt1"] = AtHt1;
-		variable["AtHt2"] = AtHt2;
-		variable["AtHt3"] = AtHt3;
-		variable["AtHt4"] = AtHt4;
-		variable["AtHt5"] = AtHt5;
-		variable["AtHt6"] = AtHt6;
-		variable["AtHt7"] = AtHt7;
-		variable["AtHt8"] = AtHt8;
-		variable["AtHt"] = AtHt;
-		variable["AtAdH1"] = AtAdH1;
-		variable["dN"] = dN;
-		variable["Nin"] = Nin;
-		variable["UrNFd"] = UrNFd;
-		variable["NSal"] = NSal;
-		variable["Nabs"] = Nabs;
-		variable["NUr"] = NUr;
-		variable["NurTotal"] = NurTotal;
-		variable["NBody"] = NBody;
-		variable["NMilk"] = NMilk;
-		variable["NFec"] = NFec;
-		variable["Nout"] = Nout;
-		variable["Nret1"] = Nret1;
-		variable["Nret2"] = Nret2;
-		variable["Ndig"] = Ndig;
-		variable["Nbal"] = Nbal;
-		variable["RumDPrta"] = RumDPrta;
-		variable["ELm"] = ELm;
-		variable["EPm"] = EPm;
-		variable["ETm"] = ETm;
-		variable["NEP"] = NEP;
-		variable["NetEff"] = NetEff;
-		variable["propLm"] = propLm;
-		variable["fTm1"] = fTm1;
-		variable["PcLm"] = PcLm;
-		variable["PcPm"] = PcPm;
-		variable["PcTm"] = PcTm;
-		variable["FCM3h"] = FCM3h;
-		variable["FCM4z1"] = FCM4z1;
-		variable["MntHP"] = MntHP;
-		variable["MEMBW"] = MEMBW;
-		variable["THP1"] = THP1;
-		variable["fGestEPrt"] = fGestEPrt;
-		variable["dOthE"] = dOthE;
-		variable["dAdipE"] = dAdipE;
-		variable["dVisE"] = dVisE;
-		variable["dGestE"] = dGestE;
-		variable["dMaint"] = dMaint;
-		variable["dHiM4"] = dHiM4;
-		variable["EB"] = EB;
-		variable["THP2"] = THP2;
-		variable["CorNEP"] = CorNEP;
-		variable["CH4EFd"] = CH4EFd;
-		variable["fCH4E"] = fCH4E;
-		variable["fCH4DE"] = fCH4DE;
-		variable["fCH4ME"] = fCH4ME;
-		variable["AaFvHy"] = AaFvHy;
-		variable["KHyEruct"] = KHyEruct;
-		variable["KHyOther"] = KHyOther;
-		variable["KumarMigEq"] = KumarMigEq;
-		variable["dTCH4"] = dTCH4;
-		variable["dCsFvH"] = dCsFvH;
-		variable["dCsHy"] = dCsHy;
-		variable["dRumAaHy"] = dRumAaHy;
-		variable["dHyFlF"] = dHyFlF;
-		variable["dHyMi"] = dHyMi;
-		variable["dTHy"] = dTHy;
-		variable["dHyEruct"] = dHyEruct;
-		variable["dHyOther"] = dHyOther;
-		variable["dDCH4"] = dDCH4;
-		variable["dCH4Kg"] = dCH4Kg;
-		variable["dCH4g"] = dCH4g;
-		variable["TCH4"] = TCH4;
-		variable["CH4KGY"] = CH4KGY;
-		variable["CH4Milk"] = CH4Milk;
-		variable["TCH4E"] = TCH4E;
-		variable["netME"] = netME;
-		variable["CH4GEi"] = CH4GEi;
-		variable["CH4DEi"] = CH4DEi;
-		variable["CH4MEi"] = CH4MEi;
-		variable["fFIM"] = fFIM;
-		variable["mult"] = mult;
-		variable["BCH4"] = BCH4;
-		variable["TBCH4"] = TBCH4;
-		variable["TBCH41"] = TBCH41;
-		variable["fBCH4E"] = fBCH4E;
-		variable["fBCH4D"] = fBCH4D;
-		variable["fBCH4M"] = fBCH4M;
-		variable["BCH4Fd"] = BCH4Fd;
-		variable["MCH4E"] = MCH4E;
-		variable["MCH4kg"] = MCH4kg;
-		variable["TMCH4E"] = TMCH4E;
-		variable["TMCH42"] = TMCH42;
-		variable["fMCH4E"] = fMCH4E;
-		variable["fMCH4D"] = fMCH4D;
-		variable["fMCH4M"] = fMCH4M;
-		variable["EPart"] = EPart;
-		variable["GlLmHt"] = GlLmHt;
-		variable["AaPmHt"] = AaPmHt;
+		variable["AccDEi"] = AccDEi;
+		variable["AccGEi"] = AccGEi;
+		variable["AccMEi"] = AccMEi;
+		variable["AcTmH1"] = AcTmH1;
+		variable["AcTmH2"] = AcTmH2;
+		variable["AcTmH3"] = AcTmH3;
+		variable["AcTmH4"] = AcTmH4;
+		variable["AcTmV1"] = AcTmV1;
+		variable["AcTmVis"] = AcTmVis;
+		variable["AcTsAdip"] = AcTsAdip;
+		variable["AcTsF1"] = AcTsF1;
 		variable["AcTsH1"] = AcTsH1;
 		variable["AcTsH2"] = AcTsH2;
 		variable["AcTsH3"] = AcTsH3;
@@ -5467,62 +3822,1707 @@ public:
 		variable["AcTsH6"] = AcTsH6;
 		variable["AcTsH7"] = AcTsH7;
 		variable["AcTsHt"] = AcTsHt;
-		variable["AcTmH1"] = AcTmH1;
-		variable["AcTmH2"] = AcTmH2;
-		variable["AcTmH3"] = AcTmH3;
-		variable["AcTmH4"] = AcTmH4;
+		variable["AdAt"] = AdAt;
+		variable["AdAtAdip"] = AdAtAdip;
+		variable["AdAtB1"] = AdAtB1;
+		variable["AdAtB2"] = AdAtB2;
+		variable["AdAtF1"] = AdAtF1;
+		variable["AdAtF2"] = AdAtF2;
+		variable["AdAtOth"] = AdAtOth;
+		variable["AdAtV1"] = AdAtV1;
+		variable["AdAtV2"] = AdAtV2;
+		variable["AdAtV3"] = AdAtV3;
+		variable["AdAtV4"] = AdAtV4;
+		variable["AdAtV5"] = AdAtV5;
+		variable["AdAtVis"] = AdAtVis;
+		variable["ADFIn"] = ADFIn;
+		variable["AdfinFd"] = AdfinFd;
+		variable["ADFP"] = ADFP;
+		variable["afAiFd"] = afAiFd;
 		variable["AFTmH5"] = AFTmH5;
 		variable["AFTmH6"] = AFTmH6;
+		variable["AfTmH9"] = AfTmH9;
+		variable["AgeInYears"] = AgeInYears;
+		variable["AHor"] = AHor;
+		variable["AHor1"] = AHor1;
+		variable["AiP"] = AiP;
+		variable["AM"] = AM;
+		variable["Am1"] = Am1;
+		variable["AM2"] = AM2;
+		variable["AmMi"] = AmMi;
+		variable["AmUr"] = AmUr;
+		variable["Animal"] = Animal;
+		variable["aPAGlH"] = aPAGlH;
+		variable["appDE"] = appDE;
+		variable["As"] = As;
+		variable["AsAsFd"] = AsAsFd;
+		variable["AshinFd"] = AshinFd;
+		variable["AshP"] = AshP;
+		variable["AsP"] = AsP;
+		variable["AtAd"] = AtAd;
+		variable["AtAd10"] = AtAd10;
+		variable["AtAd11"] = AtAd11;
+		variable["AtAd12"] = AtAd12;
+		variable["AtAd13"] = AtAd13;
+		variable["AtAd14"] = AtAd14;
+		variable["ATAd15"] = ATAd15;
+		variable["AtAdAdip"] = AtAdAdip;
+		variable["AtAdB1"] = AtAdB1;
+		variable["AtAdF1"] = AtAdF1;
+		variable["AtAdF2"] = AtAdF2;
+		variable["AtAdF3"] = AtAdF3;
+		variable["AtAdF4"] = AtAdF4;
+		variable["AtAdGest"] = AtAdGest;
+		variable["AtAdGestGrth"] = AtAdGestGrth;
+		variable["AtAdGestTO"] = AtAdGestTO;
+		variable["AtAdH1"] = AtAdH1;
+		variable["AtAdHT"] = AtAdHT;
+		variable["AtAdOth"] = AtAdOth;
+		variable["AtAdV1"] = AtAdV1;
+		variable["AtAdV2"] = AtAdV2;
+		variable["AtAdV3"] = AtAdV3;
+		variable["AtAdV4"] = AtAdV4;
+		variable["AtAdV5"] = AtAdV5;
+		variable["AtAdV6"] = AtAdV6;
+		variable["AtAdV7"] = AtAdV7;
+		variable["AtAdV8"] = AtAdV8;
+		variable["AtAdV9"] = AtAdV9;
+		variable["AtAdVis"] = AtAdVis;
+		variable["AtHt"] = AtHt;
+		variable["AtHt1"] = AtHt1;
+		variable["AtHt2"] = AtHt2;
+		variable["AtHt3"] = AtHt3;
+		variable["AtHt4"] = AtHt4;
+		variable["AtHt5"] = AtHt5;
+		variable["AtHt6"] = AtHt6;
+		variable["AtHt7"] = AtHt7;
+		variable["AtHt8"] = AtHt8;
+		variable["AtpC"] = AtpC;
+		variable["AtpF"] = AtpF;
+		variable["AtpG"] = AtpG;
+		variable["AtpM"] = AtpM;
+		variable["basalAdip"] = basalAdip;
+		variable["basalOth"] = basalOth;
+		variable["basalVis"] = basalVis;
+		variable["basHtAdip"] = basHtAdip;
+		variable["basHtOth"] = basHtOth;
+		variable["basHtVis"] = basHtVis;
+		variable["BCH4"] = BCH4;
+		variable["BCH4Fd"] = BCH4Fd;
+		variable["BCS"] = BCS;
+		variable["BCS_NZ"] = BCS_NZ;
+		variable["BcsTarget"] = BcsTarget;
+		variable["BcsTargetFactor"] = BcsTargetFactor;
+		variable["BladderVol"] = BladderVol;
+		variable["BldUr"] = BldUr;
+		variable["BldUr1"] = BldUr1;
+		variable["BldUrAm"] = BldUrAm;
+		variable["BldUrMUN"] = BldUrMUN;
+		variable["BldUrRumAm"] = BldUrRumAm;
+		variable["BldUrVol"] = BldUrVol;
+		variable["BuCdVis"] = BuCdVis;
+		variable["BW"] = BW;
+		variable["BW1"] = BW1;
+		variable["BwCorrected"] = BwCorrected;
+		variable["BwCorrection"] = BwCorrection;
+		variable["BWF"] = BWF;
+		variable["cAa"] = cAa;
+		variable["cAc"] = cAc;
+		variable["cAm"] = cAm;
+		variable["cAs"] = cAs;
+		variable["cBldUr"] = cBldUr;
+		variable["cCs"] = cCs;
+		variable["CdMi"] = CdMi;
+		variable["CdMiG2"] = CdMiG2;
+		variable["Ce"] = Ce;
+		variable["CeAcAc"] = CeAcAc;
+		variable["CeBuBu"] = CeBuBu;
+		variable["CeCs"] = CeCs;
+		variable["Cein"] = Cein;
+		variable["CeP"] = CeP;
+		variable["CePrPr"] = CePrPr;
+		variable["cFa"] = cFa;
+		variable["CFatinFd"] = CFatinFd;
+		variable["cGl"] = cGl;
+		variable["cGlTarget"] = cGlTarget;
+		variable["CH4DEi"] = CH4DEi;
+		variable["CH4E"] = CH4E;
+		variable["CH4EFd"] = CH4EFd;
+		variable["CH4GEi"] = CH4GEi;
+		variable["CH4KGY"] = CH4KGY;
+		variable["CH4MEi"] = CH4MEi;
+		variable["CH4Milk"] = CH4Milk;
+		variable["ChChFd"] = ChChFd;
+		variable["CHor"] = CHor;
+		variable["CHor1"] = CHor1;
+		variable["cMiHa"] = cMiHa;
+		variable["cMiHb"] = cMiHb;
+		variable["cMiSPart"] = cMiSPart;
+		variable["cMiWa"] = cMiWa;
+		variable["cMun"] = cMun;
+		variable["ConceiveNow"] = ConceiveNow;
+		variable["ConceiveNowVariable"] = ConceiveNowVariable;
+		variable["CONSET"] = CONSET;
+		variable["CorME"] = CorME;
+		variable["CorMEi"] = CorMEi;
+		variable["CorNEP"] = CorNEP;
+		variable["CorrectedBW"] = CorrectedBW;
+		variable["CPinFd"] = CPinFd;
+		variable["cPOth"] = cPOth;
+		variable["CpP"] = CpP;
+		variable["CPsinFd"] = CPsinFd;
+		variable["cPun"] = cPun;
+		variable["cPVis"] = cPVis;
+		variable["cRumAa"] = cRumAa;
+		variable["cRumAc"] = cRumAc;
+		variable["cRumBu"] = cRumBu;
+		variable["cRumLa"] = cRumLa;
+		variable["cRumPr"] = cRumPr;
+		variable["Cs"] = Cs;
+		variable["CsAc"] = CsAc;
+		variable["CsBu"] = CsBu;
+		variable["CsCd"] = CsCd;
+		variable["CsFv"] = CsFv;
+		variable["CsFvAc"] = CsFvAc;
+		variable["CsFvBu"] = CsFvBu;
+		variable["CsFvCd"] = CsFvCd;
+		variable["CsFvLa"] = CsFvLa;
+		variable["CsFvPr"] = CsFvPr;
+		variable["Csin"] = Csin;
+		variable["CsLa"] = CsLa;
+		variable["CsMi"] = CsMi;
+		variable["CsMiG"] = CsMiG;
+		variable["CsP"] = CsP;
+		variable["CsPr"] = CsPr;
+		variable["cTs"] = cTs;
+		variable["CumulativeLowMfDays"] = CumulativeLowMfDays;
+		variable["CurrentFeed"] = CurrentFeed;
+		variable["CurrentSupplement"] = CurrentSupplement;
+		variable["cVFA"] = cVFA;
+		variable["CWC"] = CWC;
+		variable["CWCF"] = CWCF;
+		variable["dAa"] = dAa;
+		variable["dabsEAve"] = dabsEAve;
+		variable["dAc"] = dAc;
+		variable["dAdipE"] = dAdipE;
+		variable["DailyDMin"] = DailyDMin;
+		variable["DailyMfDiff"] = DailyMfDiff;
+		variable["dAm"] = dAm;
+		variable["dAs"] = dAs;
+		variable["DAY"] = DAY;
+		variable["DayGest"] = DayGest;
+		variable["DayGestBasic"] = DayGestBasic;
+		variable["DayLength"] = DayLength;
+		variable["DaylengthP1"] = DaylengthP1;
+		variable["DaylengthP2"] = DaylengthP2;
+		variable["DaylightSavingShift"] = DaylightSavingShift;
+		variable["DayMilk"] = DayMilk;
+		variable["DayofYear"] = DayofYear;
+		variable["DayTwLength"] = DayTwLength;
+		variable["DayTwlengthP2"] = DayTwlengthP2;
+		variable["dBCS"] = dBCS;
+		variable["dBldUr"] = dBldUr;
+		variable["DCadf"] = DCadf;
+		variable["DCCe"] = DCCe;
+		variable["dCd"] = dCd;
+		variable["dCdKg"] = dCdKg;
+		variable["DCDM"] = DCDM;
+		variable["dCe"] = dCe;
+		variable["dCH4g"] = dCH4g;
+		variable["dCH4Kg"] = dCH4Kg;
+		variable["DCHa"] = DCHa;
+		variable["DCHb"] = DCHb;
+		variable["DCLg"] = DCLg;
+		variable["DCLipid"] = DCLipid;
+		variable["DCndf"] = DCndf;
+		variable["DCOm"] = DCOm;
+		variable["DCPrt"] = DCPrt;
+		variable["dCs"] = dCs;
+		variable["dCsFvH"] = dCsFvH;
+		variable["dCsHy"] = dCsHy;
+		variable["dDCH4"] = dDCH4;
+		variable["DE"] = DE;
+		variable["dEating"] = dEating;
+		variable["dEBW1"] = dEBW1;
+		variable["DEI"] = DEI;
+		variable["derivMilkingFrequencyLag"] = derivMilkingFrequencyLag;
+		variable["dFa"] = dFa;
+		variable["dFl"] = dFl;
+		variable["dGestE"] = dGestE;
+		variable["dGl"] = dGl;
+		variable["dHa"] = dHa;
+		variable["dHaMi"] = dHaMi;
+		variable["dHb"] = dHb;
+		variable["dHbMi"] = dHbMi;
+		variable["dHc"] = dHc;
+		variable["dHiM4"] = dHiM4;
+		variable["dHiP4"] = dHiP4;
+		variable["dHyEruct"] = dHyEruct;
+		variable["dHyFlF"] = dHyFlF;
+		variable["dHyMi"] = dHyMi;
+		variable["dHyOther"] = dHyOther;
+		variable["DilRate"] = DilRate;
+		variable["dIndigFd"] = dIndigFd;
+		variable["dKMilkInh"] = dKMilkInh;
+		variable["dLHor"] = dLHor;
+		variable["dLm"] = dLm;
+		variable["dLmProd"] = dLmProd;
+		variable["dLPart"] = dLPart;
+		variable["dLwExclUterGutAndGrowth"] = dLwExclUterGutAndGrowth;
+		variable["dMaint"] = dMaint;
+		variable["dMamCellsA"] = dMamCellsA;
+		variable["dMamCellsQ"] = dMamCellsQ;
+		variable["dMamCellsS"] = dMamCellsS;
+		variable["dMamLm"] = dMamLm;
+		variable["dMamMilkAve"] = dMamMilkAve;
+		variable["dMamPm"] = dMamPm;
+		variable["dMamTm"] = dMamTm;
+		variable["dMi"] = dMi;
+		variable["DMilk"] = DMilk;
+		variable["dMilkLm"] = dMilkLm;
+		variable["dMilkPm"] = dMilkPm;
+		variable["dMilkProd"] = dMilkProd;
+		variable["dMilkTm"] = dMilkTm;
+		variable["dMilkVol"] = dMilkVol;
+		variable["DMP"] = DMP;
+		variable["dMPart"] = dMPart;
+		variable["dN"] = dN;
+		variable["dNdfIn"] = dNdfIn;
+		variable["dNep"] = dNep;
+		variable["dNonUterEBW"] = dNonUterEBW;
+		variable["dOthDna"] = dOthDna;
+		variable["dOthE"] = dOthE;
+		variable["dOx"] = dOx;
+		variable["dPi"] = dPi;
+		variable["dPm"] = dPm;
+		variable["dPmProd"] = dPmProd;
+		variable["dPOth"] = dPOth;
+		variable["dPVis"] = dPVis;
+		variable["dRest"] = dRest;
+		variable["DrinkSW"] = DrinkSW;
+		variable["DrnkWa"] = DrnkWa;
+		variable["DrnkWaDiel"] = DrnkWaDiel;
+		variable["DrnkWaTot"] = DrnkWaTot;
+		variable["DrnkWaYest"] = DrnkWaYest;
+		variable["dRumAa"] = dRumAa;
+		variable["dRumAaHy"] = dRumAaHy;
+		variable["dRumAc"] = dRumAc;
+		variable["dRumBu"] = dRumBu;
+		variable["dRumCd"] = dRumCd;
+		variable["dRumLa"] = dRumLa;
+		variable["dRumLiqVol"] = dRumLiqVol;
+		variable["dRumntn"] = dRumntn;
+		variable["dRumPr"] = dRumPr;
+		variable["DryOffNow"] = DryOffNow;
+		variable["DryOffNowVariable"] = DryOffNowVariable;
+		variable["dSPart"] = dSPart;
+		variable["dTCH4"] = dTCH4;
+		variable["dTCH4E"] = dTCH4E;
+		variable["dTHy"] = dTHy;
+		variable["dTm"] = dTm;
+		variable["dTmProd"] = dTmProd;
+		variable["dTsAdip"] = dTsAdip;
+		variable["dUrea"] = dUrea;
+		variable["dVisDna"] = dVisDna;
+		variable["dVisE"] = dVisE;
+		variable["dVmAcTs"] = dVmAcTs;
+		variable["dWtAdipNew"] = dWtAdipNew;
+		variable["dWtGrvUter"] = dWtGrvUter;
+		variable["dWtOth"] = dWtOth;
+		variable["dWtPGrvUter"] = dWtPGrvUter;
+		variable["dWtPUter"] = dWtPUter;
+		variable["dWtTsAdip"] = dWtTsAdip;
+		variable["dWtUter"] = dWtUter;
+		variable["dWtVis"] = dWtVis;
+		variable["Eating"] = Eating;
+		variable["EatingSupplementsSW"] = EatingSupplementsSW;
+		variable["EatSa"] = EatSa;
+		variable["EatWa"] = EatWa;
+		variable["EB"] = EB;
+		variable["EBW"] = EBW;
+		variable["EBW1"] = EBW1;
+		variable["eerActivityAtp"] = eerActivityAtp;
+		variable["EGrvUterCLF"] = EGrvUterCLF;
+		variable["ELm"] = ELm;
+		variable["EnergyCompensation"] = EnergyCompensation;
+		variable["EnergyCompenstaion"] = EnergyCompenstaion;
+		variable["EnergyForActivity"] = EnergyForActivity;
+		variable["EnergyForGrowth"] = EnergyForGrowth;
+		variable["EnergyForMaintenance"] = EnergyForMaintenance;
+		variable["EnergyForMilk"] = EnergyForMilk;
+		variable["EnergyForPregnancy"] = EnergyForPregnancy;
+		variable["EPm"] = EPm;
+		variable["ETm"] = ETm;
+		variable["EUr"] = EUr;
+		variable["EUrFd"] = EUrFd;
+		variable["Fa"] = Fa;
+		variable["FaCd"] = FaCd;
+		variable["fAcFd"] = fAcFd;
+		variable["fADFFd"] = fADFFd;
+		variable["fAiFd"] = fAiFd;
+		variable["fAiIndigFd"] = fAiIndigFd;
+		variable["FaP"] = FaP;
+		variable["fAsFd"] = fAsFd;
+		variable["fAshFd"] = fAshFd;
+		variable["FatAdd"] = FatAdd;
 		variable["FaTmH7"] = FaTmH7;
 		variable["FaTmH8"] = FaTmH8;
-		variable["rtFa1"] = rtFa1;
-		variable["AfTmH9"] = AfTmH9;
-		variable["HiP1"] = HiP1;
-		variable["HiM1"] = HiM1;
-		variable["PrGlHt"] = PrGlHt;
-		variable["AaGlHt"] = AaGlHt;
-		variable["absGlHt"] = absGlHt;
-		variable["aPAGlH"] = aPAGlH;
+		variable["FaTmV1"] = FaTmV1;
+		variable["FaTmVis"] = FaTmVis;
+		variable["FaTsAdip"] = FaTsAdip;
+		variable["FatSc"] = FatSc;
+		variable["FaTsF1"] = FaTsF1;
+		variable["fBCH4D"] = fBCH4D;
+		variable["fBCH4E"] = fBCH4E;
+		variable["fBCH4M"] = fBCH4M;
+		variable["fBuFd"] = fBuFd;
+		variable["fBuSilage"] = fBuSilage;
+		variable["FCeCs"] = FCeCs;
+		variable["fCeFd"] = fCeFd;
+		variable["FCFatFd"] = FCFatFd;
+		variable["fCH4DE"] = fCH4DE;
+		variable["fCH4E"] = fCH4E;
+		variable["fCH4ME"] = fCH4ME;
+		variable["FCM3h"] = FCM3h;
+		variable["FCM4Z"] = FCM4Z;
+		variable["FCM4z1"] = FCM4z1;
+		variable["fCPFd"] = fCPFd;
+		variable["FCPsFd"] = FCPsFd;
+		variable["fCsHa"] = fCsHa;
+		variable["fCsHb"] = fCsHb;
+		variable["fd1"] = fd1;
+		variable["fd2"] = fd2;
+		variable["fd3"] = fd3;
+		variable["FdCapMolly"] = FdCapMolly;
+		variable["FdDMIn"] = FdDMIn;
+		variable["FdGEin"] = FdGEin;
+		variable["fDMFd"] = fDMFd;
+		variable["FdRat"] = FdRat;
+		variable["FdRatDiel"] = FdRatDiel;
+		variable["FecADF"] = FecADF;
+		variable["FecAsh"] = FecAsh;
+		variable["FecCe"] = FecCe;
+		variable["FecCh"] = FecCh;
+		variable["FecDM"] = FecDM;
+		variable["FecENG"] = FecENG;
+		variable["FecFa"] = FecFa;
+		variable["FecFMPart"] = FecFMPart;
+		variable["FecFSPart"] = FecFSPart;
+		variable["FecHa"] = FecHa;
+		variable["FecHaT"] = FecHaT;
+		variable["FecHb"] = FecHb;
+		variable["FecHC"] = FecHC;
+		variable["FecLg"] = FecLg;
+		variable["FecLipid"] = FecLipid;
+		variable["FecMiHa"] = FecMiHa;
+		variable["FecMiLi"] = FecMiLi;
+		variable["FecMiNn"] = FecMiNn;
+		variable["FecMiPi"] = FecMiPi;
+		variable["FecMPart"] = FecMPart;
+		variable["FecNDF"] = FecNDF;
+		variable["FecOm"] = FecOm;
+		variable["FecPi"] = FecPi;
+		variable["FecPiT"] = FecPiT;
+		variable["FecPiTN"] = FecPiTN;
+		variable["FecSPart"] = FecSPart;
+		variable["FeedInFlag"] = FeedInFlag;
+		variable["fFatFd"] = fFatFd;
+		variable["fFIM"] = fFIM;
+		variable["FGAm"] = FGAm;
+		variable["FGFa"] = FGFa;
+		variable["fGlHyAdip"] = fGlHyAdip;
+		variable["fGlHyVis"] = fGlHyVis;
+		variable["fHcCs"] = fHcCs;
+		variable["fHcFd"] = fHcFd;
+		variable["fIndigFd"] = fIndigFd;
+		variable["FirstEvent"] = FirstEvent;
+		variable["FIXDpH"] = FIXDpH;
+		variable["FixedLhorSW"] = FixedLhorSW;
+		variable["Fl"] = Fl;
+		variable["Fl1Fd"] = Fl1Fd;
+		variable["FLaFd"] = FLaFd;
+		variable["FlFd"] = FlFd;
+		variable["fLgAdf"] = fLgAdf;
+		variable["fLgFd"] = fLgFd;
+		variable["fLgIndigFd"] = fLgIndigFd;
+		variable["fLiFd"] = fLiFd;
+		variable["FlMi"] = FlMi;
+		variable["FlMiG"] = FlMiG;
+		variable["fLPart"] = fLPart;
+		variable["fLPartADF"] = fLPartADF;
+		variable["fLPartAi"] = fLPartAi;
+		variable["fLPartCe"] = fLPartCe;
+		variable["fLPartHc"] = fLPartHc;
+		variable["fLPartIndigFd"] = fLPartIndigFd;
+		variable["fLPartLg"] = fLPartLg;
+		variable["fLPartMPartSwal"] = fLPartMPartSwal;
+		variable["fLPartNDF"] = fLPartNDF;
+		variable["fLPartNDF_NDF"] = fLPartNDF_NDF;
+		variable["fLPartNutIng"] = fLPartNutIng;
+		variable["fLPartPi"] = fLPartPi;
+		variable["fLPartplusMPart"] = fLPartplusMPart;
+		variable["fLPartSt"] = fLPartSt;
+		variable["fLPartSwal"] = fLPartSwal;
+		variable["fMamCellsAQ"] = fMamCellsAQ;
+		variable["fMamCellsAS"] = fMamCellsAS;
+		variable["fMamCellsPA"] = fMamCellsPA;
+		variable["fMamCellsQA"] = fMamCellsQA;
+		variable["fMamCellsQS"] = fMamCellsQS;
+		variable["fMamCellsUS"] = fMamCellsUS;
+		variable["fMCH4D"] = fMCH4D;
+		variable["fMCH4E"] = fMCH4E;
+		variable["fMCH4M"] = fMCH4M;
+		variable["fMPart"] = fMPart;
+		variable["fMPart1"] = fMPart1;
+		variable["fMPartNDF_NDF"] = fMPartNDF_NDF;
+		variable["fMPartNutIng"] = fMPartNutIng;
+		variable["fMPartSA"] = fMPartSA;
+		variable["fMPartSwal"] = fMPartSwal;
+		variable["fNDFFd"] = fNDFFd;
+		variable["fNnCp"] = fNnCp;
+		variable["fNnFd"] = fNnFd;
+		variable["FNPNFd"] = FNPNFd;
+		variable["fOaFd"] = fOaFd;
+		variable["fOmFd"] = fOmFd;
+		variable["FORSET"] = FORSET;
+		variable["fParticulateFd"] = fParticulateFd;
+		variable["fPartP"] = fPartP;
+		variable["fPartSA"] = fPartSA;
+		variable["fPeFd"] = fPeFd;
+		variable["fPiCp"] = fPiCp;
+		variable["fPiFd"] = fPiFd;
+		variable["fPm"] = fPm;
+		variable["fPsCp"] = fPsCp;
+		variable["FPsFd"] = FPsFd;
+		variable["fRoughageFd"] = fRoughageFd;
+		variable["fRuAdfAdf"] = fRuAdfAdf;
+		variable["fRuAdfFd"] = fRuAdfFd;
+		variable["fRumDM"] = fRumDM;
+		variable["fRupCp"] = fRupCp;
+		variable["FRUPFd"] = FRUPFd;
+		variable["fRUStFd"] = fRUStFd;
+		variable["fRuStSt"] = fRuStSt;
+		variable["fScCs"] = fScCs;
+		variable["fScFd"] = fScFd;
+		variable["fScTFd"] = fScTFd;
+		variable["fSPart"] = fSPart;
+		variable["fSPart1"] = fSPart1;
+		variable["fSPartNDF_NDF"] = fSPartNDF_NDF;
+		variable["fSPartNutIng"] = fSPartNutIng;
+		variable["fSPartSA"] = fSPartSA;
+		variable["fSPartSwal"] = fSPartSwal;
+		variable["fStCs"] = fStCs;
+		variable["fStFd"] = fStFd;
+		variable["FStsFd"] = FStsFd;
+		variable["fStSSt"] = fStSSt;
+		variable["fTm"] = fTm;
+		variable["fTm1"] = fTm1;
+		variable["fUrCp"] = fUrCp;
+		variable["FUrFd"] = FUrFd;
+		variable["FvAcFd"] = FvAcFd;
+		variable["FvBuFd"] = FvBuFd;
+		variable["FvLaFd"] = FvLaFd;
+		variable["G1"] = G1;
+		variable["G2"] = G2;
+		variable["GE"] = GE;
+		variable["GE1Fd"] = GE1Fd;
+		variable["GE2Fd"] = GE2Fd;
+		variable["GE3Fd"] = GE3Fd;
+		variable["GEFd"] = GEFd;
+		variable["gGlLa"] = gGlLa;
+		variable["Gl"] = Gl;
+		variable["GlCd"] = GlCd;
+		variable["GlCdT"] = GlCdT;
+		variable["GlGyT"] = GlGyT;
+		variable["GlHyAdip"] = GlHyAdip;
+		variable["GlHyVis"] = GlHyVis;
+		variable["GlLaB1"] = GlLaB1;
+		variable["GlLaOth"] = GlLaOth;
+		variable["GlLmHt"] = GlLmHt;
+		variable["GLLmVis"] = GLLmVis;
+		variable["GlMilk"] = GlMilk;
 		variable["GLMilk1"] = GLMilk1;
 		variable["GlMilk2"] = GlMilk2;
 		variable["GlMilk3"] = GlMilk3;
-		variable["GlMilk"] = GlMilk;
-		variable["rtGl1"] = rtGl1;
-		variable["HiP2"] = HiP2;
-		variable["HiM2"] = HiM2;
-		variable["AaTO"] = AaTO;
-		variable["absAaHt"] = absAaHt;
-		variable["rtAa1"] = rtAa1;
-		variable["HiP3"] = HiP3;
-		variable["HiM3"] = HiM3;
-		variable["dHiP4"] = dHiP4;
+		variable["GlTO"] = GlTO;
+		variable["GlTpAdip"] = GlTpAdip;
+		variable["GlTpF1"] = GlTpF1;
+		variable["GlTpV1"] = GlTpV1;
+		variable["GlTpVis"] = GlTpVis;
+		variable["GrowthPerDay"] = GrowthPerDay;
+		variable["GyGlV1"] = GyGlV1;
+		variable["GyGlVis"] = GyGlVis;
+		variable["Ha"] = Ha;
+		variable["HaCs"] = HaCs;
+		variable["HaMi"] = HaMi;
+		variable["HaMiF"] = HaMiF;
+		variable["HaMiG"] = HaMiG;
+		variable["HaMiP"] = HaMiP;
+		variable["HaMiRum"] = HaMiRum;
+		variable["HaP"] = HaP;
+		variable["HaPT"] = HaPT;
+		variable["Hb"] = Hb;
+		variable["Hbin"] = Hbin;
+		variable["HbMi"] = HbMi;
+		variable["HbMiF"] = HbMiF;
+		variable["HbMiG"] = HbMiG;
+		variable["HbMiP"] = HbMiP;
+		variable["HbMiRum"] = HbMiRum;
+		variable["HbP"] = HbP;
+		variable["Hc"] = Hc;
+		variable["HcAcAc"] = HcAcAc;
+		variable["HcBuBu"] = HcBuBu;
+		variable["HcCs"] = HcCs;
+		variable["Hcin"] = Hcin;
+		variable["HcombAa"] = HcombAa;
+		variable["HcombAc"] = HcombAc;
+		variable["HcombBu"] = HcombBu;
+		variable["HcombCh"] = HcombCh;
+		variable["HcombCH4"] = HcombCH4;
+		variable["HcombCs"] = HcombCs;
+		variable["HcombFa"] = HcombFa;
+		variable["HcombFl"] = HcombFl;
+		variable["HcombGl"] = HcombGl;
+		variable["HcombGy"] = HcombGy;
+		variable["HcombHc"] = HcombHc;
+		variable["HcombLa"] = HcombLa;
+		variable["HcombLg"] = HcombLg;
+		variable["HcombLiFd"] = HcombLiFd;
+		variable["HcombLm"] = HcombLm;
+		variable["HcombMi"] = HcombMi;
+		variable["HcombMiLi"] = HcombMiLi;
+		variable["HcombNn"] = HcombNn;
+		variable["HcombOa"] = HcombOa;
+		variable["HcombPr"] = HcombPr;
+		variable["HcombPs"] = HcombPs;
+		variable["HcombTg"] = HcombTg;
+		variable["HcombTp"] = HcombTp;
+		variable["HcombUr"] = HcombUr;
+		variable["HcP"] = HcP;
+		variable["HcPrPr"] = HcPrPr;
+		variable["Herd"] = Herd;
+		variable["HFerm"] = HFerm;
 		variable["HFermM"] = HFermM;
 		variable["HiM"] = HiM;
+		variable["HiM1"] = HiM1;
+		variable["HiM2"] = HiM2;
+		variable["HiM3"] = HiM3;
 		variable["HiP"] = HiP;
-		variable["RQEQ"] = RQEQ;
-		variable["AaFvCd"] = AaFvCd;
-		variable["CsFvCd"] = CsFvCd;
-		variable["CsCd"] = CsCd;
-		variable["RumAaCd"] = RumAaCd;
-		variable["CdMi"] = CdMi;
-		variable["TCd"] = TCd;
-		variable["dRumCd"] = dRumCd;
-		variable["MwtCd"] = MwtCd;
-		variable["dCd"] = dCd;
-		variable["dCdKg"] = dCdKg;
-		variable["RQ1"] = RQ1;
-		variable["GlCdT"] = GlCdT;
-		variable["GlTO"] = GlTO;
-		variable["ObsMEi"] = ObsMEi;
-		variable["ObsDEi"] = ObsDEi;
+		variable["HiP1"] = HiP1;
+		variable["HiP2"] = HiP2;
+		variable["HiP3"] = HiP3;
+		variable["HiV8"] = HiV8;
+		variable["HtF2"] = HtF2;
+		variable["HtF3"] = HtF3;
+		variable["HtV2"] = HtV2;
+		variable["HtV3"] = HtV3;
+		variable["HtV4"] = HtV4;
+		variable["HtV5"] = HtV5;
+		variable["HtV6"] = HtV6;
+		variable["HtV7"] = HtV7;
+		variable["i"] = i;
+		variable["iAa"] = iAa;
+		variable["iabsEAve"] = iabsEAve;
+		variable["iAc"] = iAc;
+		variable["iAm"] = iAm;
+		variable["iAs"] = iAs;
+		variable["iBCS"] = iBCS;
+		variable["iBldUr"] = iBldUr;
+		variable["iBW"] = iBW;
+		variable["iCe"] = iCe;
+		variable["iCs"] = iCs;
+		variable["iDayGestDMI"] = iDayGestDMI;
+		variable["iEBW"] = iEBW;
+		variable["iFa"] = iFa;
+		variable["iFdRat"] = iFdRat;
+		variable["ifDWt"] = ifDWt;
+		variable["iFl"] = iFl;
+		variable["iGl"] = iGl;
+		variable["iHa"] = iHa;
+		variable["iHb"] = iHb;
+		variable["iHbF"] = iHbF;
+		variable["iHc"] = iHc;
+		variable["iIndigFd"] = iIndigFd;
+		variable["iLHor"] = iLHor;
+		variable["ilogNewEvent"] = ilogNewEvent;
+		variable["iLPart"] = iLPart;
+		variable["iMamCells"] = iMamCells;
+		variable["iMamCellsA"] = iMamCellsA;
+		variable["iMamCellsQ"] = iMamCellsQ;
+		variable["iMamCellsS"] = iMamCellsS;
+		variable["iMamLm"] = iMamLm;
+		variable["iMamMilkAve"] = iMamMilkAve;
+		variable["iMamPm"] = iMamPm;
+		variable["iMamTm"] = iMamTm;
+		variable["iMi"] = iMi;
+		variable["iMiHa"] = iMiHa;
+		variable["iMiHb"] = iMiHb;
+		variable["iMPart"] = iMPart;
+		variable["iMPartF"] = iMPartF;
+		variable["IncreasedUsDueToLowMf"] = IncreasedUsDueToLowMf;
+		variable["IndigFd"] = IndigFd;
+		variable["IndigFdFd"] = IndigFdFd;
+		variable["IndigFdMiP"] = IndigFdMiP;
+		variable["IndigFdP"] = IndigFdP;
+		variable["InfAs"] = InfAs;
+		variable["InfNaBicarb"] = InfNaBicarb;
+		variable["InfNaCl"] = InfNaCl;
+		variable["InfPrt"] = InfPrt;
+		variable["InfRumPr"] = InfRumPr;
+		variable["InMilk"] = InMilk;
+		variable["iNonFatEBW"] = iNonFatEBW;
+		variable["iNonFatNonUterEBW"] = iNonFatNonUterEBW;
+		variable["iNonUterEBW"] = iNonUterEBW;
+		variable["iNonUterEbwTarget"] = iNonUterEbwTarget;
+		variable["IntakeDay"] = IntakeDay;
+		variable["IntakeTotal"] = IntakeTotal;
+		variable["IntakeYest"] = IntakeYest;
+		variable["iotGutCont"] = iotGutCont;
+		variable["iOthDna"] = iOthDna;
+		variable["iotWtOth"] = iotWtOth;
+		variable["iotWtVis"] = iotWtVis;
+		variable["iPi"] = iPi;
+		variable["iPOth"] = iPOth;
+		variable["iPVis"] = iPVis;
+		variable["iRumAa"] = iRumAa;
+		variable["iRumAc"] = iRumAc;
+		variable["iRumBu"] = iRumBu;
+		variable["iRumLa"] = iRumLa;
+		variable["iRumLiqVol"] = iRumLiqVol;
+		variable["iRumPr"] = iRumPr;
+		variable["iRumVol"] = iRumVol;
+		variable["iSPart"] = iSPart;
+		variable["iSPartF"] = iSPartF;
+		variable["iStartDayGest"] = iStartDayGest;
+		variable["iStartDIM"] = iStartDIM;
+		variable["iTotMeals"] = iTotMeals;
+		variable["iTsAdip"] = iTsAdip;
+		variable["iVisDna"] = iVisDna;
+		variable["iVmAcTs"] = iVmAcTs;
+		variable["iVolAa"] = iVolAa;
+		variable["iVolAc"] = iVolAc;
+		variable["iVolBldUr"] = iVolBldUr;
+		variable["iVolFa"] = iVolFa;
+		variable["iVolGl"] = iVolGl;
+		variable["iWtAdip"] = iWtAdip;
+		variable["iWtCytAdip"] = iWtCytAdip;
+		variable["iWtOth"] = iWtOth;
+		variable["iWtTsAdip"] = iWtTsAdip;
+		variable["iWtVis"] = iWtVis;
+		variable["j"] = j;
+		variable["kAcquisition"] = kAcquisition;
+		variable["KCeCs"] = KCeCs;
+		variable["KCeCs1"] = KCeCs1;
+		variable["KHaCs"] = KHaCs;
+		variable["KHcCs"] = KHcCs;
+		variable["KHcCs1"] = KHcCs1;
+		variable["kLHor"] = kLHor;
+		variable["KLHorPP"] = KLHorPP;
+		variable["kMamCellsQA"] = kMamCellsQA;
+		variable["kMamCellsQaMfAdjustment"] = kMamCellsQaMfAdjustment;
+		variable["KMilkI"] = KMilkI;
+		variable["KMinh"] = KMinh;
+		variable["KNaAtAdip"] = KNaAtAdip;
+		variable["KNaAtOth"] = KNaAtOth;
+		variable["KNaAtVis"] = KNaAtVis;
+		variable["KPiAa"] = KPiAa;
+		variable["LaCdAdip"] = LaCdAdip;
+		variable["LaCdOth"] = LaCdOth;
+		variable["LaGlAdip"] = LaGlAdip;
+		variable["LaGlOth"] = LaGlOth;
+		variable["LaGlV1"] = LaGlV1;
+		variable["LaGlVis"] = LaGlVis;
+		variable["LainOth"] = LainOth;
+		variable["LaPrPr"] = LaPrPr;
+		variable["LastEA"] = LastEA;
+		variable["LastEv"] = LastEv;
+		variable["LastEvent"] = LastEvent;
+		variable["LastSu"] = LastSu;
+		variable["LastSw"] = LastSw;
+		variable["LginFd"] = LginFd;
+		variable["LgP"] = LgP;
+		variable["LgutAi"] = LgutAi;
+		variable["LgutAs"] = LgutAs;
+		variable["LgutCeAc"] = LgutCeAc;
+		variable["LgutCeBu"] = LgutCeBu;
+		variable["LgutCeFv"] = LgutCeFv;
+		variable["LgutCePr"] = LgutCePr;
+		variable["LgutFaDg"] = LgutFaDg;
+		variable["LgutHaGl"] = LgutHaGl;
+		variable["LgutHcAc"] = LgutHcAc;
+		variable["LgutHcBu"] = LgutHcBu;
+		variable["LgutHcFv"] = LgutHcFv;
+		variable["LgutHcPr"] = LgutHcPr;
+		variable["LgutPiAa"] = LgutPiAa;
+		variable["LHor"] = LHor;
+		variable["LHor1"] = LHor1;
+		variable["LhorAa"] = LhorAa;
+		variable["LhorAdip"] = LhorAdip;
+		variable["LHorDeg"] = LHorDeg;
+		variable["LhorGl"] = LhorGl;
+		variable["LHorSyn"] = LHorSyn;
+		variable["LHorSyn1"] = LHorSyn1;
+		variable["LipidP"] = LipidP;
+		variable["LiSc"] = LiSc;
+		variable["logNewEvent"] = logNewEvent;
+		variable["LowMfDecay"] = LowMfDecay;
+		variable["LPart"] = LPart;
+		variable["LPart1"] = LPart1;
+		variable["LPartCeCe"] = LPartCeCe;
+		variable["LPartHbHb"] = LPartHbHb;
+		variable["LPartHcHc"] = LPartHcHc;
+		variable["LPartIndigFdIndigFd"] = LPartIndigFdIndigFd;
+		variable["LPartMi"] = LPartMi;
+		variable["LPartMPart"] = LPartMPart;
+		variable["LPartPiPi"] = LPartPiPi;
+		variable["LPartplusMPart"] = LPartplusMPart;
+		variable["LPartRed"] = LPartRed;
+		variable["LPartSPart"] = LPartSPart;
+		variable["LPartStHa"] = LPartStHa;
+		variable["LPartSwal"] = LPartSwal;
+		variable["LW"] = LW;
+		variable["MamCells"] = MamCells;
+		variable["MamCellsA"] = MamCellsA;
+		variable["MamCellsQ"] = MamCellsQ;
+		variable["MamCellsQaKickStartFactor"] = MamCellsQaKickStartFactor;
+		variable["MamCellsQaPreToPostFactor"] = MamCellsQaPreToPostFactor;
+		variable["MamCellsS"] = MamCellsS;
+		variable["MamEnz"] = MamEnz;
+		variable["MamLm"] = MamLm;
+		variable["MamMilk"] = MamMilk;
+		variable["MamMilkAve"] = MamMilkAve;
+		variable["MamMilkAve2"] = MamMilkAve2;
+		variable["MamPm"] = MamPm;
+		variable["MamTm"] = MamTm;
+		variable["MasticationSteps"] = MasticationSteps;
+		variable["MaxEnergyForMilk"] = MaxEnergyForMilk;
+		variable["MaxRumVol"] = MaxRumVol;
+		variable["MCH4E"] = MCH4E;
+		variable["MCH4kg"] = MCH4kg;
+		variable["ME"] = ME;
+		variable["ME1"] = ME1;
+		variable["MealsDay"] = MealsDay;
+		variable["MEAN1"] = MEAN1;
+		variable["MeanParticleSize"] = MeanParticleSize;
+		variable["MedianParticleSize"] = MedianParticleSize;
+		variable["MEI"] = MEI;
+		variable["MEinMJ"] = MEinMJ;
+		variable["MEMBW"] = MEMBW;
+		variable["MetabPP"] = MetabPP;
+		variable["MHtAdip"] = MHtAdip;
+		variable["MHtGest"] = MHtGest;
+		variable["MHtGestGrth"] = MHtGestGrth;
+		variable["MHtGestTO"] = MHtGestTO;
+		variable["MHtOth"] = MHtOth;
+		variable["MHtVis"] = MHtVis;
+		variable["Mi"] = Mi;
+		variable["MiAa"] = MiAa;
+		variable["MiBu"] = MiBu;
+		variable["MiCh"] = MiCh;
+		variable["MiFa"] = MiFa;
+		variable["MiG"] = MiG;
+		variable["MiGl"] = MiGl;
+		variable["MiHaMi"] = MiHaMi;
+		variable["MiHbMi"] = MiHbMi;
+		variable["MiLGl"] = MiLGl;
+		variable["MiLiDg"] = MiLiDg;
+		variable["MilkingFrequency"] = MilkingFrequency;
+		variable["MilkingFrequencyAdjusted"] = MilkingFrequencyAdjusted;
+		variable["MilkingFrequencyAgeAdjustment"] = MilkingFrequencyAgeAdjustment;
+		variable["MilkingFrequencyBaseAdjustment"] = MilkingFrequencyBaseAdjustment;
+		variable["MilkingFrequencyLag"] = MilkingFrequencyLag;
+		variable["MilkingIndex"] = MilkingIndex;
+		variable["MilkInhDeg"] = MilkInhDeg;
+		variable["MilkInhSyn"] = MilkInhSyn;
+		variable["MilkMax"] = MilkMax;
+		variable["MilkProdDiel"] = MilkProdDiel;
+		variable["MilkSolids270MfAdjusted"] = MilkSolids270MfAdjusted;
+		variable["MilkSW"] = MilkSW;
+		variable["MiMaAd"] = MiMaAd;
+		variable["MinLPRumntn"] = MinLPRumntn;
+		variable["MiNOm"] = MiNOm;
+		variable["MiNOma"] = MiNOma;
+		variable["MiNP"] = MiNP;
+		variable["MiP"] = MiP;
+		variable["MiPP"] = MiPP;
+		variable["MiPr"] = MiPr;
+		variable["MiPrOm"] = MiPrOm;
+		variable["MirOma"] = MirOma;
+		variable["MntHP"] = MntHP;
+		variable["MPart"] = MPart;
+		variable["MPartADFP"] = MPartADFP;
+		variable["MPartDeg"] = MPartDeg;
+		variable["MPartNDFP"] = MPartNDFP;
+		variable["MPartP"] = MPartP;
+		variable["MPartSA"] = MPartSA;
+		variable["MPartSPart"] = MPartSPart;
+		variable["MPartSwal"] = MPartSwal;
+		variable["MPartVol"] = MPartVol;
+		variable["MPcAc"] = MPcAc;
+		variable["MPcBu"] = MPcBu;
+		variable["MPcPr"] = MPcPr;
+		variable["mult"] = mult;
+		variable["MwtMiLi"] = MwtMiLi;
+		variable["Nabs"] = Nabs;
+		variable["Nan"] = Nan;
+		variable["NANMNP"] = NANMNP;
+		variable["NANP"] = NANP;
+		variable["Nbal"] = Nbal;
+		variable["NBody"] = NBody;
+		variable["ndAt"] = ndAt;
+		variable["NDFIn"] = NDFIn;
+		variable["NdfinFd"] = NdfinFd;
+		variable["NDFP"] = NDFP;
+		variable["Ndiff"] = Ndiff;
+		variable["Ndig"] = Ndig;
+		variable["ndOx"] = ndOx;
+		variable["NEP"] = NEP;
+		variable["NetEff"] = NetEff;
+		variable["netME"] = netME;
+		variable["NextMilkingT"] = NextMilkingT;
+		variable["NFec"] = NFec;
+		variable["Nin"] = Nin;
+		variable["Nintake"] = Nintake;
+		variable["NitP"] = NitP;
+		variable["NMilk"] = NMilk;
+		variable["NnAmFd"] = NnAmFd;
+		variable["NninFd"] = NninFd;
+		variable["NonFatEBW"] = NonFatEBW;
+		variable["NonFatNonUterEBW"] = NonFatNonUterEBW;
+		variable["NonPreg"] = NonPreg;
+		variable["NonUterEBW"] = NonUterEBW;
+		variable["NonUterEbwTarget"] = NonUterEbwTarget;
+		variable["Nout"] = Nout;
+		variable["NpninFd"] = NpninFd;
+		variable["Nret1"] = Nret1;
+		variable["Nret2"] = Nret2;
+		variable["NSal"] = NSal;
+		variable["NUr"] = NUr;
+		variable["NurConcentration"] = NurConcentration;
+		variable["NurTotal"] = NurTotal;
+		variable["OaSc"] = OaSc;
 		variable["ObsCH4E"] = ObsCH4E;
-		variable["dTCH4E"] = dTCH4E;
-		variable["EUrFd"] = EUrFd;
-		variable["ObsPredME"] = ObsPredME;
-		variable["ObsPredDE"] = ObsPredDE;
+		variable["ObsDEi"] = ObsDEi;
+		variable["ObsMEi"] = ObsMEi;
 		variable["ObsPredCH4"] = ObsPredCH4;
+		variable["ObsPredDE"] = ObsPredDE;
 		variable["ObsPredEUr"] = ObsPredEUr;
+		variable["ObsPredME"] = ObsPredME;
+		variable["OldBasalOth"] = OldBasalOth;
+		variable["OminFd"] = OminFd;
+		variable["OmPa"] = OmPa;
+		variable["OmPt"] = OmPt;
+		variable["OnceADay2YearsOldAdjustment1"] = OnceADay2YearsOldAdjustment1;
+		variable["OsWa"] = OsWa;
+		variable["OsWaInt"] = OsWaInt;
+		variable["otGutCont"] = otGutCont;
+		variable["OthDna"] = OthDna;
+		variable["otWtOth"] = otWtOth;
+		variable["otWtVis"] = otWtVis;
+		variable["OXUP1"] = OXUP1;
+		variable["Parity"] = Parity;
+		variable["PartFd"] = PartFd;
+		variable["PcLm"] = PcLm;
+		variable["PcPm"] = PcPm;
+		variable["PcSilage"] = PcSilage;
+		variable["PcTm"] = PcTm;
+		variable["PcTmFromScfa"] = PcTmFromScfa;
+		variable["PeSc"] = PeSc;
+		variable["Pi"] = Pi;
+		variable["PiAa"] = PiAa;
+		variable["PiMiP"] = PiMiP;
+		variable["PiP"] = PiP;
+		variable["PiPiFd"] = PiPiFd;
+		variable["PostCalvingMamCells"] = PostCalvingMamCells;
+		variable["POth"] = POth;
+		variable["POthAaOth"] = POthAaOth;
+		variable["POthfDr"] = POthfDr;
+		variable["POthfSr"] = POthfSr;
+		variable["PrCdVis"] = PrCdVis;
+		variable["PreCalvingMamCells"] = PreCalvingMamCells;
+		variable["Preg"] = Preg;
+		variable["PreviousEvent"] = PreviousEvent;
+		variable["PrGlHt"] = PrGlHt;
+		variable["PrGlV1"] = PrGlV1;
+		variable["PrGlVis"] = PrGlVis;
+		variable["propLm"] = propLm;
+		variable["PsAaFd"] = PsAaFd;
+		variable["PsF"] = PsF;
+		variable["PUter"] = PUter;
+		variable["PUterAa"] = PUterAa;
+		variable["PVis"] = PVis;
+		variable["PVisAaVis"] = PVisAaVis;
+		variable["PVisfDr"] = PVisfDr;
+		variable["PVisfSr"] = PVisfSr;
+		variable["RequiredEnergy"] = RequiredEnergy;
+		variable["ResidMamMilk"] = ResidMamMilk;
+		variable["Rest"] = Rest;
+		variable["RestSa"] = RestSa;
+		variable["RestWa"] = RestWa;
+		variable["RQ1"] = RQ1;
+		variable["rtAa1"] = rtAa1;
+		variable["rtFa1"] = rtFa1;
+		variable["rtGl1"] = rtGl1;
+		variable["rtOx1"] = rtOx1;
+		variable["rtOx2"] = rtOx2;
+		variable["rtPO"] = rtPO;
+		variable["rtPOx"] = rtPOx;
+		variable["RuAdfinFd"] = RuAdfinFd;
+		variable["RumAa"] = RumAa;
+		variable["RumAaAc"] = RumAaAc;
+		variable["RumAaBu"] = RumAaBu;
+		variable["RumAaCd"] = RumAaCd;
+		variable["RumAaFv"] = RumAaFv;
+		variable["RumAaMi"] = RumAaMi;
+		variable["RumAaP"] = RumAaP;
+		variable["RumAaPr"] = RumAaPr;
+		variable["RumAc"] = RumAc;
+		variable["RumAc1"] = RumAc1;
+		variable["RumAcP"] = RumAcP;
+		variable["RumAcSynth"] = RumAcSynth;
+		variable["RumADF"] = RumADF;
+		variable["RumBU"] = RumBU;
+		variable["RumBu1"] = RumBu1;
+		variable["RumBuP"] = RumBuP;
+		variable["RumBuSynth"] = RumBuSynth;
+		variable["RumCein"] = RumCein;
+		variable["RumCP"] = RumCP;
+		variable["RumDCadf"] = RumDCadf;
+		variable["RumDCCe"] = RumDCCe;
+		variable["RumDCHa"] = RumDCHa;
+		variable["RumDCHaT"] = RumDCHaT;
+		variable["RumDCHb"] = RumDCHb;
+		variable["RumDCHc"] = RumDCHc;
+		variable["RumDCLiA"] = RumDCLiA;
+		variable["RumDCLiT"] = RumDCLiT;
+		variable["RumDCN"] = RumDCN;
+		variable["RumDCndf"] = RumDCndf;
+		variable["RumDCOm"] = RumDCOm;
+		variable["RumDCOmA"] = RumDCOmA;
+		variable["RumDCPrt"] = RumDCPrt;
+		variable["RumDM"] = RumDM;
+		variable["RumDPrta"] = RumDPrta;
+		variable["RumHcin"] = RumHcin;
+		variable["RumLa"] = RumLa;
+		variable["RumLa1"] = RumLa1;
+		variable["RumLaAc"] = RumLaAc;
+		variable["RumLaFv"] = RumLaFv;
+		variable["RumLaGl"] = RumLaGl;
+		variable["RumLaP"] = RumLaP;
+		variable["RumLaPr"] = RumLaPr;
+		variable["RumLg"] = RumLg;
+		variable["RumLiqVol"] = RumLiqVol;
+		variable["RumLiqVolEQ"] = RumLiqVolEQ;
+		variable["RumLPartSizeMean"] = RumLPartSizeMean;
+		variable["RumLpMpSizeMean"] = RumLpMpSizeMean;
+		variable["RumMPartSizeMean"] = RumMPartSizeMean;
+		variable["RumNDF"] = RumNDF;
+		variable["RumNit"] = RumNit;
+		variable["Rumntn"] = Rumntn;
+		variable["RUMNTNEQ"] = RUMNTNEQ;
+		variable["RumntnSa"] = RumntnSa;
+		variable["RumOM"] = RumOM;
+		variable["RumOsMol"] = RumOsMol;
+		variable["RumPartSizeInt"] = RumPartSizeInt;
+		variable["RumPartSizeMean"] = RumPartSizeMean;
+		variable["RumPartSizeSlp"] = RumPartSizeSlp;
+		variable["RumpH"] = RumpH;
+		variable["RumPr"] = RumPr;
+		variable["RumPr1"] = RumPr1;
+		variable["RumPrP"] = RumPrP;
+		variable["RumPrSynth"] = RumPrSynth;
+		variable["RumSPartSizeMean"] = RumSPartSizeMean;
+		variable["RumVol"] = RumVol;
+		variable["RUPinFd"] = RUPinFd;
+		variable["RuStinFd"] = RuStinFd;
+		variable["SaAs"] = SaAs;
+		variable["SaIn"] = SaIn;
+		variable["SaNnAm"] = SaNnAm;
+		variable["SaNRumAm"] = SaNRumAm;
+		variable["SaPsAa"] = SaPsAa;
+		variable["ScAc"] = ScAc;
+		variable["ScAcAc"] = ScAcAc;
+		variable["ScBu"] = ScBu;
+		variable["ScBuBu"] = ScBuBu;
+		variable["ScinFd"] = ScinFd;
+		variable["ScLa"] = ScLa;
+		variable["ScLaLa"] = ScLaLa;
+		variable["ScPr"] = ScPr;
+		variable["ScPrPr"] = ScPrPr;
+		variable["ScTCs"] = ScTCs;
+		variable["SolDM"] = SolDM;
+		variable["SolDMP"] = SolDMP;
+		variable["SolOmP"] = SolOmP;
 		variable["Somedummyvariable"] = Somedummyvariable;
+		variable["SPart"] = SPart;
+		variable["SPartADFP"] = SPartADFP;
+		variable["SPartCeCs"] = SPartCeCs;
+		variable["SPartDeg"] = SPartDeg;
+		variable["SPartHaCs"] = SPartHaCs;
+		variable["SPartHbCs"] = SPartHbCs;
+		variable["SPartHcCs"] = SPartHcCs;
+		variable["SPartMi"] = SPartMi;
+		variable["SPartMiHa"] = SPartMiHa;
+		variable["SPartMiHb"] = SPartMiHb;
+		variable["SPartMiP"] = SPartMiP;
+		variable["SPartMiPi"] = SPartMiPi;
+		variable["SPartNDFP"] = SPartNDFP;
+		variable["SPartP"] = SPartP;
+		variable["SPartPiAa"] = SPartPiAa;
+		variable["SPartSA"] = SPartSA;
+		variable["SPartSwal"] = SPartSwal;
+		variable["SPartVol"] = SPartVol;
+		variable["SpeciesFactor"] = SpeciesFactor;
+		variable["StAc"] = StAc;
+		variable["StAcAc"] = StAcAc;
+		variable["StandardMetabolicBw"] = StandardMetabolicBw;
+		variable["StartDIM"] = StartDIM;
+		variable["StBu"] = StBu;
+		variable["StBuBu"] = StBuBu;
+		variable["StCs"] = StCs;
+		variable["StCsFd"] = StCsFd;
+		variable["STFLAG"] = STFLAG;
+		variable["StHaFd"] = StHaFd;
+		variable["StinFd"] = StinFd;
+		variable["StLa"] = StLa;
+		variable["StLaLa"] = StLaLa;
+		variable["StPr"] = StPr;
+		variable["StPrPr"] = StPrPr;
+		variable["StSol"] = StSol;
+		variable["SumBinFd"] = SumBinFd;
+		variable["Sunlight"] = Sunlight;
+		variable["Sunrise"] = Sunrise;
+		variable["SunriseToday"] = SunriseToday;
+		variable["SunSet"] = SunSet;
+		variable["SunsetToday"] = SunsetToday;
+		variable["SunsetTodayTemp"] = SunsetTodayTemp;
+		variable["SupplementOnOffer"] = SupplementOnOffer;
+		variable["tAtCalving"] = tAtCalving;
+		variable["tAtConception"] = tAtConception;
+		variable["TBCH4"] = TBCH4;
+		variable["TBCH41"] = TBCH41;
+		variable["TCd"] = TCd;
+		variable["TCH4"] = TCH4;
+		variable["TCH4E"] = TCH4E;
+		variable["TcHyAdip"] = TcHyAdip;
+		variable["TcHyVis"] = TcHyVis;
+		variable["TDE"] = TDE;
+		variable["test"] = test;
+		variable["TFCM4z"] = TFCM4z;
+		variable["THP1"] = THP1;
+		variable["THP2"] = THP2;
+		variable["TIME"] = TIME;
+		variable["TMCH42"] = TMCH42;
+		variable["TMCH4E"] = TMCH4E;
+		variable["TMilkLm"] = TMilkLm;
+		variable["TMilkLmYest"] = TMilkLmYest;
+		variable["TMilkPm"] = TMilkPm;
+		variable["TMilkPmYest"] = TMilkPmYest;
+		variable["TMilkTm"] = TMilkTm;
+		variable["TMilkTmYest"] = TMilkTmYest;
+		variable["TNdfIn"] = TNdfIn;
+		variable["TNdfInYest"] = TNdfInYest;
+		variable["tNep"] = tNep;
+		variable["tNepYest"] = tNepYest;
+		variable["TOmP"] = TOmP;
+		variable["TotDMin"] = TotDMin;
+		variable["TotEating"] = TotEating;
+		variable["TotEatingYest"] = TotEatingYest;
+		variable["totFd"] = totFd;
+		variable["TotMeals"] = TotMeals;
+		variable["TotMealsYest"] = TotMealsYest;
+		variable["TotNurLast"] = TotNurLast;
+		variable["TotRest"] = TotRest;
+		variable["TotRestYest"] = TotRestYest;
+		variable["TotRumntn"] = TotRumntn;
+		variable["TotRumntnYest"] = TotRumntnYest;
+		variable["TotWaConsumed"] = TotWaConsumed;
+		variable["TotWaUrine"] = TotWaUrine;
+		variable["TotWaUrineLast"] = TotWaUrineLast;
+		variable["TpCdVis"] = TpCdVis;
+		variable["TpinAdip"] = TpinAdip;
+		variable["TpinVis"] = TpinVis;
+		variable["TpLaAdip"] = TpLaAdip;
+		variable["TPRTin"] = TPRTin;
+		variable["TpTmVis"] = TpTmVis;
+		variable["TpTsAdip"] = TpTsAdip;
+		variable["TransitSW"] = TransitSW;
+		variable["TsAdip"] = TsAdip;
+		variable["TsFaAdip"] = TsFaAdip;
+		variable["TsFaF1"] = TsFaF1;
+		variable["TStin"] = TStin;
+		variable["TTOmP"] = TTOmP;
+		variable["TVFA"] = TVFA;
+		variable["TVolMilk"] = TVolMilk;
+		variable["TVolMilkVol"] = TVolMilkVol;
+		variable["TVolMilkYest"] = TVolMilkYest;
+		variable["upGl"] = upGl;
+		variable["UrAmFd"] = UrAmFd;
+		variable["UrinationCount"] = UrinationCount;
+		variable["UrinationCountDiel"] = UrinationCountDiel;
+		variable["UrinationCountYest"] = UrinationCountYest;
+		variable["UrinationVol"] = UrinationVol;
+		variable["UrinationVolDiel"] = UrinationVolDiel;
+		variable["UrinationVolYest"] = UrinationVolYest;
+		variable["UrNFd"] = UrNFd;
+		variable["VisDna"] = VisDna;
+		variable["VmAcTs"] = VmAcTs;
+		variable["VmAcTs2"] = VmAcTs2;
+		variable["VmGlLm1Vis"] = VmGlLm1Vis;
+		variable["VmLHorSyn"] = VmLHorSyn;
+		variable["VolAa"] = VolAa;
+		variable["VolAc"] = VolAc;
+		variable["VolFa"] = VolFa;
+		variable["VolGl"] = VolGl;
+		variable["WaConsumed"] = WaConsumed;
+		variable["WaFeces"] = WaFeces;
+		variable["WaIn"] = WaIn;
+		variable["WaMi"] = WaMi;
+		variable["WaMilk"] = WaMilk;
+		variable["WaMiP"] = WaMiP;
+		variable["WaOut"] = WaOut;
+		variable["WaRespir"] = WaRespir;
+		variable["WaSweat"] = WaSweat;
+		variable["WaUrine"] = WaUrine;
+		variable["WaUrineYest"] = WaUrineYest;
+		variable["WtAcTm"] = WtAcTm;
+		variable["WtAdip"] = WtAdip;
+		variable["WtAdipNew"] = WtAdipNew;
+		variable["WtAdipTarget"] = WtAdipTarget;
+		variable["WtConc"] = WtConc;
+		variable["WtConcAgeFactor"] = WtConcAgeFactor;
+		variable["WtConcSyn"] = WtConcSyn;
+		variable["WtCytAdip"] = WtCytAdip;
+		variable["WtFaTm"] = WtFaTm;
+		variable["WtGrvUter"] = WtGrvUter;
+		variable["WtOth"] = WtOth;
+		variable["WtPConc"] = WtPConc;
+		variable["WtPConcSyn"] = WtPConcSyn;
+		variable["WtPGrvUter"] = WtPGrvUter;
+		variable["WtPGrvUterSyn"] = WtPGrvUterSyn;
+		variable["WtPOth"] = WtPOth;
+		variable["WtPUter"] = WtPUter;
+		variable["WtPUterDeg"] = WtPUterDeg;
+		variable["WtPUterSyn"] = WtPUterSyn;
+		variable["WtPVis"] = WtPVis;
+		variable["WtTsAdip"] = WtTsAdip;
+		variable["WtUter"] = WtUter;
+		variable["WtUterDeg"] = WtUterDeg;
+		variable["WtUterPart"] = WtUterPart;
+		variable["WtUterSyn"] = WtUterSyn;
+		variable["WtVis"] = WtVis;
+		variable["YAtp"] = YAtp;
+		variable["YAtpAp"] = YAtpAp;
+		variable["iTCH4"] = iTCH4;
+		variable["iRumLaF"] = iRumLaF;
+		variable["kConcSynDecay"] = kConcSynDecay;
+		variable["kUterSynDecay"] = kUterSynDecay;
+		variable["iAaF"] = iAaF;
+		variable["kPConcSynDecay"] = kPConcSynDecay;
+		variable["iGlF"] = iGlF;
+		variable["KYAtAa"] = KYAtAa;
+		variable["iOthDnaF"] = iOthDnaF;
+		variable["iVisDnaF"] = iVisDnaF;
+		variable["iRumAaF"] = iRumAaF;
+		variable["KDnaVis"] = KDnaVis;
+		variable["iMiHaF"] = iMiHaF;
+		variable["kVmGlLmDeg"] = kVmGlLmDeg;
+		variable["icFa"] = icFa;
+		variable["iFaF"] = iFaF;
+		variable["K1TsFa"] = K1TsFa;
+		variable["KFaTmVis"] = KFaTmVis;
+		variable["KFaTsAdip"] = KFaTsAdip;
+		variable["iCsF"] = iCsF;
+		variable["iMiHbF"] = iMiHbF;
+		variable["KDnaOth"] = KDnaOth;
+		variable["KFatPi"] = KFatPi;
+		variable["iWtPConc"] = iWtPConc;
+		variable["iFlF"] = iFlF;
+		variable["BaseMamCellsTurnOver"] = BaseMamCellsTurnOver;
+		variable["CINT"] = CINT;
+		variable["K1AcTm"] = K1AcTm;
+		variable["K1AcTs"] = K1AcTs;
+		variable["VmFaTmVis"] = VmFaTmVis;
+		variable["iAcF"] = iAcF;
+		variable["iRumBuF"] = iRumBuF;
+		variable["iPiF"] = iPiF;
+		variable["K1FaTm"] = K1FaTm;
+		variable["KGlLaOth"] = KGlLaOth;
+		variable["KFGAm"] = KFGAm;
+		variable["VmGlLmVisPart"] = VmGlLmVisPart;
+		variable["iAsF"] = iAsF;
+		variable["iLPartF"] = iLPartF;
+		variable["iAmF"] = iAmF;
+		variable["icAc"] = icAc;
+		variable["KAcTmVis"] = KAcTmVis;
+		variable["KAcTsAdip"] = KAcTsAdip;
+		variable["cSaPs"] = cSaPs;
+		variable["iIndigFdF"] = iIndigFdF;
+		variable["K1FaTs"] = K1FaTs;
+		variable["KAaLmVis"] = KAaLmVis;
+		variable["KAcCd"] = KAcCd;
+		variable["KAaPmVis"] = KAaPmVis;
+		variable["KFaCd"] = KFaCd;
+		variable["KAaPOthOth"] = KAaPOthOth;
+		variable["KAaPVisVis"] = KAaPVisVis;
+		variable["IntakeDeclineSlope"] = IntakeDeclineSlope;
+		variable["lambdaMamCells"] = lambdaMamCells;
+		variable["VmAaPmVis"] = VmAaPmVis;
+		variable["iCeF"] = iCeF;
+		variable["iHcF"] = iHcF;
+		variable["iMiF"] = iMiF;
+		variable["iHaF"] = iHaF;
+		variable["icGl"] = icGl;
+		variable["kAHor1Gl"] = kAHor1Gl;
+		variable["kCHorGl"] = kCHorGl;
+		variable["KGlLmVis"] = KGlLmVis;
+		variable["KGlTpAdip"] = KGlTpAdip;
+		variable["KGlTpVis"] = KGlTpVis;
+		variable["KiAm"] = KiAm;
+		variable["kMamCellsDeclineBase"] = kMamCellsDeclineBase;
+		variable["MamCellsDecayRateOfSenescence"] = MamCellsDecayRateOfSenescence;
+		variable["iRumPrF"] = iRumPrF;
+		variable["cAaBase"] = cAaBase;
+		variable["kAHorGl"] = kAHorGl;
+		variable["kCHor1Gl"] = kCHor1Gl;
+		variable["MAXT"] = MAXT;
+		variable["KRumAaFv"] = KRumAaFv;
+		variable["iBldUrF"] = iBldUrF;
+		variable["KBldUrAm"] = KBldUrAm;
+		variable["VmAcTmVis"] = VmAcTmVis;
+		variable["fAcSilage"] = fAcSilage;
+		variable["iRumAcF"] = iRumAcF;
+		variable["fSaAs"] = fSaAs;
+		variable["K1MamCells"] = K1MamCells;
+		variable["KCsFv"] = KCsFv;
+		variable["VmGlTpVis"] = VmGlTpVis;
+		variable["cGlBase"] = cGlBase;
+		variable["iMamPmF"] = iMamPmF;
+		variable["iMamTmF"] = iMamTmF;
+		variable["KAaGlVis"] = KAaGlVis;
+		variable["kMilkAsh"] = kMilkAsh;
+		variable["fAiFdBase"] = fAiFdBase;
+		variable["iAtAdh"] = iAtAdh;
+		variable["KGlCd"] = KGlCd;
+		variable["kMilkingFrequencyLagUp"] = kMilkingFrequencyLagUp;
+		variable["kUterSyn"] = kUterSyn;
+		variable["kWaSweat"] = kWaSweat;
+		variable["MwtAm"] = MwtAm;
+		variable["MwtCH4"] = MwtCH4;
+		variable["MwtN"] = MwtN;
+		variable["RumYAtp"] = RumYAtp;
+		variable["KHyEruct"] = KHyEruct;
+		variable["kConcSyn"] = kConcSyn;
+		variable["kMamCellsUsMfDecay"] = kMamCellsUsMfDecay;
+		variable["fEndogLiFd"] = fEndogLiFd;
+		variable["iVolAaF"] = iVolAaF;
+		variable["iVolGlF"] = iVolGlF;
+		variable["KFatFG"] = KFatFG;
+		variable["KFatHb"] = KFatHb;
+		variable["uTMamCells"] = uTMamCells;
+		variable["EnergyForPregnancyFactor"] = EnergyForPregnancyFactor;
+		variable["ifPm"] = ifPm;
+		variable["ifTm"] = ifTm;
+		variable["kComminuteOralMin"] = kComminuteOralMin;
+		variable["KPOthAaOth"] = KPOthAaOth;
+		variable["kWaRespir"] = kWaRespir;
+		variable["MinLPRumntnF"] = MinLPRumntnF;
+		variable["VmGlTpAdip"] = VmGlTpAdip;
+		variable["AcTgTg"] = AcTgTg;
+		variable["CappingForIntake"] = CappingForIntake;
+		variable["fLm"] = fLm;
+		variable["kMamCellsTransitionSteepness"] = kMamCellsTransitionSteepness;
+		variable["KMiHbF"] = KMiHbF;
+		variable["kVmGlLmSyn"] = kVmGlLmSyn;
+		variable["TAveMilkMam"] = TAveMilkMam;
+		variable["VmGlLaOth"] = VmGlLaOth;
+		variable["KMPartP"] = KMPartP;
+		variable["TAveabsE"] = TAveabsE;
+		variable["kPConcSyn"] = kPConcSyn;
+		variable["MEAN2"] = MEAN2;
+		variable["VmBldUrAm"] = VmBldUrAm;
+		variable["fLaSilage"] = fLaSilage;
+		variable["MwtAc"] = MwtAc;
+		variable["MwtUr"] = MwtUr;
+		variable["VmTsFaAdip"] = VmTsFaAdip;
+		variable["MwtPr"] = MwtPr;
+		variable["MwtAs"] = MwtAs;
+		variable["MwtBu"] = MwtBu;
+		variable["OthDnaMx"] = OthDnaMx;
+		variable["VisDnaMx"] = VisDnaMx;
+		variable["FaScFd"] = FaScFd;
+		variable["HrtWrk"] = HrtWrk;
+		variable["KMiHaF"] = KMiHaF;
+		variable["KPVisAaVis"] = KPVisAaVis;
+		variable["MiNnNn"] = MiNnNn;
+		variable["MwtGy"] = MwtGy;
+		variable["MwtLa"] = MwtLa;
+		variable["iMamLmF"] = iMamLmF;
+		variable["KabsLa"] = KabsLa;
+		variable["PartThick"] = PartThick;
+		variable["PResidMamMilk"] = PResidMamMilk;
+		variable["fPUter"] = fPUter;
+		variable["AMP1FT"] = AMP1FT;
+		variable["AMP2FT"] = AMP2FT;
+		variable["EnergyForMilkFactor"] = EnergyForMilkFactor;
+		variable["fOaPe"] = fOaPe;
+		variable["KDayLength"] = KDayLength;
+		variable["KHyOther"] = KHyOther;
+		variable["kMamAQBase"] = kMamAQBase;
+		variable["KNaAdip"] = KNaAdip;
+		variable["KNaOth"] = KNaOth;
+		variable["kVmGlLmDecay"] = kVmGlLmDecay;
+		variable["LgutDCAi"] = LgutDCAi;
+		variable["LgutDCHb"] = LgutDCHb;
+		variable["LiChFd"] = LiChFd;
+		variable["LiScSC"] = LiScSC;
+		variable["MaxLossDueToLowMf"] = MaxLossDueToLowMf;
+		variable["MiLiLI"] = MiLiLI;
+		variable["MwtAa"] = MwtAa;
+		variable["MwtCe"] = MwtCe;
+		variable["MwtCh"] = MwtCh;
+		variable["MwtCs"] = MwtCs;
+		variable["MwtHc"] = MwtHc;
+		variable["MwtOa"] = MwtOa;
+		variable["MwtPe"] = MwtPe;
+		variable["MwtPi"] = MwtPi;
+		variable["MwtPOth"] = MwtPOth;
+		variable["MwtPs"] = MwtPs;
+		variable["MwtPVis"] = MwtPVis;
+		variable["MwtRumAa"] = MwtRumAa;
+		variable["MwtSc"] = MwtSc;
+		variable["MwtSt"] = MwtSt;
+		variable["MwtVa"] = MwtVa;
+		variable["ObsEUr"] = ObsEUr;
+		variable["TAveMilk"] = TAveMilk;
+		variable["xOadIntakeTadIntake"] = xOadIntakeTadIntake;
+		variable["BcsTargetDecay"] = BcsTargetDecay;
+		variable["fBuAc"] = fBuAc;
+		variable["KTsFaAdip"] = KTsFaAdip;
+		variable["kUterDeg"] = kUterDeg;
+		variable["MamCellsProliferationDecayRate"] = MamCellsProliferationDecayRate;
+		variable["iWtUter"] = iWtUter;
+		variable["AaFvBu"] = AaFvBu;
+		variable["fDWt"] = fDWt;
+		variable["fLaCdAdip"] = fLaCdAdip;
+		variable["fLaCdOth"] = fLaCdOth;
+		variable["GlGlHy"] = GlGlHy;
+		variable["kMamCellsQAPostPeak"] = kMamCellsQAPostPeak;
+		variable["KNaVis"] = KNaVis;
+		variable["MiHaHA"] = MiHaHA;
+		variable["MwtFa"] = MwtFa;
+		variable["MwtFl"] = MwtFl;
+		variable["ObsCH4"] = ObsCH4;
+		variable["VmAaGlVis"] = VmAaGlVis;
+		variable["xLHorSensAdip"] = xLHorSensAdip;
+		variable["fHeifers"] = fHeifers;
+		variable["PartWidth"] = PartWidth;
+		variable["FaTgTg"] = FaTgTg;
+		variable["ifMPartRum"] = ifMPartRum;
+		variable["K2VAct"] = K2VAct;
+		variable["KidWrk"] = KidWrk;
+		variable["KSPartP"] = KSPartP;
+		variable["MwtLm"] = MwtLm;
+		variable["MwtNn"] = MwtNn;
+		variable["ResWrk"] = ResWrk;
+		variable["RumntnF"] = RumntnF;
+		variable["VmAcTsAdip"] = VmAcTsAdip;
+		variable["VmFaTsAdip"] = VmFaTsAdip;
+		variable["wLHorSensAdip"] = wLHorSensAdip;
+		variable["AaGlGl"] = AaGlGl;
+		variable["iWtConc"] = iWtConc;
+		variable["kMamCellsQAPrePeak"] = kMamCellsQAPrePeak;
+		variable["KMiHb"] = KMiHb;
+		variable["AmUrUr"] = AmUrUr;
+		variable["GlLmLm"] = GlLmLm;
+		variable["GyGlGl"] = GyGlGl;
+		variable["KLaFv"] = KLaFv;
+		variable["LaGlGl"] = LaGlGl;
+		variable["MiLiBu"] = MiLiBu;
+		variable["MiLiGl"] = MiLiGl;
+		variable["MilkInt"] = MilkInt;
+		variable["PrGlGl"] = PrGlGl;
+		variable["xLHorSensGl"] = xLHorSensGl;
+		variable["AaGlH"] = AaGlH;
+		variable["CdMiG1"] = CdMiG1;
+		variable["ifSPartRum"] = ifSPartRum;
+		variable["kEnergyCompensation"] = kEnergyCompensation;
+		variable["MiPiPI"] = MiPiPI;
+		variable["AaGlAc"] = AaGlAc;
+		variable["fGrvUterTO"] = fGrvUterTO;
+		variable["pGlHyAdip"] = pGlHyAdip;
+		variable["pGlHyVis"] = pGlHyVis;
+		variable["AaFvAc"] = AaFvAc;
+		variable["AaFvPr"] = AaFvPr;
+		variable["AaGlUr"] = AaGlUr;
+		variable["fGestEPrt"] = fGestEPrt;
+		variable["iVolAcF"] = iVolAcF;
+		variable["LgutDCFa"] = LgutDCFa;
+		variable["LgutDCPi"] = LgutDCPi;
+		variable["MwtLiFd"] = MwtLiFd;
+		variable["OaScSC"] = OaScSC;
+		variable["DCMiLi"] = DCMiLi;
+		variable["EnergyForMilkingCowMaintenancePower"] = EnergyForMilkingCowMaintenancePower;
+		variable["fPrGl"] = fPrGl;
+		variable["DCMiPi"] = DCMiPi;
+		variable["EnergyForDryCowMaintenancePower"] = EnergyForDryCowMaintenancePower;
+		variable["KWaFeces"] = KWaFeces;
+		variable["OnceADay2YearsOldAdjustment"] = OnceADay2YearsOldAdjustment;
+		variable["refIngrKAdfDeg"] = refIngrKAdfDeg;
+		variable["ikMilkInh"] = ikMilkInh;
+		variable["MiLiCh"] = MiLiCh;
+		variable["xLHorSensAa"] = xLHorSensAa;
+		variable["LaAcAc"] = LaAcAc;
+		variable["LgutDCAs"] = LgutDCAs;
+		variable["LgutDCHa"] = LgutDCHa;
+		variable["MwtFaFd"] = MwtFaFd;
+		variable["MwtTm"] = MwtTm;
+		variable["MwtTs"] = MwtTs;
+		variable["OnceADayMilkingAdjustment"] = OnceADayMilkingAdjustment;
+		variable["VmMiHa"] = VmMiHa;
+		variable["VmMiHb"] = VmMiHb;
+		variable["pLPartMPartComm"] = pLPartMPartComm;
+		variable["AaFvAt"] = AaFvAt;
+		variable["ExpV2"] = ExpV2;
+		variable["FHcCs1"] = FHcCs1;
+		variable["kComminuteOralMax"] = kComminuteOralMax;
+		variable["LaScSc"] = LaScSc;
+		variable["OsWaSlp"] = OsWaSlp;
+		variable["PeScSC"] = PeScSC;
+		variable["absAaAd"] = absAaAd;
+		variable["absGlAd"] = absGlAd;
+		variable["AcCor"] = AcCor;
+		variable["ASCor"] = ASCor;
+		variable["BldUrCor"] = BldUrCor;
+		variable["BST"] = BST;
+		variable["CeCor"] = CeCor;
+		variable["CurrentEvent"] = CurrentEvent;
+		variable["CurrHerbage"] = CurrHerbage;
+		variable["CurrStrat"] = CurrStrat;
+		variable["EatingSW"] = EatingSW;
+		variable["EatSW5"] = EatSW5;
+		variable["EPart"] = EPart;
+		variable["F1"] = F1;
+		variable["FaCor"] = FaCor;
+		variable["FLCor"] = FLCor;
+		variable["GlHyAD"] = GlHyAD;
+		variable["GlHyTp"] = GlHyTp;
+		variable["GlLmAd"] = GlLmAd;
+		variable["HaCor"] = HaCor;
+		variable["HbCor"] = HbCor;
+		variable["HcCor"] = HcCor;
+		variable["HMM"] = HMM;
+		variable["iAnimal"] = iAnimal;
+		variable["iHerd"] = iHerd;
+		variable["iLHorF"] = iLHorF;
+		variable["iMamMilkAveF"] = iMamMilkAveF;
+		variable["IndigFdCor"] = IndigFdCor;
+		variable["INS"] = INS;
+		variable["iVolBldUrF"] = iVolBldUrF;
+		variable["iVolFaF"] = iVolFaF;
+		variable["KMilkInhDeg"] = KMilkInhDeg;
+		variable["KumarMigEq"] = KumarMigEq;
+		variable["LaFvAt"] = LaFvAt;
+		variable["LPartCor"] = LPartCor;
+		variable["MamMilkCor"] = MamMilkCor;
+		variable["MICor"] = MICor;
+		variable["MiHaCor"] = MiHaCor;
+		variable["MIHbCor"] = MIHbCor;
+		variable["MiLiPr"] = MiLiPr;
+		variable["MilkProductionAgeAdjustment"] = MilkProductionAgeAdjustment;
+		variable["MIXSET"] = MIXSET;
+		variable["NSTP"] = NSTP;
+		variable["OxPrGl"] = OxPrGl;
+		variable["PICor"] = PICor;
+		variable["RQEQ"] = RQEQ;
+		variable["RumAcCor"] = RumAcCor;
+		variable["RumBuCor"] = RumBuCor;
+		variable["RumLaCor"] = RumLaCor;
+		variable["RumpHCON"] = RumpHCON;
+		variable["RumPrCor"] = RumPrCor;
+		variable["slpKRuAdf"] = slpKRuAdf;
+		variable["slpKRUP"] = slpKRUP;
+		variable["slpKRUST"] = slpKRUST;
+		variable["T3"] = T3;
+		variable["TgGyGy"] = TgGyGy;
+		variable["Theta3"] = Theta3;
+		variable["TpTpTm"] = TpTpTm;
+		variable["TpTpTs"] = TpTpTs;
+		variable["WtConcBreedFactor"] = WtConcBreedFactor;
+		variable["HcCeCe"] = HcCeCe;
+		variable["MilkDen"] = MilkDen;
+		variable["EnergyForDryCowMaintenanceFactor"] = EnergyForDryCowMaintenanceFactor;
+		variable["MilkIntPowerForFMamCelsQA1"] = MilkIntPowerForFMamCelsQA1;
+		variable["AaFvHy"] = AaFvHy;
+		variable["AmMiG2"] = AmMiG2;
+		variable["ExpOth2"] = ExpOth2;
+		variable["KbasAdip"] = KbasAdip;
+		variable["MiLiFA"] = MiLiFA;
+		variable["MPartSize"] = MPartSize;
+		variable["AaFvCd"] = AaFvCd;
+		variable["kSpecies"] = kSpecies;
+		variable["wLHorSensGl"] = wLHorSensGl;
+		variable["AaFvAm"] = AaFvAm;
+		variable["refIngrKHaCs"] = refIngrKHaCs;
+		variable["kMastication"] = kMastication;
+		variable["KMiHa"] = KMiHa;
+		variable["kMilkingFrequencyLagDown"] = kMilkingFrequencyLagDown;
+		variable["wLHorSensAa"] = wLHorSensAa;
+		variable["EnergyForMilkingCowMaintenanceFactor"] = EnergyForMilkingCowMaintenanceFactor;
+		variable["HyAcFa"] = HyAcFa;
+		variable["iKPiAa"] = iKPiAa;
+		variable["OsMolF"] = OsMolF;
+		variable["LiFlFd"] = LiFlFd;
+		variable["AcCdCd"] = AcCdCd;
+		variable["EXP10"] = EXP10;
+		variable["GlGyGY"] = GlGyGY;
+		variable["GlLaAt"] = GlLaAt;
+		variable["GlLaLa"] = GlLaLa;
+		variable["GlTpAD"] = GlTpAD;
+		variable["GlTpTp"] = GlTpTp;
+		variable["GyGlAt"] = GyGlAt;
+		variable["iParity"] = iParity;
+		variable["kLHorSensAa"] = kLHorSensAa;
+		variable["kLHorSensGl"] = kLHorSensGl;
+		variable["kMamCellsQAKickStartDecay"] = kMamCellsQAKickStartDecay;
+		variable["kMamCellsQAStart"] = kMamCellsQAStart;
+		variable["MaxBladderVol"] = MaxBladderVol;
+		variable["OxAcCd"] = OxAcCd;
+		variable["P1"] = P1;
+		variable["PrGlAd"] = PrGlAd;
+		variable["TpLaAt"] = TpLaAt;
+		variable["UrAmAm"] = UrAmAm;
+		variable["BcsTargetNadir"] = BcsTargetNadir;
+		variable["CsMiG2"] = CsMiG2;
+		variable["KbasOth"] = KbasOth;
+		variable["MamCellsPerKgMs270"] = MamCellsPerKgMs270;
+		variable["ObsME"] = ObsME;
+		variable["iME"] = iME;
+		variable["HyMiG1"] = HyMiG1;
+		variable["AcFaAd"] = AcFaAd;
+		variable["FKRuP"] = FKRuP;
+		variable["BCSBase"] = BCSBase;
+		variable["EnergyForMilkPower"] = EnergyForMilkPower;
+		variable["FaFlFd"] = FaFlFd;
+		variable["GlHyCd"] = GlHyCd;
+		variable["HyAtAt"] = HyAtAt;
+		variable["LaCdCd"] = LaCdCd;
+		variable["LaGlAd"] = LaGlAd;
+		variable["ObsDE"] = ObsDE;
+		variable["OxLaCd"] = OxLaCd;
+		variable["OxTpCd"] = OxTpCd;
+		variable["PcPeFd"] = PcPeFd;
+		variable["PrCdCd"] = PrCdCd;
+		variable["TgFaFa"] = TgFaFa;
+		variable["TpCdCd"] = TpCdCd;
+		variable["FKRuSt"] = FKRuSt;
+		variable["MyPi"] = MyPi;
+		variable["KWAP"] = KWAP;
+		variable["OxPrCd"] = OxPrCd;
+		variable["NnAmAM"] = NnAmAM;
+		variable["refIngrKPiAa"] = refIngrKPiAa;
+		variable["AtAmUr"] = AtAmUr;
+		variable["BuCdCd"] = BuCdCd;
+		variable["CsFvAt"] = CsFvAt;
+		variable["IALG"] = IALG;
+		variable["McalToMJ"] = McalToMJ;
+		variable["Theta4"] = Theta4;
+		variable["KMPartSPart"] = KMPartSPart;
+		variable["kRetMilkI"] = kRetMilkI;
+		variable["LPartSize"] = LPartSize;
+		variable["AaMiG2"] = AaMiG2;
+		variable["AaPxAD"] = AaPxAD;
+		variable["iAgeInYears"] = iAgeInYears;
+		variable["MastJawMoveBolus"] = MastJawMoveBolus;
+		variable["OxBuCd"] = OxBuCd;
+		variable["Theta1"] = Theta1;
+		variable["numVersion"] = numVersion;
+		variable["TcHyAd"] = TcHyAd;
+		variable["FKRuAdf"] = FKRuAdf;
+		variable["Theta2"] = Theta2;
+		variable["GlCdCd"] = GlCdCd;
+		variable["kAaGlGest"] = kAaGlGest;
+		variable["OxGlCd"] = OxGlCd;
+		variable["CsMiG1"] = CsMiG1;
+		variable["iKHcCs"] = iKHcCs;
+		variable["KabsAc"] = KabsAc;
+		variable["RumpHBase"] = RumpHBase;
+		variable["K1VAct"] = K1VAct;
+		variable["AmMiG1"] = AmMiG1;
+		variable["CeMeanRRT"] = CeMeanRRT;
+		variable["HaMeanRRT"] = HaMeanRRT;
+		variable["PiMeanRRT"] = PiMeanRRT;
+		variable["IntakeVersion"] = IntakeVersion;
+		variable["KbasVis"] = KbasVis;
+		variable["iKCeCs"] = iKCeCs;
+		variable["version"] = version;
+		variable["TpTgAD"] = TpTgAD;
+		variable["AaCor"] = AaCor;
+		variable["AcCdAt"] = AcCdAt;
+		variable["AcquisitionJawMovesCurrent"] = AcquisitionJawMovesCurrent;
+		variable["AmCor"] = AmCor;
+		variable["CsCor"] = CsCor;
+		variable["GlCor"] = GlCor;
+		variable["iMilkAve"] = iMilkAve;
+		variable["RumAaCor"] = RumAaCor;
+		variable["THETA5"] = THETA5;
+		variable["KabsBu"] = KabsBu;
+		variable["NumberOfFeeds"] = NumberOfFeeds;
+		variable["iKHaCs"] = iKHaCs;
+		variable["KabsPr"] = KabsPr;
+		variable["PMamEnzCell"] = PMamEnzCell;
+		variable["vfaeff"] = vfaeff;
+		variable["FaCdCd"] = FaCdCd;
+		variable["kMamCellsTransitionDim"] = kMamCellsTransitionDim;
+		variable["LaCdAt"] = LaCdAt;
+		variable["PrCdAt"] = PrCdAt;
+		variable["FdRatWFM"] = FdRatWFM;
+		variable["iDMilk"] = iDMilk;
+		variable["LHorBase"] = LHorBase;
+		variable["LhorTurnoverDays"] = LhorTurnoverDays;
+		variable["SmoothingPeriodDays"] = SmoothingPeriodDays;
+		variable["TpCdAt"] = TpCdAt;
+		variable["KLPartRed"] = KLPartRed;
+		variable["OxFaCd"] = OxFaCd;
+		variable["KAmabs"] = KAmabs;
+		variable["AcAcTs"] = AcAcTs;
+		variable["BuCdAt"] = BuCdAt;
+		variable["kSurfaceArea"] = kSurfaceArea;
+		variable["CountDownDays"] = CountDownDays;
+		variable["GlCdAt"] = GlCdAt;
+		variable["Latitude"] = Latitude;
+		variable["MwtCd"] = MwtCd;
+		variable["iFCM4Z"] = iFCM4Z;
+		variable["KAsabs"] = KAsabs;
+		variable["iMEi"] = iMEi;
+		variable["iDEi"] = iDEi;
+		variable["PeakIntakeDay"] = PeakIntakeDay;
+		variable["VsizF"] = VsizF;
+		variable["DaysDry"] = DaysDry;
+		variable["DaysOpen"] = DaysOpen;
+		variable["kInitRumVol"] = kInitRumVol;
+		variable["KMilk"] = KMilk;
+		variable["FaCdAt"] = FaCdAt;
+		variable["iOxup"] = iOxup;
+		variable["BolusWeightTotalCurrent"] = BolusWeightTotalCurrent;
+		variable["MamCellsPerKgMsAdjustment"] = MamCellsPerKgMsAdjustment;
+		variable["MaxBolusWeight"] = MaxBolusWeight;
+		variable["VmAaPVisVis"] = VmAaPVisVis;
+		variable["VmAaPOthOth"] = VmAaPOthOth;
+		variable["StartDayGest"] = StartDayGest;
+		variable["iDayOfYear"] = iDayOfYear;
+		variable["GestLength"] = GestLength;
+		variable["WaPool"] = WaPool;
+		variable["WaPoolTarget"] = WaPoolTarget;
+		variable["TSTP"] = TSTP;
+		variable["VmRumAaFv"] = VmRumAaFv;
+		variable["KgMilkSolidsExpectedIn270Days"] = KgMilkSolidsExpectedIn270Days;
+		variable["StandardBw"] = StandardBw;
+		variable["MatBW"] = MatBW;
+		variable["MamCellsPart"] = MamCellsPart;
+		variable["VmCsFv"] = VmCsFv;
+		variable["KBldUrU"] = KBldUrU;
+		variable["SecondsPerDay"] = SecondsPerDay;
 	
 	} // end pull_variables_from_model
 	
@@ -5532,1720 +5532,75 @@ public:
 		t = variable["t"];
 		
 		// push model variables
-		version = variable["version"];
-		numVersion = variable["numVersion"];
-		MyPi = variable["MyPi"];
-		MwtOa = variable["MwtOa"];
-		MwtPe = variable["MwtPe"];
-		MwtSc = variable["MwtSc"];
-		MwtSt = variable["MwtSt"];
-		MwtFl = variable["MwtFl"];
-		MwtGy = variable["MwtGy"];
-		MwtHc = variable["MwtHc"];
-		MwtLiFd = variable["MwtLiFd"];
-		MwtCe = variable["MwtCe"];
-		MwtNn = variable["MwtNn"];
-		MwtPi = variable["MwtPi"];
-		MwtPs = variable["MwtPs"];
-		MwtAc = variable["MwtAc"];
-		MwtBu = variable["MwtBu"];
-		MwtPr = variable["MwtPr"];
-		MwtVa = variable["MwtVa"];
-		MwtCh = variable["MwtCh"];
-		MwtCs = variable["MwtCs"];
-		MwtRumAa = variable["MwtRumAa"];
-		MwtUr = variable["MwtUr"];
-		MwtAm = variable["MwtAm"];
-		MwtAs = variable["MwtAs"];
-		MwtFa = variable["MwtFa"];
-		MwtLa = variable["MwtLa"];
-		MwtCH4 = variable["MwtCH4"];
-		MwtFaFd = variable["MwtFaFd"];
-		MwtN = variable["MwtN"];
-		MwtPOth = variable["MwtPOth"];
-		MwtAa = variable["MwtAa"];
-		MwtLm = variable["MwtLm"];
-		MwtTm = variable["MwtTm"];
-		MwtTs = variable["MwtTs"];
-		MwtPVis = variable["MwtPVis"];
-		F1 = variable["F1"];
-		test = variable["test"];
-		HcombCH4 = variable["HcombCH4"];
-		HcombAc = variable["HcombAc"];
-		HcombPr = variable["HcombPr"];
-		HcombBu = variable["HcombBu"];
-		HcombGl = variable["HcombGl"];
-		HcombGy = variable["HcombGy"];
-		HcombFl = variable["HcombFl"];
-		HcombFa = variable["HcombFa"];
-		HcombCs = variable["HcombCs"];
-		HcombHc = variable["HcombHc"];
-		HcombPs = variable["HcombPs"];
-		HcombNn = variable["HcombNn"];
-		HcombCh = variable["HcombCh"];
-		HcombUr = variable["HcombUr"];
-		HcombOa = variable["HcombOa"];
-		HcombLiFd = variable["HcombLiFd"];
-		HcombLa = variable["HcombLa"];
-		HcombTg = variable["HcombTg"];
-		HcombLm = variable["HcombLm"];
-		HcombAa = variable["HcombAa"];
-		HcombTp = variable["HcombTp"];
-		HcombMi = variable["HcombMi"];
-		HcombLg = variable["HcombLg"];
-		HcombMiLi = variable["HcombMiLi"];
-		MatBW = variable["MatBW"];
-		AmCor = variable["AmCor"];
-		CsCor = variable["CsCor"];
-		HaCor = variable["HaCor"];
-		RumAaCor = variable["RumAaCor"];
-		HbCor = variable["HbCor"];
-		RumAcCor = variable["RumAcCor"];
-		RumBuCor = variable["RumBuCor"];
-		RumLaCor = variable["RumLaCor"];
-		RumPrCor = variable["RumPrCor"];
-		LPartCor = variable["LPartCor"];
-		ASCor = variable["ASCor"];
-		IndigFdCor = variable["IndigFdCor"];
-		MICor = variable["MICor"];
-		PICor = variable["PICor"];
-		FLCor = variable["FLCor"];
-		MiHaCor = variable["MiHaCor"];
-		MIHbCor = variable["MIHbCor"];
-		AaCor = variable["AaCor"];
-		AcCor = variable["AcCor"];
-		BldUrCor = variable["BldUrCor"];
-		FaCor = variable["FaCor"];
-		CeCor = variable["CeCor"];
-		HcCor = variable["HcCor"];
-		GlCor = variable["GlCor"];
-		CurrentEvent = variable["CurrentEvent"];
-		PreviousEvent = variable["PreviousEvent"];
-		i = variable["i"];
-		j = variable["j"];
-		jj = variable["jj"];
-		GlobalDMIEqn = variable["GlobalDMIEqn"];
 		Expt = variable["Expt"];
-		ilogNewEvent = variable["ilogNewEvent"];
+		GlobalDMIEqn = variable["GlobalDMIEqn"];
+		jj = variable["jj"];
 		logCriteria1 = variable["logCriteria1"];
-		logNewEvent = variable["logNewEvent"];
-		McalToMJ = variable["McalToMJ"];
-		dMilkVol = variable["dMilkVol"];
-		dMilkProd = variable["dMilkProd"];
-		MilkProdDiel = variable["MilkProdDiel"];
-		dLmProd = variable["dLmProd"];
-		dPmProd = variable["dPmProd"];
-		dTmProd = variable["dTmProd"];
-		TVolMilk = variable["TVolMilk"];
-		TVolMilkYest = variable["TVolMilkYest"];
-		dNep = variable["dNep"];
-		tNep = variable["tNep"];
-		tNepYest = variable["tNepYest"];
-		MastJawMoveBolus = variable["MastJawMoveBolus"];
-		Rest = variable["Rest"];
-		STFLAG = variable["STFLAG"];
-		IntakeYest = variable["IntakeYest"];
-		TransitSW = variable["TransitSW"];
-		FdDMIn = variable["FdDMIn"];
-		DrnkWa = variable["DrnkWa"];
-		DrnkWaTot = variable["DrnkWaTot"];
-		DrnkWaDiel = variable["DrnkWaDiel"];
-		DrnkWaYest = variable["DrnkWaYest"];
-		DrinkSW = variable["DrinkSW"];
-		WaUrineYest = variable["WaUrineYest"];
-		UrinationCount = variable["UrinationCount"];
-		UrinationCountYest = variable["UrinationCountYest"];
-		UrinationCountDiel = variable["UrinationCountDiel"];
-		UrinationVol = variable["UrinationVol"];
-		UrinationVolYest = variable["UrinationVolYest"];
-		UrinationVolDiel = variable["UrinationVolDiel"];
-		iKHaCs = variable["iKHaCs"];
-		refIngrKHaCs = variable["refIngrKHaCs"];
-		iKCeCs = variable["iKCeCs"];
-		iKHcCs = variable["iKHcCs"];
-		refIngrKAdfDeg = variable["refIngrKAdfDeg"];
-		iKPiAa = variable["iKPiAa"];
-		refIngrKPiAa = variable["refIngrKPiAa"];
-		iAnimal = variable["iAnimal"];
-		Animal = variable["Animal"];
-		iDayOfYear = variable["iDayOfYear"];
-		DayofYear = variable["DayofYear"];
-		iParity = variable["iParity"];
-		Parity = variable["Parity"];
-		DaysDry = variable["DaysDry"];
-		DaysOpen = variable["DaysOpen"];
-		GestLength = variable["GestLength"];
-		StartDayGest = variable["StartDayGest"];
-		StartDIM = variable["StartDIM"];
-		AbortPregNow = variable["AbortPregNow"];
-		ConceiveNow = variable["ConceiveNow"];
-		DryOffNow = variable["DryOffNow"];
-		iAgeInYears = variable["iAgeInYears"];
-		WtConcBreedFactor = variable["WtConcBreedFactor"];
-		BCSBase = variable["BCSBase"];
-		AgeInYears = variable["AgeInYears"];
-		WtConcAgeFactor = variable["WtConcAgeFactor"];
-		iStartDayGest = variable["iStartDayGest"];
-		iDayGestDMI = variable["iDayGestDMI"];
-		iStartDIM = variable["iStartDIM"];
-		ConceiveNowVariable = variable["ConceiveNowVariable"];
-		DryOffNowVariable = variable["DryOffNowVariable"];
-		AbortPregNowVariable = variable["AbortPregNowVariable"];
-		tAtConception = variable["tAtConception"];
-		DayGestBasic = variable["DayGestBasic"];
-		DayGest = variable["DayGest"];
-		tAtCalving = variable["tAtCalving"];
-		DayMilk = variable["DayMilk"];
-		fHeifers = variable["fHeifers"];
-		FirstEvent = variable["FirstEvent"];
-		LastEvent = variable["LastEvent"];
-		iBW = variable["iBW"];
-		iBCS = variable["iBCS"];
-		iHerd = variable["iHerd"];
-		Herd = variable["Herd"];
-		fPUter = variable["fPUter"];
-		iWtUter = variable["iWtUter"];
-		kUterSyn = variable["kUterSyn"];
-		kUterDeg = variable["kUterDeg"];
-		kUterSynDecay = variable["kUterSynDecay"];
-		iWtConc = variable["iWtConc"];
-		kConcSyn = variable["kConcSyn"];
-		kConcSynDecay = variable["kConcSynDecay"];
-		iWtPConc = variable["iWtPConc"];
-		kPConcSyn = variable["kPConcSyn"];
-		kPConcSynDecay = variable["kPConcSynDecay"];
-		Preg = variable["Preg"];
-		NonPreg = variable["NonPreg"];
-		WtUterPart = variable["WtUterPart"];
-		WtUter = variable["WtUter"];
-		WtPUter = variable["WtPUter"];
-		PUter = variable["PUter"];
-		WtConc = variable["WtConc"];
-		WtGrvUter = variable["WtGrvUter"];
-		fEndogLiFd = variable["fEndogLiFd"];
-		fAiFdBase = variable["fAiFdBase"];
-		afAiFd = variable["afAiFd"];
-		SecondsPerDay = variable["SecondsPerDay"];
-		CurrentFeed = variable["CurrentFeed"];
-		CurrentSupplement = variable["CurrentSupplement"];
-		Silage = variable["Silage"];
-		NumberOfFeeds = variable["NumberOfFeeds"];
-		fAiFd = variable["fAiFd"];
-		fCPFd = variable["fCPFd"];
-		FCPsFd = variable["FCPsFd"];
-		FUrFd = variable["FUrFd"];
-		FNPNFd = variable["FNPNFd"];
-		FRUPFd = variable["FRUPFd"];
-		FPsFd = variable["FPsFd"];
-		fPiFd = variable["fPiFd"];
-		fNnFd = variable["fNnFd"];
-		FCFatFd = variable["FCFatFd"];
-		fLiFd = variable["fLiFd"];
-		fFatFd = variable["fFatFd"];
-		fAshFd = variable["fAshFd"];
-		fAsFd = variable["fAsFd"];
-		fNDFFd = variable["fNDFFd"];
-		fADFFd = variable["fADFFd"];
-		fRuAdfFd = variable["fRuAdfFd"];
-		fLgFd = variable["fLgFd"];
-		fHcFd = variable["fHcFd"];
-		fCeFd = variable["fCeFd"];
-		fOmFd = variable["fOmFd"];
-		fStFd = variable["fStFd"];
-		FStsFd = variable["FStsFd"];
-		fRUStFd = variable["fRUStFd"];
-		PartFd = variable["PartFd"];
-		fScFd = variable["fScFd"];
-		StSol = variable["StSol"];
-		SpeciesFactor = variable["SpeciesFactor"];
-		LPartSize = variable["LPartSize"];
-		MPartSize = variable["MPartSize"];
-		CappingForIntake = variable["CappingForIntake"];
-		IntakeVersion = variable["IntakeVersion"];
-		GrowthPerDay = variable["GrowthPerDay"];
-		OnceADayMilkingAdjustment = variable["OnceADayMilkingAdjustment"];
-		OnceADay2YearsOldAdjustment = variable["OnceADay2YearsOldAdjustment"];
-		IntakeDeclineSlope = variable["IntakeDeclineSlope"];
-		EnergyForDryCowMaintenancePower = variable["EnergyForDryCowMaintenancePower"];
-		EnergyForDryCowMaintenanceFactor = variable["EnergyForDryCowMaintenanceFactor"];
-		EnergyForMilkingCowMaintenancePower = variable["EnergyForMilkingCowMaintenancePower"];
-		EnergyForMilkingCowMaintenanceFactor = variable["EnergyForMilkingCowMaintenanceFactor"];
-		EnergyForMilkFactor = variable["EnergyForMilkFactor"];
-		EnergyForMilkPower = variable["EnergyForMilkPower"];
-		EnergyForPregnancyFactor = variable["EnergyForPregnancyFactor"];
-		PeakIntakeDay = variable["PeakIntakeDay"];
-		kEnergyCompensation = variable["kEnergyCompensation"];
-		xOadIntakeTadIntake = variable["xOadIntakeTadIntake"];
-		SmoothingPeriodDays = variable["SmoothingPeriodDays"];
-		FeedInFlag = variable["FeedInFlag"];
-		FdRatWFM = variable["FdRatWFM"];
-		MaxEnergyForMilk = variable["MaxEnergyForMilk"];
-		iFdRat = variable["iFdRat"];
-		NonUterEBW = variable["NonUterEBW"];
-		NonUterEbwTarget = variable["NonUterEbwTarget"];
-		EnergyForActivity = variable["EnergyForActivity"];
-		EnergyForPregnancy = variable["EnergyForPregnancy"];
-		EnergyForGrowth = variable["EnergyForGrowth"];
-		EnergyCompensation = variable["EnergyCompensation"];
-		EnergyForMaintenance = variable["EnergyForMaintenance"];
-		EnergyForMilk = variable["EnergyForMilk"];
-		RequiredEnergy = variable["RequiredEnergy"];
-		FdCapMolly = variable["FdCapMolly"];
-		FdRat = variable["FdRat"];
-		fd1 = variable["fd1"];
-		fd2 = variable["fd2"];
-		fd3 = variable["fd3"];
-		EnergyCompenstaion = variable["EnergyCompenstaion"];
-		iNonUterEbwTarget = variable["iNonUterEbwTarget"];
-		iNonUterEBW = variable["iNonUterEBW"];
-		IntakeDay = variable["IntakeDay"];
-		iTotMeals = variable["iTotMeals"];
-		TotMeals = variable["TotMeals"];
-		TotMealsYest = variable["TotMealsYest"];
-		TNdfIn = variable["TNdfIn"];
-		TNdfInYest = variable["TNdfInYest"];
-		iAaF = variable["iAaF"];
-		iAcF = variable["iAcF"];
-		iFaF = variable["iFaF"];
-		iGlF = variable["iGlF"];
-		iVolAaF = variable["iVolAaF"];
-		iVolAcF = variable["iVolAcF"];
-		iVolFaF = variable["iVolFaF"];
-		iVolGlF = variable["iVolGlF"];
-		iCeF = variable["iCeF"];
-		iHaF = variable["iHaF"];
-		iHcF = variable["iHcF"];
-		iIndigFdF = variable["iIndigFdF"];
-		iPiF = variable["iPiF"];
-		iHbF = variable["iHbF"];
-		iLPartF = variable["iLPartF"];
-		ifMPartRum = variable["ifMPartRum"];
-		ifSPartRum = variable["ifSPartRum"];
-		iMPartF = variable["iMPartF"];
-		iSPartF = variable["iSPartF"];
-		iAmF = variable["iAmF"];
-		iAsF = variable["iAsF"];
-		iCsF = variable["iCsF"];
-		iFlF = variable["iFlF"];
-		iMiF = variable["iMiF"];
-		iRumAaF = variable["iRumAaF"];
-		iRumAcF = variable["iRumAcF"];
-		iRumBuF = variable["iRumBuF"];
-		iRumPrF = variable["iRumPrF"];
-		iBldUrF = variable["iBldUrF"];
-		iMiHaF = variable["iMiHaF"];
-		iMiHbF = variable["iMiHbF"];
-		iVolBldUrF = variable["iVolBldUrF"];
-		iRumLaF = variable["iRumLaF"];
-		iOthDnaF = variable["iOthDnaF"];
-		iVisDnaF = variable["iVisDnaF"];
-		kInitRumVol = variable["kInitRumVol"];
-		MaxRumVol = variable["MaxRumVol"];
-		RumVol = variable["RumVol"];
-		RumDM = variable["RumDM"];
-		iRumLiqVol = variable["iRumLiqVol"];
-		RumLiqVol = variable["RumLiqVol"];
-		iotGutCont = variable["iotGutCont"];
-		iEBW = variable["iEBW"];
-		iWtAdip = variable["iWtAdip"];
-		iWtCytAdip = variable["iWtCytAdip"];
-		iWtTsAdip = variable["iWtTsAdip"];
-		iNonFatEBW = variable["iNonFatEBW"];
-		iNonFatNonUterEBW = variable["iNonFatNonUterEBW"];
-		iWtOth = variable["iWtOth"];
-		iWtVis = variable["iWtVis"];
-		BWF = variable["BWF"];
-		iotWtOth = variable["iotWtOth"];
-		iotWtVis = variable["iotWtVis"];
-		ifDWt = variable["ifDWt"];
-		iPOth = variable["iPOth"];
-		iPVis = variable["iPVis"];
-		iTsAdip = variable["iTsAdip"];
-		iabsEAve = variable["iabsEAve"];
-		iGl = variable["iGl"];
-		iVolGl = variable["iVolGl"];
-		iFa = variable["iFa"];
-		iVolFa = variable["iVolFa"];
-		iAc = variable["iAc"];
-		iVolAc = variable["iVolAc"];
-		iAa = variable["iAa"];
-		iVolAa = variable["iVolAa"];
-		iBldUr = variable["iBldUr"];
-		iVolBldUr = variable["iVolBldUr"];
-		iHa = variable["iHa"];
-		iLPart = variable["iLPart"];
-		iMPart = variable["iMPart"];
-		iHc = variable["iHc"];
-		iCe = variable["iCe"];
-		iHb = variable["iHb"];
-		iPi = variable["iPi"];
-		iIndigFd = variable["iIndigFd"];
-		iSPart = variable["iSPart"];
-		iRumLa = variable["iRumLa"];
-		iCs = variable["iCs"];
-		iAs = variable["iAs"];
-		iAm = variable["iAm"];
-		iMi = variable["iMi"];
-		iFl = variable["iFl"];
-		iRumAc = variable["iRumAc"];
-		iRumPr = variable["iRumPr"];
-		iRumBu = variable["iRumBu"];
-		iRumAa = variable["iRumAa"];
-		iMiHa = variable["iMiHa"];
-		iMiHb = variable["iMiHb"];
-		iOthDna = variable["iOthDna"];
-		iVisDna = variable["iVisDna"];
-		iVmAcTs = variable["iVmAcTs"];
-		SolDM = variable["SolDM"];
-		TotWaUrineLast = variable["TotWaUrineLast"];
-		TotNurLast = variable["TotNurLast"];
-		BladderVol = variable["BladderVol"];
-		NurConcentration = variable["NurConcentration"];
-		MamMilkCor = variable["MamMilkCor"];
-		TAveMilkMam = variable["TAveMilkMam"];
-		THETA5 = variable["THETA5"];
-		iLHorF = variable["iLHorF"];
-		iMamMilkAveF = variable["iMamMilkAveF"];
-		iMamTmF = variable["iMamTmF"];
-		LHorBase = variable["LHorBase"];
-		iLHor = variable["iLHor"];
-		iMamLmF = variable["iMamLmF"];
-		iMamPmF = variable["iMamPmF"];
-		iMilkAve = variable["iMilkAve"];
-		TAveMilk = variable["TAveMilk"];
-		CumulativeLowMfDays = variable["CumulativeLowMfDays"];
-		DailyMfDiff = variable["DailyMfDiff"];
-		InMilk = variable["InMilk"];
-		iMamCells = variable["iMamCells"];
-		iMamCellsA = variable["iMamCellsA"];
-		iMamCellsQ = variable["iMamCellsQ"];
-		iMamCellsS = variable["iMamCellsS"];
-		dWtAdipNew = variable["dWtAdipNew"];
-		BcsTarget = variable["BcsTarget"];
-		dLwExclUterGutAndGrowth = variable["dLwExclUterGutAndGrowth"];
-		MilkingFrequencyLag = variable["MilkingFrequencyLag"];
-		derivMilkingFrequencyLag = variable["derivMilkingFrequencyLag"];
-		iRumVol = variable["iRumVol"];
-		BST = variable["BST"];
-		INS = variable["INS"];
-		T3 = variable["T3"];
-		kRetMilkI = variable["kRetMilkI"];
-		MilkMax = variable["MilkMax"];
-		KMilkI = variable["KMilkI"];
-		iMamMilkAve = variable["iMamMilkAve"];
-		iMamTm = variable["iMamTm"];
-		iMamPm = variable["iMamPm"];
-		iMamLm = variable["iMamLm"];
-		TotEatingYest = variable["TotEatingYest"];
-		TotRumntnYest = variable["TotRumntnYest"];
-		TotRestYest = variable["TotRestYest"];
-		dEating = variable["dEating"];
-		dRumntn = variable["dRumntn"];
-		dRest = variable["dRest"];
-		MilkInt = variable["MilkInt"];
-		PResidMamMilk = variable["PResidMamMilk"];
-		MilkingIndex = variable["MilkingIndex"];
-		MilkingFrequency = variable["MilkingFrequency"];
-		NextMilkingT = variable["NextMilkingT"];
-		MilkSW = variable["MilkSW"];
-		EatingSupplementsSW = variable["EatingSupplementsSW"];
-		SupplementOnOffer = variable["SupplementOnOffer"];
-		HMM = variable["HMM"];
-		RUMNTNEQ = variable["RUMNTNEQ"];
-		WaPool = variable["WaPool"];
-		WaPoolTarget = variable["WaPoolTarget"];
-		EatingSW = variable["EatingSW"];
-		AcquisitionJawMovesCurrent = variable["AcquisitionJawMovesCurrent"];
-		BolusWeightTotalCurrent = variable["BolusWeightTotalCurrent"];
-		MaxBolusWeight = variable["MaxBolusWeight"];
-		EatSW5 = variable["EatSW5"];
-		CurrStrat = variable["CurrStrat"];
-		CurrHerbage = variable["CurrHerbage"];
-		StandardBw = variable["StandardBw"];
-		StandardMetabolicBw = variable["StandardMetabolicBw"];
-		BwCorrected = variable["BwCorrected"];
-		BwCorrection = variable["BwCorrection"];
-		ResidMamMilk = variable["ResidMamMilk"];
-		dNdfIn = variable["dNdfIn"];
-		MealsDay = variable["MealsDay"];
-		SunriseToday = variable["SunriseToday"];
-		SunsetToday = variable["SunsetToday"];
-		TMilkLmYest = variable["TMilkLmYest"];
-		TMilkPmYest = variable["TMilkPmYest"];
-		TMilkTmYest = variable["TMilkTmYest"];
-		FdRatDiel = variable["FdRatDiel"];
-		IALG = variable["IALG"];
-		NSTP = variable["NSTP"];
-		CINT = variable["CINT"];
-		MAXT = variable["MAXT"];
-		TSTP = variable["TSTP"];
-		TIME = variable["TIME"];
-		LastEv = variable["LastEv"];
-		LastSu = variable["LastSu"];
-		LastSw = variable["LastSw"];
-		LastEA = variable["LastEA"];
-		fAcSilage = variable["fAcSilage"];
-		fLaSilage = variable["fLaSilage"];
-		PcSilage = variable["PcSilage"];
-		PcPeFd = variable["PcPeFd"];
-		fBuAc = variable["fBuAc"];
-		fOaPe = variable["fOaPe"];
-		fAcFd = variable["fAcFd"];
-		FLaFd = variable["FLaFd"];
-		fBuSilage = variable["fBuSilage"];
-		fBuFd = variable["fBuFd"];
-		fPeFd = variable["fPeFd"];
-		fOaFd = variable["fOaFd"];
-		fRoughageFd = variable["fRoughageFd"];
-		fDMFd = variable["fDMFd"];
-		PiMeanRRT = variable["PiMeanRRT"];
-		HaMeanRRT = variable["HaMeanRRT"];
-		CeMeanRRT = variable["CeMeanRRT"];
-		FKRuP = variable["FKRuP"];
-		FKRuSt = variable["FKRuSt"];
-		FKRuAdf = variable["FKRuAdf"];
-		FHcCs1 = variable["FHcCs1"];
-		slpKRuAdf = variable["slpKRuAdf"];
-		slpKRUP = variable["slpKRUP"];
-		slpKRUST = variable["slpKRUST"];
-		KPiAa = variable["KPiAa"];
-		KHaCs = variable["KHaCs"];
-		KCeCs1 = variable["KCeCs1"];
-		KHcCs1 = variable["KHcCs1"];
-		fRupCp = variable["fRupCp"];
-		fPiCp = variable["fPiCp"];
-		fPsCp = variable["fPsCp"];
-		fNnCp = variable["fNnCp"];
-		fUrCp = variable["fUrCp"];
-		fRuStSt = variable["fRuStSt"];
-		fStSSt = variable["fStSSt"];
-		fRuAdfAdf = variable["fRuAdfAdf"];
-		fLgAdf = variable["fLgAdf"];
-		RestSa = variable["RestSa"];
-		RestWa = variable["RestWa"];
-		RumntnSa = variable["RumntnSa"];
-		EatSa = variable["EatSa"];
-		SaIn = variable["SaIn"];
-		EatWa = variable["EatWa"];
-		otGutCont = variable["otGutCont"];
-		OsMolF = variable["OsMolF"];
-		RumLiqVolEQ = variable["RumLiqVolEQ"];
-		WaIn = variable["WaIn"];
-		RumOsMol = variable["RumOsMol"];
-		OsWaInt = variable["OsWaInt"];
-		OsWaSlp = variable["OsWaSlp"];
-		OsWa = variable["OsWa"];
-		fRumDM = variable["fRumDM"];
-		WaOut = variable["WaOut"];
-		dRumLiqVol = variable["dRumLiqVol"];
-		DilRate = variable["DilRate"];
-		KWaFeces = variable["KWaFeces"];
-		kMilkAsh = variable["kMilkAsh"];
-		kWaRespir = variable["kWaRespir"];
-		kWaSweat = variable["kWaSweat"];
-		WaFeces = variable["WaFeces"];
-		WaMilk = variable["WaMilk"];
-		WaRespir = variable["WaRespir"];
-		WaSweat = variable["WaSweat"];
-		WaUrine = variable["WaUrine"];
-		WaConsumed = variable["WaConsumed"];
-		TotWaConsumed = variable["TotWaConsumed"];
-		TotWaUrine = variable["TotWaUrine"];
-		MaxBladderVol = variable["MaxBladderVol"];
-		MilkDen = variable["MilkDen"];
-		TVolMilkVol = variable["TVolMilkVol"];
-		CountDownDays = variable["CountDownDays"];
-		IntakeTotal = variable["IntakeTotal"];
-		kMastication = variable["kMastication"];
-		kAcquisition = variable["kAcquisition"];
-		kSpecies = variable["kSpecies"];
-		kComminuteOralMin = variable["kComminuteOralMin"];
-		kComminuteOralMax = variable["kComminuteOralMax"];
-		MasticationSteps = variable["MasticationSteps"];
 		Old = variable["Old"];
-		SumBinFd = variable["SumBinFd"];
-		MeanParticleSize = variable["MeanParticleSize"];
-		MedianParticleSize = variable["MedianParticleSize"];
-		fSPartSwal = variable["fSPartSwal"];
-		fMPartSwal = variable["fMPartSwal"];
-		fLPartSwal = variable["fLPartSwal"];
-		fLPartMPartSwal = variable["fLPartMPartSwal"];
-		PsF = variable["PsF"];
-		fParticulateFd = variable["fParticulateFd"];
-		iDMilk = variable["iDMilk"];
-		iFCM4Z = variable["iFCM4Z"];
-		iME = variable["iME"];
-		iOxup = variable["iOxup"];
-		iAtAdh = variable["iAtAdh"];
-		ifPm = variable["ifPm"];
-		ifTm = variable["ifTm"];
-		icAc = variable["icAc"];
-		icFa = variable["icFa"];
-		icGl = variable["icGl"];
-		iTCH4 = variable["iTCH4"];
-		iDEi = variable["iDEi"];
-		iMEi = variable["iMEi"];
-		VmAcTsAdip = variable["VmAcTsAdip"];
-		rtPOx = variable["rtPOx"];
-		fTm = variable["fTm"];
-		FCM4Z = variable["FCM4Z"];
-		AtAdHT = variable["AtAdHT"];
-		ME = variable["ME"];
-		OXUP1 = variable["OXUP1"];
-		MamMilkAve2 = variable["MamMilkAve2"];
-		EBW = variable["EBW"];
-		BW = variable["BW"];
-		VolGl = variable["VolGl"];
-		VolFa = variable["VolFa"];
-		VolAc = variable["VolAc"];
-		VolAa = variable["VolAa"];
-		BldUrVol = variable["BldUrVol"];
-		DMilk = variable["DMilk"];
-		TFCM4z = variable["TFCM4z"];
-		WtCytAdip = variable["WtCytAdip"];
-		otWtOth = variable["otWtOth"];
-		otWtVis = variable["otWtVis"];
-		fPm = variable["fPm"];
-		ObsCH4 = variable["ObsCH4"];
-		ObsDE = variable["ObsDE"];
-		ObsEUr = variable["ObsEUr"];
-		ObsME = variable["ObsME"];
-		FatAdd = variable["FatAdd"];
-		InfPrt = variable["InfPrt"];
-		CWC = variable["CWC"];
-		GE1Fd = variable["GE1Fd"];
-		GE2Fd = variable["GE2Fd"];
-		GE3Fd = variable["GE3Fd"];
-		GEFd = variable["GEFd"];
-		HcCeCe = variable["HcCeCe"];
-		LaScSc = variable["LaScSc"];
-		LiScSC = variable["LiScSC"];
-		OaScSC = variable["OaScSC"];
-		PeScSC = variable["PeScSC"];
-		FaScFd = variable["FaScFd"];
-		fLPartNutIng = variable["fLPartNutIng"];
-		fLPartSt = variable["fLPartSt"];
-		fLPartHc = variable["fLPartHc"];
-		fLPartCe = variable["fLPartCe"];
-		fLPartPi = variable["fLPartPi"];
-		fLPartLg = variable["fLPartLg"];
-		fLPartAi = variable["fLPartAi"];
-		fIndigFd = variable["fIndigFd"];
-		fLPartIndigFd = variable["fLPartIndigFd"];
-		fLgIndigFd = variable["fLgIndigFd"];
-		fAiIndigFd = variable["fAiIndigFd"];
-		fLPartADF = variable["fLPartADF"];
-		fLPartNDF = variable["fLPartNDF"];
-		fMPartNutIng = variable["fMPartNutIng"];
-		fSPartNutIng = variable["fSPartNutIng"];
-		OaSc = variable["OaSc"];
-		PeSc = variable["PeSc"];
-		LiSc = variable["LiSc"];
-		FatSc = variable["FatSc"];
-		fScTFd = variable["fScTFd"];
-		totFd = variable["totFd"];
-		DailyDMin = variable["DailyDMin"];
-		TotDMin = variable["TotDMin"];
-		OminFd = variable["OminFd"];
-		NdfinFd = variable["NdfinFd"];
-		AdfinFd = variable["AdfinFd"];
-		RuAdfinFd = variable["RuAdfinFd"];
-		LginFd = variable["LginFd"];
-		RuStinFd = variable["RuStinFd"];
-		ScinFd = variable["ScinFd"];
-		CPinFd = variable["CPinFd"];
-		CPsinFd = variable["CPsinFd"];
-		RUPinFd = variable["RUPinFd"];
-		NpninFd = variable["NpninFd"];
-		NninFd = variable["NninFd"];
-		CFatinFd = variable["CFatinFd"];
-		AshinFd = variable["AshinFd"];
-		DAY = variable["DAY"];
-		CWCF = variable["CWCF"];
-		RumntnF = variable["RumntnF"];
-		MinLPRumntnF = variable["MinLPRumntnF"];
-		AMP1FT = variable["AMP1FT"];
-		AMP2FT = variable["AMP2FT"];
-		MEAN1 = variable["MEAN1"];
-		MEAN2 = variable["MEAN2"];
-		MinLPRumntn = variable["MinLPRumntn"];
-		Eating = variable["Eating"];
-		Rumntn = variable["Rumntn"];
-		TotRumntn = variable["TotRumntn"];
-		TotEating = variable["TotEating"];
-		TotRest = variable["TotRest"];
-		AaFvAc = variable["AaFvAc"];
-		AaFvPr = variable["AaFvPr"];
-		AaFvBu = variable["AaFvBu"];
-		LaAcAc = variable["LaAcAc"];
-		LaPrPr = variable["LaPrPr"];
-		AaFvFat = variable["AaFvFat"];
-		CONSET = variable["CONSET"];
-		FORSET = variable["FORSET"];
-		MIXSET = variable["MIXSET"];
-		ScAcAc = variable["ScAcAc"];
-		ScPrPr = variable["ScPrPr"];
-		ScBuBu = variable["ScBuBu"];
-		ScLaLa = variable["ScLaLa"];
-		StAcAc = variable["StAcAc"];
-		StPrPr = variable["StPrPr"];
-		StBuBu = variable["StBuBu"];
-		StLaLa = variable["StLaLa"];
-		HcAcAc = variable["HcAcAc"];
-		HcPrPr = variable["HcPrPr"];
-		HcBuBu = variable["HcBuBu"];
-		CeAcAc = variable["CeAcAc"];
-		CePrPr = variable["CePrPr"];
-		CeBuBu = variable["CeBuBu"];
-		ScAc = variable["ScAc"];
-		ScPr = variable["ScPr"];
-		ScBu = variable["ScBu"];
-		ScLa = variable["ScLa"];
-		StAc = variable["StAc"];
-		StPr = variable["StPr"];
-		StBu = variable["StBu"];
-		StLa = variable["StLa"];
-		FIXDpH = variable["FIXDpH"];
-		RumpHBase = variable["RumpHBase"];
-		RumpHCON = variable["RumpHCON"];
-		vfaeff = variable["vfaeff"];
-		RumpH = variable["RumpH"];
-		TVFA = variable["TVFA"];
-		cVFA = variable["cVFA"];
-		KSPartP = variable["KSPartP"];
-		KWAP = variable["KWAP"];
-		KLPartRed = variable["KLPartRed"];
-		dLPart = variable["dLPart"];
-		LPartSwal = variable["LPartSwal"];
-		LPartRed = variable["LPartRed"];
-		LPart = variable["LPart"];
-		LPart1 = variable["LPart1"];
-		KMPartSPart = variable["KMPartSPart"];
-		pLPartMPartComm = variable["pLPartMPartComm"];
-		KMPartP = variable["KMPartP"];
-		dMPart = variable["dMPart"];
-		MPartSwal = variable["MPartSwal"];
-		LPartMPart = variable["LPartMPart"];
-		MPartSPart = variable["MPartSPart"];
-		MPartDeg = variable["MPartDeg"];
-		MPartP = variable["MPartP"];
-		MPart = variable["MPart"];
-		LPartplusMPart = variable["LPartplusMPart"];
-		dSPart = variable["dSPart"];
-		SPartSwal = variable["SPartSwal"];
-		LPartSPart = variable["LPartSPart"];
-		SPartDeg = variable["SPartDeg"];
-		SPartP = variable["SPartP"];
-		SPart = variable["SPart"];
-		fLPart = variable["fLPart"];
-		fMPart = variable["fMPart"];
-		fLPartplusMPart = variable["fLPartplusMPart"];
-		fSPart = variable["fSPart"];
-		fMPart1 = variable["fMPart1"];
-		fSPart1 = variable["fSPart1"];
-		RumPartSizeSlp = variable["RumPartSizeSlp"];
-		RumPartSizeInt = variable["RumPartSizeInt"];
-		PartWidth = variable["PartWidth"];
-		PartThick = variable["PartThick"];
-		kSurfaceArea = variable["kSurfaceArea"];
-		RumPartSizeMean = variable["RumPartSizeMean"];
-		RumLpMpSizeMean = variable["RumLpMpSizeMean"];
-		RumLPartSizeMean = variable["RumLPartSizeMean"];
-		RumMPartSizeMean = variable["RumMPartSizeMean"];
-		RumSPartSizeMean = variable["RumSPartSizeMean"];
-		MPartSA = variable["MPartSA"];
-		MPartVol = variable["MPartVol"];
-		SPartSA = variable["SPartSA"];
-		SPartVol = variable["SPartVol"];
-		fSPartSA = variable["fSPartSA"];
-		fMPartSA = variable["fMPartSA"];
-		fPartSA = variable["fPartSA"];
-		fPartP = variable["fPartP"];
-		KMiHa = variable["KMiHa"];
-		KMiHb = variable["KMiHb"];
-		VmMiHa = variable["VmMiHa"];
-		KMiHaF = variable["KMiHaF"];
-		KMiHbF = variable["KMiHbF"];
-		VmMiHb = variable["VmMiHb"];
-		Csin = variable["Csin"];
-		fCsHa = variable["fCsHa"];
-		fCsHb = variable["fCsHb"];
-		HaMiP = variable["HaMiP"];
-		HbMiP = variable["HbMiP"];
-		IndigFdMiP = variable["IndigFdMiP"];
-		PiMiP = variable["PiMiP"];
-		SPartMiPi = variable["SPartMiPi"];
-		CsMiG = variable["CsMiG"];
-		HaMiG = variable["HaMiG"];
-		HbMiG = variable["HbMiG"];
-		cMiHa = variable["cMiHa"];
-		cMiHb = variable["cMiHb"];
-		SPartMiHa = variable["SPartMiHa"];
-		SPartMiHb = variable["SPartMiHb"];
-		HaMiRum = variable["HaMiRum"];
-		HbMiRum = variable["HbMiRum"];
-		HaMiF = variable["HaMiF"];
-		HbMiF = variable["HbMiF"];
-		MiHaMi = variable["MiHaMi"];
-		MiHbMi = variable["MiHbMi"];
-		dHaMi = variable["dHaMi"];
-		dHbMi = variable["dHbMi"];
-		HaMi = variable["HaMi"];
-		HbMi = variable["HbMi"];
-		dHa = variable["dHa"];
-		StinFd = variable["StinFd"];
-		StCsFd = variable["StCsFd"];
-		StHaFd = variable["StHaFd"];
-		LPartStHa = variable["LPartStHa"];
-		SPartHaCs = variable["SPartHaCs"];
-		HaP = variable["HaP"];
-		HaPT = variable["HaPT"];
-		Ha = variable["Ha"];
-		KFatHb = variable["KFatHb"];
-		KHcCs = variable["KHcCs"];
-		KCeCs = variable["KCeCs"];
-		dHc = variable["dHc"];
-		Hcin = variable["Hcin"];
-		RumHcin = variable["RumHcin"];
-		LPartHcHc = variable["LPartHcHc"];
-		SPartHcCs = variable["SPartHcCs"];
-		HcP = variable["HcP"];
-		Hc = variable["Hc"];
-		dCe = variable["dCe"];
-		RumCein = variable["RumCein"];
-		Cein = variable["Cein"];
-		LPartCeCe = variable["LPartCeCe"];
-		SPartCeCs = variable["SPartCeCs"];
-		CeP = variable["CeP"];
-		Ce = variable["Ce"];
-		dHb = variable["dHb"];
-		Hbin = variable["Hbin"];
-		LPartHbHb = variable["LPartHbHb"];
-		SPartHbCs = variable["SPartHbCs"];
-		HbP = variable["HbP"];
-		Hb = variable["Hb"];
-		KFatPi = variable["KFatPi"];
-		dPi = variable["dPi"];
-		PiPiFd = variable["PiPiFd"];
-		LPartPiPi = variable["LPartPiPi"];
-		SPartPiAa = variable["SPartPiAa"];
-		PiP = variable["PiP"];
-		TPRTin = variable["TPRTin"];
-		Pi = variable["Pi"];
-		dIndigFd = variable["dIndigFd"];
-		IndigFdFd = variable["IndigFdFd"];
-		LPartIndigFdIndigFd = variable["LPartIndigFdIndigFd"];
-		IndigFdP = variable["IndigFdP"];
-		LgP = variable["LgP"];
-		AiP = variable["AiP"];
-		IndigFd = variable["IndigFd"];
-		RumLg = variable["RumLg"];
-		KCsFv = variable["KCsFv"];
-		VmCsFv = variable["VmCsFv"];
-		dCs = variable["dCs"];
-		cCs = variable["cCs"];
-		ScTCs = variable["ScTCs"];
-		StCs = variable["StCs"];
-		HaCs = variable["HaCs"];
-		HcCs = variable["HcCs"];
-		CeCs = variable["CeCs"];
-		CsFv = variable["CsFv"];
-		CsMi = variable["CsMi"];
-		CsP = variable["CsP"];
-		Cs = variable["Cs"];
-		cSaPs = variable["cSaPs"];
-		KRumAaFv = variable["KRumAaFv"];
-		VmRumAaFv = variable["VmRumAaFv"];
-		dRumAa = variable["dRumAa"];
-		cRumAa = variable["cRumAa"];
-		PsAaFd = variable["PsAaFd"];
-		PiAa = variable["PiAa"];
-		RumAaP = variable["RumAaP"];
-		SaPsAa = variable["SaPsAa"];
-		RumAaFv = variable["RumAaFv"];
-		RumAaMi = variable["RumAaMi"];
-		RumAa = variable["RumAa"];
-		AaFvAm = variable["AaFvAm"];
-		KAmabs = variable["KAmabs"];
-		NnAmAM = variable["NnAmAM"];
-		UrAmAm = variable["UrAmAm"];
-		KBldUrAm = variable["KBldUrAm"];
-		KiAm = variable["KiAm"];
-		VmBldUrAm = variable["VmBldUrAm"];
-		dAm = variable["dAm"];
-		UrAmFd = variable["UrAmFd"];
-		NnAmFd = variable["NnAmFd"];
-		AaAm = variable["AaAm"];
-		SaNnAm = variable["SaNnAm"];
-		BldUrAm = variable["BldUrAm"];
-		absRumAm = variable["absRumAm"];
-		AmMi = variable["AmMi"];
-		AM2 = variable["AM2"];
-		AM = variable["AM"];
-		Am1 = variable["Am1"];
-		cAm = variable["cAm"];
-		cBldUr = variable["cBldUr"];
-		fSaAs = variable["fSaAs"];
-		KAsabs = variable["KAsabs"];
-		InfNaBicarb = variable["InfNaBicarb"];
-		InfNaCl = variable["InfNaCl"];
-		dAs = variable["dAs"];
-		AsAsFd = variable["AsAsFd"];
-		SaAs = variable["SaAs"];
-		InfAs = variable["InfAs"];
-		AsP = variable["AsP"];
-		AshP = variable["AshP"];
-		absRumAs = variable["absRumAs"];
-		cAs = variable["cAs"];
-		As = variable["As"];
-		FaFlFd = variable["FaFlFd"];
-		LiChFd = variable["LiChFd"];
-		LiFlFd = variable["LiFlFd"];
-		dFl = variable["dFl"];
-		FlFd = variable["FlFd"];
-		Fl1Fd = variable["Fl1Fd"];
-		FlMi = variable["FlMi"];
-		FaP = variable["FaP"];
-		LipidP = variable["LipidP"];
-		Fl = variable["Fl"];
-		KabsAc = variable["KabsAc"];
-		KabsBu = variable["KabsBu"];
-		KabsLa = variable["KabsLa"];
-		KabsPr = variable["KabsPr"];
-		dRumAc = variable["dRumAc"];
-		FvAcFd = variable["FvAcFd"];
-		CsAc = variable["CsAc"];
-		CsFvAc = variable["CsFvAc"];
-		fScCs = variable["fScCs"];
-		fStCs = variable["fStCs"];
-		fHcCs = variable["fHcCs"];
-		FCeCs = variable["FCeCs"];
-		RumLaAc = variable["RumLaAc"];
-		RumAaAc = variable["RumAaAc"];
-		absRumAc = variable["absRumAc"];
-		RumAcSynth = variable["RumAcSynth"];
-		cRumAc = variable["cRumAc"];
-		RumAcP = variable["RumAcP"];
-		RumAc = variable["RumAc"];
-		RumAc1 = variable["RumAc1"];
-		MPcAc = variable["MPcAc"];
-		InfRumPr = variable["InfRumPr"];
-		dRumPr = variable["dRumPr"];
-		CsPr = variable["CsPr"];
-		RumLaPr = variable["RumLaPr"];
-		CsFvPr = variable["CsFvPr"];
-		RumAaPr = variable["RumAaPr"];
-		RumPrP = variable["RumPrP"];
-		RumPrSynth = variable["RumPrSynth"];
-		cRumPr = variable["cRumPr"];
-		absRumPr = variable["absRumPr"];
-		RumPr = variable["RumPr"];
-		RumPr1 = variable["RumPr1"];
-		MPcPr = variable["MPcPr"];
-		dRumBu = variable["dRumBu"];
-		CsBu = variable["CsBu"];
-		CsFvBu = variable["CsFvBu"];
-		RumAaBu = variable["RumAaBu"];
-		FvBuFd = variable["FvBuFd"];
-		absRumBu = variable["absRumBu"];
-		RumBuP = variable["RumBuP"];
-		RumBuSynth = variable["RumBuSynth"];
-		cRumBu = variable["cRumBu"];
-		RumBU = variable["RumBU"];
-		RumBu1 = variable["RumBu1"];
-		MPcBu = variable["MPcBu"];
-		KLaFv = variable["KLaFv"];
-		dRumLa = variable["dRumLa"];
-		CsLa = variable["CsLa"];
-		CsFvLa = variable["CsFvLa"];
-		FvLaFd = variable["FvLaFd"];
-		RumLaP = variable["RumLaP"];
-		cRumLa = variable["cRumLa"];
-		RumLaFv = variable["RumLaFv"];
-		absRumLa = variable["absRumLa"];
-		RumLa = variable["RumLa"];
-		RumLa1 = variable["RumLa1"];
-		KFGAm = variable["KFGAm"];
-		KYAtAa = variable["KYAtAa"];
-		LaFvAt = variable["LaFvAt"];
-		RumYAtp = variable["RumYAtp"];
-		KFatFG = variable["KFatFG"];
-		AaFvAt = variable["AaFvAt"];
-		CsFvAt = variable["CsFvAt"];
-		AmMiG1 = variable["AmMiG1"];
-		CdMiG1 = variable["CdMiG1"];
-		CsMiG1 = variable["CsMiG1"];
-		HyMiG1 = variable["HyMiG1"];
-		FlMiG = variable["FlMiG"];
-		AaMiG2 = variable["AaMiG2"];
-		AmMiG2 = variable["AmMiG2"];
-		CsMiG2 = variable["CsMiG2"];
+		Silage = variable["Silage"];
 		HyMiG2 = variable["HyMiG2"];
-		CdMiG2 = variable["CdMiG2"];
-		MiHaHA = variable["MiHaHA"];
-		MiLiLI = variable["MiLiLI"];
-		MiNnNn = variable["MiNnNn"];
-		MiPiPI = variable["MiPiPI"];
-		MiLiBu = variable["MiLiBu"];
-		MiLiCh = variable["MiLiCh"];
-		MiLiFA = variable["MiLiFA"];
-		MiLiGl = variable["MiLiGl"];
-		MiLiPr = variable["MiLiPr"];
-		MwtMiLi = variable["MwtMiLi"];
-		MiMaAd = variable["MiMaAd"];
-		dMi = variable["dMi"];
-		MiG = variable["MiG"];
-		AtpG = variable["AtpG"];
-		AtpF = variable["AtpF"];
-		AtpC = variable["AtpC"];
-		AtpM = variable["AtpM"];
-		FGAm = variable["FGAm"];
-		FGFa = variable["FGFa"];
-		YAtp = variable["YAtp"];
-		YAtpAp = variable["YAtpAp"];
-		G1 = variable["G1"];
-		G2 = variable["G2"];
-		MiP = variable["MiP"];
-		SPartMiP = variable["SPartMiP"];
-		WaMiP = variable["WaMiP"];
-		LPartMi = variable["LPartMi"];
-		SPartMi = variable["SPartMi"];
-		WaMi = variable["WaMi"];
-		cMiSPart = variable["cMiSPart"];
-		cMiWa = variable["cMiWa"];
-		Mi = variable["Mi"];
-		RumNit = variable["RumNit"];
-		RumCP = variable["RumCP"];
-		ADFIn = variable["ADFIn"];
-		NDFIn = variable["NDFIn"];
-		RumADF = variable["RumADF"];
-		RumNDF = variable["RumNDF"];
-		RumOM = variable["RumOM"];
-		fLPartNDF_NDF = variable["fLPartNDF_NDF"];
-		fMPartNDF_NDF = variable["fMPartNDF_NDF"];
-		fSPartNDF_NDF = variable["fSPartNDF_NDF"];
-		ADFP = variable["ADFP"];
-		MPartADFP = variable["MPartADFP"];
-		SPartADFP = variable["SPartADFP"];
-		NDFP = variable["NDFP"];
-		MPartNDFP = variable["MPartNDFP"];
-		SPartNDFP = variable["SPartNDFP"];
-		NitP = variable["NitP"];
-		MiNP = variable["MiNP"];
-		CpP = variable["CpP"];
-		NANP = variable["NANP"];
-		MiPP = variable["MiPP"];
-		NANMNP = variable["NANMNP"];
-		MetabPP = variable["MetabPP"];
-		SolOmP = variable["SolOmP"];
-		DCMiLi = variable["DCMiLi"];
-		DCMiPi = variable["DCMiPi"];
-		LgutDCHa = variable["LgutDCHa"];
-		LgutDCHb = variable["LgutDCHb"];
-		LgutDCAi = variable["LgutDCAi"];
-		LgutDCAs = variable["LgutDCAs"];
-		LgutDCFa = variable["LgutDCFa"];
-		LgutDCPi = variable["LgutDCPi"];
-		DMP = variable["DMP"];
-		ChChFd = variable["ChChFd"];
-		LgutHaGl = variable["LgutHaGl"];
-		MiGl = variable["MiGl"];
-		MiAa = variable["MiAa"];
-		MiLiDg = variable["MiLiDg"];
-		MiFa = variable["MiFa"];
-		LgutFaDg = variable["LgutFaDg"];
-		MiBu = variable["MiBu"];
-		MiPr = variable["MiPr"];
-		MiLGl = variable["MiLGl"];
-		MiCh = variable["MiCh"];
-		LgutHcFv = variable["LgutHcFv"];
-		LgutHcAc = variable["LgutHcAc"];
-		LgutHcPr = variable["LgutHcPr"];
-		LgutHcBu = variable["LgutHcBu"];
-		LgutCeFv = variable["LgutCeFv"];
-		LgutCeAc = variable["LgutCeAc"];
-		LgutCePr = variable["LgutCePr"];
-		LgutCeBu = variable["LgutCeBu"];
-		LgutPiAa = variable["LgutPiAa"];
-		LgutAs = variable["LgutAs"];
-		LgutAi = variable["LgutAi"];
-		FecHa = variable["FecHa"];
-		FecMiHa = variable["FecMiHa"];
-		FecHaT = variable["FecHaT"];
-		FecHb = variable["FecHb"];
-		FecHC = variable["FecHC"];
-		FecCe = variable["FecCe"];
-		FecADF = variable["FecADF"];
-		FecNDF = variable["FecNDF"];
-		FecLg = variable["FecLg"];
-		FecFa = variable["FecFa"];
-		FecMiLi = variable["FecMiLi"];
-		FecLipid = variable["FecLipid"];
-		FecMiPi = variable["FecMiPi"];
-		FecMiNn = variable["FecMiNn"];
-		FecPi = variable["FecPi"];
-		FecPiT = variable["FecPiT"];
-		FecPiTN = variable["FecPiTN"];
-		FecAsh = variable["FecAsh"];
-		FecCh = variable["FecCh"];
-		FecOm = variable["FecOm"];
-		FecENG = variable["FecENG"];
-		FecDM = variable["FecDM"];
-		FecMPart = variable["FecMPart"];
-		FecSPart = variable["FecSPart"];
-		FecFMPart = variable["FecFMPart"];
-		FecFSPart = variable["FecFSPart"];
-		SolDMP = variable["SolDMP"];
-		TOmP = variable["TOmP"];
-		TTOmP = variable["TTOmP"];
-		OmPt = variable["OmPt"];
-		OmPa = variable["OmPa"];
-		RumDCOm = variable["RumDCOm"];
-		RumDCOmA = variable["RumDCOmA"];
-		RumDCPrt = variable["RumDCPrt"];
-		RumDCN = variable["RumDCN"];
-		RumDCndf = variable["RumDCndf"];
-		RumDCadf = variable["RumDCadf"];
-		RumDCHa = variable["RumDCHa"];
-		RumDCHaT = variable["RumDCHaT"];
-		RumDCHc = variable["RumDCHc"];
-		RumDCCe = variable["RumDCCe"];
-		RumDCHb = variable["RumDCHb"];
-		RumDCLiA = variable["RumDCLiA"];
-		RumDCLiT = variable["RumDCLiT"];
-		DCDM = variable["DCDM"];
-		DCOm = variable["DCOm"];
-		DCPrt = variable["DCPrt"];
-		DCHa = variable["DCHa"];
-		DCLipid = variable["DCLipid"];
-		DCndf = variable["DCndf"];
-		DCadf = variable["DCadf"];
-		DCHb = variable["DCHb"];
-		DCLg = variable["DCLg"];
-		TStin = variable["TStin"];
-		FdGEin = variable["FdGEin"];
-		AccGEi = variable["AccGEi"];
-		TDE = variable["TDE"];
-		appDE = variable["appDE"];
-		DEI = variable["DEI"];
-		DE = variable["DE"];
-		AccDEi = variable["AccDEi"];
-		CH4E = variable["CH4E"];
-		EUr = variable["EUr"];
-		MEI = variable["MEI"];
-		AccMEi = variable["AccMEi"];
-		ME1 = variable["ME1"];
-		GE = variable["GE"];
-		HFerm = variable["HFerm"];
-		CorMEi = variable["CorMEi"];
-		CorME = variable["CorME"];
-		DCCe = variable["DCCe"];
-		Nintake = variable["Nintake"];
-		Nan = variable["Nan"];
-		Ndiff = variable["Ndiff"];
-		MiPrOm = variable["MiPrOm"];
-		MirOma = variable["MirOma"];
-		MiNOm = variable["MiNOm"];
-		MiNOma = variable["MiNOma"];
-		absGl = variable["absGl"];
-		AbsAa = variable["AbsAa"];
-		absAc = variable["absAc"];
-		absPr = variable["absPr"];
-		absBu = variable["absBu"];
-		AbsAm = variable["AbsAm"];
-		absFa = variable["absFa"];
-		absAs = variable["absAs"];
-		absLa = variable["absLa"];
-		AbsAcE = variable["AbsAcE"];
-		absPrE = variable["absPrE"];
-		absBuE = variable["absBuE"];
-		absFaE = variable["absFaE"];
-		absAaE = variable["absAaE"];
-		absGlE = variable["absGlE"];
-		absLaE = variable["absLaE"];
-		AbsE = variable["AbsE"];
-		Latitude = variable["Latitude"];
-		DaylightSavingShift = variable["DaylightSavingShift"];
-		DaylengthP1 = variable["DaylengthP1"];
-		DayTwlengthP2 = variable["DayTwlengthP2"];
-		DayTwLength = variable["DayTwLength"];
-		DaylengthP2 = variable["DaylengthP2"];
-		DayLength = variable["DayLength"];
-		Sunlight = variable["Sunlight"];
-		Sunrise = variable["Sunrise"];
-		SunSet = variable["SunSet"];
-		SunsetTodayTemp = variable["SunsetTodayTemp"];
-		kAHorGl = variable["kAHorGl"];
-		Theta2 = variable["Theta2"];
-		kAHor1Gl = variable["kAHor1Gl"];
-		Theta3 = variable["Theta3"];
-		kCHorGl = variable["kCHorGl"];
-		Theta4 = variable["Theta4"];
-		kCHor1Gl = variable["kCHor1Gl"];
-		AHor = variable["AHor"];
-		AHor1 = variable["AHor1"];
-		CHor = variable["CHor"];
-		CHor1 = variable["CHor1"];
-		dWtUter = variable["dWtUter"];
-		dWtPUter = variable["dWtPUter"];
-		WtUterSyn = variable["WtUterSyn"];
-		WtPUterSyn = variable["WtPUterSyn"];
-		WtUterDeg = variable["WtUterDeg"];
-		WtPUterDeg = variable["WtPUterDeg"];
-		AaPUter = variable["AaPUter"];
-		PUterAa = variable["PUterAa"];
-		WtConcSyn = variable["WtConcSyn"];
-		WtPConc = variable["WtPConc"];
-		WtPConcSyn = variable["WtPConcSyn"];
-		AaPConc = variable["AaPConc"];
-		kAaGlGest = variable["kAaGlGest"];
-		WtPGrvUter = variable["WtPGrvUter"];
-		WtPGrvUterSyn = variable["WtPGrvUterSyn"];
-		dWtGrvUter = variable["dWtGrvUter"];
-		dWtPGrvUter = variable["dWtPGrvUter"];
-		AaPGest = variable["AaPGest"];
-		AaGlGest = variable["AaGlGest"];
-		KMilk = variable["KMilk"];
-		MilkProductionAgeAdjustment = variable["MilkProductionAgeAdjustment"];
-		MamCellsPerKgMs270 = variable["MamCellsPerKgMs270"];
-		MamCellsPerKgMsAdjustment = variable["MamCellsPerKgMsAdjustment"];
-		KgMilkSolidsExpectedIn270Days = variable["KgMilkSolidsExpectedIn270Days"];
-		MamCellsPart = variable["MamCellsPart"];
-		K1MamCells = variable["K1MamCells"];
-		uTMamCells = variable["uTMamCells"];
-		lambdaMamCells = variable["lambdaMamCells"];
-		kMamAQBase = variable["kMamAQBase"];
-		kMamCellsDeclineBase = variable["kMamCellsDeclineBase"];
-		kMamCellsQAPrePeak = variable["kMamCellsQAPrePeak"];
-		kMamCellsQAPostPeak = variable["kMamCellsQAPostPeak"];
-		kMamCellsQAStart = variable["kMamCellsQAStart"];
-		kMamCellsQAKickStartDecay = variable["kMamCellsQAKickStartDecay"];
-		kMamCellsTransitionDim = variable["kMamCellsTransitionDim"];
-		kMamCellsTransitionSteepness = variable["kMamCellsTransitionSteepness"];
-		MamCellsDecayRateOfSenescence = variable["MamCellsDecayRateOfSenescence"];
-		BaseMamCellsTurnOver = variable["BaseMamCellsTurnOver"];
-		MamCellsProliferationDecayRate = variable["MamCellsProliferationDecayRate"];
-		kMamCellsUsMfDecay = variable["kMamCellsUsMfDecay"];
-		MilkIntPowerForFMamCelsQA1 = variable["MilkIntPowerForFMamCelsQA1"];
-		MaxLossDueToLowMf = variable["MaxLossDueToLowMf"];
-		PreCalvingMamCells = variable["PreCalvingMamCells"];
-		PostCalvingMamCells = variable["PostCalvingMamCells"];
-		MamCells = variable["MamCells"];
-		MEinMJ = variable["MEinMJ"];
-		LW = variable["LW"];
-		fMamCellsQA = variable["fMamCellsQA"];
-		fMamCellsPA = variable["fMamCellsPA"];
-		fMamCellsUS = variable["fMamCellsUS"];
-		fMamCellsAS = variable["fMamCellsAS"];
-		fMamCellsQS = variable["fMamCellsQS"];
-		fMamCellsAQ = variable["fMamCellsAQ"];
-		dMamCellsA = variable["dMamCellsA"];
-		dMamCellsQ = variable["dMamCellsQ"];
-		dMamCellsS = variable["dMamCellsS"];
-		MamCellsA = variable["MamCellsA"];
-		MamCellsQ = variable["MamCellsQ"];
-		MamCellsS = variable["MamCellsS"];
-		MamCellsQaKickStartFactor = variable["MamCellsQaKickStartFactor"];
-		MamCellsQaPreToPostFactor = variable["MamCellsQaPreToPostFactor"];
-		kMamCellsQA = variable["kMamCellsQA"];
-		kMamCellsQaMfAdjustment = variable["kMamCellsQaMfAdjustment"];
-		LowMfDecay = variable["LowMfDecay"];
-		IncreasedUsDueToLowMf = variable["IncreasedUsDueToLowMf"];
-		dNonUterEBW = variable["dNonUterEBW"];
-		WtAdipNew = variable["WtAdipNew"];
-		LhorTurnoverDays = variable["LhorTurnoverDays"];
-		kLHorSensAa = variable["kLHorSensAa"];
-		kLHorSensGl = variable["kLHorSensGl"];
-		wLHorSensAa = variable["wLHorSensAa"];
-		wLHorSensAdip = variable["wLHorSensAdip"];
-		wLHorSensGl = variable["wLHorSensGl"];
-		xLHorSensAa = variable["xLHorSensAa"];
-		xLHorSensAdip = variable["xLHorSensAdip"];
-		xLHorSensGl = variable["xLHorSensGl"];
-		cAaBase = variable["cAaBase"];
-		cGlBase = variable["cGlBase"];
-		KDayLength = variable["KDayLength"];
-		FixedLhorSW = variable["FixedLhorSW"];
-		cGlTarget = variable["cGlTarget"];
-		LHor = variable["LHor"];
-		LHor1 = variable["LHor1"];
-		dLHor = variable["dLHor"];
-		VmLHorSyn = variable["VmLHorSyn"];
-		LHorSyn1 = variable["LHorSyn1"];
-		LHorSyn = variable["LHorSyn"];
-		LHorDeg = variable["LHorDeg"];
-		kLHor = variable["kLHor"];
-		LhorAa = variable["LhorAa"];
-		LhorGl = variable["LhorGl"];
-		LhorAdip = variable["LhorAdip"];
-		KLHorPP = variable["KLHorPP"];
-		BcsTargetNadir = variable["BcsTargetNadir"];
-		BcsTargetDecay = variable["BcsTargetDecay"];
-		BcsTargetFactor = variable["BcsTargetFactor"];
-		WtAdipTarget = variable["WtAdipTarget"];
-		CorrectedBW = variable["CorrectedBW"];
-		PMamEnzCell = variable["PMamEnzCell"];
-		MamEnz = variable["MamEnz"];
-		kMilkingFrequencyLagUp = variable["kMilkingFrequencyLagUp"];
-		kMilkingFrequencyLagDown = variable["kMilkingFrequencyLagDown"];
-		MilkingFrequencyAdjusted = variable["MilkingFrequencyAdjusted"];
-		MilkingFrequencyBaseAdjustment = variable["MilkingFrequencyBaseAdjustment"];
-		OnceADay2YearsOldAdjustment1 = variable["OnceADay2YearsOldAdjustment1"];
-		MilkingFrequencyAgeAdjustment = variable["MilkingFrequencyAgeAdjustment"];
-		MilkSolids270MfAdjusted = variable["MilkSolids270MfAdjusted"];
-		ikMilkInh = variable["ikMilkInh"];
-		KMilkInhDeg = variable["KMilkInhDeg"];
-		dKMilkInh = variable["dKMilkInh"];
-		MilkInhSyn = variable["MilkInhSyn"];
-		MilkInhDeg = variable["MilkInhDeg"];
-		KMinh = variable["KMinh"];
-		AcAcTs = variable["AcAcTs"];
-		KTsFaAdip = variable["KTsFaAdip"];
-		TgFaFa = variable["TgFaFa"];
-		VmTsFaAdip = variable["VmTsFaAdip"];
-		Theta1 = variable["Theta1"];
-		K1FaTs = variable["K1FaTs"];
-		K1TsFa = variable["K1TsFa"];
-		KFaTsAdip = variable["KFaTsAdip"];
-		KFaTmVis = variable["KFaTmVis"];
-		VmFaTmVis = variable["VmFaTmVis"];
-		VmFaTsAdip = variable["VmFaTsAdip"];
-		AcTgTg = variable["AcTgTg"];
-		FaTgTg = variable["FaTgTg"];
-		K1FaTm = variable["K1FaTm"];
-		P1 = variable["P1"];
-		EXP10 = variable["EXP10"];
-		dTsAdip = variable["dTsAdip"];
-		TsFaAdip = variable["TsFaAdip"];
-		cTs = variable["cTs"];
-		FaTsF1 = variable["FaTsF1"];
-		AcTsF1 = variable["AcTsF1"];
-		WtAdip = variable["WtAdip"];
-		dWtTsAdip = variable["dWtTsAdip"];
-		WtTsAdip = variable["WtTsAdip"];
-		TsAdip = variable["TsAdip"];
-		dBCS = variable["dBCS"];
-		BCS = variable["BCS"];
-		BCS_NZ = variable["BCS_NZ"];
-		dFa = variable["dFa"];
-		FaTsAdip = variable["FaTsAdip"];
-		cFa = variable["cFa"];
-		TsFaF1 = variable["TsFaF1"];
-		FaTmVis = variable["FaTmVis"];
-		Fa = variable["Fa"];
-		K1VAct = variable["K1VAct"];
-		K2VAct = variable["K2VAct"];
-		dVmAcTs = variable["dVmAcTs"];
-		VmAcTs2 = variable["VmAcTs2"];
-		VmAcTs = variable["VmAcTs"];
-		KAcTmVis = variable["KAcTmVis"];
-		KAcTsAdip = variable["KAcTsAdip"];
-		VmAcTmVis = variable["VmAcTmVis"];
-		AaGlAc = variable["AaGlAc"];
-		K1AcTm = variable["K1AcTm"];
-		K1AcTs = variable["K1AcTs"];
-		dAc = variable["dAc"];
-		AaAcV1 = variable["AaAcV1"];
-		AcTsAdip = variable["AcTsAdip"];
-		cAc = variable["cAc"];
-		AcTmVis = variable["AcTmVis"];
-		Ac = variable["Ac"];
-		WtAcTm = variable["WtAcTm"];
-		WtFaTm = variable["WtFaTm"];
-		dTm = variable["dTm"];
-		dMamTm = variable["dMamTm"];
-		dMilkTm = variable["dMilkTm"];
-		MamTm = variable["MamTm"];
-		TMilkTm = variable["TMilkTm"];
-		PcTmFromScfa = variable["PcTmFromScfa"];
-		ExpOth2 = variable["ExpOth2"];
-		ExpV2 = variable["ExpV2"];
-		KDnaOth = variable["KDnaOth"];
-		KDnaVis = variable["KDnaVis"];
-		OthDnaMx = variable["OthDnaMx"];
-		VisDnaMx = variable["VisDnaMx"];
-		dOthDna = variable["dOthDna"];
-		dVisDna = variable["dVisDna"];
-		OthDna = variable["OthDna"];
-		VisDna = variable["VisDna"];
-		VmAaPOthOth = variable["VmAaPOthOth"];
-		KAaPOthOth = variable["KAaPOthOth"];
-		KAaPVisVis = variable["KAaPVisVis"];
-		VmAaPVisVis = variable["VmAaPVisVis"];
-		KAaGlVis = variable["KAaGlVis"];
-		VmAaGlVis = variable["VmAaGlVis"];
-		VmAaPmVis = variable["VmAaPmVis"];
-		fDWt = variable["fDWt"];
-		KPOthAaOth = variable["KPOthAaOth"];
-		KPVisAaVis = variable["KPVisAaVis"];
-		AaGlUr = variable["AaGlUr"];
-		KAaPmVis = variable["KAaPmVis"];
-		VsizF = variable["VsizF"];
-		dAa = variable["dAa"];
-		dPOth = variable["dPOth"];
-		dPVis = variable["dPVis"];
-		POthAaOth = variable["POthAaOth"];
-		PVisAaVis = variable["PVisAaVis"];
-		cPOth = variable["cPOth"];
-		cPVis = variable["cPVis"];
-		WtPOth = variable["WtPOth"];
-		WtPVis = variable["WtPVis"];
-		WtOth = variable["WtOth"];
-		dWtOth = variable["dWtOth"];
-		WtVis = variable["WtVis"];
-		dWtVis = variable["dWtVis"];
-		AaPOthOth = variable["AaPOthOth"];
-		AaPVisVis = variable["AaPVisVis"];
-		AaGlVis = variable["AaGlVis"];
-		POthfSr = variable["POthfSr"];
-		PVisfSr = variable["PVisfSr"];
-		POthfDr = variable["POthfDr"];
-		PVisfDr = variable["PVisfDr"];
-		AaPmVis = variable["AaPmVis"];
-		cAa = variable["cAa"];
-		PVis = variable["PVis"];
-		POth = variable["POth"];
-		AA1 = variable["AA1"];
 		AA = variable["AA"];
-		AmUrUr = variable["AmUrUr"];
-		KBldUrU = variable["KBldUrU"];
-		dBldUr = variable["dBldUr"];
-		AaUrVis = variable["AaUrVis"];
-		AaUrGest = variable["AaUrGest"];
-		AmUr = variable["AmUr"];
-		BldUrRumAm = variable["BldUrRumAm"];
-		SaNRumAm = variable["SaNRumAm"];
-		dUrea = variable["dUrea"];
-		BldUr1 = variable["BldUr1"];
-		BldUr = variable["BldUr"];
-		cPun = variable["cPun"];
-		cMun = variable["cMun"];
-		BldUrMUN = variable["BldUrMUN"];
-		dPm = variable["dPm"];
-		dMamPm = variable["dMamPm"];
-		dMilkPm = variable["dMilkPm"];
-		MamPm = variable["MamPm"];
-		TMilkPm = variable["TMilkPm"];
-		AaGlGl = variable["AaGlGl"];
-		GyGlGl = variable["GyGlGl"];
-		LaGlGl = variable["LaGlGl"];
-		PrGlGl = variable["PrGlGl"];
-		KGlLmVis = variable["KGlLmVis"];
-		VmGlTpAdip = variable["VmGlTpAdip"];
-		fLaCdAdip = variable["fLaCdAdip"];
-		KGlTpAdip = variable["KGlTpAdip"];
-		KGlTpVis = variable["KGlTpVis"];
-		VmGlTpVis = variable["VmGlTpVis"];
-		fLaCdOth = variable["fLaCdOth"];
-		GlGlHy = variable["GlGlHy"];
-		KGlLaOth = variable["KGlLaOth"];
-		VmGlLaOth = variable["VmGlLaOth"];
-		fPrGl = variable["fPrGl"];
-		GlLaLa = variable["GlLaLa"];
-		pGlHyAdip = variable["pGlHyAdip"];
-		pGlHyVis = variable["pGlHyVis"];
-		TgGyGy = variable["TgGyGy"];
-		GlGyGY = variable["GlGyGY"];
-		GlHyTp = variable["GlHyTp"];
-		GlTpTp = variable["GlTpTp"];
-		KAaLmVis = variable["KAaLmVis"];
-		TpTpTs = variable["TpTpTs"];
-		TpTpTm = variable["TpTpTm"];
-		dGl = variable["dGl"];
-		upGl = variable["upGl"];
+		AA1 = variable["AA1"];
+		AaAcV1 = variable["AaAcV1"];
+		AaAm = variable["AaAm"];
+		AaFvFat = variable["AaFvFat"];
+		AaGlGest = variable["AaGlGest"];
+		AaGlHt = variable["AaGlHt"];
 		AaGlV1 = variable["AaGlV1"];
-		PrGlV1 = variable["PrGlV1"];
-		PrGlVis = variable["PrGlVis"];
-		LaGlV1 = variable["LaGlV1"];
-		RumLaGl = variable["RumLaGl"];
-		gGlLa = variable["gGlLa"];
-		GyGlVis = variable["GyGlVis"];
-		GyGlV1 = variable["GyGlV1"];
-		VmGlLmVisPart = variable["VmGlLmVisPart"];
-		kVmGlLmDecay = variable["kVmGlLmDecay"];
-		kVmGlLmDeg = variable["kVmGlLmDeg"];
-		kVmGlLmSyn = variable["kVmGlLmSyn"];
-		VmGlLm1Vis = variable["VmGlLm1Vis"];
-		GLLmVis = variable["GLLmVis"];
-		GlHyAdip = variable["GlHyAdip"];
-		GlHyVis = variable["GlHyVis"];
-		fGlHyAdip = variable["fGlHyAdip"];
-		fGlHyVis = variable["fGlHyVis"];
-		GlTpAdip = variable["GlTpAdip"];
-		GlTpVis = variable["GlTpVis"];
-		GlLaOth = variable["GlLaOth"];
-		TpinAdip = variable["TpinAdip"];
-		GlTpF1 = variable["GlTpF1"];
-		TpinVis = variable["TpinVis"];
-		GlTpV1 = variable["GlTpV1"];
-		LainOth = variable["LainOth"];
-		GlLaB1 = variable["GlLaB1"];
-		TpLaAdip = variable["TpLaAdip"];
-		TpCdVis = variable["TpCdVis"];
-		TpTsAdip = variable["TpTsAdip"];
-		TpTmVis = variable["TpTmVis"];
-		AcTmV1 = variable["AcTmV1"];
-		FaTmV1 = variable["FaTmV1"];
-		LaCdAdip = variable["LaCdAdip"];
-		LaGlAdip = variable["LaGlAdip"];
-		GlGyT = variable["GlGyT"];
-		LaCdOth = variable["LaCdOth"];
-		LaGlOth = variable["LaGlOth"];
-		Gl = variable["Gl"];
-		cGl = variable["cGl"];
-		fLm = variable["fLm"];
-		GlLmLm = variable["GlLmLm"];
-		dLm = variable["dLm"];
-		dMamLm = variable["dMamLm"];
-		dMilkLm = variable["dMilkLm"];
-		MamLm = variable["MamLm"];
-		TMilkLm = variable["TMilkLm"];
-		MamMilk = variable["MamMilk"];
-		dMamMilkAve = variable["dMamMilkAve"];
-		MamMilkAve = variable["MamMilkAve"];
-		AcCdAt = variable["AcCdAt"];
-		FaCdAt = variable["FaCdAt"];
-		GlCdAt = variable["GlCdAt"];
-		GyGlAt = variable["GyGlAt"];
-		GlLaAt = variable["GlLaAt"];
-		LaCdAt = variable["LaCdAt"];
-		PrCdAt = variable["PrCdAt"];
-		TpCdAt = variable["TpCdAt"];
-		TpLaAt = variable["TpLaAt"];
-		BuCdAt = variable["BuCdAt"];
-		HyAtAt = variable["HyAtAt"];
-		AaPxAD = variable["AaPxAD"];
-		GlHyAD = variable["GlHyAD"];
-		GlTpAD = variable["GlTpAD"];
-		LaGlAd = variable["LaGlAd"];
-		AcFaAd = variable["AcFaAd"];
-		GlLmAd = variable["GlLmAd"];
-		PrGlAd = variable["PrGlAd"];
-		TcHyAd = variable["TcHyAd"];
-		TpTgAD = variable["TpTgAD"];
-		absAaAd = variable["absAaAd"];
-		absGlAd = variable["absGlAd"];
-		OxAcCd = variable["OxAcCd"];
-		OxBuCd = variable["OxBuCd"];
-		OxGlCd = variable["OxGlCd"];
-		OxLaCd = variable["OxLaCd"];
-		OxPrCd = variable["OxPrCd"];
-		OxFaCd = variable["OxFaCd"];
-		OxPrGl = variable["OxPrGl"];
-		OxTpCd = variable["OxTpCd"];
-		AcCdCd = variable["AcCdCd"];
-		BuCdCd = variable["BuCdCd"];
-		GlCdCd = variable["GlCdCd"];
-		GlHyCd = variable["GlHyCd"];
-		PrCdCd = variable["PrCdCd"];
-		FaCdCd = variable["FaCdCd"];
-		LaCdCd = variable["LaCdCd"];
-		TpCdCd = variable["TpCdCd"];
-		TAveabsE = variable["TAveabsE"];
-		dabsEAve = variable["dabsEAve"];
+		AaGlVis = variable["AaGlVis"];
+		AaPConc = variable["AaPConc"];
+		AaPGest = variable["AaPGest"];
+		AaPmHt = variable["AaPmHt"];
+		AaPmVis = variable["AaPmVis"];
+		AaPOthHt = variable["AaPOthHt"];
+		AaPOthOth = variable["AaPOthOth"];
+		AaPUter = variable["AaPUter"];
+		AaPVisVis = variable["AaPVisVis"];
+		AaTO = variable["AaTO"];
+		AaUrGest = variable["AaUrGest"];
+		AaUrVis = variable["AaUrVis"];
+		AbortPregNow = variable["AbortPregNow"];
+		AbortPregNowVariable = variable["AbortPregNowVariable"];
+		AbsAa = variable["AbsAa"];
+		absAaE = variable["absAaE"];
+		absAaHt = variable["absAaHt"];
+		absAc = variable["absAc"];
+		AbsAcE = variable["AbsAcE"];
+		AbsAm = variable["AbsAm"];
+		absAs = variable["absAs"];
+		absBu = variable["absBu"];
+		absBuE = variable["absBuE"];
+		AbsE = variable["AbsE"];
 		absEAve = variable["absEAve"];
 		absEF = variable["absEF"];
-		EBW1 = variable["EBW1"];
-		dEBW1 = variable["dEBW1"];
-		BW1 = variable["BW1"];
-		NonFatEBW = variable["NonFatEBW"];
-		NonFatNonUterEBW = variable["NonFatNonUterEBW"];
-		AaGlH = variable["AaGlH"];
-		HyAcFa = variable["HyAcFa"];
-		KNaOth = variable["KNaOth"];
-		KbasOth = variable["KbasOth"];
-		eerActivityAtp = variable["eerActivityAtp"];
-		AtAd = variable["AtAd"];
-		AdAt = variable["AdAt"];
-		AtAdOth = variable["AtAdOth"];
-		AtAdB1 = variable["AtAdB1"];
-		basalOth = variable["basalOth"];
-		OldBasalOth = variable["OldBasalOth"];
-		KNaAtOth = variable["KNaAtOth"];
-		AdAtOth = variable["AdAtOth"];
-		AdAtB1 = variable["AdAtB1"];
-		AdAtB2 = variable["AdAtB2"];
-		basHtOth = variable["basHtOth"];
-		AaPOthHt = variable["AaPOthHt"];
-		MHtOth = variable["MHtOth"];
-		KbasAdip = variable["KbasAdip"];
-		KNaAdip = variable["KNaAdip"];
-		AtAdAdip = variable["AtAdAdip"];
-		basalAdip = variable["basalAdip"];
-		KNaAtAdip = variable["KNaAtAdip"];
-		AtAdF1 = variable["AtAdF1"];
-		AtAdF2 = variable["AtAdF2"];
-		AtAdF3 = variable["AtAdF3"];
-		AtAdF4 = variable["AtAdF4"];
-		AdAtAdip = variable["AdAtAdip"];
-		AdAtF1 = variable["AdAtF1"];
-		AdAtF2 = variable["AdAtF2"];
-		basHtAdip = variable["basHtAdip"];
-		HtF2 = variable["HtF2"];
-		HtF3 = variable["HtF3"];
-		MHtAdip = variable["MHtAdip"];
-		HrtWrk = variable["HrtWrk"];
-		KbasVis = variable["KbasVis"];
-		KidWrk = variable["KidWrk"];
-		KNaVis = variable["KNaVis"];
-		ResWrk = variable["ResWrk"];
-		AtAmUr = variable["AtAmUr"];
-		AtAdVis = variable["AtAdVis"];
-		basalVis = variable["basalVis"];
-		KNaAtVis = variable["KNaAtVis"];
-		AtAdV1 = variable["AtAdV1"];
-		AtAdV2 = variable["AtAdV2"];
-		AtAdV3 = variable["AtAdV3"];
-		AtAdV4 = variable["AtAdV4"];
-		AtAdV5 = variable["AtAdV5"];
-		AtAdV6 = variable["AtAdV6"];
-		AtAdV7 = variable["AtAdV7"];
-		AtAdV8 = variable["AtAdV8"];
-		LaGlVis = variable["LaGlVis"];
-		AtAdV9 = variable["AtAdV9"];
-		AtAd10 = variable["AtAd10"];
-		AtAd11 = variable["AtAd11"];
-		AtAd12 = variable["AtAd12"];
-		AtAd13 = variable["AtAd13"];
-		AtAd14 = variable["AtAd14"];
-		ATAd15 = variable["ATAd15"];
-		AdAtVis = variable["AdAtVis"];
-		AdAtV1 = variable["AdAtV1"];
-		AdAtV2 = variable["AdAtV2"];
-		AdAtV3 = variable["AdAtV3"];
-		AdAtV4 = variable["AdAtV4"];
-		PrCdVis = variable["PrCdVis"];
-		BuCdVis = variable["BuCdVis"];
-		AdAtV5 = variable["AdAtV5"];
-		basHtVis = variable["basHtVis"];
-		HtV2 = variable["HtV2"];
-		HtV3 = variable["HtV3"];
-		HtV4 = variable["HtV4"];
-		HtV5 = variable["HtV5"];
-		HtV6 = variable["HtV6"];
-		HtV7 = variable["HtV7"];
-		HiV8 = variable["HiV8"];
-		MHtVis = variable["MHtVis"];
-		fGrvUterTO = variable["fGrvUterTO"];
-		AtAdGestGrth = variable["AtAdGestGrth"];
-		AtAdGestTO = variable["AtAdGestTO"];
-		AtAdGest = variable["AtAdGest"];
-		MHtGestGrth = variable["MHtGestGrth"];
-		MHtGestTO = variable["MHtGestTO"];
-		MHtGest = variable["MHtGest"];
-		EGrvUterCLF = variable["EGrvUterCLF"];
-		KAcCd = variable["KAcCd"];
-		KFaCd = variable["KFaCd"];
-		KGlCd = variable["KGlCd"];
-		ndAt = variable["ndAt"];
-		ndOx = variable["ndOx"];
-		rtOx1 = variable["rtOx1"];
-		rtOx2 = variable["rtOx2"];
-		GlCd = variable["GlCd"];
-		FaCd = variable["FaCd"];
+		absFa = variable["absFa"];
+		absFaE = variable["absFaE"];
+		absGl = variable["absGl"];
+		absGlE = variable["absGlE"];
+		absGlHt = variable["absGlHt"];
+		absLa = variable["absLa"];
+		absLaE = variable["absLaE"];
+		absPr = variable["absPr"];
+		absPrE = variable["absPrE"];
+		absRumAc = variable["absRumAc"];
+		absRumAm = variable["absRumAm"];
+		absRumAs = variable["absRumAs"];
+		absRumBu = variable["absRumBu"];
+		absRumLa = variable["absRumLa"];
+		absRumPr = variable["absRumPr"];
+		Ac = variable["Ac"];
 		AcCd = variable["AcCd"];
-		rtPO = variable["rtPO"];
-		TcHyAdip = variable["TcHyAdip"];
-		TcHyVis = variable["TcHyVis"];
-		dOx = variable["dOx"];
-		AtHt1 = variable["AtHt1"];
-		AtHt2 = variable["AtHt2"];
-		AtHt3 = variable["AtHt3"];
-		AtHt4 = variable["AtHt4"];
-		AtHt5 = variable["AtHt5"];
-		AtHt6 = variable["AtHt6"];
-		AtHt7 = variable["AtHt7"];
-		AtHt8 = variable["AtHt8"];
-		AtHt = variable["AtHt"];
-		AtAdH1 = variable["AtAdH1"];
-		dN = variable["dN"];
-		Nin = variable["Nin"];
-		UrNFd = variable["UrNFd"];
-		NSal = variable["NSal"];
-		Nabs = variable["Nabs"];
-		NUr = variable["NUr"];
-		NurTotal = variable["NurTotal"];
-		NBody = variable["NBody"];
-		NMilk = variable["NMilk"];
-		NFec = variable["NFec"];
-		Nout = variable["Nout"];
-		Nret1 = variable["Nret1"];
-		Nret2 = variable["Nret2"];
-		Ndig = variable["Ndig"];
-		Nbal = variable["Nbal"];
-		RumDPrta = variable["RumDPrta"];
-		ELm = variable["ELm"];
-		EPm = variable["EPm"];
-		ETm = variable["ETm"];
-		NEP = variable["NEP"];
-		NetEff = variable["NetEff"];
-		propLm = variable["propLm"];
-		fTm1 = variable["fTm1"];
-		PcLm = variable["PcLm"];
-		PcPm = variable["PcPm"];
-		PcTm = variable["PcTm"];
-		FCM3h = variable["FCM3h"];
-		FCM4z1 = variable["FCM4z1"];
-		MntHP = variable["MntHP"];
-		MEMBW = variable["MEMBW"];
-		THP1 = variable["THP1"];
-		fGestEPrt = variable["fGestEPrt"];
-		dOthE = variable["dOthE"];
-		dAdipE = variable["dAdipE"];
-		dVisE = variable["dVisE"];
-		dGestE = variable["dGestE"];
-		dMaint = variable["dMaint"];
-		dHiM4 = variable["dHiM4"];
-		EB = variable["EB"];
-		THP2 = variable["THP2"];
-		CorNEP = variable["CorNEP"];
-		CH4EFd = variable["CH4EFd"];
-		fCH4E = variable["fCH4E"];
-		fCH4DE = variable["fCH4DE"];
-		fCH4ME = variable["fCH4ME"];
-		AaFvHy = variable["AaFvHy"];
-		KHyEruct = variable["KHyEruct"];
-		KHyOther = variable["KHyOther"];
-		KumarMigEq = variable["KumarMigEq"];
-		dTCH4 = variable["dTCH4"];
-		dCsFvH = variable["dCsFvH"];
-		dCsHy = variable["dCsHy"];
-		dRumAaHy = variable["dRumAaHy"];
-		dHyFlF = variable["dHyFlF"];
-		dHyMi = variable["dHyMi"];
-		dTHy = variable["dTHy"];
-		dHyEruct = variable["dHyEruct"];
-		dHyOther = variable["dHyOther"];
-		dDCH4 = variable["dDCH4"];
-		dCH4Kg = variable["dCH4Kg"];
-		dCH4g = variable["dCH4g"];
-		TCH4 = variable["TCH4"];
-		CH4KGY = variable["CH4KGY"];
-		CH4Milk = variable["CH4Milk"];
-		TCH4E = variable["TCH4E"];
-		netME = variable["netME"];
-		CH4GEi = variable["CH4GEi"];
-		CH4DEi = variable["CH4DEi"];
-		CH4MEi = variable["CH4MEi"];
-		fFIM = variable["fFIM"];
-		mult = variable["mult"];
-		BCH4 = variable["BCH4"];
-		TBCH4 = variable["TBCH4"];
-		TBCH41 = variable["TBCH41"];
-		fBCH4E = variable["fBCH4E"];
-		fBCH4D = variable["fBCH4D"];
-		fBCH4M = variable["fBCH4M"];
-		BCH4Fd = variable["BCH4Fd"];
-		MCH4E = variable["MCH4E"];
-		MCH4kg = variable["MCH4kg"];
-		TMCH4E = variable["TMCH4E"];
-		TMCH42 = variable["TMCH42"];
-		fMCH4E = variable["fMCH4E"];
-		fMCH4D = variable["fMCH4D"];
-		fMCH4M = variable["fMCH4M"];
-		EPart = variable["EPart"];
-		GlLmHt = variable["GlLmHt"];
-		AaPmHt = variable["AaPmHt"];
+		AccDEi = variable["AccDEi"];
+		AccGEi = variable["AccGEi"];
+		AccMEi = variable["AccMEi"];
+		AcTmH1 = variable["AcTmH1"];
+		AcTmH2 = variable["AcTmH2"];
+		AcTmH3 = variable["AcTmH3"];
+		AcTmH4 = variable["AcTmH4"];
+		AcTmV1 = variable["AcTmV1"];
+		AcTmVis = variable["AcTmVis"];
+		AcTsAdip = variable["AcTsAdip"];
+		AcTsF1 = variable["AcTsF1"];
 		AcTsH1 = variable["AcTsH1"];
 		AcTsH2 = variable["AcTsH2"];
 		AcTsH3 = variable["AcTsH3"];
@@ -7254,62 +5609,1707 @@ public:
 		AcTsH6 = variable["AcTsH6"];
 		AcTsH7 = variable["AcTsH7"];
 		AcTsHt = variable["AcTsHt"];
-		AcTmH1 = variable["AcTmH1"];
-		AcTmH2 = variable["AcTmH2"];
-		AcTmH3 = variable["AcTmH3"];
-		AcTmH4 = variable["AcTmH4"];
+		AdAt = variable["AdAt"];
+		AdAtAdip = variable["AdAtAdip"];
+		AdAtB1 = variable["AdAtB1"];
+		AdAtB2 = variable["AdAtB2"];
+		AdAtF1 = variable["AdAtF1"];
+		AdAtF2 = variable["AdAtF2"];
+		AdAtOth = variable["AdAtOth"];
+		AdAtV1 = variable["AdAtV1"];
+		AdAtV2 = variable["AdAtV2"];
+		AdAtV3 = variable["AdAtV3"];
+		AdAtV4 = variable["AdAtV4"];
+		AdAtV5 = variable["AdAtV5"];
+		AdAtVis = variable["AdAtVis"];
+		ADFIn = variable["ADFIn"];
+		AdfinFd = variable["AdfinFd"];
+		ADFP = variable["ADFP"];
+		afAiFd = variable["afAiFd"];
 		AFTmH5 = variable["AFTmH5"];
 		AFTmH6 = variable["AFTmH6"];
+		AfTmH9 = variable["AfTmH9"];
+		AgeInYears = variable["AgeInYears"];
+		AHor = variable["AHor"];
+		AHor1 = variable["AHor1"];
+		AiP = variable["AiP"];
+		AM = variable["AM"];
+		Am1 = variable["Am1"];
+		AM2 = variable["AM2"];
+		AmMi = variable["AmMi"];
+		AmUr = variable["AmUr"];
+		Animal = variable["Animal"];
+		aPAGlH = variable["aPAGlH"];
+		appDE = variable["appDE"];
+		As = variable["As"];
+		AsAsFd = variable["AsAsFd"];
+		AshinFd = variable["AshinFd"];
+		AshP = variable["AshP"];
+		AsP = variable["AsP"];
+		AtAd = variable["AtAd"];
+		AtAd10 = variable["AtAd10"];
+		AtAd11 = variable["AtAd11"];
+		AtAd12 = variable["AtAd12"];
+		AtAd13 = variable["AtAd13"];
+		AtAd14 = variable["AtAd14"];
+		ATAd15 = variable["ATAd15"];
+		AtAdAdip = variable["AtAdAdip"];
+		AtAdB1 = variable["AtAdB1"];
+		AtAdF1 = variable["AtAdF1"];
+		AtAdF2 = variable["AtAdF2"];
+		AtAdF3 = variable["AtAdF3"];
+		AtAdF4 = variable["AtAdF4"];
+		AtAdGest = variable["AtAdGest"];
+		AtAdGestGrth = variable["AtAdGestGrth"];
+		AtAdGestTO = variable["AtAdGestTO"];
+		AtAdH1 = variable["AtAdH1"];
+		AtAdHT = variable["AtAdHT"];
+		AtAdOth = variable["AtAdOth"];
+		AtAdV1 = variable["AtAdV1"];
+		AtAdV2 = variable["AtAdV2"];
+		AtAdV3 = variable["AtAdV3"];
+		AtAdV4 = variable["AtAdV4"];
+		AtAdV5 = variable["AtAdV5"];
+		AtAdV6 = variable["AtAdV6"];
+		AtAdV7 = variable["AtAdV7"];
+		AtAdV8 = variable["AtAdV8"];
+		AtAdV9 = variable["AtAdV9"];
+		AtAdVis = variable["AtAdVis"];
+		AtHt = variable["AtHt"];
+		AtHt1 = variable["AtHt1"];
+		AtHt2 = variable["AtHt2"];
+		AtHt3 = variable["AtHt3"];
+		AtHt4 = variable["AtHt4"];
+		AtHt5 = variable["AtHt5"];
+		AtHt6 = variable["AtHt6"];
+		AtHt7 = variable["AtHt7"];
+		AtHt8 = variable["AtHt8"];
+		AtpC = variable["AtpC"];
+		AtpF = variable["AtpF"];
+		AtpG = variable["AtpG"];
+		AtpM = variable["AtpM"];
+		basalAdip = variable["basalAdip"];
+		basalOth = variable["basalOth"];
+		basalVis = variable["basalVis"];
+		basHtAdip = variable["basHtAdip"];
+		basHtOth = variable["basHtOth"];
+		basHtVis = variable["basHtVis"];
+		BCH4 = variable["BCH4"];
+		BCH4Fd = variable["BCH4Fd"];
+		BCS = variable["BCS"];
+		BCS_NZ = variable["BCS_NZ"];
+		BcsTarget = variable["BcsTarget"];
+		BcsTargetFactor = variable["BcsTargetFactor"];
+		BladderVol = variable["BladderVol"];
+		BldUr = variable["BldUr"];
+		BldUr1 = variable["BldUr1"];
+		BldUrAm = variable["BldUrAm"];
+		BldUrMUN = variable["BldUrMUN"];
+		BldUrRumAm = variable["BldUrRumAm"];
+		BldUrVol = variable["BldUrVol"];
+		BuCdVis = variable["BuCdVis"];
+		BW = variable["BW"];
+		BW1 = variable["BW1"];
+		BwCorrected = variable["BwCorrected"];
+		BwCorrection = variable["BwCorrection"];
+		BWF = variable["BWF"];
+		cAa = variable["cAa"];
+		cAc = variable["cAc"];
+		cAm = variable["cAm"];
+		cAs = variable["cAs"];
+		cBldUr = variable["cBldUr"];
+		cCs = variable["cCs"];
+		CdMi = variable["CdMi"];
+		CdMiG2 = variable["CdMiG2"];
+		Ce = variable["Ce"];
+		CeAcAc = variable["CeAcAc"];
+		CeBuBu = variable["CeBuBu"];
+		CeCs = variable["CeCs"];
+		Cein = variable["Cein"];
+		CeP = variable["CeP"];
+		CePrPr = variable["CePrPr"];
+		cFa = variable["cFa"];
+		CFatinFd = variable["CFatinFd"];
+		cGl = variable["cGl"];
+		cGlTarget = variable["cGlTarget"];
+		CH4DEi = variable["CH4DEi"];
+		CH4E = variable["CH4E"];
+		CH4EFd = variable["CH4EFd"];
+		CH4GEi = variable["CH4GEi"];
+		CH4KGY = variable["CH4KGY"];
+		CH4MEi = variable["CH4MEi"];
+		CH4Milk = variable["CH4Milk"];
+		ChChFd = variable["ChChFd"];
+		CHor = variable["CHor"];
+		CHor1 = variable["CHor1"];
+		cMiHa = variable["cMiHa"];
+		cMiHb = variable["cMiHb"];
+		cMiSPart = variable["cMiSPart"];
+		cMiWa = variable["cMiWa"];
+		cMun = variable["cMun"];
+		ConceiveNow = variable["ConceiveNow"];
+		ConceiveNowVariable = variable["ConceiveNowVariable"];
+		CONSET = variable["CONSET"];
+		CorME = variable["CorME"];
+		CorMEi = variable["CorMEi"];
+		CorNEP = variable["CorNEP"];
+		CorrectedBW = variable["CorrectedBW"];
+		CPinFd = variable["CPinFd"];
+		cPOth = variable["cPOth"];
+		CpP = variable["CpP"];
+		CPsinFd = variable["CPsinFd"];
+		cPun = variable["cPun"];
+		cPVis = variable["cPVis"];
+		cRumAa = variable["cRumAa"];
+		cRumAc = variable["cRumAc"];
+		cRumBu = variable["cRumBu"];
+		cRumLa = variable["cRumLa"];
+		cRumPr = variable["cRumPr"];
+		Cs = variable["Cs"];
+		CsAc = variable["CsAc"];
+		CsBu = variable["CsBu"];
+		CsCd = variable["CsCd"];
+		CsFv = variable["CsFv"];
+		CsFvAc = variable["CsFvAc"];
+		CsFvBu = variable["CsFvBu"];
+		CsFvCd = variable["CsFvCd"];
+		CsFvLa = variable["CsFvLa"];
+		CsFvPr = variable["CsFvPr"];
+		Csin = variable["Csin"];
+		CsLa = variable["CsLa"];
+		CsMi = variable["CsMi"];
+		CsMiG = variable["CsMiG"];
+		CsP = variable["CsP"];
+		CsPr = variable["CsPr"];
+		cTs = variable["cTs"];
+		CumulativeLowMfDays = variable["CumulativeLowMfDays"];
+		CurrentFeed = variable["CurrentFeed"];
+		CurrentSupplement = variable["CurrentSupplement"];
+		cVFA = variable["cVFA"];
+		CWC = variable["CWC"];
+		CWCF = variable["CWCF"];
+		dAa = variable["dAa"];
+		dabsEAve = variable["dabsEAve"];
+		dAc = variable["dAc"];
+		dAdipE = variable["dAdipE"];
+		DailyDMin = variable["DailyDMin"];
+		DailyMfDiff = variable["DailyMfDiff"];
+		dAm = variable["dAm"];
+		dAs = variable["dAs"];
+		DAY = variable["DAY"];
+		DayGest = variable["DayGest"];
+		DayGestBasic = variable["DayGestBasic"];
+		DayLength = variable["DayLength"];
+		DaylengthP1 = variable["DaylengthP1"];
+		DaylengthP2 = variable["DaylengthP2"];
+		DaylightSavingShift = variable["DaylightSavingShift"];
+		DayMilk = variable["DayMilk"];
+		DayofYear = variable["DayofYear"];
+		DayTwLength = variable["DayTwLength"];
+		DayTwlengthP2 = variable["DayTwlengthP2"];
+		dBCS = variable["dBCS"];
+		dBldUr = variable["dBldUr"];
+		DCadf = variable["DCadf"];
+		DCCe = variable["DCCe"];
+		dCd = variable["dCd"];
+		dCdKg = variable["dCdKg"];
+		DCDM = variable["DCDM"];
+		dCe = variable["dCe"];
+		dCH4g = variable["dCH4g"];
+		dCH4Kg = variable["dCH4Kg"];
+		DCHa = variable["DCHa"];
+		DCHb = variable["DCHb"];
+		DCLg = variable["DCLg"];
+		DCLipid = variable["DCLipid"];
+		DCndf = variable["DCndf"];
+		DCOm = variable["DCOm"];
+		DCPrt = variable["DCPrt"];
+		dCs = variable["dCs"];
+		dCsFvH = variable["dCsFvH"];
+		dCsHy = variable["dCsHy"];
+		dDCH4 = variable["dDCH4"];
+		DE = variable["DE"];
+		dEating = variable["dEating"];
+		dEBW1 = variable["dEBW1"];
+		DEI = variable["DEI"];
+		derivMilkingFrequencyLag = variable["derivMilkingFrequencyLag"];
+		dFa = variable["dFa"];
+		dFl = variable["dFl"];
+		dGestE = variable["dGestE"];
+		dGl = variable["dGl"];
+		dHa = variable["dHa"];
+		dHaMi = variable["dHaMi"];
+		dHb = variable["dHb"];
+		dHbMi = variable["dHbMi"];
+		dHc = variable["dHc"];
+		dHiM4 = variable["dHiM4"];
+		dHiP4 = variable["dHiP4"];
+		dHyEruct = variable["dHyEruct"];
+		dHyFlF = variable["dHyFlF"];
+		dHyMi = variable["dHyMi"];
+		dHyOther = variable["dHyOther"];
+		DilRate = variable["DilRate"];
+		dIndigFd = variable["dIndigFd"];
+		dKMilkInh = variable["dKMilkInh"];
+		dLHor = variable["dLHor"];
+		dLm = variable["dLm"];
+		dLmProd = variable["dLmProd"];
+		dLPart = variable["dLPart"];
+		dLwExclUterGutAndGrowth = variable["dLwExclUterGutAndGrowth"];
+		dMaint = variable["dMaint"];
+		dMamCellsA = variable["dMamCellsA"];
+		dMamCellsQ = variable["dMamCellsQ"];
+		dMamCellsS = variable["dMamCellsS"];
+		dMamLm = variable["dMamLm"];
+		dMamMilkAve = variable["dMamMilkAve"];
+		dMamPm = variable["dMamPm"];
+		dMamTm = variable["dMamTm"];
+		dMi = variable["dMi"];
+		DMilk = variable["DMilk"];
+		dMilkLm = variable["dMilkLm"];
+		dMilkPm = variable["dMilkPm"];
+		dMilkProd = variable["dMilkProd"];
+		dMilkTm = variable["dMilkTm"];
+		dMilkVol = variable["dMilkVol"];
+		DMP = variable["DMP"];
+		dMPart = variable["dMPart"];
+		dN = variable["dN"];
+		dNdfIn = variable["dNdfIn"];
+		dNep = variable["dNep"];
+		dNonUterEBW = variable["dNonUterEBW"];
+		dOthDna = variable["dOthDna"];
+		dOthE = variable["dOthE"];
+		dOx = variable["dOx"];
+		dPi = variable["dPi"];
+		dPm = variable["dPm"];
+		dPmProd = variable["dPmProd"];
+		dPOth = variable["dPOth"];
+		dPVis = variable["dPVis"];
+		dRest = variable["dRest"];
+		DrinkSW = variable["DrinkSW"];
+		DrnkWa = variable["DrnkWa"];
+		DrnkWaDiel = variable["DrnkWaDiel"];
+		DrnkWaTot = variable["DrnkWaTot"];
+		DrnkWaYest = variable["DrnkWaYest"];
+		dRumAa = variable["dRumAa"];
+		dRumAaHy = variable["dRumAaHy"];
+		dRumAc = variable["dRumAc"];
+		dRumBu = variable["dRumBu"];
+		dRumCd = variable["dRumCd"];
+		dRumLa = variable["dRumLa"];
+		dRumLiqVol = variable["dRumLiqVol"];
+		dRumntn = variable["dRumntn"];
+		dRumPr = variable["dRumPr"];
+		DryOffNow = variable["DryOffNow"];
+		DryOffNowVariable = variable["DryOffNowVariable"];
+		dSPart = variable["dSPart"];
+		dTCH4 = variable["dTCH4"];
+		dTCH4E = variable["dTCH4E"];
+		dTHy = variable["dTHy"];
+		dTm = variable["dTm"];
+		dTmProd = variable["dTmProd"];
+		dTsAdip = variable["dTsAdip"];
+		dUrea = variable["dUrea"];
+		dVisDna = variable["dVisDna"];
+		dVisE = variable["dVisE"];
+		dVmAcTs = variable["dVmAcTs"];
+		dWtAdipNew = variable["dWtAdipNew"];
+		dWtGrvUter = variable["dWtGrvUter"];
+		dWtOth = variable["dWtOth"];
+		dWtPGrvUter = variable["dWtPGrvUter"];
+		dWtPUter = variable["dWtPUter"];
+		dWtTsAdip = variable["dWtTsAdip"];
+		dWtUter = variable["dWtUter"];
+		dWtVis = variable["dWtVis"];
+		Eating = variable["Eating"];
+		EatingSupplementsSW = variable["EatingSupplementsSW"];
+		EatSa = variable["EatSa"];
+		EatWa = variable["EatWa"];
+		EB = variable["EB"];
+		EBW = variable["EBW"];
+		EBW1 = variable["EBW1"];
+		eerActivityAtp = variable["eerActivityAtp"];
+		EGrvUterCLF = variable["EGrvUterCLF"];
+		ELm = variable["ELm"];
+		EnergyCompensation = variable["EnergyCompensation"];
+		EnergyCompenstaion = variable["EnergyCompenstaion"];
+		EnergyForActivity = variable["EnergyForActivity"];
+		EnergyForGrowth = variable["EnergyForGrowth"];
+		EnergyForMaintenance = variable["EnergyForMaintenance"];
+		EnergyForMilk = variable["EnergyForMilk"];
+		EnergyForPregnancy = variable["EnergyForPregnancy"];
+		EPm = variable["EPm"];
+		ETm = variable["ETm"];
+		EUr = variable["EUr"];
+		EUrFd = variable["EUrFd"];
+		Fa = variable["Fa"];
+		FaCd = variable["FaCd"];
+		fAcFd = variable["fAcFd"];
+		fADFFd = variable["fADFFd"];
+		fAiFd = variable["fAiFd"];
+		fAiIndigFd = variable["fAiIndigFd"];
+		FaP = variable["FaP"];
+		fAsFd = variable["fAsFd"];
+		fAshFd = variable["fAshFd"];
+		FatAdd = variable["FatAdd"];
 		FaTmH7 = variable["FaTmH7"];
 		FaTmH8 = variable["FaTmH8"];
-		rtFa1 = variable["rtFa1"];
-		AfTmH9 = variable["AfTmH9"];
-		HiP1 = variable["HiP1"];
-		HiM1 = variable["HiM1"];
-		PrGlHt = variable["PrGlHt"];
-		AaGlHt = variable["AaGlHt"];
-		absGlHt = variable["absGlHt"];
-		aPAGlH = variable["aPAGlH"];
+		FaTmV1 = variable["FaTmV1"];
+		FaTmVis = variable["FaTmVis"];
+		FaTsAdip = variable["FaTsAdip"];
+		FatSc = variable["FatSc"];
+		FaTsF1 = variable["FaTsF1"];
+		fBCH4D = variable["fBCH4D"];
+		fBCH4E = variable["fBCH4E"];
+		fBCH4M = variable["fBCH4M"];
+		fBuFd = variable["fBuFd"];
+		fBuSilage = variable["fBuSilage"];
+		FCeCs = variable["FCeCs"];
+		fCeFd = variable["fCeFd"];
+		FCFatFd = variable["FCFatFd"];
+		fCH4DE = variable["fCH4DE"];
+		fCH4E = variable["fCH4E"];
+		fCH4ME = variable["fCH4ME"];
+		FCM3h = variable["FCM3h"];
+		FCM4Z = variable["FCM4Z"];
+		FCM4z1 = variable["FCM4z1"];
+		fCPFd = variable["fCPFd"];
+		FCPsFd = variable["FCPsFd"];
+		fCsHa = variable["fCsHa"];
+		fCsHb = variable["fCsHb"];
+		fd1 = variable["fd1"];
+		fd2 = variable["fd2"];
+		fd3 = variable["fd3"];
+		FdCapMolly = variable["FdCapMolly"];
+		FdDMIn = variable["FdDMIn"];
+		FdGEin = variable["FdGEin"];
+		fDMFd = variable["fDMFd"];
+		FdRat = variable["FdRat"];
+		FdRatDiel = variable["FdRatDiel"];
+		FecADF = variable["FecADF"];
+		FecAsh = variable["FecAsh"];
+		FecCe = variable["FecCe"];
+		FecCh = variable["FecCh"];
+		FecDM = variable["FecDM"];
+		FecENG = variable["FecENG"];
+		FecFa = variable["FecFa"];
+		FecFMPart = variable["FecFMPart"];
+		FecFSPart = variable["FecFSPart"];
+		FecHa = variable["FecHa"];
+		FecHaT = variable["FecHaT"];
+		FecHb = variable["FecHb"];
+		FecHC = variable["FecHC"];
+		FecLg = variable["FecLg"];
+		FecLipid = variable["FecLipid"];
+		FecMiHa = variable["FecMiHa"];
+		FecMiLi = variable["FecMiLi"];
+		FecMiNn = variable["FecMiNn"];
+		FecMiPi = variable["FecMiPi"];
+		FecMPart = variable["FecMPart"];
+		FecNDF = variable["FecNDF"];
+		FecOm = variable["FecOm"];
+		FecPi = variable["FecPi"];
+		FecPiT = variable["FecPiT"];
+		FecPiTN = variable["FecPiTN"];
+		FecSPart = variable["FecSPart"];
+		FeedInFlag = variable["FeedInFlag"];
+		fFatFd = variable["fFatFd"];
+		fFIM = variable["fFIM"];
+		FGAm = variable["FGAm"];
+		FGFa = variable["FGFa"];
+		fGlHyAdip = variable["fGlHyAdip"];
+		fGlHyVis = variable["fGlHyVis"];
+		fHcCs = variable["fHcCs"];
+		fHcFd = variable["fHcFd"];
+		fIndigFd = variable["fIndigFd"];
+		FirstEvent = variable["FirstEvent"];
+		FIXDpH = variable["FIXDpH"];
+		FixedLhorSW = variable["FixedLhorSW"];
+		Fl = variable["Fl"];
+		Fl1Fd = variable["Fl1Fd"];
+		FLaFd = variable["FLaFd"];
+		FlFd = variable["FlFd"];
+		fLgAdf = variable["fLgAdf"];
+		fLgFd = variable["fLgFd"];
+		fLgIndigFd = variable["fLgIndigFd"];
+		fLiFd = variable["fLiFd"];
+		FlMi = variable["FlMi"];
+		FlMiG = variable["FlMiG"];
+		fLPart = variable["fLPart"];
+		fLPartADF = variable["fLPartADF"];
+		fLPartAi = variable["fLPartAi"];
+		fLPartCe = variable["fLPartCe"];
+		fLPartHc = variable["fLPartHc"];
+		fLPartIndigFd = variable["fLPartIndigFd"];
+		fLPartLg = variable["fLPartLg"];
+		fLPartMPartSwal = variable["fLPartMPartSwal"];
+		fLPartNDF = variable["fLPartNDF"];
+		fLPartNDF_NDF = variable["fLPartNDF_NDF"];
+		fLPartNutIng = variable["fLPartNutIng"];
+		fLPartPi = variable["fLPartPi"];
+		fLPartplusMPart = variable["fLPartplusMPart"];
+		fLPartSt = variable["fLPartSt"];
+		fLPartSwal = variable["fLPartSwal"];
+		fMamCellsAQ = variable["fMamCellsAQ"];
+		fMamCellsAS = variable["fMamCellsAS"];
+		fMamCellsPA = variable["fMamCellsPA"];
+		fMamCellsQA = variable["fMamCellsQA"];
+		fMamCellsQS = variable["fMamCellsQS"];
+		fMamCellsUS = variable["fMamCellsUS"];
+		fMCH4D = variable["fMCH4D"];
+		fMCH4E = variable["fMCH4E"];
+		fMCH4M = variable["fMCH4M"];
+		fMPart = variable["fMPart"];
+		fMPart1 = variable["fMPart1"];
+		fMPartNDF_NDF = variable["fMPartNDF_NDF"];
+		fMPartNutIng = variable["fMPartNutIng"];
+		fMPartSA = variable["fMPartSA"];
+		fMPartSwal = variable["fMPartSwal"];
+		fNDFFd = variable["fNDFFd"];
+		fNnCp = variable["fNnCp"];
+		fNnFd = variable["fNnFd"];
+		FNPNFd = variable["FNPNFd"];
+		fOaFd = variable["fOaFd"];
+		fOmFd = variable["fOmFd"];
+		FORSET = variable["FORSET"];
+		fParticulateFd = variable["fParticulateFd"];
+		fPartP = variable["fPartP"];
+		fPartSA = variable["fPartSA"];
+		fPeFd = variable["fPeFd"];
+		fPiCp = variable["fPiCp"];
+		fPiFd = variable["fPiFd"];
+		fPm = variable["fPm"];
+		fPsCp = variable["fPsCp"];
+		FPsFd = variable["FPsFd"];
+		fRoughageFd = variable["fRoughageFd"];
+		fRuAdfAdf = variable["fRuAdfAdf"];
+		fRuAdfFd = variable["fRuAdfFd"];
+		fRumDM = variable["fRumDM"];
+		fRupCp = variable["fRupCp"];
+		FRUPFd = variable["FRUPFd"];
+		fRUStFd = variable["fRUStFd"];
+		fRuStSt = variable["fRuStSt"];
+		fScCs = variable["fScCs"];
+		fScFd = variable["fScFd"];
+		fScTFd = variable["fScTFd"];
+		fSPart = variable["fSPart"];
+		fSPart1 = variable["fSPart1"];
+		fSPartNDF_NDF = variable["fSPartNDF_NDF"];
+		fSPartNutIng = variable["fSPartNutIng"];
+		fSPartSA = variable["fSPartSA"];
+		fSPartSwal = variable["fSPartSwal"];
+		fStCs = variable["fStCs"];
+		fStFd = variable["fStFd"];
+		FStsFd = variable["FStsFd"];
+		fStSSt = variable["fStSSt"];
+		fTm = variable["fTm"];
+		fTm1 = variable["fTm1"];
+		fUrCp = variable["fUrCp"];
+		FUrFd = variable["FUrFd"];
+		FvAcFd = variable["FvAcFd"];
+		FvBuFd = variable["FvBuFd"];
+		FvLaFd = variable["FvLaFd"];
+		G1 = variable["G1"];
+		G2 = variable["G2"];
+		GE = variable["GE"];
+		GE1Fd = variable["GE1Fd"];
+		GE2Fd = variable["GE2Fd"];
+		GE3Fd = variable["GE3Fd"];
+		GEFd = variable["GEFd"];
+		gGlLa = variable["gGlLa"];
+		Gl = variable["Gl"];
+		GlCd = variable["GlCd"];
+		GlCdT = variable["GlCdT"];
+		GlGyT = variable["GlGyT"];
+		GlHyAdip = variable["GlHyAdip"];
+		GlHyVis = variable["GlHyVis"];
+		GlLaB1 = variable["GlLaB1"];
+		GlLaOth = variable["GlLaOth"];
+		GlLmHt = variable["GlLmHt"];
+		GLLmVis = variable["GLLmVis"];
+		GlMilk = variable["GlMilk"];
 		GLMilk1 = variable["GLMilk1"];
 		GlMilk2 = variable["GlMilk2"];
 		GlMilk3 = variable["GlMilk3"];
-		GlMilk = variable["GlMilk"];
-		rtGl1 = variable["rtGl1"];
-		HiP2 = variable["HiP2"];
-		HiM2 = variable["HiM2"];
-		AaTO = variable["AaTO"];
-		absAaHt = variable["absAaHt"];
-		rtAa1 = variable["rtAa1"];
-		HiP3 = variable["HiP3"];
-		HiM3 = variable["HiM3"];
-		dHiP4 = variable["dHiP4"];
+		GlTO = variable["GlTO"];
+		GlTpAdip = variable["GlTpAdip"];
+		GlTpF1 = variable["GlTpF1"];
+		GlTpV1 = variable["GlTpV1"];
+		GlTpVis = variable["GlTpVis"];
+		GrowthPerDay = variable["GrowthPerDay"];
+		GyGlV1 = variable["GyGlV1"];
+		GyGlVis = variable["GyGlVis"];
+		Ha = variable["Ha"];
+		HaCs = variable["HaCs"];
+		HaMi = variable["HaMi"];
+		HaMiF = variable["HaMiF"];
+		HaMiG = variable["HaMiG"];
+		HaMiP = variable["HaMiP"];
+		HaMiRum = variable["HaMiRum"];
+		HaP = variable["HaP"];
+		HaPT = variable["HaPT"];
+		Hb = variable["Hb"];
+		Hbin = variable["Hbin"];
+		HbMi = variable["HbMi"];
+		HbMiF = variable["HbMiF"];
+		HbMiG = variable["HbMiG"];
+		HbMiP = variable["HbMiP"];
+		HbMiRum = variable["HbMiRum"];
+		HbP = variable["HbP"];
+		Hc = variable["Hc"];
+		HcAcAc = variable["HcAcAc"];
+		HcBuBu = variable["HcBuBu"];
+		HcCs = variable["HcCs"];
+		Hcin = variable["Hcin"];
+		HcombAa = variable["HcombAa"];
+		HcombAc = variable["HcombAc"];
+		HcombBu = variable["HcombBu"];
+		HcombCh = variable["HcombCh"];
+		HcombCH4 = variable["HcombCH4"];
+		HcombCs = variable["HcombCs"];
+		HcombFa = variable["HcombFa"];
+		HcombFl = variable["HcombFl"];
+		HcombGl = variable["HcombGl"];
+		HcombGy = variable["HcombGy"];
+		HcombHc = variable["HcombHc"];
+		HcombLa = variable["HcombLa"];
+		HcombLg = variable["HcombLg"];
+		HcombLiFd = variable["HcombLiFd"];
+		HcombLm = variable["HcombLm"];
+		HcombMi = variable["HcombMi"];
+		HcombMiLi = variable["HcombMiLi"];
+		HcombNn = variable["HcombNn"];
+		HcombOa = variable["HcombOa"];
+		HcombPr = variable["HcombPr"];
+		HcombPs = variable["HcombPs"];
+		HcombTg = variable["HcombTg"];
+		HcombTp = variable["HcombTp"];
+		HcombUr = variable["HcombUr"];
+		HcP = variable["HcP"];
+		HcPrPr = variable["HcPrPr"];
+		Herd = variable["Herd"];
+		HFerm = variable["HFerm"];
 		HFermM = variable["HFermM"];
 		HiM = variable["HiM"];
+		HiM1 = variable["HiM1"];
+		HiM2 = variable["HiM2"];
+		HiM3 = variable["HiM3"];
 		HiP = variable["HiP"];
-		RQEQ = variable["RQEQ"];
-		AaFvCd = variable["AaFvCd"];
-		CsFvCd = variable["CsFvCd"];
-		CsCd = variable["CsCd"];
-		RumAaCd = variable["RumAaCd"];
-		CdMi = variable["CdMi"];
-		TCd = variable["TCd"];
-		dRumCd = variable["dRumCd"];
-		MwtCd = variable["MwtCd"];
-		dCd = variable["dCd"];
-		dCdKg = variable["dCdKg"];
-		RQ1 = variable["RQ1"];
-		GlCdT = variable["GlCdT"];
-		GlTO = variable["GlTO"];
-		ObsMEi = variable["ObsMEi"];
-		ObsDEi = variable["ObsDEi"];
+		HiP1 = variable["HiP1"];
+		HiP2 = variable["HiP2"];
+		HiP3 = variable["HiP3"];
+		HiV8 = variable["HiV8"];
+		HtF2 = variable["HtF2"];
+		HtF3 = variable["HtF3"];
+		HtV2 = variable["HtV2"];
+		HtV3 = variable["HtV3"];
+		HtV4 = variable["HtV4"];
+		HtV5 = variable["HtV5"];
+		HtV6 = variable["HtV6"];
+		HtV7 = variable["HtV7"];
+		i = variable["i"];
+		iAa = variable["iAa"];
+		iabsEAve = variable["iabsEAve"];
+		iAc = variable["iAc"];
+		iAm = variable["iAm"];
+		iAs = variable["iAs"];
+		iBCS = variable["iBCS"];
+		iBldUr = variable["iBldUr"];
+		iBW = variable["iBW"];
+		iCe = variable["iCe"];
+		iCs = variable["iCs"];
+		iDayGestDMI = variable["iDayGestDMI"];
+		iEBW = variable["iEBW"];
+		iFa = variable["iFa"];
+		iFdRat = variable["iFdRat"];
+		ifDWt = variable["ifDWt"];
+		iFl = variable["iFl"];
+		iGl = variable["iGl"];
+		iHa = variable["iHa"];
+		iHb = variable["iHb"];
+		iHbF = variable["iHbF"];
+		iHc = variable["iHc"];
+		iIndigFd = variable["iIndigFd"];
+		iLHor = variable["iLHor"];
+		ilogNewEvent = variable["ilogNewEvent"];
+		iLPart = variable["iLPart"];
+		iMamCells = variable["iMamCells"];
+		iMamCellsA = variable["iMamCellsA"];
+		iMamCellsQ = variable["iMamCellsQ"];
+		iMamCellsS = variable["iMamCellsS"];
+		iMamLm = variable["iMamLm"];
+		iMamMilkAve = variable["iMamMilkAve"];
+		iMamPm = variable["iMamPm"];
+		iMamTm = variable["iMamTm"];
+		iMi = variable["iMi"];
+		iMiHa = variable["iMiHa"];
+		iMiHb = variable["iMiHb"];
+		iMPart = variable["iMPart"];
+		iMPartF = variable["iMPartF"];
+		IncreasedUsDueToLowMf = variable["IncreasedUsDueToLowMf"];
+		IndigFd = variable["IndigFd"];
+		IndigFdFd = variable["IndigFdFd"];
+		IndigFdMiP = variable["IndigFdMiP"];
+		IndigFdP = variable["IndigFdP"];
+		InfAs = variable["InfAs"];
+		InfNaBicarb = variable["InfNaBicarb"];
+		InfNaCl = variable["InfNaCl"];
+		InfPrt = variable["InfPrt"];
+		InfRumPr = variable["InfRumPr"];
+		InMilk = variable["InMilk"];
+		iNonFatEBW = variable["iNonFatEBW"];
+		iNonFatNonUterEBW = variable["iNonFatNonUterEBW"];
+		iNonUterEBW = variable["iNonUterEBW"];
+		iNonUterEbwTarget = variable["iNonUterEbwTarget"];
+		IntakeDay = variable["IntakeDay"];
+		IntakeTotal = variable["IntakeTotal"];
+		IntakeYest = variable["IntakeYest"];
+		iotGutCont = variable["iotGutCont"];
+		iOthDna = variable["iOthDna"];
+		iotWtOth = variable["iotWtOth"];
+		iotWtVis = variable["iotWtVis"];
+		iPi = variable["iPi"];
+		iPOth = variable["iPOth"];
+		iPVis = variable["iPVis"];
+		iRumAa = variable["iRumAa"];
+		iRumAc = variable["iRumAc"];
+		iRumBu = variable["iRumBu"];
+		iRumLa = variable["iRumLa"];
+		iRumLiqVol = variable["iRumLiqVol"];
+		iRumPr = variable["iRumPr"];
+		iRumVol = variable["iRumVol"];
+		iSPart = variable["iSPart"];
+		iSPartF = variable["iSPartF"];
+		iStartDayGest = variable["iStartDayGest"];
+		iStartDIM = variable["iStartDIM"];
+		iTotMeals = variable["iTotMeals"];
+		iTsAdip = variable["iTsAdip"];
+		iVisDna = variable["iVisDna"];
+		iVmAcTs = variable["iVmAcTs"];
+		iVolAa = variable["iVolAa"];
+		iVolAc = variable["iVolAc"];
+		iVolBldUr = variable["iVolBldUr"];
+		iVolFa = variable["iVolFa"];
+		iVolGl = variable["iVolGl"];
+		iWtAdip = variable["iWtAdip"];
+		iWtCytAdip = variable["iWtCytAdip"];
+		iWtOth = variable["iWtOth"];
+		iWtTsAdip = variable["iWtTsAdip"];
+		iWtVis = variable["iWtVis"];
+		j = variable["j"];
+		kAcquisition = variable["kAcquisition"];
+		KCeCs = variable["KCeCs"];
+		KCeCs1 = variable["KCeCs1"];
+		KHaCs = variable["KHaCs"];
+		KHcCs = variable["KHcCs"];
+		KHcCs1 = variable["KHcCs1"];
+		kLHor = variable["kLHor"];
+		KLHorPP = variable["KLHorPP"];
+		kMamCellsQA = variable["kMamCellsQA"];
+		kMamCellsQaMfAdjustment = variable["kMamCellsQaMfAdjustment"];
+		KMilkI = variable["KMilkI"];
+		KMinh = variable["KMinh"];
+		KNaAtAdip = variable["KNaAtAdip"];
+		KNaAtOth = variable["KNaAtOth"];
+		KNaAtVis = variable["KNaAtVis"];
+		KPiAa = variable["KPiAa"];
+		LaCdAdip = variable["LaCdAdip"];
+		LaCdOth = variable["LaCdOth"];
+		LaGlAdip = variable["LaGlAdip"];
+		LaGlOth = variable["LaGlOth"];
+		LaGlV1 = variable["LaGlV1"];
+		LaGlVis = variable["LaGlVis"];
+		LainOth = variable["LainOth"];
+		LaPrPr = variable["LaPrPr"];
+		LastEA = variable["LastEA"];
+		LastEv = variable["LastEv"];
+		LastEvent = variable["LastEvent"];
+		LastSu = variable["LastSu"];
+		LastSw = variable["LastSw"];
+		LginFd = variable["LginFd"];
+		LgP = variable["LgP"];
+		LgutAi = variable["LgutAi"];
+		LgutAs = variable["LgutAs"];
+		LgutCeAc = variable["LgutCeAc"];
+		LgutCeBu = variable["LgutCeBu"];
+		LgutCeFv = variable["LgutCeFv"];
+		LgutCePr = variable["LgutCePr"];
+		LgutFaDg = variable["LgutFaDg"];
+		LgutHaGl = variable["LgutHaGl"];
+		LgutHcAc = variable["LgutHcAc"];
+		LgutHcBu = variable["LgutHcBu"];
+		LgutHcFv = variable["LgutHcFv"];
+		LgutHcPr = variable["LgutHcPr"];
+		LgutPiAa = variable["LgutPiAa"];
+		LHor = variable["LHor"];
+		LHor1 = variable["LHor1"];
+		LhorAa = variable["LhorAa"];
+		LhorAdip = variable["LhorAdip"];
+		LHorDeg = variable["LHorDeg"];
+		LhorGl = variable["LhorGl"];
+		LHorSyn = variable["LHorSyn"];
+		LHorSyn1 = variable["LHorSyn1"];
+		LipidP = variable["LipidP"];
+		LiSc = variable["LiSc"];
+		logNewEvent = variable["logNewEvent"];
+		LowMfDecay = variable["LowMfDecay"];
+		LPart = variable["LPart"];
+		LPart1 = variable["LPart1"];
+		LPartCeCe = variable["LPartCeCe"];
+		LPartHbHb = variable["LPartHbHb"];
+		LPartHcHc = variable["LPartHcHc"];
+		LPartIndigFdIndigFd = variable["LPartIndigFdIndigFd"];
+		LPartMi = variable["LPartMi"];
+		LPartMPart = variable["LPartMPart"];
+		LPartPiPi = variable["LPartPiPi"];
+		LPartplusMPart = variable["LPartplusMPart"];
+		LPartRed = variable["LPartRed"];
+		LPartSPart = variable["LPartSPart"];
+		LPartStHa = variable["LPartStHa"];
+		LPartSwal = variable["LPartSwal"];
+		LW = variable["LW"];
+		MamCells = variable["MamCells"];
+		MamCellsA = variable["MamCellsA"];
+		MamCellsQ = variable["MamCellsQ"];
+		MamCellsQaKickStartFactor = variable["MamCellsQaKickStartFactor"];
+		MamCellsQaPreToPostFactor = variable["MamCellsQaPreToPostFactor"];
+		MamCellsS = variable["MamCellsS"];
+		MamEnz = variable["MamEnz"];
+		MamLm = variable["MamLm"];
+		MamMilk = variable["MamMilk"];
+		MamMilkAve = variable["MamMilkAve"];
+		MamMilkAve2 = variable["MamMilkAve2"];
+		MamPm = variable["MamPm"];
+		MamTm = variable["MamTm"];
+		MasticationSteps = variable["MasticationSteps"];
+		MaxEnergyForMilk = variable["MaxEnergyForMilk"];
+		MaxRumVol = variable["MaxRumVol"];
+		MCH4E = variable["MCH4E"];
+		MCH4kg = variable["MCH4kg"];
+		ME = variable["ME"];
+		ME1 = variable["ME1"];
+		MealsDay = variable["MealsDay"];
+		MEAN1 = variable["MEAN1"];
+		MeanParticleSize = variable["MeanParticleSize"];
+		MedianParticleSize = variable["MedianParticleSize"];
+		MEI = variable["MEI"];
+		MEinMJ = variable["MEinMJ"];
+		MEMBW = variable["MEMBW"];
+		MetabPP = variable["MetabPP"];
+		MHtAdip = variable["MHtAdip"];
+		MHtGest = variable["MHtGest"];
+		MHtGestGrth = variable["MHtGestGrth"];
+		MHtGestTO = variable["MHtGestTO"];
+		MHtOth = variable["MHtOth"];
+		MHtVis = variable["MHtVis"];
+		Mi = variable["Mi"];
+		MiAa = variable["MiAa"];
+		MiBu = variable["MiBu"];
+		MiCh = variable["MiCh"];
+		MiFa = variable["MiFa"];
+		MiG = variable["MiG"];
+		MiGl = variable["MiGl"];
+		MiHaMi = variable["MiHaMi"];
+		MiHbMi = variable["MiHbMi"];
+		MiLGl = variable["MiLGl"];
+		MiLiDg = variable["MiLiDg"];
+		MilkingFrequency = variable["MilkingFrequency"];
+		MilkingFrequencyAdjusted = variable["MilkingFrequencyAdjusted"];
+		MilkingFrequencyAgeAdjustment = variable["MilkingFrequencyAgeAdjustment"];
+		MilkingFrequencyBaseAdjustment = variable["MilkingFrequencyBaseAdjustment"];
+		MilkingFrequencyLag = variable["MilkingFrequencyLag"];
+		MilkingIndex = variable["MilkingIndex"];
+		MilkInhDeg = variable["MilkInhDeg"];
+		MilkInhSyn = variable["MilkInhSyn"];
+		MilkMax = variable["MilkMax"];
+		MilkProdDiel = variable["MilkProdDiel"];
+		MilkSolids270MfAdjusted = variable["MilkSolids270MfAdjusted"];
+		MilkSW = variable["MilkSW"];
+		MiMaAd = variable["MiMaAd"];
+		MinLPRumntn = variable["MinLPRumntn"];
+		MiNOm = variable["MiNOm"];
+		MiNOma = variable["MiNOma"];
+		MiNP = variable["MiNP"];
+		MiP = variable["MiP"];
+		MiPP = variable["MiPP"];
+		MiPr = variable["MiPr"];
+		MiPrOm = variable["MiPrOm"];
+		MirOma = variable["MirOma"];
+		MntHP = variable["MntHP"];
+		MPart = variable["MPart"];
+		MPartADFP = variable["MPartADFP"];
+		MPartDeg = variable["MPartDeg"];
+		MPartNDFP = variable["MPartNDFP"];
+		MPartP = variable["MPartP"];
+		MPartSA = variable["MPartSA"];
+		MPartSPart = variable["MPartSPart"];
+		MPartSwal = variable["MPartSwal"];
+		MPartVol = variable["MPartVol"];
+		MPcAc = variable["MPcAc"];
+		MPcBu = variable["MPcBu"];
+		MPcPr = variable["MPcPr"];
+		mult = variable["mult"];
+		MwtMiLi = variable["MwtMiLi"];
+		Nabs = variable["Nabs"];
+		Nan = variable["Nan"];
+		NANMNP = variable["NANMNP"];
+		NANP = variable["NANP"];
+		Nbal = variable["Nbal"];
+		NBody = variable["NBody"];
+		ndAt = variable["ndAt"];
+		NDFIn = variable["NDFIn"];
+		NdfinFd = variable["NdfinFd"];
+		NDFP = variable["NDFP"];
+		Ndiff = variable["Ndiff"];
+		Ndig = variable["Ndig"];
+		ndOx = variable["ndOx"];
+		NEP = variable["NEP"];
+		NetEff = variable["NetEff"];
+		netME = variable["netME"];
+		NextMilkingT = variable["NextMilkingT"];
+		NFec = variable["NFec"];
+		Nin = variable["Nin"];
+		Nintake = variable["Nintake"];
+		NitP = variable["NitP"];
+		NMilk = variable["NMilk"];
+		NnAmFd = variable["NnAmFd"];
+		NninFd = variable["NninFd"];
+		NonFatEBW = variable["NonFatEBW"];
+		NonFatNonUterEBW = variable["NonFatNonUterEBW"];
+		NonPreg = variable["NonPreg"];
+		NonUterEBW = variable["NonUterEBW"];
+		NonUterEbwTarget = variable["NonUterEbwTarget"];
+		Nout = variable["Nout"];
+		NpninFd = variable["NpninFd"];
+		Nret1 = variable["Nret1"];
+		Nret2 = variable["Nret2"];
+		NSal = variable["NSal"];
+		NUr = variable["NUr"];
+		NurConcentration = variable["NurConcentration"];
+		NurTotal = variable["NurTotal"];
+		OaSc = variable["OaSc"];
 		ObsCH4E = variable["ObsCH4E"];
-		dTCH4E = variable["dTCH4E"];
-		EUrFd = variable["EUrFd"];
-		ObsPredME = variable["ObsPredME"];
-		ObsPredDE = variable["ObsPredDE"];
+		ObsDEi = variable["ObsDEi"];
+		ObsMEi = variable["ObsMEi"];
 		ObsPredCH4 = variable["ObsPredCH4"];
+		ObsPredDE = variable["ObsPredDE"];
 		ObsPredEUr = variable["ObsPredEUr"];
+		ObsPredME = variable["ObsPredME"];
+		OldBasalOth = variable["OldBasalOth"];
+		OminFd = variable["OminFd"];
+		OmPa = variable["OmPa"];
+		OmPt = variable["OmPt"];
+		OnceADay2YearsOldAdjustment1 = variable["OnceADay2YearsOldAdjustment1"];
+		OsWa = variable["OsWa"];
+		OsWaInt = variable["OsWaInt"];
+		otGutCont = variable["otGutCont"];
+		OthDna = variable["OthDna"];
+		otWtOth = variable["otWtOth"];
+		otWtVis = variable["otWtVis"];
+		OXUP1 = variable["OXUP1"];
+		Parity = variable["Parity"];
+		PartFd = variable["PartFd"];
+		PcLm = variable["PcLm"];
+		PcPm = variable["PcPm"];
+		PcSilage = variable["PcSilage"];
+		PcTm = variable["PcTm"];
+		PcTmFromScfa = variable["PcTmFromScfa"];
+		PeSc = variable["PeSc"];
+		Pi = variable["Pi"];
+		PiAa = variable["PiAa"];
+		PiMiP = variable["PiMiP"];
+		PiP = variable["PiP"];
+		PiPiFd = variable["PiPiFd"];
+		PostCalvingMamCells = variable["PostCalvingMamCells"];
+		POth = variable["POth"];
+		POthAaOth = variable["POthAaOth"];
+		POthfDr = variable["POthfDr"];
+		POthfSr = variable["POthfSr"];
+		PrCdVis = variable["PrCdVis"];
+		PreCalvingMamCells = variable["PreCalvingMamCells"];
+		Preg = variable["Preg"];
+		PreviousEvent = variable["PreviousEvent"];
+		PrGlHt = variable["PrGlHt"];
+		PrGlV1 = variable["PrGlV1"];
+		PrGlVis = variable["PrGlVis"];
+		propLm = variable["propLm"];
+		PsAaFd = variable["PsAaFd"];
+		PsF = variable["PsF"];
+		PUter = variable["PUter"];
+		PUterAa = variable["PUterAa"];
+		PVis = variable["PVis"];
+		PVisAaVis = variable["PVisAaVis"];
+		PVisfDr = variable["PVisfDr"];
+		PVisfSr = variable["PVisfSr"];
+		RequiredEnergy = variable["RequiredEnergy"];
+		ResidMamMilk = variable["ResidMamMilk"];
+		Rest = variable["Rest"];
+		RestSa = variable["RestSa"];
+		RestWa = variable["RestWa"];
+		RQ1 = variable["RQ1"];
+		rtAa1 = variable["rtAa1"];
+		rtFa1 = variable["rtFa1"];
+		rtGl1 = variable["rtGl1"];
+		rtOx1 = variable["rtOx1"];
+		rtOx2 = variable["rtOx2"];
+		rtPO = variable["rtPO"];
+		rtPOx = variable["rtPOx"];
+		RuAdfinFd = variable["RuAdfinFd"];
+		RumAa = variable["RumAa"];
+		RumAaAc = variable["RumAaAc"];
+		RumAaBu = variable["RumAaBu"];
+		RumAaCd = variable["RumAaCd"];
+		RumAaFv = variable["RumAaFv"];
+		RumAaMi = variable["RumAaMi"];
+		RumAaP = variable["RumAaP"];
+		RumAaPr = variable["RumAaPr"];
+		RumAc = variable["RumAc"];
+		RumAc1 = variable["RumAc1"];
+		RumAcP = variable["RumAcP"];
+		RumAcSynth = variable["RumAcSynth"];
+		RumADF = variable["RumADF"];
+		RumBU = variable["RumBU"];
+		RumBu1 = variable["RumBu1"];
+		RumBuP = variable["RumBuP"];
+		RumBuSynth = variable["RumBuSynth"];
+		RumCein = variable["RumCein"];
+		RumCP = variable["RumCP"];
+		RumDCadf = variable["RumDCadf"];
+		RumDCCe = variable["RumDCCe"];
+		RumDCHa = variable["RumDCHa"];
+		RumDCHaT = variable["RumDCHaT"];
+		RumDCHb = variable["RumDCHb"];
+		RumDCHc = variable["RumDCHc"];
+		RumDCLiA = variable["RumDCLiA"];
+		RumDCLiT = variable["RumDCLiT"];
+		RumDCN = variable["RumDCN"];
+		RumDCndf = variable["RumDCndf"];
+		RumDCOm = variable["RumDCOm"];
+		RumDCOmA = variable["RumDCOmA"];
+		RumDCPrt = variable["RumDCPrt"];
+		RumDM = variable["RumDM"];
+		RumDPrta = variable["RumDPrta"];
+		RumHcin = variable["RumHcin"];
+		RumLa = variable["RumLa"];
+		RumLa1 = variable["RumLa1"];
+		RumLaAc = variable["RumLaAc"];
+		RumLaFv = variable["RumLaFv"];
+		RumLaGl = variable["RumLaGl"];
+		RumLaP = variable["RumLaP"];
+		RumLaPr = variable["RumLaPr"];
+		RumLg = variable["RumLg"];
+		RumLiqVol = variable["RumLiqVol"];
+		RumLiqVolEQ = variable["RumLiqVolEQ"];
+		RumLPartSizeMean = variable["RumLPartSizeMean"];
+		RumLpMpSizeMean = variable["RumLpMpSizeMean"];
+		RumMPartSizeMean = variable["RumMPartSizeMean"];
+		RumNDF = variable["RumNDF"];
+		RumNit = variable["RumNit"];
+		Rumntn = variable["Rumntn"];
+		RUMNTNEQ = variable["RUMNTNEQ"];
+		RumntnSa = variable["RumntnSa"];
+		RumOM = variable["RumOM"];
+		RumOsMol = variable["RumOsMol"];
+		RumPartSizeInt = variable["RumPartSizeInt"];
+		RumPartSizeMean = variable["RumPartSizeMean"];
+		RumPartSizeSlp = variable["RumPartSizeSlp"];
+		RumpH = variable["RumpH"];
+		RumPr = variable["RumPr"];
+		RumPr1 = variable["RumPr1"];
+		RumPrP = variable["RumPrP"];
+		RumPrSynth = variable["RumPrSynth"];
+		RumSPartSizeMean = variable["RumSPartSizeMean"];
+		RumVol = variable["RumVol"];
+		RUPinFd = variable["RUPinFd"];
+		RuStinFd = variable["RuStinFd"];
+		SaAs = variable["SaAs"];
+		SaIn = variable["SaIn"];
+		SaNnAm = variable["SaNnAm"];
+		SaNRumAm = variable["SaNRumAm"];
+		SaPsAa = variable["SaPsAa"];
+		ScAc = variable["ScAc"];
+		ScAcAc = variable["ScAcAc"];
+		ScBu = variable["ScBu"];
+		ScBuBu = variable["ScBuBu"];
+		ScinFd = variable["ScinFd"];
+		ScLa = variable["ScLa"];
+		ScLaLa = variable["ScLaLa"];
+		ScPr = variable["ScPr"];
+		ScPrPr = variable["ScPrPr"];
+		ScTCs = variable["ScTCs"];
+		SolDM = variable["SolDM"];
+		SolDMP = variable["SolDMP"];
+		SolOmP = variable["SolOmP"];
 		Somedummyvariable = variable["Somedummyvariable"];
+		SPart = variable["SPart"];
+		SPartADFP = variable["SPartADFP"];
+		SPartCeCs = variable["SPartCeCs"];
+		SPartDeg = variable["SPartDeg"];
+		SPartHaCs = variable["SPartHaCs"];
+		SPartHbCs = variable["SPartHbCs"];
+		SPartHcCs = variable["SPartHcCs"];
+		SPartMi = variable["SPartMi"];
+		SPartMiHa = variable["SPartMiHa"];
+		SPartMiHb = variable["SPartMiHb"];
+		SPartMiP = variable["SPartMiP"];
+		SPartMiPi = variable["SPartMiPi"];
+		SPartNDFP = variable["SPartNDFP"];
+		SPartP = variable["SPartP"];
+		SPartPiAa = variable["SPartPiAa"];
+		SPartSA = variable["SPartSA"];
+		SPartSwal = variable["SPartSwal"];
+		SPartVol = variable["SPartVol"];
+		SpeciesFactor = variable["SpeciesFactor"];
+		StAc = variable["StAc"];
+		StAcAc = variable["StAcAc"];
+		StandardMetabolicBw = variable["StandardMetabolicBw"];
+		StartDIM = variable["StartDIM"];
+		StBu = variable["StBu"];
+		StBuBu = variable["StBuBu"];
+		StCs = variable["StCs"];
+		StCsFd = variable["StCsFd"];
+		STFLAG = variable["STFLAG"];
+		StHaFd = variable["StHaFd"];
+		StinFd = variable["StinFd"];
+		StLa = variable["StLa"];
+		StLaLa = variable["StLaLa"];
+		StPr = variable["StPr"];
+		StPrPr = variable["StPrPr"];
+		StSol = variable["StSol"];
+		SumBinFd = variable["SumBinFd"];
+		Sunlight = variable["Sunlight"];
+		Sunrise = variable["Sunrise"];
+		SunriseToday = variable["SunriseToday"];
+		SunSet = variable["SunSet"];
+		SunsetToday = variable["SunsetToday"];
+		SunsetTodayTemp = variable["SunsetTodayTemp"];
+		SupplementOnOffer = variable["SupplementOnOffer"];
+		tAtCalving = variable["tAtCalving"];
+		tAtConception = variable["tAtConception"];
+		TBCH4 = variable["TBCH4"];
+		TBCH41 = variable["TBCH41"];
+		TCd = variable["TCd"];
+		TCH4 = variable["TCH4"];
+		TCH4E = variable["TCH4E"];
+		TcHyAdip = variable["TcHyAdip"];
+		TcHyVis = variable["TcHyVis"];
+		TDE = variable["TDE"];
+		test = variable["test"];
+		TFCM4z = variable["TFCM4z"];
+		THP1 = variable["THP1"];
+		THP2 = variable["THP2"];
+		TIME = variable["TIME"];
+		TMCH42 = variable["TMCH42"];
+		TMCH4E = variable["TMCH4E"];
+		TMilkLm = variable["TMilkLm"];
+		TMilkLmYest = variable["TMilkLmYest"];
+		TMilkPm = variable["TMilkPm"];
+		TMilkPmYest = variable["TMilkPmYest"];
+		TMilkTm = variable["TMilkTm"];
+		TMilkTmYest = variable["TMilkTmYest"];
+		TNdfIn = variable["TNdfIn"];
+		TNdfInYest = variable["TNdfInYest"];
+		tNep = variable["tNep"];
+		tNepYest = variable["tNepYest"];
+		TOmP = variable["TOmP"];
+		TotDMin = variable["TotDMin"];
+		TotEating = variable["TotEating"];
+		TotEatingYest = variable["TotEatingYest"];
+		totFd = variable["totFd"];
+		TotMeals = variable["TotMeals"];
+		TotMealsYest = variable["TotMealsYest"];
+		TotNurLast = variable["TotNurLast"];
+		TotRest = variable["TotRest"];
+		TotRestYest = variable["TotRestYest"];
+		TotRumntn = variable["TotRumntn"];
+		TotRumntnYest = variable["TotRumntnYest"];
+		TotWaConsumed = variable["TotWaConsumed"];
+		TotWaUrine = variable["TotWaUrine"];
+		TotWaUrineLast = variable["TotWaUrineLast"];
+		TpCdVis = variable["TpCdVis"];
+		TpinAdip = variable["TpinAdip"];
+		TpinVis = variable["TpinVis"];
+		TpLaAdip = variable["TpLaAdip"];
+		TPRTin = variable["TPRTin"];
+		TpTmVis = variable["TpTmVis"];
+		TpTsAdip = variable["TpTsAdip"];
+		TransitSW = variable["TransitSW"];
+		TsAdip = variable["TsAdip"];
+		TsFaAdip = variable["TsFaAdip"];
+		TsFaF1 = variable["TsFaF1"];
+		TStin = variable["TStin"];
+		TTOmP = variable["TTOmP"];
+		TVFA = variable["TVFA"];
+		TVolMilk = variable["TVolMilk"];
+		TVolMilkVol = variable["TVolMilkVol"];
+		TVolMilkYest = variable["TVolMilkYest"];
+		upGl = variable["upGl"];
+		UrAmFd = variable["UrAmFd"];
+		UrinationCount = variable["UrinationCount"];
+		UrinationCountDiel = variable["UrinationCountDiel"];
+		UrinationCountYest = variable["UrinationCountYest"];
+		UrinationVol = variable["UrinationVol"];
+		UrinationVolDiel = variable["UrinationVolDiel"];
+		UrinationVolYest = variable["UrinationVolYest"];
+		UrNFd = variable["UrNFd"];
+		VisDna = variable["VisDna"];
+		VmAcTs = variable["VmAcTs"];
+		VmAcTs2 = variable["VmAcTs2"];
+		VmGlLm1Vis = variable["VmGlLm1Vis"];
+		VmLHorSyn = variable["VmLHorSyn"];
+		VolAa = variable["VolAa"];
+		VolAc = variable["VolAc"];
+		VolFa = variable["VolFa"];
+		VolGl = variable["VolGl"];
+		WaConsumed = variable["WaConsumed"];
+		WaFeces = variable["WaFeces"];
+		WaIn = variable["WaIn"];
+		WaMi = variable["WaMi"];
+		WaMilk = variable["WaMilk"];
+		WaMiP = variable["WaMiP"];
+		WaOut = variable["WaOut"];
+		WaRespir = variable["WaRespir"];
+		WaSweat = variable["WaSweat"];
+		WaUrine = variable["WaUrine"];
+		WaUrineYest = variable["WaUrineYest"];
+		WtAcTm = variable["WtAcTm"];
+		WtAdip = variable["WtAdip"];
+		WtAdipNew = variable["WtAdipNew"];
+		WtAdipTarget = variable["WtAdipTarget"];
+		WtConc = variable["WtConc"];
+		WtConcAgeFactor = variable["WtConcAgeFactor"];
+		WtConcSyn = variable["WtConcSyn"];
+		WtCytAdip = variable["WtCytAdip"];
+		WtFaTm = variable["WtFaTm"];
+		WtGrvUter = variable["WtGrvUter"];
+		WtOth = variable["WtOth"];
+		WtPConc = variable["WtPConc"];
+		WtPConcSyn = variable["WtPConcSyn"];
+		WtPGrvUter = variable["WtPGrvUter"];
+		WtPGrvUterSyn = variable["WtPGrvUterSyn"];
+		WtPOth = variable["WtPOth"];
+		WtPUter = variable["WtPUter"];
+		WtPUterDeg = variable["WtPUterDeg"];
+		WtPUterSyn = variable["WtPUterSyn"];
+		WtPVis = variable["WtPVis"];
+		WtTsAdip = variable["WtTsAdip"];
+		WtUter = variable["WtUter"];
+		WtUterDeg = variable["WtUterDeg"];
+		WtUterPart = variable["WtUterPart"];
+		WtUterSyn = variable["WtUterSyn"];
+		WtVis = variable["WtVis"];
+		YAtp = variable["YAtp"];
+		YAtpAp = variable["YAtpAp"];
+		iTCH4 = variable["iTCH4"];
+		iRumLaF = variable["iRumLaF"];
+		kConcSynDecay = variable["kConcSynDecay"];
+		kUterSynDecay = variable["kUterSynDecay"];
+		iAaF = variable["iAaF"];
+		kPConcSynDecay = variable["kPConcSynDecay"];
+		iGlF = variable["iGlF"];
+		KYAtAa = variable["KYAtAa"];
+		iOthDnaF = variable["iOthDnaF"];
+		iVisDnaF = variable["iVisDnaF"];
+		iRumAaF = variable["iRumAaF"];
+		KDnaVis = variable["KDnaVis"];
+		iMiHaF = variable["iMiHaF"];
+		kVmGlLmDeg = variable["kVmGlLmDeg"];
+		icFa = variable["icFa"];
+		iFaF = variable["iFaF"];
+		K1TsFa = variable["K1TsFa"];
+		KFaTmVis = variable["KFaTmVis"];
+		KFaTsAdip = variable["KFaTsAdip"];
+		iCsF = variable["iCsF"];
+		iMiHbF = variable["iMiHbF"];
+		KDnaOth = variable["KDnaOth"];
+		KFatPi = variable["KFatPi"];
+		iWtPConc = variable["iWtPConc"];
+		iFlF = variable["iFlF"];
+		BaseMamCellsTurnOver = variable["BaseMamCellsTurnOver"];
+		CINT = variable["CINT"];
+		K1AcTm = variable["K1AcTm"];
+		K1AcTs = variable["K1AcTs"];
+		VmFaTmVis = variable["VmFaTmVis"];
+		iAcF = variable["iAcF"];
+		iRumBuF = variable["iRumBuF"];
+		iPiF = variable["iPiF"];
+		K1FaTm = variable["K1FaTm"];
+		KGlLaOth = variable["KGlLaOth"];
+		KFGAm = variable["KFGAm"];
+		VmGlLmVisPart = variable["VmGlLmVisPart"];
+		iAsF = variable["iAsF"];
+		iLPartF = variable["iLPartF"];
+		iAmF = variable["iAmF"];
+		icAc = variable["icAc"];
+		KAcTmVis = variable["KAcTmVis"];
+		KAcTsAdip = variable["KAcTsAdip"];
+		cSaPs = variable["cSaPs"];
+		iIndigFdF = variable["iIndigFdF"];
+		K1FaTs = variable["K1FaTs"];
+		KAaLmVis = variable["KAaLmVis"];
+		KAcCd = variable["KAcCd"];
+		KAaPmVis = variable["KAaPmVis"];
+		KFaCd = variable["KFaCd"];
+		KAaPOthOth = variable["KAaPOthOth"];
+		KAaPVisVis = variable["KAaPVisVis"];
+		IntakeDeclineSlope = variable["IntakeDeclineSlope"];
+		lambdaMamCells = variable["lambdaMamCells"];
+		VmAaPmVis = variable["VmAaPmVis"];
+		iCeF = variable["iCeF"];
+		iHcF = variable["iHcF"];
+		iMiF = variable["iMiF"];
+		iHaF = variable["iHaF"];
+		icGl = variable["icGl"];
+		kAHor1Gl = variable["kAHor1Gl"];
+		kCHorGl = variable["kCHorGl"];
+		KGlLmVis = variable["KGlLmVis"];
+		KGlTpAdip = variable["KGlTpAdip"];
+		KGlTpVis = variable["KGlTpVis"];
+		KiAm = variable["KiAm"];
+		kMamCellsDeclineBase = variable["kMamCellsDeclineBase"];
+		MamCellsDecayRateOfSenescence = variable["MamCellsDecayRateOfSenescence"];
+		iRumPrF = variable["iRumPrF"];
+		cAaBase = variable["cAaBase"];
+		kAHorGl = variable["kAHorGl"];
+		kCHor1Gl = variable["kCHor1Gl"];
+		MAXT = variable["MAXT"];
+		KRumAaFv = variable["KRumAaFv"];
+		iBldUrF = variable["iBldUrF"];
+		KBldUrAm = variable["KBldUrAm"];
+		VmAcTmVis = variable["VmAcTmVis"];
+		fAcSilage = variable["fAcSilage"];
+		iRumAcF = variable["iRumAcF"];
+		fSaAs = variable["fSaAs"];
+		K1MamCells = variable["K1MamCells"];
+		KCsFv = variable["KCsFv"];
+		VmGlTpVis = variable["VmGlTpVis"];
+		cGlBase = variable["cGlBase"];
+		iMamPmF = variable["iMamPmF"];
+		iMamTmF = variable["iMamTmF"];
+		KAaGlVis = variable["KAaGlVis"];
+		kMilkAsh = variable["kMilkAsh"];
+		fAiFdBase = variable["fAiFdBase"];
+		iAtAdh = variable["iAtAdh"];
+		KGlCd = variable["KGlCd"];
+		kMilkingFrequencyLagUp = variable["kMilkingFrequencyLagUp"];
+		kUterSyn = variable["kUterSyn"];
+		kWaSweat = variable["kWaSweat"];
+		MwtAm = variable["MwtAm"];
+		MwtCH4 = variable["MwtCH4"];
+		MwtN = variable["MwtN"];
+		RumYAtp = variable["RumYAtp"];
+		KHyEruct = variable["KHyEruct"];
+		kConcSyn = variable["kConcSyn"];
+		kMamCellsUsMfDecay = variable["kMamCellsUsMfDecay"];
+		fEndogLiFd = variable["fEndogLiFd"];
+		iVolAaF = variable["iVolAaF"];
+		iVolGlF = variable["iVolGlF"];
+		KFatFG = variable["KFatFG"];
+		KFatHb = variable["KFatHb"];
+		uTMamCells = variable["uTMamCells"];
+		EnergyForPregnancyFactor = variable["EnergyForPregnancyFactor"];
+		ifPm = variable["ifPm"];
+		ifTm = variable["ifTm"];
+		kComminuteOralMin = variable["kComminuteOralMin"];
+		KPOthAaOth = variable["KPOthAaOth"];
+		kWaRespir = variable["kWaRespir"];
+		MinLPRumntnF = variable["MinLPRumntnF"];
+		VmGlTpAdip = variable["VmGlTpAdip"];
+		AcTgTg = variable["AcTgTg"];
+		CappingForIntake = variable["CappingForIntake"];
+		fLm = variable["fLm"];
+		kMamCellsTransitionSteepness = variable["kMamCellsTransitionSteepness"];
+		KMiHbF = variable["KMiHbF"];
+		kVmGlLmSyn = variable["kVmGlLmSyn"];
+		TAveMilkMam = variable["TAveMilkMam"];
+		VmGlLaOth = variable["VmGlLaOth"];
+		KMPartP = variable["KMPartP"];
+		TAveabsE = variable["TAveabsE"];
+		kPConcSyn = variable["kPConcSyn"];
+		MEAN2 = variable["MEAN2"];
+		VmBldUrAm = variable["VmBldUrAm"];
+		fLaSilage = variable["fLaSilage"];
+		MwtAc = variable["MwtAc"];
+		MwtUr = variable["MwtUr"];
+		VmTsFaAdip = variable["VmTsFaAdip"];
+		MwtPr = variable["MwtPr"];
+		MwtAs = variable["MwtAs"];
+		MwtBu = variable["MwtBu"];
+		OthDnaMx = variable["OthDnaMx"];
+		VisDnaMx = variable["VisDnaMx"];
+		FaScFd = variable["FaScFd"];
+		HrtWrk = variable["HrtWrk"];
+		KMiHaF = variable["KMiHaF"];
+		KPVisAaVis = variable["KPVisAaVis"];
+		MiNnNn = variable["MiNnNn"];
+		MwtGy = variable["MwtGy"];
+		MwtLa = variable["MwtLa"];
+		iMamLmF = variable["iMamLmF"];
+		KabsLa = variable["KabsLa"];
+		PartThick = variable["PartThick"];
+		PResidMamMilk = variable["PResidMamMilk"];
+		fPUter = variable["fPUter"];
+		AMP1FT = variable["AMP1FT"];
+		AMP2FT = variable["AMP2FT"];
+		EnergyForMilkFactor = variable["EnergyForMilkFactor"];
+		fOaPe = variable["fOaPe"];
+		KDayLength = variable["KDayLength"];
+		KHyOther = variable["KHyOther"];
+		kMamAQBase = variable["kMamAQBase"];
+		KNaAdip = variable["KNaAdip"];
+		KNaOth = variable["KNaOth"];
+		kVmGlLmDecay = variable["kVmGlLmDecay"];
+		LgutDCAi = variable["LgutDCAi"];
+		LgutDCHb = variable["LgutDCHb"];
+		LiChFd = variable["LiChFd"];
+		LiScSC = variable["LiScSC"];
+		MaxLossDueToLowMf = variable["MaxLossDueToLowMf"];
+		MiLiLI = variable["MiLiLI"];
+		MwtAa = variable["MwtAa"];
+		MwtCe = variable["MwtCe"];
+		MwtCh = variable["MwtCh"];
+		MwtCs = variable["MwtCs"];
+		MwtHc = variable["MwtHc"];
+		MwtOa = variable["MwtOa"];
+		MwtPe = variable["MwtPe"];
+		MwtPi = variable["MwtPi"];
+		MwtPOth = variable["MwtPOth"];
+		MwtPs = variable["MwtPs"];
+		MwtPVis = variable["MwtPVis"];
+		MwtRumAa = variable["MwtRumAa"];
+		MwtSc = variable["MwtSc"];
+		MwtSt = variable["MwtSt"];
+		MwtVa = variable["MwtVa"];
+		ObsEUr = variable["ObsEUr"];
+		TAveMilk = variable["TAveMilk"];
+		xOadIntakeTadIntake = variable["xOadIntakeTadIntake"];
+		BcsTargetDecay = variable["BcsTargetDecay"];
+		fBuAc = variable["fBuAc"];
+		KTsFaAdip = variable["KTsFaAdip"];
+		kUterDeg = variable["kUterDeg"];
+		MamCellsProliferationDecayRate = variable["MamCellsProliferationDecayRate"];
+		iWtUter = variable["iWtUter"];
+		AaFvBu = variable["AaFvBu"];
+		fDWt = variable["fDWt"];
+		fLaCdAdip = variable["fLaCdAdip"];
+		fLaCdOth = variable["fLaCdOth"];
+		GlGlHy = variable["GlGlHy"];
+		kMamCellsQAPostPeak = variable["kMamCellsQAPostPeak"];
+		KNaVis = variable["KNaVis"];
+		MiHaHA = variable["MiHaHA"];
+		MwtFa = variable["MwtFa"];
+		MwtFl = variable["MwtFl"];
+		ObsCH4 = variable["ObsCH4"];
+		VmAaGlVis = variable["VmAaGlVis"];
+		xLHorSensAdip = variable["xLHorSensAdip"];
+		fHeifers = variable["fHeifers"];
+		PartWidth = variable["PartWidth"];
+		FaTgTg = variable["FaTgTg"];
+		ifMPartRum = variable["ifMPartRum"];
+		K2VAct = variable["K2VAct"];
+		KidWrk = variable["KidWrk"];
+		KSPartP = variable["KSPartP"];
+		MwtLm = variable["MwtLm"];
+		MwtNn = variable["MwtNn"];
+		ResWrk = variable["ResWrk"];
+		RumntnF = variable["RumntnF"];
+		VmAcTsAdip = variable["VmAcTsAdip"];
+		VmFaTsAdip = variable["VmFaTsAdip"];
+		wLHorSensAdip = variable["wLHorSensAdip"];
+		AaGlGl = variable["AaGlGl"];
+		iWtConc = variable["iWtConc"];
+		kMamCellsQAPrePeak = variable["kMamCellsQAPrePeak"];
+		KMiHb = variable["KMiHb"];
+		AmUrUr = variable["AmUrUr"];
+		GlLmLm = variable["GlLmLm"];
+		GyGlGl = variable["GyGlGl"];
+		KLaFv = variable["KLaFv"];
+		LaGlGl = variable["LaGlGl"];
+		MiLiBu = variable["MiLiBu"];
+		MiLiGl = variable["MiLiGl"];
+		MilkInt = variable["MilkInt"];
+		PrGlGl = variable["PrGlGl"];
+		xLHorSensGl = variable["xLHorSensGl"];
+		AaGlH = variable["AaGlH"];
+		CdMiG1 = variable["CdMiG1"];
+		ifSPartRum = variable["ifSPartRum"];
+		kEnergyCompensation = variable["kEnergyCompensation"];
+		MiPiPI = variable["MiPiPI"];
+		AaGlAc = variable["AaGlAc"];
+		fGrvUterTO = variable["fGrvUterTO"];
+		pGlHyAdip = variable["pGlHyAdip"];
+		pGlHyVis = variable["pGlHyVis"];
+		AaFvAc = variable["AaFvAc"];
+		AaFvPr = variable["AaFvPr"];
+		AaGlUr = variable["AaGlUr"];
+		fGestEPrt = variable["fGestEPrt"];
+		iVolAcF = variable["iVolAcF"];
+		LgutDCFa = variable["LgutDCFa"];
+		LgutDCPi = variable["LgutDCPi"];
+		MwtLiFd = variable["MwtLiFd"];
+		OaScSC = variable["OaScSC"];
+		DCMiLi = variable["DCMiLi"];
+		EnergyForMilkingCowMaintenancePower = variable["EnergyForMilkingCowMaintenancePower"];
+		fPrGl = variable["fPrGl"];
+		DCMiPi = variable["DCMiPi"];
+		EnergyForDryCowMaintenancePower = variable["EnergyForDryCowMaintenancePower"];
+		KWaFeces = variable["KWaFeces"];
+		OnceADay2YearsOldAdjustment = variable["OnceADay2YearsOldAdjustment"];
+		refIngrKAdfDeg = variable["refIngrKAdfDeg"];
+		ikMilkInh = variable["ikMilkInh"];
+		MiLiCh = variable["MiLiCh"];
+		xLHorSensAa = variable["xLHorSensAa"];
+		LaAcAc = variable["LaAcAc"];
+		LgutDCAs = variable["LgutDCAs"];
+		LgutDCHa = variable["LgutDCHa"];
+		MwtFaFd = variable["MwtFaFd"];
+		MwtTm = variable["MwtTm"];
+		MwtTs = variable["MwtTs"];
+		OnceADayMilkingAdjustment = variable["OnceADayMilkingAdjustment"];
+		VmMiHa = variable["VmMiHa"];
+		VmMiHb = variable["VmMiHb"];
+		pLPartMPartComm = variable["pLPartMPartComm"];
+		AaFvAt = variable["AaFvAt"];
+		ExpV2 = variable["ExpV2"];
+		FHcCs1 = variable["FHcCs1"];
+		kComminuteOralMax = variable["kComminuteOralMax"];
+		LaScSc = variable["LaScSc"];
+		OsWaSlp = variable["OsWaSlp"];
+		PeScSC = variable["PeScSC"];
+		absAaAd = variable["absAaAd"];
+		absGlAd = variable["absGlAd"];
+		AcCor = variable["AcCor"];
+		ASCor = variable["ASCor"];
+		BldUrCor = variable["BldUrCor"];
+		BST = variable["BST"];
+		CeCor = variable["CeCor"];
+		CurrentEvent = variable["CurrentEvent"];
+		CurrHerbage = variable["CurrHerbage"];
+		CurrStrat = variable["CurrStrat"];
+		EatingSW = variable["EatingSW"];
+		EatSW5 = variable["EatSW5"];
+		EPart = variable["EPart"];
+		F1 = variable["F1"];
+		FaCor = variable["FaCor"];
+		FLCor = variable["FLCor"];
+		GlHyAD = variable["GlHyAD"];
+		GlHyTp = variable["GlHyTp"];
+		GlLmAd = variable["GlLmAd"];
+		HaCor = variable["HaCor"];
+		HbCor = variable["HbCor"];
+		HcCor = variable["HcCor"];
+		HMM = variable["HMM"];
+		iAnimal = variable["iAnimal"];
+		iHerd = variable["iHerd"];
+		iLHorF = variable["iLHorF"];
+		iMamMilkAveF = variable["iMamMilkAveF"];
+		IndigFdCor = variable["IndigFdCor"];
+		INS = variable["INS"];
+		iVolBldUrF = variable["iVolBldUrF"];
+		iVolFaF = variable["iVolFaF"];
+		KMilkInhDeg = variable["KMilkInhDeg"];
+		KumarMigEq = variable["KumarMigEq"];
+		LaFvAt = variable["LaFvAt"];
+		LPartCor = variable["LPartCor"];
+		MamMilkCor = variable["MamMilkCor"];
+		MICor = variable["MICor"];
+		MiHaCor = variable["MiHaCor"];
+		MIHbCor = variable["MIHbCor"];
+		MiLiPr = variable["MiLiPr"];
+		MilkProductionAgeAdjustment = variable["MilkProductionAgeAdjustment"];
+		MIXSET = variable["MIXSET"];
+		NSTP = variable["NSTP"];
+		OxPrGl = variable["OxPrGl"];
+		PICor = variable["PICor"];
+		RQEQ = variable["RQEQ"];
+		RumAcCor = variable["RumAcCor"];
+		RumBuCor = variable["RumBuCor"];
+		RumLaCor = variable["RumLaCor"];
+		RumpHCON = variable["RumpHCON"];
+		RumPrCor = variable["RumPrCor"];
+		slpKRuAdf = variable["slpKRuAdf"];
+		slpKRUP = variable["slpKRUP"];
+		slpKRUST = variable["slpKRUST"];
+		T3 = variable["T3"];
+		TgGyGy = variable["TgGyGy"];
+		Theta3 = variable["Theta3"];
+		TpTpTm = variable["TpTpTm"];
+		TpTpTs = variable["TpTpTs"];
+		WtConcBreedFactor = variable["WtConcBreedFactor"];
+		HcCeCe = variable["HcCeCe"];
+		MilkDen = variable["MilkDen"];
+		EnergyForDryCowMaintenanceFactor = variable["EnergyForDryCowMaintenanceFactor"];
+		MilkIntPowerForFMamCelsQA1 = variable["MilkIntPowerForFMamCelsQA1"];
+		AaFvHy = variable["AaFvHy"];
+		AmMiG2 = variable["AmMiG2"];
+		ExpOth2 = variable["ExpOth2"];
+		KbasAdip = variable["KbasAdip"];
+		MiLiFA = variable["MiLiFA"];
+		MPartSize = variable["MPartSize"];
+		AaFvCd = variable["AaFvCd"];
+		kSpecies = variable["kSpecies"];
+		wLHorSensGl = variable["wLHorSensGl"];
+		AaFvAm = variable["AaFvAm"];
+		refIngrKHaCs = variable["refIngrKHaCs"];
+		kMastication = variable["kMastication"];
+		KMiHa = variable["KMiHa"];
+		kMilkingFrequencyLagDown = variable["kMilkingFrequencyLagDown"];
+		wLHorSensAa = variable["wLHorSensAa"];
+		EnergyForMilkingCowMaintenanceFactor = variable["EnergyForMilkingCowMaintenanceFactor"];
+		HyAcFa = variable["HyAcFa"];
+		iKPiAa = variable["iKPiAa"];
+		OsMolF = variable["OsMolF"];
+		LiFlFd = variable["LiFlFd"];
+		AcCdCd = variable["AcCdCd"];
+		EXP10 = variable["EXP10"];
+		GlGyGY = variable["GlGyGY"];
+		GlLaAt = variable["GlLaAt"];
+		GlLaLa = variable["GlLaLa"];
+		GlTpAD = variable["GlTpAD"];
+		GlTpTp = variable["GlTpTp"];
+		GyGlAt = variable["GyGlAt"];
+		iParity = variable["iParity"];
+		kLHorSensAa = variable["kLHorSensAa"];
+		kLHorSensGl = variable["kLHorSensGl"];
+		kMamCellsQAKickStartDecay = variable["kMamCellsQAKickStartDecay"];
+		kMamCellsQAStart = variable["kMamCellsQAStart"];
+		MaxBladderVol = variable["MaxBladderVol"];
+		OxAcCd = variable["OxAcCd"];
+		P1 = variable["P1"];
+		PrGlAd = variable["PrGlAd"];
+		TpLaAt = variable["TpLaAt"];
+		UrAmAm = variable["UrAmAm"];
+		BcsTargetNadir = variable["BcsTargetNadir"];
+		CsMiG2 = variable["CsMiG2"];
+		KbasOth = variable["KbasOth"];
+		MamCellsPerKgMs270 = variable["MamCellsPerKgMs270"];
+		ObsME = variable["ObsME"];
+		iME = variable["iME"];
+		HyMiG1 = variable["HyMiG1"];
+		AcFaAd = variable["AcFaAd"];
+		FKRuP = variable["FKRuP"];
+		BCSBase = variable["BCSBase"];
+		EnergyForMilkPower = variable["EnergyForMilkPower"];
+		FaFlFd = variable["FaFlFd"];
+		GlHyCd = variable["GlHyCd"];
+		HyAtAt = variable["HyAtAt"];
+		LaCdCd = variable["LaCdCd"];
+		LaGlAd = variable["LaGlAd"];
+		ObsDE = variable["ObsDE"];
+		OxLaCd = variable["OxLaCd"];
+		OxTpCd = variable["OxTpCd"];
+		PcPeFd = variable["PcPeFd"];
+		PrCdCd = variable["PrCdCd"];
+		TgFaFa = variable["TgFaFa"];
+		TpCdCd = variable["TpCdCd"];
+		FKRuSt = variable["FKRuSt"];
+		MyPi = variable["MyPi"];
+		KWAP = variable["KWAP"];
+		OxPrCd = variable["OxPrCd"];
+		NnAmAM = variable["NnAmAM"];
+		refIngrKPiAa = variable["refIngrKPiAa"];
+		AtAmUr = variable["AtAmUr"];
+		BuCdCd = variable["BuCdCd"];
+		CsFvAt = variable["CsFvAt"];
+		IALG = variable["IALG"];
+		McalToMJ = variable["McalToMJ"];
+		Theta4 = variable["Theta4"];
+		KMPartSPart = variable["KMPartSPart"];
+		kRetMilkI = variable["kRetMilkI"];
+		LPartSize = variable["LPartSize"];
+		AaMiG2 = variable["AaMiG2"];
+		AaPxAD = variable["AaPxAD"];
+		iAgeInYears = variable["iAgeInYears"];
+		MastJawMoveBolus = variable["MastJawMoveBolus"];
+		OxBuCd = variable["OxBuCd"];
+		Theta1 = variable["Theta1"];
+		numVersion = variable["numVersion"];
+		TcHyAd = variable["TcHyAd"];
+		FKRuAdf = variable["FKRuAdf"];
+		Theta2 = variable["Theta2"];
+		GlCdCd = variable["GlCdCd"];
+		kAaGlGest = variable["kAaGlGest"];
+		OxGlCd = variable["OxGlCd"];
+		CsMiG1 = variable["CsMiG1"];
+		iKHcCs = variable["iKHcCs"];
+		KabsAc = variable["KabsAc"];
+		RumpHBase = variable["RumpHBase"];
+		K1VAct = variable["K1VAct"];
+		AmMiG1 = variable["AmMiG1"];
+		CeMeanRRT = variable["CeMeanRRT"];
+		HaMeanRRT = variable["HaMeanRRT"];
+		PiMeanRRT = variable["PiMeanRRT"];
+		IntakeVersion = variable["IntakeVersion"];
+		KbasVis = variable["KbasVis"];
+		iKCeCs = variable["iKCeCs"];
+		version = variable["version"];
+		TpTgAD = variable["TpTgAD"];
+		AaCor = variable["AaCor"];
+		AcCdAt = variable["AcCdAt"];
+		AcquisitionJawMovesCurrent = variable["AcquisitionJawMovesCurrent"];
+		AmCor = variable["AmCor"];
+		CsCor = variable["CsCor"];
+		GlCor = variable["GlCor"];
+		iMilkAve = variable["iMilkAve"];
+		RumAaCor = variable["RumAaCor"];
+		THETA5 = variable["THETA5"];
+		KabsBu = variable["KabsBu"];
+		NumberOfFeeds = variable["NumberOfFeeds"];
+		iKHaCs = variable["iKHaCs"];
+		KabsPr = variable["KabsPr"];
+		PMamEnzCell = variable["PMamEnzCell"];
+		vfaeff = variable["vfaeff"];
+		FaCdCd = variable["FaCdCd"];
+		kMamCellsTransitionDim = variable["kMamCellsTransitionDim"];
+		LaCdAt = variable["LaCdAt"];
+		PrCdAt = variable["PrCdAt"];
+		FdRatWFM = variable["FdRatWFM"];
+		iDMilk = variable["iDMilk"];
+		LHorBase = variable["LHorBase"];
+		LhorTurnoverDays = variable["LhorTurnoverDays"];
+		SmoothingPeriodDays = variable["SmoothingPeriodDays"];
+		TpCdAt = variable["TpCdAt"];
+		KLPartRed = variable["KLPartRed"];
+		OxFaCd = variable["OxFaCd"];
+		KAmabs = variable["KAmabs"];
+		AcAcTs = variable["AcAcTs"];
+		BuCdAt = variable["BuCdAt"];
+		kSurfaceArea = variable["kSurfaceArea"];
+		CountDownDays = variable["CountDownDays"];
+		GlCdAt = variable["GlCdAt"];
+		Latitude = variable["Latitude"];
+		MwtCd = variable["MwtCd"];
+		iFCM4Z = variable["iFCM4Z"];
+		KAsabs = variable["KAsabs"];
+		iMEi = variable["iMEi"];
+		iDEi = variable["iDEi"];
+		PeakIntakeDay = variable["PeakIntakeDay"];
+		VsizF = variable["VsizF"];
+		DaysDry = variable["DaysDry"];
+		DaysOpen = variable["DaysOpen"];
+		kInitRumVol = variable["kInitRumVol"];
+		KMilk = variable["KMilk"];
+		FaCdAt = variable["FaCdAt"];
+		iOxup = variable["iOxup"];
+		BolusWeightTotalCurrent = variable["BolusWeightTotalCurrent"];
+		MamCellsPerKgMsAdjustment = variable["MamCellsPerKgMsAdjustment"];
+		MaxBolusWeight = variable["MaxBolusWeight"];
+		VmAaPVisVis = variable["VmAaPVisVis"];
+		VmAaPOthOth = variable["VmAaPOthOth"];
+		StartDayGest = variable["StartDayGest"];
+		iDayOfYear = variable["iDayOfYear"];
+		GestLength = variable["GestLength"];
+		WaPool = variable["WaPool"];
+		WaPoolTarget = variable["WaPoolTarget"];
+		TSTP = variable["TSTP"];
+		VmRumAaFv = variable["VmRumAaFv"];
+		KgMilkSolidsExpectedIn270Days = variable["KgMilkSolidsExpectedIn270Days"];
+		StandardBw = variable["StandardBw"];
+		MatBW = variable["MatBW"];
+		MamCellsPart = variable["MamCellsPart"];
+		VmCsFv = variable["VmCsFv"];
+		KBldUrU = variable["KBldUrU"];
+		SecondsPerDay = variable["SecondsPerDay"];
 	
 	} // end push_variables_to_model
 	
@@ -7386,112 +7386,10 @@ public:
 	
 	void calculate_rate ( ) {
 		
-		// calculations
-		// dynamic 
-		// Determine if the calcualted slope for RumPartSize is positive and write a message
-		// to the screen if it is.
-		
-		if ( RumPartSizeSlp > 0.0 ) {
-			// CALL DISSTR(bufferslp); ! write the message
-			// CALL DISSTR(' '); ! write a blank line
-			// else if(RumPartSizeInt.gt.0.5) then
-			// CALL DISSTR(bufferint); ! write the message
-			// else
-			// 	Continue
-		}
-		
-		dNdfIn = TNdfIn - TNdfInYest ;
-		dRumntn = TotRumntn - TotRumntnYest ;
-		dRest = TotRest - TotRestYest ;
-		dEating = TotEating - TotEatingYest ;
-		dNep = tNep - tNepYest ;
-		MilkProdDiel = TVolMilk - TVolMilkYest ; // Unit: kg. Cummulative milk produced since last midnight. See also dMilkProd
-		dMilkVol = dMilkProd / MilkDen ;
-		
-		// !! Maintain some DAILY cummulatives (that is, like integ, but reset to zero every midnight).
-		// !! Best for fitting intermittent potentially short term flows like FdRat, DrnkWa and WeUrine,
-		// !! As fitting the momentary value may lose accuracy significantly. Fitting the "Total" integ
-		// !! on the other hand has the prioblem of not knowing what the carry over of the pre-run is.
-		FdRatDiel = IntakeTotal - IntakeYest ; // Unit: kgDM. Daily cummlative DM intake. Being reset to zero at midnight
-		UrinationVolDiel = UrinationVol - UrinationVolYest ; // Unit: litre. Daily cummlative urination volume. Being reset to zero at midnight
-		UrinationCountDiel = UrinationCount - UrinationCountYest ; // Unit: urinationEvents. Daily cummlative count. Being reset to zero at midnight
-		DrnkWaDiel = DrnkWaTot - DrnkWaYest ; // Unit litre. Daily cummlative drinking volume. Being reset to zero at midnight
-		
-		// Include code to allow intermittent feeding of a supplement
-		// BEGIN  Include 'Intermittent_Eating_Discrete.csl'	! Summarize meals
-		
-		// No intermittent eating for basic Molly
-		// END  Include 'Intermittent_Eating_Discrete.csl'	! Summarize meals
-		// BEGIN  Include 'Mindy_Discrete.csl'                ! Discrete include section for changing swards when Mindy intake submodel is used. MDH 6/1/2011
-		
-		// No Mindy code in this project
-		// END  Include 'Mindy_Discrete.csl'                ! Discrete include section for changing swards when Mindy intake submodel is used. MDH 6/1/2011
-		
+		// derivative calculations
 		// derivative 
 		
 		TIME = t ;
-		
-		// ********* Feed, Management, Environment, & Genetic inputs ************
-		// This section transfers values from the Event array to Model variables
-		
-		// BEGIN  INCLUDE 'CurrentEvent.csl'
-		
-		// END  INCLUDE 'CurrentEvent.csl'
-		
-		// BEGIN  INCLUDE 'FdRat_Deriv.csl'
-		
-		// Mindy sets feedInFlag to 2, but still she must not have the if statement
-		// below even though it is inactive it messes things up
-		// Hence the separation deriv (molly) vs. deriv_basic (mindy need RequiredEnergy too)
-		
-		// BEGIN  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'
-		
-		// procedural ( MaxEnergyForMilk = MilkSolids270MfAdjusted ) 
-		
-		MaxEnergyForMilk = EnergyForMilkFactor *
-			( ( 1.0 - xOadIntakeTadIntake ) * MilkSolids270MfAdjusted +
-			xOadIntakeTadIntake * KgMilkSolidsExpectedIn270Days ) ; // Once a days seem toeat more compared to their production.
-		// end of procedural 
-		
-		// procedural ( RequiredEnergy , FdCapMolly = DayMilk , NonUterEbwTarget , NonUterEBW ) 
-		
-		EnergyForActivity = 0 ; // (ActEnergyReq / MjoulesToATPConv / MEinMJ) / (0.02 * (17.0 * (MEinMJ/3.6/4.1555) - 2.0) + 0.5)
-		EnergyForPregnancy = EnergyForPregnancyFactor * 11.5 * WtGrvUter ; //
-		EnergyForGrowth = GrowthPerDay * 50.0 ; // Assuming 50MJ required for 1kg LW gain
-		EnergyCompensation = ( NonUterEbwTarget / NonUterEBW ) *pow(1,1)* kEnergyCompensation ; // Any extra/deficit in condition would decrease/increase intake, trying to simulate the extra hunger of low condition cows, and lower insentive to eat for fat cows
-		// ** 0.5 gives approx 1% more food for every 2% LW deficit in the non extreme range, and vice versa. ** 1 would give 1:1 relationship.
-		if ( DayMilk <= 0 ) { // Dry Cow
-			EnergyForMaintenance = NonUterEbwTarget *pow(1,1)* EnergyForDryCowMaintenancePower * EnergyForDryCowMaintenanceFactor ;
-			EnergyForMilk = 0 ;
-		} else { // Milking Cow
-			EnergyForMaintenance = NonUterEbwTarget *pow(1,1)* EnergyForMilkingCowMaintenancePower * EnergyForMilkingCowMaintenanceFactor ;
-			if ( DayMilk <= PeakIntakeDay ) {
-				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - ( 1.0 - DayMilk / PeakIntakeDay ) *pow(1,1)* EnergyForMilkPower ) ;
-			} else if ( DayMilk <= ( PeakIntakeDay + SmoothingPeriodDays ) ) {
-				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - IntakeDeclineSlope * ( SmoothingPeriodDays / 2.0 ) * ( ( DayMilk - PeakIntakeDay ) / SmoothingPeriodDays ) *pow(1,1)* 2.0 ) ;
-			} else {
-				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - IntakeDeclineSlope * ( SmoothingPeriodDays / 2.0 + ( DayMilk - ( PeakIntakeDay + SmoothingPeriodDays ) ) ) ) ;
-			}
-		}
-		
-		RequiredEnergy = ( EnergyForMaintenance // Molly's required intake, in MJ
-			+ EnergyForMilk //
-			+ EnergyForPregnancy //
-			+ EnergyForGrowth //
-			+ EnergyForActivity ) // Currently this one zero, avarage activity assumed and bundled in rEnergeyForMaintenance
-			* EnergyCompensation ; // Smaller than one for fat cows, largerthan 1 for skinny, on the long run brings cows that differ only in condition, to a similar state.
-		//
-		FdCapMolly = NonUterEbwTarget * CappingForIntake ; // in kgDM actual, WFM will not feed her more forage (pasture & silage) then this amount, but may feed things like grains on top of that
-		//
-		// end of procedural 
-		
-		// END  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'
-		
-		if ( FeedInFlag == 1.0 ) { //
-			FdRat = FdRatWFM ; // Allocated feed - m files or WFM
-		} else { //
-			FdRat = RequiredEnergy / 11.5 ; // Fully fed automatically (standalone)
-		}
 		
 		// END  INCLUDE 'FdRat_Deriv.csl'
 		// BEGIN  INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one
@@ -7659,40 +7557,6 @@ public:
 		fRuAdfAdf = fRuAdfFd / fADFFd ; // RuAdf as a fraction of Adf
 		fLgAdf = fLgFd / fADFFd ; // Lignin as a fraction of Adf
 		// end of procedural 
-		// END  INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one
-		// BEGIN  INCLUDE 'Intermittent_Eating_deriv.csl'
-		
-		// No intermittent eating for basic Molly
-		
-		// END  INCLUDE 'Intermittent_Eating_deriv.csl'
-		// BEGIN  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
-		// *************************************************
-		// COMPUTATION OF WATER DYNAMICS: different in MIndy
-		// *************************************************
-		// Salivation, drinking, water flow through rumen wall, rumen soluble,
-		// particulate and total rumen dry matter (RumDM) and rumen volume.
-		// Rumen volume can be calculated based upon RumDM/0.1555 which is the
-		// default or based upon water dynamics and osmolality when the rumen
-		// liquid volume equation(RumLiqVolEQ)is set to 1.0. The empirical
-		// equation for OSWa is not generally applicable and should not be used
-		// for continuous feeding and unusual diets e.g. high salt, NaHCO3, and
-		// thus should be closely monitored when RumLiqVolEQ is set to 1.0.
-		
-		RestSa = 0.8555 * ( EBW *pow(1,1)* 0.7555 ) * Rest ; // At 8 h resting, this equates to 70 ml/min which is below the 114 ml/min according to Maekawa et al.
-		// (2002; JDS:85, 1176-1182) and Cassida and Stokes (1986; JDS:69,1282-1292)
-		RestWa = 1.4 * FdDMIn * 0.7555 ;
-		// RestSa=6.0*(FdDMin/FdInt)*Rest*RestCor
-		// 60 L/DAY with Rumntn=0.3555
-		// Only runs when not feeding, corrected down for ruminating
-		RumntnSa = 2.4555 * ( EBW *pow(1,1)* 0.7555 ) * Rumntn ;
-		// 85 L/DAY with Rumntn=0.3555 at 500 kg EBW
-		// Only active during rumination
-		
-		EatSa = 3.2 * FdDMIn ; // L/Kg FdDMin. Redefined by Mindy to be: EatSa=2.6555*(EBW**0.7555)*Eating
-		SaIn = EatSa + RestSa + RumntnSa ;
-		EatWa = 3.3555 * FdDMIn * 0.7555 ;
-		// RestWa=1.4555*(FdDMin/FdInt)*0.7555*RumntnCor*NOFEED
-		DrnkWa = EatWa + RestWa ;
 		// Water functions based on 4.7L/Kg DM, with 70% being consumed
 		// during eating, and only 75% of water consumed entering the rumen
 		
@@ -7701,78 +7565,8 @@ public:
 		} else {
 			otGutCont = 1.0 * IntakeDay ; // Changed to a daily summary value to accomodate within day eating patterns. MDH 5-23-11
 		}
-		// OSMOLALITY FACTOR
-		
-		WaIn = SaIn + DrnkWa ;
-		
-		// procedural ( RumLiqVol , fRumDM = RumLiqVolEQ , SaIn , DrnkWa , LPart , MPart , SPart ) 
-		RumOsMol = ( Cs / CsCor + Fl / FLCor + AM / AmCor + RumAc / RumAcCor +
-			RumPr / RumPrCor + RumBU / RumBuCor + RumLa / RumLaCor
-			+ RumAa / RumAaCor + As / MwtAs / ASCor * OsMolF ) / RumLiqVol ;
-		// Rumen Fluid OsMolality. As (soluble ash) multiflied by a factor
-		// to give moles of ions.  MwtAs=0.08555 was picked from NaHCO3
-		// Not clear why OsMolF is applied to AA.  This would appear to be a mistake and thus removed. MDH 2-19-14
-		// As plays a very minor role in driving Osmol.  VFA are the drivers.
-		// OsWa=0.7555*((RumOsMol-0.2555)*1000)-41.0   	  !Dobson , the negative intercept in this emprical equation causes mOsmol to run at 300, MDH 2-19-14
-		// Set the slope a little higher to keep osmolality down, MDH 2-19-14
-		OsWa = OsWaSlp * ( ( RumOsMol -0.2555 ) * 1000 ) + OsWaInt ; // Set the intercept to 0 to achieve a center around 280 mOsmol
-		fRumDM = 0.1555 ;
-		// 14.7% DM of rumen contents based on lactating cow data from
-		// VanVuuren 1999,JDS 82:143,Johnson 1991,JDS 74:933,Woodford 1988
-		// JDS 71:674,Shaver 1985,18th Rum Func Conf p45, DCM90(Purina),
-		// and Hartnell 1979,JAS 48:381
-		RumVol = RumDM / fRumDM ;
-		RumLiqVol = RumVol - RumDM ;
-		WaOut = RumLiqVol * KWAP ;
-		dRumLiqVol = WaIn - WaOut + OsWa ;
-		// end of procedural // OF PROCEDURAL
-		
-		DilRate = WaOut / RumLiqVol / ( 24 ) ; // Dilution rate divided by 24 to get %/hr
-		
-		// Animal Water Balance Equations, MDH Jan 23, 2014
-		// assumed feces is 23% DM from Murphy 1992 review, JDS
-		// Assumed 1% Ash in milk
-		// Assumed half the maximal respiratory rate cited in Murphy, 1992 JDS
-		// Assumed 25% the maximal sweating rate cited in Murphy, 1992 JDS
-		WaFeces = FecDM / ( 1 - KWaFeces ) - FecDM ;
-		WaMilk = DMilk - dLm - dPm - dTm - DMilk * kMilkAsh ;
 		WaRespir = BWF * kWaRespir ;
 		WaSweat = BWF * kWaSweat ;
-		WaUrine = DrnkWa - WaRespir - WaSweat - WaFeces - WaMilk ; // This will easily go negative if DRnkWa is inadequate. May at times during the day with intermittent feeding
-		WaConsumed = WaFeces + WaMilk + WaUrine + WaRespir + WaSweat ;
-		// TotWaConsumed = integ ( WaConsumed , 0.0 ) 
-		// TotWaUrine = integ ( WaUrine , 0.0 ) 
-		
-		// Urine output
-		
-		// procedural ( = TotWaUrine ) 
-		if ( t == 0 ) {
-			BladderVol = 0 ;
-		} else {
-			BladderVol = TotWaUrine - TotWaUrineLast ;
-		}
-		if ( BladderVol >= MaxBladderVol ) {
-			// Empty the bladder
-			UrinationVol = UrinationVol + BladderVol ;
-			TotWaUrineLast = TotWaUrine ;
-		}
-		// end of procedural 
-		
-		// !! Populate the particle size reduction working array (fBinFd)
-		// !! With the pre-ingested distribution of the current feed
-		
-		// procedural ( fBinFd = CurrentFeed , CurrStrat , iBinFd ) 
-		for ( int i = 1 ; i <= MaxFdScreens ; ++ i ) { // DO binLoop4 i = 1, maxFdScreens
-			fBinFd [ i - 1 ] = iBinFd [ CurrentFeed - 1 ][ i +1 - 1 ] / 100.0 ;
-		} // binLoop4: CONTINUE
-		// end of procedural 
-		// END  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
-		
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// !!!!!!!! Calve / Conceive / Dry Off / Advance pregnancy & lactation !!!!  Gil Feb 2010  !!!!!!!!!!!!!!
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		
-		TVolMilkVol = TVolMilk / MilkDen ; // L, CCP 9-1-06
 		AgeInYears = iAgeInYears + ( t / 365.0 ) ;
 		
 		// procedural ( DayGest , DryOffNowVariable , ConceiveNowVariable = t ) 
@@ -7815,23 +7609,6 @@ public:
 			tAtConception = 2999.0 ;
 			AbortPregNowVariable = 0.0 ;
 		}
-		// end of procedural 
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		
-		// IntakeTotal = integ ( FdRat , 0 ) 
-		
-		// Unit: multiplier. Adaptor from actual mastication jaw movements to the arbitrary steps of the model which are on a finer scale.
-		kAcquisition = 0.3555 * kMastication ; // Unit: multiplier. Adaptor from actual acquisition jaw movements to the arbitrary steps of the model which are on a finer scale. Acquisition/Severing bites are expected to have very little effect (smaller k) compared to mastication bites.
-		// The ratio of 0.3555 was solved from Boudun grazing vs. Indoor cow identical diet.
-		// Unit: power. SpeciesFactor simulates ease of breakdown of the feed. It reduces mastication and increases breakdown effiecncy (simulated by cheating: increasing steps in the model!). However tougher feed should result in larger particle size, so we must avoid kSpecies=1 which will neutralize the species effect (i.e. with SpeciesFactor=1 the decreased breakdown effeciecny would cancel out exactly the effect of the increased mastication of tougher feed)
-		// Fitted to 21 datasets, Bailey 90, Loginbuhl 89, Shaver, Oshio, John&reid 87, however with mastication time left free as was unknown! Hence in future the k will be influenced by the feeds ease of breakdown, which will also reduce mastication time so end result will not change a lot.
-		// -"-
-		// Array of proprtions that pass from each bin to the next bin upon one mastication jaw mevement
-		
-		// procedural ( kComminuteOral = kComminuteOralMin , kComminuteOralMax ) 
-		for ( int i = 1 ; i <= MaxFdScreens ; ++ i ) { // do kc_loop i = 1,MaxFdScreens
-			kComminuteOral [ i - 1 ] = kComminuteOralMin + ( kComminuteOralMax - kComminuteOralMin ) * ( FdBinMeshSize [ i - 1 ] / FdBinMeshSize [ MaxFdScreens - 1 ] ) ;
-		} // kc_loop: Continue
 		// end of procedural 
 		
 		// ! Apply the grinding effect of mastication to get the particle size distribution of the swallowed ingesta
@@ -7899,11 +7676,6 @@ public:
 		}
 		fLPartMPartSwal = fLPartSwal + fMPartSwal ;
 		// end of procedural 
-		
-		PsF = fMPartSwal + fSPartSwal ; // This needs to be revised, MDH Feb 10, 2014
-		
-		// Calculate the proportion of the feed that will remain in particulate form
-		fParticulateFd = fStFd - FStsFd + fCeFd + fHcFd + fLgFd + fAiFd + fPiFd ;
 		
 		// ***** End of Nutrient Inputs Include Section ***************
 		
@@ -8031,40 +7803,6 @@ public:
 		FatSc = fFatFd * FaScFd ;
 		// La moved to a separate pool
 		fScTFd = fScFd + OaSc + PeSc + LiSc + FatSc ;
-		totFd = fScFd + fOaFd + fPeFd + FLaFd + fLiFd + fFatFd + fStFd + fHcFd + fCeFd + fLgFd +
-			FPsFd + fPiFd + fNnFd + FUrFd + fAsFd + fAiFd + fAcFd + fBuFd ;
-		
-		// FEEDING MANAGEMENT
-		
-		// FdRat, FdDMin, and DailyDMin are all Kg dry matter
-		// consumed per day (FdRat is specified input from animal
-		// database(ie Event 2)).
-		// FDINT (feeding interval) and FDTM (time spent eating in
-		// each feeding interval0 are used in rumination, salivation
-		// and water dynamics functions so are left in at this time
-		// but may not function properly.  NES 8/99
-		
-		// Next block (up to RUMINATION) was merged From Molly86 for Mindy. Gil July 2012, including deletion of the Feeding Starategies section!
-		// Daily Feed and Nutrient Intakes
-		FdDMIn = FdRat ;
-		DailyDMin = FdDMIn ;
-		// TotDMin = integ ( DailyDMin , 1.0E-9 ) 
-		// LpinFd=fLp*FdDMin
-		OminFd = fOmFd * FdDMIn ;
-		NdfinFd = fNDFFd * FdDMIn ;
-		// TNdfIn = integ ( NdfinFd , 1.0E-9 ) 
-		AdfinFd = fADFFd * FdDMIn ;
-		RuAdfinFd = fRuAdfFd * FdDMIn ;
-		LginFd = fLgFd * FdDMIn ;
-		RuStinFd = fRUStFd * FdDMIn ;
-		ScinFd = fScFd * FdDMIn ;
-		CPinFd = fCPFd * FdDMIn ;
-		CPsinFd = FCPsFd * FdDMIn ;
-		RUPinFd = FRUPFd * FdDMIn ;
-		NpninFd = FNPNFd * FdDMIn ;
-		NninFd = fNnFd * FdDMIn ;
-		CFatinFd = FCFatFd * FdDMIn ;
-		AshinFd = fAshFd * FdDMIn ;
 		
 		// RUMINATION!
 		// ***********
@@ -8087,31 +7825,6 @@ public:
 		
 		DAY = 1.0 ;
 		CWCF = 1.0 * ( 0.1555 +0.5555 * CWC ) ;
-		// Gil Aug 20102 moved RUMNTEQ to mindy_init (=0 for molly; = 1 for mindy)
-		// Fraction of MBW. Set to achieve appropriate rumination times and LP pool sizes, added 04-25-2011, MDH
-		
-		MinLPRumntn = MinLPRumntnF * BWF *pow(1,1)* 0.7555 ;
-		
-		// procedural ( Rumntn , Eating , Rest = RUMNTNEQ , CWCF , DAY , TIME , 
-			// AMP1FT , MEAN1 , RumntnF , FdDMIn ) 
-		if ( RUMNTNEQ == 0.0 ) {
-			Eating = RumntnF ;
-			Rumntn = RumntnF ;
-			Rest = 1 - Rumntn ; // - Eating
-		} else {
-			// Determine whether the animal is eating, ruminating, or resting with Mindy Intake model, 4-25-2011, MDH
-			Rest = 0.0 ;
-			Rumntn = 0.0 ;
-			Eating = 0.0 ;
-			if ( FdDMIn > 0.1 ) {
-				Eating = 1.0 ;
-			} else if ( LPart > MinLPRumntn ) { // Ruminate until LP becomes less than or equal to the minimum LP size to stimulate rumination.
-				Rumntn = 1.0 ;
-			} else {
-				Rest = 1.0 ;
-			}
-		}
-		// end of procedural 
 		
 		// TotRumntn = integ ( Rumntn , 0.0 ) 
 		// TotEating = integ ( Eating , 0.0 ) 
@@ -8134,7 +7847,6 @@ public:
 		// VFA produced per mole Aa fermented with an average C/Aa=5.08.
 		
 		LaPrPr = 0.1555 ;
-		AaFvFat = ( AaFvAc / 2 ) + ( AaFvPr / 2 ) + AaFvBu ;
 		// for Simusolv fitting
 		
 		// procedural ( ScAcAc , StAcAc , HcAcAc , CeAcAc = FORSET , MIXSET , CONSET ) 
@@ -8195,127 +7907,12 @@ public:
 		
 	label_13:
 		// end of procedural 
-		// OF PROCEDURAL
-		
-		// ADJUSTMENT OF STOICHIOMETRIC COEFFICIENTS FOR RumpH
-		// Stiochiometric coefficients have pH effects embedded in them.
-		// These equations should probably be sigmoidal.
-		// Switch to pure lactate at pH 5.4 may not be correct, it is
-		// probably a logarithmic increase starting at 5.5.  These changes
-		// in stoichiometric coefficients parallel those suggested by
-		// the equation which corrects for systematic errors in CONSET
-		// due to increasing proportions of concentrate in the ration
-		// which was formulated by Murphy et al (1982).
-		
-		// procedural ( ScAc , ScPr , ScBu , ScLa , StAc , StPr , StBu , StLa = RumpH , 
-			// ScAcAc , ScPrPr , ScBuBu , ScLaLa , StAcAc , StPrPr , StBuBu , StLaLa ) 
-		ScAc = ScAcAc ;
-		ScPr = ScPrPr ;
-		ScBu = ScBuBu ;
-		ScLa = ScLaLa ;
-		StAc = StAcAc ;
-		StPr = StPrPr ;
-		StBu = StBuBu ;
-		StLa = StLaLa ;
-		if ( RumpH >= 6.2 ) goto label_24 ;
-		if ( RumpH <= 5.4 ) goto label_23 ;
-		ScAc = 0.7555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScAcAc -0.7555 ) ;
-		ScPr = 0.5555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScPrPr -0.5555 ) ;
-		ScBu = 0.4555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScBuBu -0.4555 ) ;
-		StAc = 0.6555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StAcAc -0.6555 ) ;
-		StPr = 0.8555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StPrPr -0.8555 ) ;
-		StBu = 0.2555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StBuBu -0.2555 ) ;
-		goto label_24 ;
-	label_23: ScAc = 0.0 ;
-		ScPr = 0.0 ;
-		ScBu = 0.0 ;
-		StAc = 0.0 ;
-		StPr = 0.0 ;
-		StBu = 0.0 ;
-		ScLa = 2.0 ;
-		StLa = 2.0 ;
-	label_24:
-		// end of procedural // OF PROCEDURAL
-		
-		// RUMEN pH CRumpH
-		// Rumen pH influences stoichiometry of fermentation (above) and
-		// hydrolytic rate constants for cellulose and hemicellulose.
-		// This is most relevant when meal rather than continuous feeding
-		// is implemented.  However, in the default it is left on
-		// (RumpHCON=1.0,FIXDPH=0.0).  (RumpHCON) RumpH control allows the
-		// RumpH equation to be shut off so a fixed pH (FIXDpH) can be used
-		
-		// pH predicted from Briggs et al., 1957 as used in Argyle and Baldwin, 1988
-		// RumpH=(7.2555-(10.0*cVFA+1.5*cRumLa))
-		RumpH = ( RumpHBase - ( vfaeff * cVFA +1.5 * cRumLa ) ) * RumpHCON + FIXDpH ;
 		TVFA = RumAc / RumAcCor + RumPr / RumPrCor + RumBU / RumBuCor ;
-		cVFA = TVFA / RumLiqVol ; // cVFA in Moles/liter
-		
-		// PASSAGE RATE CONSTANTS
-		// **********************
-		// KSPartP is now a fraction of KWAP, MDH 5-25-13
-		// KSPartP=2.6555*(FdDMin/ebw**0.7555)+1.00
-		// KWaP=1/((0.02555*(ebw**0.7555)/FdDMin)+0.1555)
-		// KSPartP & KWaP are in TURNOVERS PER DAY
-		// Equations derived by regression from Robinson 1985 Can.JAS 65:347
-		// and Evans 1981 Can.JAS 61:97
-		
-		// Inputs to the particle pools was altered to utilize seiving data, default seive is the Penn State Particle
-		// 	separator, but any sieve size can be used.  The feed seiving data is modified using a set of equations
-		// 	to reflect the effects of mastication during ingestion, and thus particle entry into the rumen reflects,
-		// 	the original particle size reduced by mastication.  A normal Penn State Shaker distribution is used as
-		// 	as a default.
-		// Initial rumen particle pool sizes were the mean of the seiving observations of Shaver et al., 1988. MDH
-		
-		// LARGE PARTICLE POOL(LPart in Kg); Retained on a 4.8 mm screen
-		// This is a real pool that is intended to represent the floating raft.  Starch was added to the pool, 5-21,2013
-		// 	to reflect entry of larger starch particles.  Assuming starch particle size reflects total diet
-		// 	particle size is likely an overestimate of starch entry into the LPart pool, but failing to include
-		// 	it as in the original model is clearly an underestimate. MDH
-		
-		// This pool was reduced in size and more dietary material is diverted through it
-		// necessitating a large increase in the rate constant, MDH
-		// Should be function of physical properties of feed!
-		// Should KLPartRed be a function of fermentation rate?
-		// Should entry be lagged for hydration??
-		
-		dLPart = LPartSwal - LPartRed ;
-		LPartSwal = FdDMIn * fLPartNutIng ; // LARGE PARTICLES
-		LPartRed = KLPartRed * LPart / LPartCor * Rumntn ;
-		// LPart = integ ( dLPart , iLPart ) 
-		LPart1 = LPart / LPartCor ;
-		
-		// MEDIUM PARTICLE POOL (MPart in Kg); Retained on a 1.2 mm screen put passes a 4.8 mm screen
-		// Added in May of 2013 to allow representation of differential passage of particles from the
-		// 	rumen based on size and differental rates of fermentation based on surface area.
-		// 	This pool is a phantom pool that is used with SPart, another phantom pool,
-		// 	to mathematically partition the pools of Hc, Ce, Ha, Pi, and IndigFd into medium and
-		// 	small fractions to allow application of differential outflow and degradation. MDH
-		// Set to achieve steady state on the base diet, MDH
-		// ??Need to verify and update if needed
-		// A proportion of Liq Flow. An initial guess, MDH
-		dMPart = MPartSwal + LPartMPart - MPartSPart - MPartDeg - MPartP ;
-		MPartSwal = FdDMIn * fMPartNutIng ;
-		LPartMPart = LPartRed * pLPartMPartComm ;
-		MPartSPart = MPart * KMPartSPart * Rumntn ;
-		MPartDeg = ( SPartHaCs + SPartHcCs + SPartCeCs + SPartPiAa ) / fPartSA * ( fMPart1 * fMPartSA ) ;
-		MPartP = ( HaP + HcP + CeP + PiP + IndigFdP ) / fPartP * ( fMPart1 * KMPartP ) ;
-		// MPart = integ ( dMPart , iMPart ) 
-		LPartplusMPart = MPart + LPart / LPartCor ;
-		
-		// SMALL PARTICLE POOLS(SPart in Kg); Passes a 1.2 mm screen
-		// A phantom pool that is used with MPart to mathematically partition Hc, Ce, Ha, Pi, and IndigFd.
-		dSPart = SPartSwal + LPartSPart + MPartSPart - SPartDeg - SPartP ;
-		SPartSwal = FdDMIn * fSPartNutIng ;
-		LPartSPart = LPartRed * ( 1 - pLPartMPartComm ) ;
-		SPartDeg = ( SPartHaCs + SPartHcCs + SPartCeCs + SPartPiAa ) / fPartSA * ( fSPart1 * fSPartSA ) ;
-		SPartP = ( HaP + HcP + CeP + PiP + IndigFdP ) / fPartP * ( fSPart1 * KSPartP ) ;
 		// SPart = integ ( dSPart , iSPart ) 
 		
 		// Fractional particle pool sizes
 		fLPart = ( LPart / LPartCor ) / ( LPart / LPartCor + MPart + SPart ) ;
 		fMPart = MPart / ( LPart / LPartCor + MPart + SPart ) ;
-		fLPartplusMPart = ( MPart + LPart / LPartCor ) / ( LPart / LPartCor + MPart + SPart ) ;
 		fSPart = SPart / ( LPart / LPartCor + MPart + SPart ) ;
 		fMPart1 = MPart / ( MPart + SPart ) ;
 		fSPart1 = SPart / ( MPart + SPart ) ;
@@ -8346,266 +7943,29 @@ public:
 		fPartSA = ( fMPart1 * fMPartSA + fSPart1 * fSPartSA ) ;
 		fPartP = ( fMPart1 * KMPartP + fSPart1 * KSPartP ) ;
 		
-		// **********************************
-		// MICROBES ASSOCIATED WITH SPart(kg/kg)
-		// **********************************
-		// Association of microbes with small particle Ha(MiHa) and Hb
-		// (MiHb). Was added to prevent increases in KHaCs from
-		// increasing digestion of Hb(due to more microbes) and vice versa
-		// i. e. to give specificity associated with small
-		// particles based upon substrate they grew on.
-		
-		Csin = ScTCs + StCs + HaCs + HcCs + CeCs ; // Fractions of Cs entry
-		fCsHa = HaCs / Csin ; // attributed to Ha at Hb
-		fCsHb = ( HcCs + CeCs ) / Csin ; // hydrolysis.
-		
-		HaMiP = ( HaMi / MiHaCor ) / RumLiqVol * WaOut * fPartP ;
-		HbMiP = ( HbMi / MIHbCor ) / RumLiqVol * WaOut * fPartP ;
-		IndigFdMiP = IndigFdP * cMiSPart ; // Passage of microbes in
-		PiMiP = PiP * cMiSPart ; // association with SPart
-		SPartMiPi = IndigFdMiP + PiMiP + HaMiP + HbMiP ;
-		
-		CsMiG = MiG * ( CsFv * CsFvAt / AtpF ) ; // Proportion of microbial
-		HaMiG = CsMiG * fCsHa ; // growth attributable to
-		HbMiG = CsMiG * fCsHb ; // Cs formed from Ha and Hb hydrolysis
-		
 		cMiHa = ( HaMi / MiHaCor ) / ( Ha / HaCor ) ; // Concentration (kg/kg) of
 		cMiHb = ( HbMi / MIHbCor ) / ( Hb / HbCor ) ; // microbes associated with Ha and Hb
 		
-		SPartMiHa = KMiHa * Ha / HaCor * cMiSPart ; // Microbes attached
-		SPartMiHb = KMiHb * Hb / HbCor * cMiSPart ;
-		
-		HaMiRum = cMiHa * SPartHaCs ; // Microbes already associated with SPart potentially
-		HbMiRum = cMiHb * SPartHcCs + cMiHb * SPartCeCs ; // released due to hydrolysis of particulate substrates
-		
 		HaMiF = VmMiHa / ( 1.0 + KMiHaF / ( ( Ha / HaCor ) / ( SPart + MPart ) ) ) ; // Fraction of potentially released microbes actually
 		HbMiF = VmMiHb / ( 1.0 + KMiHbF / ( ( Hb / HbCor ) / ( SPart + MPart ) ) ) ; // dependent on fractions of Ha and Hb in SPart where
-		// max retention on SPart is 0.8555 of those potentially released.
-		
-		MiHaMi = HaMiF * ( HaMiG + HaMiRum ) ; // Microbes on particles and those grown from Ha and Hb
-		MiHbMi = HbMiF * ( HbMiG + HbMiRum ) ; // hydrolysis and fermentation which remain in association with SP.
-		
-		dHaMi = SPartMiHa + MiHaMi - HaMiP - HaMiRum ;
-		dHbMi = SPartMiHb + MiHbMi - HbMiP - HbMiRum ;
-		// HaMi = integ ( dHaMi , iMiHa ) 
-		// HbMi = integ ( dHbMi , iMiHb ) 
-		
-		// STARCH (St in Kg) OR ALPHA-HEXOSE (Ha in Kg) METABOLISM
-		dHa = StHaFd + LPartStHa - HaP - SPartHaCs ;
-		StinFd = fStFd * FdDMIn ;
-		StCsFd = FStsFd * FdDMIn ;
-		StHaFd = ( StinFd - StCsFd ) * ( 1 - fLPartSwal ) ; // error as fLPart was applied to StinFd previously, MDH 5-27-13
-		LPartStHa = LPartRed * fLPartSt ;
 		SPartHaCs = KHaCs * Ha / HaCor * cMiHa * fPartSA ;
-		HaP = Ha / HaCor / RumLiqVol * WaOut * fPartP ;
-		HaPT = HaP + ( MiP * MiHaHA ) ; // To Fit Duodenal Data, Kg/d
-		// Ha = integ ( dHa , iHa ) 
-		
-		// HOLOCELLULOSE(Hc+Ce in Kg) OR BETA-HEXOSES(Hc and Ce in Kg)
-		// METABOLISM
-		
-		// The Hb equation should probably be sigmoid from pH 7.0 on down
-		// to pH 5.5 with the steapest decrease below 6.2 to 5.5, but there
-		// are not enough data to create that form.
-		
-		// procedural ( KHcCs , KCeCs = RumpH , KHcCs1 , KCeCs1 ) 
-		KHcCs = KHcCs1 ;
-		KCeCs = KCeCs1 ;
-		if ( RumpH >= 6.2 ) goto label_22 ;
-		KHcCs = KHcCs - ( KHcCs * 1.8555 * ( 6.2 - RumpH ) ) ;
-		KHcCs = max ( KHcCs , 0.0 ) ;
-		KCeCs = KCeCs - ( KCeCs * 1.8555 * ( 6.2 - RumpH ) ) ;
-		KCeCs = max ( KCeCs , 0.0 ) ;
-	label_22:
-		// end of procedural // OF PROCEDURAL
-		
-		// Effect of added dietary fat on organic matter digestibility (SPartHbCs)
-		// was added 12/90 but is very tentative as linear slope was derived
-		// from +/- fat data.
-		
-		dHc = Hcin + LPartHcHc - SPartHcCs - HcP ;
-		Hcin = RumHcin * ( 1 - fLPartSwal ) ;
-		RumHcin = fHcFd * FdDMIn ;
-		LPartHcHc = LPartRed * fLPartHc ; // HOLOCELLULOSE-Hb
-		SPartHcCs = Hc / HcCor * KHcCs * cMiHb * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatHb ) ) ;
-		HcP = Hc / HcCor / RumLiqVol * WaOut * fPartP ;
-		// Hc = integ ( dHc , iHc ) 
-		
-		dCe = Cein + LPartCeCe - SPartCeCs - CeP ;
-		RumCein = fCeFd * FdDMIn ;
-		Cein = RumCein * ( 1 - fLPartSwal ) ;
-		LPartCeCe = LPartRed * fLPartCe ; // HOLOCELLULOSE-Hb
-		SPartCeCs = Ce / CeCor * KCeCs * cMiHb * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatHb ) ) ;
-		CeP = Ce / CeCor / RumLiqVol * WaOut * fPartP ;
-		// Ce = integ ( dCe , iCe ) 
-		
-		dHb = Hbin + LPartHbHb - SPartHbCs - HbP ;
-		Hbin = Cein + Hcin ;
-		LPartHbHb = LPartCeCe + LPartHcHc ;
-		SPartHbCs = SPartCeCs + SPartHcCs ;
-		HbP = HcP + CeP ;
-		// Hb = integ ( dHb , iHb ) 
-		
-		// INSOLUBLE PROTEIN (Pi in Kg) METABOLISM
-		// Sept. 20, 2004 solution against Bate5o2 data.
-		// Effect of added dietary fat on protein degradability added 12/90
-		// again this is an effect which is poorly supported.
-		dPi = PiPiFd + LPartPiPi - SPartPiAa - PiP ;
-		PiPiFd = fPiFd * FdDMIn * ( 1 - fLPartSwal ) ;
-		LPartPiPi = LPartRed * fLPartPi ;
-		SPartPiAa = Pi / PICor * KPiAa * cMiSPart * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatPi ) ) ;
-		PiP = Pi / PICor / RumLiqVol * WaOut * fPartP ;
-		TPRTin = ( FPsFd + fPiFd + fNnFd ) * FdDMIn ;
-		// Pi = integ ( dPi , iPi ) 
-		
-		// LIGNIN AND INSOLUBLE ASH (IndigFd in Kg)
-		dIndigFd = IndigFdFd + LPartIndigFdIndigFd - IndigFdP ;
-		IndigFdFd = FdDMIn * fIndigFd * ( 1 - fLPartSwal ) ;
-		LPartIndigFdIndigFd = LPartRed * fLPartIndigFd ; // INDIGESTIBLE FEED
-		IndigFdP = IndigFd / IndigFdCor / RumLiqVol * WaOut * fPartP ;
-		LgP = IndigFdP * fLgIndigFd ; // To Fit Duodenal Data Kg/d
-		AiP = IndigFdP * fAiIndigFd ;
-		// IndigFd = integ ( dIndigFd , iIndigFd ) 
-		RumLg = IndigFd / IndigFdCor * fLgIndigFd + LPart / LPartCor * fLPartLg ;
-		
-		// WATER SOLUBLE CARBOHYDRATE(Sc in Kg;Cs in Moles)
-		
-		dCs = ScTCs + StCs + HaCs + HcCs + CeCs - CsFv - CsMi - CsP ;
-		cCs = ( Cs / CsCor ) / RumLiqVol ;
-		ScTCs = fScTFd * FdDMIn / MwtSc ;
-		StCs = StCsFd / MwtSt ; // SOLUBLE CARBOHYDRATES
 		HaCs = SPartHaCs / MwtSt ; // CS
-		HcCs = SPartHcCs / MwtHc * 0.8555 ; // Converts kg of hemicellulose to moles of hexose equivalents.
-		CeCs = SPartCeCs / MwtCe ;
-		CsFv = VmCsFv * WaMi / ( 1.0 + KCsFv / cCs ) ;
-		CsMi = MiG * ( CsMiG1 * G1 + CsMiG2 * G2 ) ;
 		CsP = KWAP * Cs / CsCor ;
-		// Cs = integ ( dCs , iCs ) 
-		
-		// AMINO ACID (RumAa in moles) METABOLISM
-		
-		dRumAa = PsAaFd + PiAa + SaPsAa - RumAaFv - RumAaMi - RumAaP ;
-		cRumAa = ( RumAa / RumAaCor ) / RumLiqVol ;
-		PsAaFd = FPsFd * FdDMIn / MwtPs ;
-		PiAa = SPartPiAa / MwtPs ;
 		RumAaP = KWAP * RumAa / RumAaCor ; // AMINO ACIDS-RumAa
-		SaPsAa = cSaPs * SaIn ;
-		RumAaFv = VmRumAaFv * WaMi / ( 1.0 + KRumAaFv / cRumAa ) ;
-		RumAaMi = MiG * AaMiG2 * G2 ;
-		// RumAa = integ ( dRumAa , iRumAa ) 
-		
-		// AMMONIA (Am in moles)METABOLISM
-		
-		dAm = NnAmFd + AaAm + SaNnAm + BldUrAm - absRumAm - AmMi + UrAmFd ;
-		UrAmFd = FUrFd * FdDMIn * UrAmAm / MwtUr ;
-		NnAmFd = fNnFd * FdDMIn * NnAmAM / MwtNn ; // RUMEN AMMONNIA-Am
-		AaAm = RumAaFv * AaFvAm ;
-		SaNnAm = cBldUr * SaIn * UrAmAm ;
-		BldUrAm = ( VmBldUrAm * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KBldUrAm / cBldUr + cAm / KiAm ) ) * UrAmAm ;
-		// BldUr transport accross rumen wall inhibited by Am.
-		absRumAm = KAmabs * AM / AmCor ;
-		AmMi = MiG * ( AmMiG1 * G1 + AmMiG2 * G2 ) ;
 		// AM2 = integ ( dAm , iAm ) 
 		AM = max ( 1e-9 , AM2 ) ; // Prevent a crash when AM goes negative. I don't have time to find the source
-		Am1 = AM / AmCor ;
-		cAm = ( AM / AmCor ) / RumLiqVol ;
-		cBldUr = ( BldUr / BldUrCor ) / BldUrVol ;
-		
-		// SOLUBLE ASH(As in Kg)
-		
-		dAs = AsAsFd + SaAs + InfAs - AsP - absRumAs ;
-		AsAsFd = fAsFd * FdDMIn ;
-		SaAs = fSaAs * SaIn ;
 		InfAs = InfNaCl + InfNaBicarb ;
 		AsP = As / ASCor * KWAP ;
-		AshP = AsP + AiP ; // Total Duodenal Ash, Kg/d
-		absRumAs = KAsabs * cAs ;
-		cAs = ( As / ASCor ) / RumLiqVol ;
-		// As = integ ( dAs , iAs ) 
-		
-		// LONG CHAIN FATTY ACIDS(Fl,Fa in moles)
-		
-		dFl = FlFd + Fl1Fd - FlMi - FaP ;
-		FlFd = fLiFd * FdDMIn / ( MwtLiFd ) * LiFlFd ;
-		Fl1Fd = fFatFd * FdDMIn * FaFlFd / MwtFaFd ;
-		FlMi = MiG * FlMiG ;
 		// FATTY ACIDS
 		FaP = KWAP * Fl / FLCor ;
-		LipidP = ( FaP * MwtFa ) + ( MiP * MiLiLI ) ; // Total Duodenal Lipid Flow, Kg/d
-		// Fl = integ ( dFl , iFl ) 
-		
-		// VOLATILE FATTY ACIDS AND LACTATE(RumAc,RumPr,RumBu,RumLa in moles)
-		// Rate constants may not be equal as assumed here!
-		// KabsLa set to low level to define variable
-		// La fermentation may be needed
-		// CCP 9-13-06
-		
-		// ACETATE-RumAc
-		
-		dRumAc = FvAcFd + CsAc + RumAaAc + RumLaAc - absRumAc - RumAcP ;
-		FvAcFd = fAcFd * FdDMIn / MwtAc ;
-		CsAc = CsFv * CsFvAc ;
-		CsFvAc = ScAc * fScCs + StAc * fStCs + HcAcAc * fHcCs + CeAcAc * FCeCs ;
-		fScCs = ScTCs / Csin ;
-		fStCs = ( StCs + HaCs ) / Csin ;
-		fHcCs = HcCs / Csin ;
-		FCeCs = CeCs / Csin ;
-		RumLaAc = RumLaFv * LaAcAc ;
-		RumAaAc = AaFvAc * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
 		absRumAc = KabsAc * RumAc / RumAcCor ;
-		RumAcSynth = CsAc + RumAaAc + RumLaAc ; // synthesized ruminal acetate
-		cRumAc = ( RumAc / RumAcCor ) / RumLiqVol ;
 		RumAcP = ( RumAc / RumAcCor ) * KWAP ;
-		// RumAc = integ ( dRumAc , iRumAc ) 
-		RumAc1 = RumAc / RumAcCor ; // Uninflated Rumen Pool size for comparison to observed data
-		MPcAc = ( RumAc / RumAcCor ) / TVFA * 100 ; // Mole percent(MPc)
-		
-		// PROPIONATE-RumPr
-		// infused ruminal propionate, mol/d
-		dRumPr = CsPr + RumAaPr + RumLaPr + InfRumPr - absRumPr - RumPrP ;
-		CsPr = CsFv * CsFvPr ;
-		RumLaPr = RumLaFv * LaPrPr ;
-		CsFvPr = ScPr * fScCs + StPr * fStCs + HcPrPr * fHcCs + CePrPr * FCeCs ;
-		RumAaPr = AaFvPr * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
 		RumPrP = ( RumPr / RumPrCor ) * KWAP ;
-		RumPrSynth = CsPr + RumAaPr + RumLaPr ;
-		cRumPr = ( RumPr / RumPrCor ) / RumLiqVol ;
 		absRumPr = KabsPr * RumPr / RumPrCor ;
-		// RumPr = integ ( dRumPr , iRumPr ) 
-		RumPr1 = RumPr / RumPrCor ; // Uninflated Rumen Pool size for comparison to observed data
-		MPcPr = ( RumPr / RumPrCor ) / TVFA * 100 ;
-		
-		// BUTYRATE-RumBu
-		dRumBu = CsBu + RumAaBu + FvBuFd - absRumBu - RumBuP ;
-		CsBu = CsFv * CsFvBu ;
-		CsFvBu = ScBu * fScCs + StBu * fStCs + HcBuBu * fHcCs +
-			CeBuBu * FCeCs ;
-		RumAaBu = AaFvBu * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
-		FvBuFd = fBuFd * FdDMIn / MwtBu ;
 		absRumBu = KabsBu * RumBU / RumBuCor ;
 		RumBuP = ( RumBU / RumBuCor ) * KWAP ;
-		RumBuSynth = CsBu + RumAaBu ;
-		cRumBu = ( RumBU / RumBuCor ) / RumLiqVol ;
-		// RumBU = integ ( dRumBu , iRumBu ) 
-		RumBu1 = RumBU / RumBuCor ; // Uninflated Rumen Pool size for comparison to observed data
-		MPcBu = ( RumBU / RumBuCor ) / TVFA * 100 ;
-		
-		// Lactate functions are in to define variables and
-		// are not based on hard data. Should add a fermentation
-		// equation,KabsLa is arbitrary.
-		
-		dRumLa = CsLa + FvLaFd - RumLaP - absRumLa - RumLaFv ;
-		CsLa = CsFv * CsFvLa ;
-		CsFvLa = ScLa * fScCs + StLa * fStCs ;
-		// assumes no Hc,Ce,Aa, GOTO La
-		FvLaFd = FdDMIn * FLaFd / MwtLa ;
 		RumLaP = ( RumLa / RumLaCor ) * KWAP ;
-		// LACTATE
-		cRumLa = ( RumLa / RumLaCor ) / RumLiqVol ;
-		RumLaFv = KLaFv * cMiWa * RumLa / RumLaCor ;
 		absRumLa = RumLa * KabsLa / RumLaCor ;
-		// RumLa = integ ( dRumLa , iRumLa ) 
-		RumLa1 = RumLa / RumLaCor ; // Uninflated Rumen Pool size for comparison to observed data
 		
 		// MICROBIAL FUNCTIONS (Mi in Kg)
 		// ********************************
@@ -8625,50 +7985,13 @@ public:
 		
 		FlMiG = 0.2555 ;
 		
-		// Growth with amino acids(G2)
-		
-		CdMiG2 = -0.05 ;
-		
 		// Microbe composition (Kg/Kg)
 		// NOTE:Organic Matter only
 		
 		// Lipid composition in mole/mole
 		
 		MwtMiLi = 0.6555 ;
-		
-		// Effect of added dietary fat on microbial yield (MiG) 12/14/90 jk
-		
-		// procedural ( MiMaAd = RumpH ) 
-		// Effect of pH on microbe maintenence requirement.
-		MiMaAd = 20 ;
-		// MOLES/KG/DAY
-		if ( RumpH >= 6.2 ) goto label_26 ;
-		if ( RumpH <= 5.4 ) goto label_25 ;
-		MiMaAd = MiMaAd + ( MiMaAd * ( ( 0.8 - ( RumpH -5.4 ) ) / 0.8 ) ) ;
-		goto label_26 ;
-	label_25: MiMaAd = 40 ;
-	label_26:
-		// end of procedural 
-		// OF PROCEDURAL
-		
-		dMi = MiG - MiP ;
-		MiG = AtpG * YAtp * FGAm * FGFa ;
-		AtpG = AtpF - AtpM ;
-		AtpF = CsFv * CsFvAt + RumAaFv * AaFvAt +0.7555 * NnAmFd * AaFvAt + RumLaFv * LaFvAt ;
-		AtpC = 2 * ( CsAc + RumAaAc ) + ( CsPr + RumAaPr ) + ( CsBu + RumAaBu ) + CsLa ;
-		// I don t know why John has this in,RLB
-		AtpM = Mi / MICor * MiMaAd ;
-		FGAm = 1.0 / ( 1.0 + KFGAm / cAm ) ;
 		FGFa = 1 + ( fFatFd / fLiFd * KFatFG ) ;
-		YAtp = 0.01555 + RumYAtp / ( 1.0 + KYAtAa / cRumAa ) ;
-		YAtpAp = MiG / AtpF ;
-		G1 = 1.0 - G2 ;
-		G2 = 0.5 / ( 1.0 + KYAtAa / cRumAa ) ;
-		MiP = SPartMiP + WaMiP ;
-		SPartMiP = cMiSPart * ( SPartP + MPartP ) ;
-		WaMiP = KWAP * WaMi ;
-		// Fixed MiCor additions to the following LP, SP, and Wa Mi pools, CCP 7/27/06
-		LPartMi = ( ( LPart / LPartCor ) / ( RumDM - Mi / MICor ) ) * ( Mi / MICor ) ;
 		SPartMi = ( ( SPart + MPart ) / ( RumDM - Mi / MICor ) ) * ( Mi / MICor ) ;
 		WaMi = Mi / MICor * SolDM / ( RumDM - Mi / MICor ) ;
 		cMiSPart = SPartMi / ( SPart + MPart ) ;
@@ -8677,42 +8000,7 @@ public:
 		
 		// Total Ruminal DM, SolDM, N and CP, kg
 		RumNit = ( RumAa / RumAaCor * MwtPs + Pi / PICor + Mi * MiPiPI + Mi * MiNnNn + fLPartPi * LPart / LPartCor ) * .16 + AM * .14 ;
-		RumCP = RumNit / .16 ;
-		
-		ADFIn = fADFFd * FdRat ;
-		NDFIn = fNDFFd * FdRat ;
-		RumADF = Ce / CeCor + IndigFd / IndigFdCor + LPart / LPartCor * fLPartADF ; // Rumen pool size of ADF and NDF, kg
 		RumNDF = Hc / HcCor + Ce / CeCor + IndigFd / IndigFdCor + LPart / LPartCor * fLPartNDF ;
-		RumOM = RumDM - As / ASCor - ( IndigFd / IndigFdCor * fAiIndigFd ) - LPart / LPartCor * fLPartAi ;
-		fLPartNDF_NDF = fLPartNDF / RumNDF ;
-		fMPartNDF_NDF = fMPart * RumNDF / RumNDF ;
-		fSPartNDF_NDF = fSPart * RumNDF / RumNDF ;
-		
-		// procedural ( = Cs , AM , RumPr , RumBU , RumAc , RumAa , As , Fl , Mi , RumLa , LPart , MPart , SPart ) 
-		SolDM = Cs * MwtCs / CsCor + AM * MwtAm / AmCor + RumPr * MwtPr / RumPrCor + RumBU * MwtBu
-			/ RumBuCor + RumAa * MwtRumAa / RumAaCor + As / ASCor + Fl * MwtFl / FLCor +
-			RumAc * MwtAc / RumAcCor + RumLa * MwtLa / RumLaCor ;
-		if ( t > 0 ) RumDM = LPart / LPartCor + MPart + SPart + SolDM + Mi / MICor ;
-		// end of procedural 
-		
-		// ****************************************************************
-		// 	Passage Rates from the Rumen
-		ADFP = CeP + IndigFdP ;
-		MPartADFP = ( CeP + IndigFdP ) / fPartP * ( fMPart1 * KMPartP ) ;
-		SPartADFP = ( CeP + IndigFdP ) / fPartP * ( fSPart1 * KSPartP ) ;
-		
-		NDFP = HcP + ADFP ;
-		MPartNDFP = ( HcP + ADFP ) / fPartP * ( fMPart1 * KMPartP ) ;
-		SPartNDFP = ( HcP + ADFP ) / fPartP * ( fSPart1 * KSPartP ) ;
-		
-		NitP = ( ( RumAaP * MwtPs ) + PiP + ( MiP * MiPiPI ) + ( MiP * MiNnNn ) ) * .16 ; // Total Duodenal N Flow, Kg N/d
-		MiNP = MiP * ( MiPiPI + MiNnNn ) * .16 ;
-		CpP = NitP * 6.2555 ; // Total CP Passage to SI, kg/d
-		NANP = NitP ; // No accomodation for Ammonia passage. Is this correct? Probably blown off by drying.
-		MiPP = MiP * MiPiPI + MiP * MiNnNn ; // Microbial CP Passage
-		NANMNP = NANP - ( 0.1555 * MiPP ) ;
-		MetabPP = MiP * MiPiPI * DCMiPi + PiP * LgutDCPi ; // Metabolizable Protein Passage, kg/d, original eqn wrong corrected 1-30-07 mdh
-		SolOmP = CsP * MwtCs + FaP * MwtFl + RumAaP * MwtRumAa + ChChFd ; // Added ChChFd to be consistent with DMP, MDH. Mar 31, 2014
 		
 		// BEGIN  INCLUDE 'EXPERIMENTAL_BIAS_Vectors_in_deriv.csl'
 		
@@ -8723,163 +8011,11 @@ public:
 		// ************************
 		
 		otGutCont = 1 * IntakeDay ; // Changed to a daily summary value to accomodate within day eating patterns. MDH 5-23-11
-		DMP = AshP + LipidP + ( NitP / .16 ) + LgP + CeP + HaPT + HcP + ChChFd ;
-		ChChFd = fLiFd * FdDMIn / MwtLiFd * LiChFd * MwtCh ;
-		// Total Duodenal Dry Matter Flow, Kg/d
-		
-		LgutHaGl = HaP * LgutDCHa / MwtSt ;
-		MiGl = MiP * MiHaHA * LgutDCHa / MwtSt ;
-		MiAa = MiP * MiPiPI * DCMiPi / MwtPi ;
-		// Computes digestion (Dg) of nutrients
-		MiLiDg = MiP * MiLiLI * DCMiLi / MwtMiLi ;
-		// in the lower gut in moles.
-		MiFa = MiLiDg * MiLiFA ;
 		LgutFaDg = LgutDCFa * FaP ;
-		MiBu = MiLiDg * MiLiBu ;
-		MiPr = MiLiDg * MiLiPr ;
-		MiLGl = MiLiDg * MiLiGl ;
-		MiCh = ( MiP * MiLiLI / MwtMiLi ) * MiLiCh ;
-		LgutHcFv = HcP * LgutDCHb / MwtHc * 0.8555 ;
-		// Corrects kg hemicellulose
-		LgutHcAc = LgutHcFv * HcAcAc ;
-		// to moles hexose equivalents
-		LgutHcPr = LgutHcFv * HcPrPr ;
-		LgutHcBu = LgutHcFv * HcBuBu ;
-		LgutCeFv = CeP * LgutDCHb / MwtCe ;
-		LgutCeAc = LgutCeFv * CeAcAc ;
-		LgutCePr = LgutCeFv * CePrPr ;
-		LgutCeBu = LgutCeFv * CeBuBu ;
-		LgutPiAa = PiP * LgutDCPi / MwtPi ;
 		LgutAs = LgutDCAs * AsP ;
-		LgutAi = LgutDCAi * IndigFdP * fAiFd / fIndigFd ;
-		
-		// FECES (Fec)
-		
-		FecHa = HaP * ( 1.0 - LgutDCHa ) ;
-		FecMiHa = MiP * MiHaHA * ( 1.0 - LgutDCHa ) ;
-		FecHaT = FecHa + FecMiHa ;
-		FecHb = HbP * ( 1.0 - LgutDCHb ) ;
-		FecHC = HcP * ( 1.0 - LgutDCHb ) ;
-		FecCe = CeP * ( 1.0 - LgutDCHb ) ;
-		FecADF = FecCe + IndigFdP ;
-		FecNDF = FecADF + FecHC ;
-		FecLg = IndigFdP * fLgFd / fIndigFd ;
 		FecFa = FaP * ( 1 - LgutDCFa ) * MwtFl ;
-		FecMiLi = MiP * MiLiLI * ( 1.0 - DCMiLi ) ;
-		FecLipid = FecFa + FecMiLi ; // Total Fecal Lipid Flow, Kg/d
-		FecMiPi = MiP * MiPiPI * ( 1.0 - DCMiPi ) ; // KG.
-		FecMiNn = MiP * MiNnNn ;
-		FecPi = PiP * ( 1.0 - LgutDCPi ) ;
-		FecPiT = FecMiPi + FecMiNn + FecPi ;
-		FecPiTN = FecPiT * .16 ;
-		FecAsh = AsP * ( 1.0 - LgutDCAs ) +
-			IndigFdP * fAiFd / fIndigFd * ( 1.0 - LgutDCAi ) ;
-		FecCh = ChChFd + MiCh * DCMiLi * MwtCh ;
-		FecOm = FecHa + FecHb + FecPiT + FecMiLi + FecLg + FecCh + FecMiHa + FecFa ;
-		FecENG = ( FecHa * 4.1555 + FecHb * 4.1555 + ( FecMiPi + FecPi ) * 5.7 + FecMiLi * 7.2 +
-			FecLg * 8.3 + FecCh * 3.3555 + FecMiNn * 5.7 + FecMiHa * 4.1555 + FecFa * 9.5555 ) * F1 ;
-		FecDM = FecOm + FecAsh ;
-		
-		// Need to calculate MPart and SPart in feces from ruminal outflow.  Subtract non NDF digested
-		// nutrients from the ruminal particle outlfow values to get feces, MDH Feb 11, 2014
-		FecMPart = MPartP ; // these do not account for intestinal digestion of MPart and SPart. Need to fix per above.
-		FecSPart = SPartP ;
-		FecFMPart = FecMPart / ( FecMPart + FecSPart ) ;
-		FecFSPart = FecSPart / ( FecMPart + FecSPart ) ;
-		
-		SolDMP = SolOmP + AsP ;
-		TOmP = SolOmP + HaP + HbP + PiP + LgP ;
-		TTOmP = TOmP + MiP ;
-		OmPt = TOmP ; // true OM passage. Not sure why the above do not follow the standard. Added this variable to maintain historical data references, MDH
-		OmPa = TTOmP ; // apparent OM passage from the rumen
-		
-		// DIGESTION COEFFICIENTS (DC)
-		// **********************
-		// RUMEN DIGESTION COEF.(RumDC)
-		RumDCOm = 1.0 - TOmP / OminFd ; // FOR TRUE ORGANIC MATTER
-		RumDCOmA = 1.0 - TTOmP / OminFd ; // FOR APPARENT ORGANIC MATTER
-		RumDCPrt = ( TPRTin - PiP - ( RumAaP * MwtAa ) ) / TPRTin ;
-		RumDCN = ( Nintake - NANMNP ) / Nintake ;
-		RumDCndf = 1.0 - ( ( HcP + CeP + FecLg ) / ( fHcFd + fCeFd + fLgFd ) / FdDMIn ) ;
-		RumDCadf = 1.0 - ( ( CeP + FecLg ) / ( fCeFd + fLgFd ) / FdDMIn ) ;
-		RumDCHa = 1.0 - HaP / StinFd ; // truely digested
-		RumDCHaT = 1.0 - HaPT / StinFd ; // apparent Ha digestion
-		RumDCHc = 1.0 - HcP / RumHcin ;
-		RumDCCe = 1.0 - CeP / RumCein ;
-		RumDCHb = 1.0 - HbP / ( FdDMIn * ( fHcFd + fCeFd ) ) ;
-		RumDCLiA = 1.0 - LipidP / ( FCFatFd * FdRat ) ; // Apparently Digested in the Rumen
-		RumDCLiT = 1.0 - ( LipidP - MiP * MiLiLI ) / ( FCFatFd * FdRat ) ; // Truly Digested in the Rumen
-		
-		// Total Tract Digestion Coef. (DC)
-		DCDM = 1.0 - FecDM / FdDMIn ;
-		DCOm = ( OminFd - FecOm ) / OminFd ;
-		DCPrt = ( TPRTin - FecPiT ) / TPRTin ;
-		DCHa = ( TStin - FecHa ) / TStin ;
-		DCLipid = 1.0 - FecLipid / ( FCFatFd * FdRat ) ; // No Correction for Micribial Lipid
-		DCndf = 1.0 - ( ( FecHC + FecCe + FecLg ) / ( fHcFd + fCeFd + fLgFd ) / FdDMIn ) ;
-		DCadf = 1.0 - ( ( FecCe + FecLg ) / ( fCeFd + fLgFd ) / FdDMIn ) ;
-		DCHb = ( Hbin - FecHb ) / Hbin ;
-		DCLg = ( ( fLgFd * FdDMIn ) - FecLg ) / ( fLgFd * FdDMIn ) ;
-		TStin = FdDMIn * fStFd ;
-		
-		// Computation of digestion coefficients for energy and energy terms.
-		FdGEin = GEFd * FdDMIn + InfPrt * 5.7 ;
-		// AccGEi = integ ( FdGEin , 1.0E-8 ) 
-		TDE = AbsE / FdGEin ;
-		appDE = ( FdGEin - FecENG ) / FdGEin ; // APPARRENT DIGESTIBLE ENERGY
-		DEI = FdGEin - FecENG ; // DIGESTIBLE ENERGY INTAKE
-		DE = DEI / FdDMIn ; // DIGESTIBLE ENERGY
-		// AccDEi = integ ( DEI , 1.0E-8 ) 
-		
-		CH4E = dTCH4 * HcombCH4 ; // APPARRENT AND CORRECTED
-		EUr = dUrea * HcombUr ; // METABOLIZABLE
-		MEI = ( FdGEin - CH4E - EUr - FecENG ) ; // ENERGY
-		// AccMEi = integ ( MEI , 1.0E-8 ) 
-		ME1 = MEI / FdDMIn ;
-		GE = FdGEin / FdDMIn ;
-		HFerm = FdGEin - AbsE - FecENG - CH4E - EUr ;
-		CorMEi = MEI - HFerm ;
-		CorME = CorMEi / FdDMIn ;
-		
-		// For comparison to Beever et al.
-		DCCe = 1.0 - ( FecCe / ( fCeFd * FdDMIn ) ) ;
-		Nintake = FdDMIn * ( FPsFd + fPiFd + FUrFd + fNnFd ) * 1000 * 0.1555 ;
-		Nan = 1000 * 0.1555 * ( PiP + ( RumAaP * 0.1555 ) + ( MiP * 0.5555 ) + ( MiP * 0.09555 ) ) ;
-		Ndiff = ( Nintake - Nan ) / Nintake ;
-		
-		// For comparison to Clark papers
-		MiPrOm = MiP * MiPiPI / ( OminFd - TOmP ) ; // kg CP/kg OM True
-		MirOma = MiP * MiPiPI / ( OminFd - TTOmP ) ; // Apparent
-		MiNOm = MiPrOm / 6.2555 ; // kg N/kg OM True
-		MiNOma = MirOma / 6.2555 ; // Apparent
-		
-		// **************************************************************
-		// INTERFACE OF MODELS---NUTRIENT ABSORBTION
-		// *************************************************************
-		// Absorbtion of nutrients
-		
-		absGl = LgutHaGl + CsP + MiGl + MiLGl ;
-		AbsAa = MiAa + LgutPiAa + RumAaP + InfPrt / 0.1555 ;
-		absAc = absRumAc + LgutHcAc + LgutCeAc + RumAcP ;
-		// Computes absorbtion of nutrients
-		absPr = absRumPr + MiPr + LgutHcPr + LgutCePr + RumPrP ;
-		// in whole gut in moles.This is
-		absBu = absRumBu + LgutHcBu + LgutCeBu + MiBu + RumBuP ;
-		// input to cow model.
-		AbsAm = absRumAm ;
-		// Correction for absFa converts stearate (Fl) from
-		absFa = ( MiFa + LgutFaDg ) * MwtFl / MwtFa ;
-		// gut to palmitate in animal.
-		absAs = absRumAs + LgutAs + LgutAi ;
 		absLa = absRumLa + RumLaP ;
-		AbsAcE = absAc * HcombAc ;
-		absPrE = absPr * HcombPr ;
-		absBuE = absBu * HcombBu ;
-		absFaE = absFa * HcombFa ;
-		absAaE = AbsAa * HcombAa ;
-		absGlE = absGl * HcombGl ;
 		absLaE = absLa * HcombLa ;
-		AbsE = AbsAcE + absPrE + absBuE + absFaE + absAaE + absGlE + absLaE ;
 		
 		// **********************************************************
 		// DYNAMIC ELEMENTS OF ANIMAL SUBMODEL
@@ -8947,20 +8083,6 @@ public:
 		
 		// ****************** Uterine Tissue and Protein Mass ********************
 		WtUterPart = iWtUter * exp ( ( kUterSyn - kUterSynDecay * GestLength ) * GestLength ) ;
-		WtUter = WtConcAgeFactor * WtConcBreedFactor *
-			( ( iWtUter * exp ( ( kUterSyn - kUterSynDecay * DayGest ) * DayGest ) ) * Preg
-			+ ( ( WtUterPart - iWtUter ) * exp ( - kUterDeg * fmod ( DayMilk +3000.0 , 3000.0 ) ) + iWtUter ) * NonPreg ) ;
-		
-		WtPUter = WtUter * fPUter ; // kg protein in uterus
-		PUter = WtPUter * MwtPVis ; // moles of AA in uterus
-		dWtUter = WtUterSyn - WtUterDeg ;
-		dWtPUter = WtPUterSyn - WtPUterDeg ;
-		WtUterSyn = WtUter * ( kUterSyn -2 * kUterSynDecay * DayGest ) * Preg ;
-		WtPUterSyn = WtUterSyn * fPUter ;
-		WtUterDeg = ( WtUter - iWtUter ) * kUterDeg * NonPreg ;
-		WtPUterDeg = WtUterDeg * fPUter ;
-		AaPUter = WtPUterSyn / MwtPVis ;
-		PUterAa = WtPUterDeg / MwtPVis ;
 		
 		// ********************* Conceptus plus Fluid Mass ***********************
 		WtConcAgeFactor = 1.0 - 0.02555 * ( 4.001 - min ( 4.0 , AgeInYears ) ) *pow(1,1)* 2.3555 ; // GL. This yields 0.8555 for 2 years old; 0.9555 for 3 & 1.0 for 4+ Based on DairyNZ data
@@ -8970,26 +8092,6 @@ public:
 		WtPConc = iWtPConc * exp ( ( kPConcSyn - kPConcSynDecay * DayGest ) * DayGest ) ;
 		WtPConcSyn = WtPConc * ( kPConcSyn -2 * kPConcSynDecay * DayGest ) * Preg ;
 		AaPConc = WtPConcSyn * Preg / MwtPVis ;
-		
-		// *********************** Gravid Uterus *********************************
-		// Yields approximately 2x use for Oxid as for prt syn per Bell 1995
-		WtGrvUter = WtConc + WtUter ;
-		WtPGrvUter = WtPConc + WtPUter ;
-		WtPGrvUterSyn = WtPConcSyn + WtPUterSyn ;
-		dWtGrvUter = WtConcSyn + dWtUter ;
-		dWtPGrvUter = WtPConcSyn + dWtPUter ;
-		AaPGest = AaPConc + AaPUter - PUterAa ;
-		AaGlGest = WtGrvUter * kAaGlGest * cAa ; // I think I have accounted for heat and ATP correctly
-		// Ox and CO2 are not accounted for, MDH 4-14-07
-		
-		// ************** MILKING *****************************
-		// MilkingTm controls the amount of time required for milk out (d).  Set to 1 for continuous milking.
-		// MilkInt controls the time interval for milking (d). Set to .5 for 2x/d, .33 for 3x/d, etc.
-		
-		// procedural ( MilkSW = ResidMamMilk , MamMilk , DayMilk ) 
-		if ( DayMilk <= 0 ) MilkSW = 0 ; // Turn off milking when dry
-		if ( MamMilk <= ResidMamMilk ) MilkSW = 0.0 ; // Turn off milking when udder empty
-		// end of procedural 
 		// OF PROCEDURAL
 		
 		// BEGIN  INCLUDE 'MamCells_deriv.csl'
@@ -9024,25 +8126,125 @@ public:
 		
 		PreCalvingMamCells = MamCellsPart * exp ( - uTMamCells * ( 1 - exp ( K1MamCells * DayMilk ) ) / K1MamCells + lambdaMamCells * DayMilk ) ; // Oroginal Dijkstra
 		PostCalvingMamCells = MamCellsA + MamCellsQ ;
-		MamCells = ( InMilk * PostCalvingMamCells ) + ( ( 1 - InMilk ) * PreCalvingMamCells ) ;
-		MEinMJ = ME * McalToMJ ; // Moved here to minimise diff with mark
-		LW = BW + MamMilk ; // Unit: kg. Liveweight incl. milk ! Moved here to minimise diff with mark
-		
-		// **** Active, Quiescent and Senecenced cell dynamics  *********************************************
-		// Pools are: A(Active); Q(Quiescent); S(Senecenced); U(Udder=A+Q); P (Proliferated = endless stand by pool).
-		// U, P, S are conceptual, not explicitly implemented
-		// Fluxes are: PA; AQ; QA; AS; QS; US = AS+QS
-		
-		fMamCellsQA = InMilk * MamCellsQ * kMamCellsQA * kMamCellsQaMfAdjustment ;
-		fMamCellsPA = InMilk * MamCellsPart * ( BaseMamCellsTurnOver + uTMamCells * exp ( - MamCellsProliferationDecayRate * DayMilk ) ) ; // Approximation of the growth rate derived from Dijkstra's MamCells eq.
-		fMamCellsUS = InMilk * MamCellsPart * ( ( kMamCellsDeclineBase * exp ( - MamCellsDecayRateOfSenescence * DayMilk ) + BaseMamCellsTurnOver ) ) + IncreasedUsDueToLowMf ; // Approximation of the senescence rate derived from Dijkstra's MamCells eq, PLUS dymaically calculated increase loss due to low milking frequency
-		fMamCellsAS = fMamCellsUS * MamCellsA / ( MamCellsQ + MamCellsA ) ; // Partition the total death rate between the Q and A pools
-		fMamCellsQS = fMamCellsUS * MamCellsQ / ( MamCellsQ + MamCellsA ) ; // Partition the total death rate between the Q and A pools
 		fMamCellsAQ = MamCellsA * kMamAQBase ; // GL: removed KMINH as there are alternative explicit MF drivers
+		MamCellsQaPreToPostFactor = 1 / ( 1 + exp ( kMamCellsTransitionSteepness * ( kMamCellsTransitionDim - DayMilk ) ) ) ;
+		// CumulativeLowMfDays = integ ( DailyMfDiff , 0 ) // Keep track of the cummulative number of 1x eqivalent days on low liking freq, e.g 20 days on 1.5x or 10 days on 1x both grow cumulativeLowMfDiff by 10.
+		LowMfDecay = exp ( - kMamCellsUsMfDecay * CumulativeLowMfDays ) ; // The longer on low MF the slower the senescence
+		LHor = FixedLhorSW * LHorBase + ( 1 - FixedLhorSW ) * LHor1 ;
+		VmLHorSyn = wLHorSensAa + wLHorSensGl + wLHorSensAdip ; // Denominator of LhorSyn. Set so that the division gives 1.0 when all drivers are on base line
 		
-		dMamCellsA = InMilk * ( fMamCellsQA - fMamCellsAQ + fMamCellsPA - fMamCellsAS ) - 100 * ( 1 - InMilk ) * ( MamCellsA - 1e-12 ) ; // Second part empties the A pool withing few hours after dry off
-		dMamCellsQ = InMilk * ( fMamCellsAQ - fMamCellsQA - fMamCellsQS ) + 100 * ( 1 - InMilk ) * ( MamCells - MamCellsQ ) ; // Second part brings Q pool to have all MamCells when dry
-		dMamCellsS = fMamCellsAS + fMamCellsQS ;
+		kLHor = LHorBase / LhorTurnoverDays ; // Base degredadion and synthesis rate. Unit: LHOR units per day
+		
+		KLHorPP = ( 12 / DayLength - 1 ) * KDayLength ; // CCP 12-11-06
+		BcsTargetFactor = min ( 1.0 , max ( exp ( - BcsTargetDecay * ( DayMilk - 1.0 ) ) , ( DayMilk -50.0 ) / ( 365.0 -50.0 ) ) ) ; // Changes beween 1 (calving) through 0 (~day 40) than up to 1 after 365 days, to create the BcsTarget
+		CorrectedBW = NonUterEbwTarget + iRumVol ; // Using iRumVol rather than RumVol, to avoid fluctuation
+		
+		// **** Mammary ENZYMES ***************************************************************************
+		// This should be a fn of DayMilk
+		MamEnz = MamCellsA * PMamEnzCell * ( LHor / LHorBase ) * BST ;
+		MilkingFrequencyAdjusted = MilkingFrequencyLag * MilkingFrequencyAgeAdjustment ; // Young cows do not perform as well as mature cows on OAD. Observed relationship incorporated, and we capture that in both reduced intake(FdRat_DairyNZ.csl), and here, by artificially reducing their milking frequency as if they are miked even less than once a day, to magnify the OAD effect (slow return from Q to A pools)
+		
+		// procedural ( InMilk = DayMilk ) 
+		if ( DayMilk < 0 ) {
+			InMilk = 0.0 ;
+		} else {
+			InMilk = 1.0 ;
+		}
+		// end of procedural 
+		
+		// Spike smoothing example - keep
+		// AaSmoothed  = Integ(dAaSmoothed,AaBase)
+		// dAaSmoothed = 0.1 * (Aa - AaSmoothed)
+		// END  INCLUDE 'MamCells_deriv.csl'
+		
+		MilkingFrequency = 1.0 / MilkInt ; // Gil May 2012 added to make the merged code compile
+		MilkInhDeg = KMinh * KMilkInhDeg ;
+		WtTsAdip = MwtTs * TsAdip ;
+		// Adds injected INS as effector of Gl uptake
+		cFa = Fa / VolFa ;
+		// Adds injected INS as long term effector
+		// Changed VmAcTs to VmAcTs2 - kc 3/2/95
+		// VmAcTs2 = integ ( dVmAcTs , iVmAcTs ) 
+		VmAcTs = VmAcTs2 ;
+		cAc = Ac / VolAc ;
+		
+		dOthDna = ( KDnaOth *pow(1,1)* ExpOth2 ) * ( ( OthDnaMx - OthDna ) / OthDnaMx ) ;
+		dVisDna = ( KDnaVis *pow(1,1)* ExpV2 ) * ( ( VisDnaMx - VisDna ) / VisDnaMx ) ;
+		POthAaOth = KPOthAaOth * POth ;
+		PVisAaVis = KPVisAaVis * PVis ;
+		WtPOth = POth * MwtPOth ;
+		WtPVis = PVis * MwtPVis ;
+		WtOth = WtPOth / fDWt + otWtOth ;
+		WtVis = WtPVis / fDWt + otWtVis ;
+		// PVis = integ ( dPVis , iPVis ) 
+		// POth = integ ( dPOth , iPOth ) 
+		// Fixed by Gil: instead of Aa =INTEG(dAa ,iAa) use the following 2 lines
+		// AA1 = integ ( dAa , iAa ) 
+		AA = max ( 0.1 , AA1 ) ;
+		// BldUr1 = integ ( dBldUr , iBldUr ) 
+		BldUr = max ( 1e-9 , BldUr1 ) ; // Prevent a crash when AM goes negative. I don't have time to find the source
+		// The following adjustment to VmGlLm was added to allow for greater fat and protein content
+		// in early and late lactation. MDH 3-6-06
+		
+		VmGlLm1Vis = VmGlLmVisPart * exp ( kVmGlLmSyn * ( 1 - exp ( - kVmGlLmDecay * DayMilk ) ) /
+			kVmGlLmDecay - kVmGlLmDeg * DayMilk ) ; // Dijkstras equation to represent Lm synth capacity
+		fGlHyAdip = pGlHyAdip ;
+		fGlHyVis = pGlHyVis ;
+		// Gl = integ ( dGl , iGl ) 
+		cGl = Gl / VolGl ;
+		// MamLm = integ ( dMamLm , iMamLm ) // Mammary LACTOSE
+		// TMilkLm = integ ( dMilkLm , 1.0E-8 ) // AND TOTAL YIELD
+		TVolMilk = TMilkLm / fLm ;
+		MamMilk = MamLm / fLm ;
+		dMamMilkAve = TAveMilkMam * ( MamMilk - MamMilkAve2 ) ;
+		// absEAve = integ ( dabsEAve , iabsEAve ) 
+		absEF = absEAve / ( EBW *pow(1,1)* 0.7555 ) ;
+		KNaAtOth = 0.8 + KNaOth * T3 * absEF ;
+		KNaAtAdip = 0.3 + KNaAdip * T3 * absEF ;
+		AtAd12 = KidWrk * EBW *pow(1,1)* 0.7555 ;
+		AtAd13 = HrtWrk * OXUP1 ;
+		AtAd14 = ResWrk * OXUP1 ;
+		HtV5 = AtAd12 * AtAdHT ; // kidney work
+		HtV6 = AtAd13 * AtAdHT ; // heart work
+		HtV7 = AtAd14 * AtAdHT ; // respiration
+		rtOx1 = cGl * ( cAc + KAcCd ) / ( cAc * ( cGl + KGlCd / AHor ) ) ;
+		rtOx2 = cFa * ( cAc + KAcCd ) / ( cAc * ( cFa + KFaCd ) ) ;
+		// tNep = integ ( NEP , 0 ) 
+		// DAILY MILK COMPOSITION
+		propLm = dLmProd / ( dMilkProd +1.0e-9 ) ;
+		fPm = dPmProd / ( dMilkProd +1.0e-9 ) ;
+		fTm1 = dTmProd / ( dMilkProd +1.0e-9 ) ;
+		
+		// TCH4 = integ ( dTCH4 , iTCH4 ) // TCH4 is in moles
+		
+		CH4KGY = TCH4 * MwtCH4 ; // total kg methane
+		TCH4E = TCH4 * HcombCH4 ; // total kcal methane
+		
+		SPartMiHa = KMiHa * Ha / HaCor * cMiSPart ; // Microbes attached
+		SPartMiHb = KMiHb * Hb / HbCor * cMiSPart ;
+		
+		HaMiRum = cMiHa * SPartHaCs ; // Microbes already associated with SPart potentially
+		SPartPiAa = Pi / PICor * KPiAa * cMiSPart * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatPi ) ) ;
+		// BldUr transport accross rumen wall inhibited by Am.
+		absRumAm = KAmabs * AM / AmCor ;
+		cBldUr = ( BldUr / BldUrCor ) / BldUrVol ;
+		RumLaFv = KLaFv * cMiWa * RumLa / RumLaCor ;
+		WaMiP = KWAP * WaMi ;
+		WtUter = WtConcAgeFactor * WtConcBreedFactor *
+			( ( iWtUter * exp ( ( kUterSyn - kUterSynDecay * DayGest ) * DayGest ) ) * Preg
+			+ ( ( WtUterPart - iWtUter ) * exp ( - kUterDeg * fmod ( DayMilk +3000.0 , 3000.0 ) ) + iWtUter ) * NonPreg ) ;
+		// Ox and CO2 are not accounted for, MDH 4-14-07
+		
+		// ************** MILKING *****************************
+		// MilkingTm controls the amount of time required for milk out (d).  Set to 1 for continuous milking.
+		// MilkInt controls the time interval for milking (d). Set to .5 for 2x/d, .33 for 3x/d, etc.
+		
+		// procedural ( MilkSW = ResidMamMilk , MamMilk , DayMilk ) 
+		if ( DayMilk <= 0 ) MilkSW = 0 ; // Turn off milking when dry
+		if ( MamMilk <= ResidMamMilk ) MilkSW = 0.0 ; // Turn off milking when udder empty
+		// end of procedural 
+		MamCells = ( InMilk * PostCalvingMamCells ) + ( ( 1 - InMilk ) * PreCalvingMamCells ) ;
+		fMamCellsPA = InMilk * MamCellsPart * ( BaseMamCellsTurnOver + uTMamCells * exp ( - MamCellsProliferationDecayRate * DayMilk ) ) ; // Approximation of the growth rate derived from Dijkstra's MamCells eq.
 		
 		// MamCellsA = integ ( dMamCellsA , iMamCellsA ) 
 		// MamCellsQ = integ ( dMamCellsQ , iMamCellsQ ) 
@@ -9055,10 +8257,6 @@ public:
 		// This final value is the major driver of the steady state proportion of active cells (pMamCellsA)
 		
 		MamCellsQaKickStartFactor = InMilk * ( exp ( - kMamCellsQAKickStartDecay * DayMilk ) ) ;
-		MamCellsQaPreToPostFactor = 1 / ( 1 + exp ( kMamCellsTransitionSteepness * ( kMamCellsTransitionDim - DayMilk ) ) ) ;
-		kMamCellsQA = ( kMamCellsQAPrePeak + // Baseline value
-			MamCellsQaKickStartFactor * ( kMamCellsQAStart - kMamCellsQAPrePeak ) + // Adds the kickstart boost which decays to nearly nothing after dew days
-			MamCellsQaPreToPostFactor * ( kMamCellsQAPostPeak - kMamCellsQAPrePeak ) ) ; // Adds the trasnsition portion towards the final post peak value
 		
 		// ****** Low Milking Frequency adjustements ******************************************************
 		// While on low milking frequency we have increased senescence (long term carry over)
@@ -9067,83 +8265,14 @@ public:
 		// depending on total days in low milking frequency (not necessarily consequtive)
 		kMamCellsQaMfAdjustment = ( MilkingFrequencyAdjusted / 2 ) *pow(1,1)* MilkIntPowerForFMamCelsQA1 ; // Stimulus adjustment, more cells go from Q to A as the milking frequency goes higher. Note that it gives 1 = no change for twice a day milking (MilkInt = 0.5).
 		DailyMfDiff = max ( 0. , ( 2 - MilkingFrequency ) * InMilk ) ; // DailyMfDiff would be 1 while on once a day; 0.5 while on 1.5 a day etc.
-		// CumulativeLowMfDays = integ ( DailyMfDiff , 0 ) // Keep track of the cummulative number of 1x eqivalent days on low liking freq, e.g 20 days on 1.5x or 10 days on 1x both grow cumulativeLowMfDiff by 10.
-		LowMfDecay = exp ( - kMamCellsUsMfDecay * CumulativeLowMfDays ) ; // The longer on low MF the slower the senescence
-		IncreasedUsDueToLowMf = -1 * MamCells * MaxLossDueToLowMf * derivt ( 0 , LowMfDecay ) ;
-		// IncreasedUsDueToLowMfPublished = MamCells * MaxLossDueToLowMf * kMamCellsUsMfDecay * EXP(-kMamCellsUsMfDecay * CumulativeLowMfDays) ! This one is published because it is simple enough, and is identical to the IncreasedUsDueToLowMf BUT ONLY for a single period of non-2x-frequency. The above IncreasedUsDueToLowMf handles multiple periods of non-2x milking frequency elegantly but harder to describe in publication.
-		
-		// ***** AdiposeNew = estimation for LHOR sensitivity only ***********************************************
-		// Back Calculated Adipose for LHOR sensitivity. WtAdip not reliable
-		// calculates WtAdipNew as following NonUterEBW changes, excl preg, gut,and growth of
-		// young cows. For average condition cows most of net LW loss will come from fat.
-		// The lower the adipose is the less fat and more muscle will be lost / gained.
-		// The higher the adipose is the more fat and less muscle will be lost / gained.
-		
-		dNonUterEBW = derivt ( iNonUterEBW , NonUterEBW ) ;
-		dLwExclUterGutAndGrowth = dNonUterEBW - GrowthPerDay ;
-		dWtAdipNew = dLwExclUterGutAndGrowth * ( 1 - exp ( -8 * WtAdipNew / ( WtAdipNew + NonUterEBW ) ) ) ; // The smaller the adipose the smaller the propertion of fat is from any weight gain / loss
-		// WtAdipNew = max ( 0. , integ ( dWtAdipNew , iWtAdip ) ) 
-		// NonUterEbwTarget = integ ( GrowthPerDay , iNonUterEbwTarget ) 
-		
-		// **** LHOR *******************************************************************************************
-		// Roughly the number days it would take LHOR to change to the full extent once the drivers state changed
-		// Linear slope component in the equation
-		// Linear slope component in the equation
-		// Relative importance of blood amino acids
-		// Relative importance of adipose size.
-		// Relative importance of blood glocose.
-		// Curvature component of the sensitivity
-		// Curvature component of the sensitivity
-		// Curvature component of the sensitivity
-		// Baseline of cAA.  When cAA = cAaBase => nil change to LHOR due to amino acids level. 10-2015 GL changed from 0.06555 to 0.005
-		// Baseline of CGL. When cGL = cGlBase => nil change to LHOR due to glucose level
-		// CCP Scalar for PP effect on LHor degradation
-		// Unit: 0 or 1. set to 1 to bypass the Lhor equation and use Lhor set to its baseline instead.
-		
-		cGlTarget = cGlBase * ( BcsTarget / BCSBase ) ; // Gl Has the same strong dip as BCS, so we want only deviation from the pattern t count topwards LHor syntheis.
-		LHor = FixedLhorSW * LHorBase + ( 1 - FixedLhorSW ) * LHor1 ;
-		// LHor1 = integ ( dLHor , iLHor ) 
-		dLHor = LHorSyn - LHorDeg ;
-		VmLHorSyn = wLHorSensAa + wLHorSensGl + wLHorSensAdip ; // Denominator of LhorSyn. Set so that the division gives 1.0 when all drivers are on base line
-		LHorSyn1 = kLHor * ( wLHorSensAa * LhorAa + wLHorSensGl * LhorGl + wLHorSensAdip * LhorAdip ) / VmLHorSyn ; // The expression in the brackets yields 1 when all drivers are on their baseline.
-		LHorSyn = InMilk * LHorSyn1 + ( 1 - InMilk ) * LHorDeg ; // Maintain base level while dry, the real game starts when she calves, otherwise we may have too much sesnitivity to the dry period situation of the cow
 		LHorDeg = kLHor * ( 1 + KLHorPP ) * ( LHor / LHorBase ) ; // CCP + GL (made turnover adjustable). This equation empties (1 + KLhorPP)/turnoverDays of LHOR pool
-		
-		kLHor = LHorBase / LhorTurnoverDays ; // Base degredadion and synthesis rate. Unit: LHOR units per day
-		
-		// Create a sigmoid / saturating  sensitivity to high levels of nutrients (AA GL)to avoid runaway to extremes.
-		// Example: If AA are at -40%; -20%; 0%; 20%; 40% above base level (i.e.  cAa/cAaBase = 0.6; 0.8; 1; 1.2; 1.4).
-		// Now lets say xLhorAaSens = 0.5 then  LhorAa (contribution of Aa to lactation hormone synthesis) will be:
-		// 1 - ((1-0.6)^0.5); 1 - ((1-0.8)^0.5); 1; 1 + (1.2 - 1)^0.5; 1 + (1.4 - 1)^0.5
-		// = -63%; -44%; 0%; +44%; +63% of base contribution to LhorSyn,
-		if ( cAa < cAaBase ) {
-			LhorAa = 1 - kLHorSensAa * ( 1 - max ( cAa , 0.000001 ) / cAaBase ) *pow(1,1)* xLHorSensAa ;
-		} else {
-			LhorAa = 1 + kLHorSensAa * ( ( cAa / cAaBase ) - 1 ) *pow(1,1)* xLHorSensAa ;
-		}
-		
-		if ( cGl < cGlTarget ) {
-			LhorGl = 1 - kLHorSensGl * ( 1 - ( cGl / cGlTarget ) ) *pow(1,1)* xLHorSensGl ;
-		} else {
-			LhorGl = 1 + kLHorSensGl * ( ( cGl / cGlTarget ) - 1 ) *pow(1,1)* xLHorSensGl ;
-		}
-		
-		LhorAdip = ( WtAdipNew / WtAdipTarget ) *pow(1,1)* xLHorSensAdip ; // Contribution of Adippose to LhorSyn (not linear)
-		
-		KLHorPP = ( 12 / DayLength - 1 ) * KDayLength ; // CCP 12-11-06
 		
 		// **** Target BCS *******************************************************************************************
 		// Target BCS around peak lactaion. Calving, Calving + 365 days => BcsTarget = BcsBase; DIM 10 to 70:  BCS = BcsTargetNadir;  oOther DIM: linear - connect the dots.
 		// Determines the exponential down curve of TargetBcs from calving to nadir
 		
 		BcsTarget = BcsTargetNadir + ( BCSBase - BcsTargetNadir ) * BcsTargetFactor ; // This goes from BcsBase down to BcsTargetNadir around peak and recovering to base after 365 days. This reflectes the findin of JR et al JDS 2007, around this VARYING target BCS the sesnitivity (milk response) to adipose size drastically changes from high (e.g. under that BCS: 17% yield for 1 BCS NZ point at peak) to very low (4% yield for BCS point around peak)
-		BcsTargetFactor = min ( 1.0 , max ( exp ( - BcsTargetDecay * ( DayMilk - 1.0 ) ) , ( DayMilk -50.0 ) / ( 365.0 -50.0 ) ) ) ; // Changes beween 1 (calving) through 0 (~day 40) than up to 1 after 365 days, to create the BcsTarget
 		WtAdipTarget = 0.2555 * CorrectedBW + 36 * BcsTarget - 122.1 ; // MDH Target Adipose weight defended by the animal. GL made TegetBcs variable to refelect findings of BCS article, JR et al JDS 2007
-		CorrectedBW = NonUterEbwTarget + iRumVol ; // Using iRumVol rather than RumVol, to avoid fluctuation
-		
-		// **** Mammary ENZYMES ***************************************************************************
-		// This should be a fn of DayMilk
-		MamEnz = MamCellsA * PMamEnzCell * ( LHor / LHorBase ) * BST ;
 		
 		// **** Misc **************************************************************************************
 		
@@ -9153,15 +8282,6 @@ public:
 		} else {
 			derivMilkingFrequencyLag = kMilkingFrequencyLagUp * ( MilkingFrequency - MilkingFrequencyLag ) ; // slow recovery from low MilkingFrequency to higher MilkingFrequency
 		}
-		MilkingFrequencyAdjusted = MilkingFrequencyLag * MilkingFrequencyAgeAdjustment ; // Young cows do not perform as well as mature cows on OAD. Observed relationship incorporated, and we capture that in both reduced intake(FdRat_DairyNZ.csl), and here, by artificially reducing their milking frequency as if they are miked even less than once a day, to magnify the OAD effect (slow return from Q to A pools)
-		
-		// procedural ( InMilk = DayMilk ) 
-		if ( DayMilk < 0 ) {
-			InMilk = 0.0 ;
-		} else {
-			InMilk = 1.0 ;
-		}
-		// end of procedural 
 		
 		// procedural ( MilkSolids270MfAdjusted = MilkingFrequency , InMilk ) 
 		
@@ -9176,69 +8296,10 @@ public:
 		
 		MilkSolids270MfAdjusted = KgMilkSolidsExpectedIn270Days * MilkingFrequencyAgeAdjustment * MilkingFrequencyBaseAdjustment ; // Expected yield on actual milking frequency
 		// end of procedural 
-		
-		// Spike smoothing example - keep
-		// AaSmoothed  = Integ(dAaSmoothed,AaBase)
-		// dAaSmoothed = 0.1 * (Aa - AaSmoothed)
-		// END  INCLUDE 'MamCells_deriv.csl'
-		
-		MilkingFrequency = 1.0 / MilkInt ; // Gil May 2012 added to make the merged code compile
-		
-		// RETAINED MILK EFFECTS, Altered Apr 23, 2008 to smooth effects on milk production
-		
-		dKMilkInh = MilkInhSyn - MilkInhDeg ;
 		MilkInhSyn = ( 1 * MamMilk ) / ( KMilkI + MamMilk ) ; // Changed to prevent negative values, Apr 23, 2008 MDH
-		MilkInhDeg = KMinh * KMilkInhDeg ;
-		// KMinh = integ ( dKMilkInh , ikMilkInh ) 
-		
-		// Gil May 2012 MamEnz code moved to MamCells_MDH_in_deriv.csl / MamCells_DairyNZ_in_deriv.csl becsue to retain difference
-		
-		// ************************** LIPID METABOLISM(Fa,Ts) **********************
-		// Inputs to storage triacylglyceride pool (Ts) are fatty acid
-		// esterification(FaTsAdip*FaTsTs=6*0.3555=2.0)and lipogenesis from acetate
-		// (AcTs*AcTsTs=16*.042=0.6555). Output is lipolysis (TsFaAdip = 2.6555).
-		// Inputs to fatty acid plus triacylglyceride pool(Fa) are
-		// absorption (absFa = 1.0) from gut and lipolysis(TsFaAdip*TsFaFa
-		// =2.6555*3 = 8.0). Outputs are fatty acid (re)esterification
-		// (FaTsAdip=6.0),incorporation into milk fat(FaTmVis=1.8) and oxidation
-		// FaCd = 1.2). Rationale in setting VmTsFaAdip, KTsFaAdip and theta1 was
-		// that, in later versions VmTsFaAdip may be a function of catabolic
-		// hormone rather than having Estate as a general effector as is current.
-		// Also, Ts should not become rate limiting until cTs is less than 0.2.
-		// With KTsFaAdip set at .5 and theta1 at 5,cTs is not limiting until .2
-		// and then becomes very limiting. cFa is 0.5E-3 and cGl is 3.0E-3.
-		// KFaTsAdip was set at 1.6555E-4 to make cFa close to saturating and K1FaTs
-		// at 2.0E-3 to make the reaction responsive to Gl changes. Aggregation
-		// confounds KFaTmVis and VmFaTmVis so these were set to produce 1/2 Vmax
-		// in reference state.
-		
-		// revised constants VmFaTmVis and VmTsFaAdip 7/92 (kc)
-		dTsAdip = FaTsF1 + AcTsF1 - TsFaAdip ;
-		// TsFaAdip=(VmTsFaAdip**CHor1/(1.0+(KTsFaAdip/cTs)**Theta1))
-		// Replaced 12/87
-		TsFaAdip = VmTsFaAdip * ( EBW *pow(1,1)* 0.7555 ) * CHor1 * T3 / ( 1.0 + ( cFa / K1TsFa ) *pow(1,1)* EXP10
-			+ ( KTsFaAdip / cTs ) *pow(1,1)* Theta1 ) ;
-		// Adds cFa as feedback term and T3 as effector of VMAX
-		cTs = TsAdip / WtAdip ;
-		FaTsF1 = FaTsAdip * FaTgTg ;
-		// BODY FAT OR STORAGE
-		AcTsF1 = AcTsAdip * AcTgTg ;
 		// TRIGLYCERIDE-TsAdip
 		WtAdip = WtCytAdip + WtTsAdip ;
-		dWtTsAdip = dTsAdip * MwtTs ;
-		WtTsAdip = MwtTs * TsAdip ;
-		// TsAdip = integ ( dTsAdip , iTsAdip ) 
-		// BCS prediction from Waltner et al., JDS 77:2570, MDH & NES
-		dBCS = dWtTsAdip / 46.6 ;
-		BCS = ( WtAdip - iWtAdip ) / 46.6 + iBCS ; // BW does not affect BCS within a run hence this equation vs init section
-		BCS_NZ = ( 9 * ( ( WtAdip - iWtAdip ) / 46.6 + ( 4 * iBCS +5 ) / 9 ) -5 ) / 4 ; // CCP's scale, 7-26-07
-		
-		dFa = absFa + TsFaF1 - FaTsAdip - FaTmVis - FaCd ;
 		FaTsAdip = VmFaTsAdip * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KFaTsAdip / cFa + K1FaTs / ( AHor * INS * cGl ) ) ;
-		// Adds injected INS as effector of Gl uptake
-		cFa = Fa / VolFa ;
-		// PLASMA LIPIDS-Fa
-		TsFaF1 = TsFaAdip * TgFaFa ;
 		FaTmVis = ( VmFaTmVis * MamEnz ) * ( INS *pow(1,1)* P1 ) / ( 1.0 + KFaTmVis / cFa + K1FaTm / cGl ) ;
 		// Adds injected INS as effector of VMAx
 		// Fa = integ ( dFa , iFa ) 
@@ -9260,18 +8321,153 @@ public:
 		// constants K1 and K2 revised 7/92 (kc)
 		
 		dVmAcTs = K1VAct * AHor1 * INS - K2VAct * VmAcTs ;
-		// Adds injected INS as long term effector
-		// Changed VmAcTs to VmAcTs2 - kc 3/2/95
-		// VmAcTs2 = integ ( dVmAcTs , iVmAcTs ) 
-		VmAcTs = VmAcTs2 ;
-		
-		// revised constant VmAcTmVis 7/92 (kc)
-		
-		dAc = absAc + AaAcV1 - AcTsAdip - AcTmVis - AcCd ;
-		AaAcV1 = AaGlVis * AaGlAc ;
 		AcTsAdip = VmAcTs / ( 1.0 + KAcTsAdip / cAc + K1AcTs / ( AHor * cGl ) ) ;
-		cAc = Ac / VolAc ;
 		AcTmVis = VmAcTmVis * MamEnz * INS *pow(1,1)* P1 / ( 1.0 + KAcTmVis / cAc + K1AcTm / cGl ) ;
+		// Added Gl based on residual errors observed for ExtLact and Aston simulations
+		cAa = AA / VolAa ;
+		GLLmVis = VmGlLm1Vis * MamEnz / ( 1.0 + KGlLmVis / cGl + KAaLmVis / cAa ) ; // cAa should affect the Vm not Ks
+		GlHyAdip = AcTsAdip * fGlHyAdip * GlGlHy ;
+		GlHyVis = AcTmVis * fGlHyVis * GlGlHy ;
+		GlTpAdip = VmGlTpAdip * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KGlTpAdip / cGl ) ;
+		GlTpVis = VmGlTpVis * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KGlTpVis / cGl ) ;
+		GlLaOth = VmGlLaOth * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KGlLaOth / cGl ) ;
+		basalOth = eerActivityAtp / 3 + ( KbasOth + KNaAtOth ) * WtOth *pow(1,1)* 0.7555 ; // GL Apr 2014: KBasalOth reduced from ~2.2 to XXX and eerActivityATP introduced
+		basalAdip = ( KbasAdip + KNaAtAdip ) * WtAdip *pow(1,1)* 0.7555 ;
+		PiAa = SPartPiAa / MwtPs ;
+		// input to cow model.
+		AbsAm = absRumAm ;
+		
+		WtPUter = WtUter * fPUter ; // kg protein in uterus
+		WtUterSyn = WtUter * ( kUterSyn -2 * kUterSynDecay * DayGest ) * Preg ;
+		WtUterDeg = ( WtUter - iWtUter ) * kUterDeg * NonPreg ;
+		
+		// *********************** Gravid Uterus *********************************
+		// Yields approximately 2x use for Oxid as for prt syn per Bell 1995
+		WtGrvUter = WtConc + WtUter ;
+		kMamCellsQA = ( kMamCellsQAPrePeak + // Baseline value
+			MamCellsQaKickStartFactor * ( kMamCellsQAStart - kMamCellsQAPrePeak ) + // Adds the kickstart boost which decays to nearly nothing after dew days
+			MamCellsQaPreToPostFactor * ( kMamCellsQAPostPeak - kMamCellsQAPrePeak ) ) ; // Adds the trasnsition portion towards the final post peak value
+		IncreasedUsDueToLowMf = -1 * MamCells * MaxLossDueToLowMf * derivt ( 0 , LowMfDecay ) ;
+		dMilkTm = MamTm * KMilk * MilkSW ; // Mammary MILK FAT
+		dUrea = KBldUrU * cBldUr ;
+		
+		// MUN calculations, CCP 3-28-07
+		cPun = cBldUr * 2 * 14 * 1000 / 10 ; // Converts cBldUr from mol Urea/l to mg N/dl.
+		dMilkPm = MamPm * KMilk * MilkSW ;
+		GlTpF1 = GlTpAdip * GlTpTp ;
+		GlTpV1 = GlTpVis * GlTpTp ;
+		GlLaB1 = GlLaOth * GlLaLa ;
+		AcTmV1 = AcTmVis * AcTgTg ;
+		FaTmV1 = FaTmVis * FaTgTg ;
+		
+		// ********************** Milk Yield ********************************
+		// Lactose in mammary gland(MamLm)and secreted (dMilkLm,TMilkLm) plus
+		// TOTAL MILK YIELD
+		
+		dLm = GLLmVis * GlLmLm * MwtLm ; // Kg/d produced
+		dMilkLm = MamLm * KMilk * MilkSW ;
+		// WtGrvUter added Apr 5, 2007 MDH to refect gestation status.
+		EBW1 = WtOth + WtAdip + WtVis + WtGrvUter + WaPool - WaPoolTarget ;
+		NonFatEBW = EBW1 - WtAdip ;
+		AdAtB1 = GlLaOth * GlLaAt ;
+		
+		// Heat production in body
+		
+		basHtOth = basalOth * AtAdHT ; // Basal
+		AtAdF1 = GlHyAdip * GlHyAD ;
+		AtAdF2 = GlTpAdip * GlTpAD ;
+		// ADIPOSE
+		AtAdF4 = AcTsAdip * ( TcHyAd * ( 1.0 - fGlHyAdip ) + AcFaAd ) ;
+		
+		// Heat Production in adipose
+		basHtAdip = basalAdip * AtAdHT ; // Basal
+		AtAdV2 = AcTmVis * ( TcHyAd * ( 1.0 - fGlHyVis ) + AcFaAd ) ;
+		AtAdV5 = GLLmVis * GlLmAd ;
+		AtAdV6 = GlHyVis * GlHyAD ;
+		AtAdV7 = GlTpVis * GlTpAD ;
+		TcHyAdip = AcTsAdip * HyAcFa * ( 1.0 - fGlHyAdip ) ; // correction for NADH
+		TcHyVis = AcTmVis * HyAcFa * ( 1.0 - fGlHyVis ) ; // from ICD in TCA
+		RumLaAc = RumLaFv * LaAcAc ;
+		RumLaPr = RumLaFv * LaPrPr ;
+		AaGlGest = WtGrvUter * kAaGlGest * cAa ; // I think I have accounted for heat and ATP correctly
+		
+		// **** Active, Quiescent and Senecenced cell dynamics  *********************************************
+		// Pools are: A(Active); Q(Quiescent); S(Senecenced); U(Udder=A+Q); P (Proliferated = endless stand by pool).
+		// U, P, S are conceptual, not explicitly implemented
+		// Fluxes are: PA; AQ; QA; AS; QS; US = AS+QS
+		
+		fMamCellsQA = InMilk * MamCellsQ * kMamCellsQA * kMamCellsQaMfAdjustment ;
+		// WtAdipNew = max ( 0. , integ ( dWtAdipNew , iWtAdip ) ) 
+		// NonUterEbwTarget = integ ( GrowthPerDay , iNonUterEbwTarget ) 
+		
+		// **** LHOR *******************************************************************************************
+		// Roughly the number days it would take LHOR to change to the full extent once the drivers state changed
+		// Linear slope component in the equation
+		// Linear slope component in the equation
+		// Relative importance of blood amino acids
+		// Relative importance of adipose size.
+		// Relative importance of blood glocose.
+		// Curvature component of the sensitivity
+		// Curvature component of the sensitivity
+		// Curvature component of the sensitivity
+		// Baseline of cAA.  When cAA = cAaBase => nil change to LHOR due to amino acids level. 10-2015 GL changed from 0.06555 to 0.005
+		// Baseline of CGL. When cGL = cGlBase => nil change to LHOR due to glucose level
+		// CCP Scalar for PP effect on LHor degradation
+		// Unit: 0 or 1. set to 1 to bypass the Lhor equation and use Lhor set to its baseline instead.
+		
+		cGlTarget = cGlBase * ( BcsTarget / BCSBase ) ; // Gl Has the same strong dip as BCS, so we want only deviation from the pattern t count topwards LHor syntheis.
+		
+		// Create a sigmoid / saturating  sensitivity to high levels of nutrients (AA GL)to avoid runaway to extremes.
+		// Example: If AA are at -40%; -20%; 0%; 20%; 40% above base level (i.e.  cAa/cAaBase = 0.6; 0.8; 1; 1.2; 1.4).
+		// Now lets say xLhorAaSens = 0.5 then  LhorAa (contribution of Aa to lactation hormone synthesis) will be:
+		// 1 - ((1-0.6)^0.5); 1 - ((1-0.8)^0.5); 1; 1 + (1.2 - 1)^0.5; 1 + (1.4 - 1)^0.5
+		// = -63%; -44%; 0%; +44%; +63% of base contribution to LhorSyn,
+		if ( cAa < cAaBase ) {
+			LhorAa = 1 - kLHorSensAa * ( 1 - max ( cAa , 0.000001 ) / cAaBase ) *pow(1,1)* xLHorSensAa ;
+		} else {
+			LhorAa = 1 + kLHorSensAa * ( ( cAa / cAaBase ) - 1 ) *pow(1,1)* xLHorSensAa ;
+		}
+		
+		LhorAdip = ( WtAdipNew / WtAdipTarget ) *pow(1,1)* xLHorSensAdip ; // Contribution of Adippose to LhorSyn (not linear)
+		
+		// RETAINED MILK EFFECTS, Altered Apr 23, 2008 to smooth effects on milk production
+		
+		dKMilkInh = MilkInhSyn - MilkInhDeg ;
+		// Adds cFa as feedback term and T3 as effector of VMAX
+		cTs = TsAdip / WtAdip ;
+		FaTsF1 = FaTsAdip * FaTgTg ;
+		// BODY FAT OR STORAGE
+		AcTsF1 = AcTsAdip * AcTgTg ;
+		AaPOthOth = VmAaPOthOth * OthDna / ( 1.0 + KAaPOthOth / ( AHor * cAa ) ) ;
+		AaPVisVis = VmAaPVisVis * VisDna / ( 1.0 + KAaPVisVis / ( AHor * cAa ) ) ;
+		AaGlVis = VmAaGlVis * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KAaGlVis / cAa ) ; // GLUCONEOGENESIS
+		
+		// MILK PROTEIN SYNTHESIS
+		AaPmVis = VmAaPmVis * MamEnz / ( 1.0 + KAaPmVis / cAa + KGlLmVis / cGl ) ;
+		WtPUterSyn = WtUterSyn * fPUter ;
+		WtPUterDeg = WtUterDeg * fPUter ;
+		WtPGrvUter = WtPConc + WtPUter ;
+		AmUr = AbsAm * AmUrUr ;
+		cMun = 0.8555 * cPun -1.9555 ; // From Kauffman & St-Pierre, 2001, JDS, 84: 2284-2294 (mg/dl)
+		DMilk = dLm / fLm ; // This now has significant within day variation due to udder fill. MDH. Changed from dMamLm to dLm, 23-1-2014
+		NonUterEBW = EBW1 - WtGrvUter ;
+		HtF2 = AtAdF2 * AtAdHT ; // Gl to Tp
+		HtV3 = AtAdV7 * AtAdHT ; // Gl to Tp
+		// AbsAa & AbsAm in moles
+		NUr = dUrea * UrAmAm * MwtN ;
+		
+		// Milk yield and composition
+		// MILK ENERGY
+		ELm = dLm * 2.0 * HcombGl / MwtLm ;
+		EUr = dUrea * HcombUr ; // METABOLIZABLE
+		dWtUter = WtUterSyn - WtUterDeg ;
+		fMamCellsUS = InMilk * MamCellsPart * ( ( kMamCellsDeclineBase * exp ( - MamCellsDecayRateOfSenescence * DayMilk ) + BaseMamCellsTurnOver ) ) + IncreasedUsDueToLowMf ; // Approximation of the senescence rate derived from Dijkstra's MamCells eq, PLUS dymaically calculated increase loss due to low milking frequency
+		
+		if ( cGl < cGlTarget ) {
+			LhorGl = 1 - kLHorSensGl * ( 1 - ( cGl / cGlTarget ) ) *pow(1,1)* xLHorSensGl ;
+		} else {
+			LhorGl = 1 + kLHorSensGl * ( ( cGl / cGlTarget ) - 1 ) *pow(1,1)* xLHorSensGl ;
+		}
 		// Adds INS as effector
 		// Ac = integ ( dAc , iAc ) 
 		
@@ -9280,530 +8476,22 @@ public:
 		// calculations added 11/99. NES
 		WtAcTm = AcTmV1 * MwtTm ;
 		WtFaTm = FaTmV1 * MwtTm ;
-		dTm = WtAcTm + WtFaTm ; // Kg/d Produced
-		dMamTm = dTm - dMilkTm ;
-		dMilkTm = MamTm * KMilk * MilkSW ; // Mammary MILK FAT
-		// MamTm = integ ( dMamTm , iMamTm ) // AND TOTAL YIELD
-		// TMilkTm = integ ( dMilkTm , 1.0E-8 ) 
-		// Percent milk fat from de novo synthesis (PcTmFromScfa)added to
-		// be able to follow patterns with different diets and through
-		// lactation. 11/99. NES
-		PcTmFromScfa = ( AcTmV1 / ( AcTmV1 + FaTmV1 ) ) * 100 ;
-		
-		// DNA ACCRETION
-		// *************
-		
-		dOthDna = ( KDnaOth *pow(1,1)* ExpOth2 ) * ( ( OthDnaMx - OthDna ) / OthDnaMx ) ;
-		dVisDna = ( KDnaVis *pow(1,1)* ExpV2 ) * ( ( VisDnaMx - VisDna ) / VisDnaMx ) ;
-		// OthDna = integ ( dOthDna , iOthDna ) 
-		// VisDna = integ ( dVisDna , iVisDna ) 
-		
-		// AMINO ACID AND NITROGEN METABOLISM
-		// **********************************
-		
-		// Amino acid metabolism (Aa) including protein turnover (P) in
-		//      Lean body mass (POth) and Viscera (PVis).
-		
-		// Inputs to Aa are absAa (12.6), POthAa (10.0) and PVisAa (8.2). TO
-		// from Proc.Nutr.Soc.39:43-52(Reeds and Lobley) at 18g/BW**0.7555.
-		// TO=2.0 kg/day or (/0.1555) 18.2 moles/day. Outputs are AaPOthOth (10),
-		// AaPVis (8.2), AaPm (8.6) and gluconeogenesis (AaGlVis=4.0).
-		// Biosynthetic reactions set at 1/2Vmax in reference state. Capacity
-		// for AaGlVis is very high (5x) relative to flux in fed (reference)
-		// state so set there. Compution of mass in Oth and Vis assumes
-		// that protein+H2O is 70% of wt at 25% dry matter (fractional
-		// dry wt=fDWt) and that remaining wt is constant(otWtOth,otWtVis).
-		// Aa pool size and volume increased 10x in this version.
-		// KPOthAaOth and KPVisAaVis adusted 05/01/91 to make equations functions
-		// of POth and PVis rather than cPOth and cPVis jk.
-		// VmAaGlVis now scaled to body size (BWF) jk 05/09/91
-		
-		// revised constant VmAaPmVis 7/92 (kc)
-		
-		// AMINO ACID METABOLISM
-		dAa = AbsAa + POthAaOth + PVisAaVis - AaPOthOth - AaPVisVis - AaPmVis - AaGlVis - SaPsAa
-			- AaPGest - AaGlGest ;
-		dPOth = AaPOthOth - POthAaOth ;
-		dPVis = AaPVisVis - PVisAaVis ;
-		POthAaOth = KPOthAaOth * POth ;
-		PVisAaVis = KPVisAaVis * PVis ;
-		cPOth = POth / WtOth ;
-		cPVis = PVis / WtVis ;
-		WtPOth = POth * MwtPOth ;
-		WtPVis = PVis * MwtPVis ;
-		WtOth = WtPOth / fDWt + otWtOth ;
-		dWtOth = dPOth * MwtPOth / fDWt ;
-		WtVis = WtPVis / fDWt + otWtVis ;
-		dWtVis = dPVis * MwtPVis / fDWt ;
-		AaPOthOth = VmAaPOthOth * OthDna / ( 1.0 + KAaPOthOth / ( AHor * cAa ) ) ;
-		AaPVisVis = VmAaPVisVis * VisDna / ( 1.0 + KAaPVisVis / ( AHor * cAa ) ) ;
-		AaGlVis = VmAaGlVis * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KAaGlVis / cAa ) ; // GLUCONEOGENESIS
-		
-		POthfSr = AaPOthOth / POth ;
-		// Fractional synthetic and degradation rates
-		PVisfSr = AaPVisVis / PVis ;
-		POthfDr = POthAaOth / POth ;
-		PVisfDr = PVisAaVis / PVis ;
-		
-		// MILK PROTEIN SYNTHESIS
-		AaPmVis = VmAaPmVis * MamEnz / ( 1.0 + KAaPmVis / cAa + KGlLmVis / cGl ) ;
-		// Added Gl based on residual errors observed for ExtLact and Aston simulations
-		cAa = AA / VolAa ;
-		// PVis = integ ( dPVis , iPVis ) 
-		// POth = integ ( dPOth , iPOth ) 
-		// Fixed by Gil: instead of Aa =INTEG(dAa ,iAa) use the following 2 lines
-		// AA1 = integ ( dAa , iAa ) 
-		AA = max ( 0.1 , AA1 ) ;
-		
-		// Ammonia and urea metabolism
-		
-		dBldUr = AaUrVis + AaUrGest + AmUr - BldUrRumAm - SaNRumAm - BldUrMUN - dUrea ;
+		TpinAdip = GlHyAdip * GlHyTp + GlTpF1 ;
+		TpinVis = GlHyVis * GlHyTp + GlTpV1 ;
+		LainOth = GlLaB1 ;
+		TpTmVis = ( FaTmV1 + AcTmV1 ) * TpTpTm ;
+		dMamLm = dLm - dMilkLm ;
 		AaUrVis = AaGlVis * AaGlUr ;
 		AaUrGest = AaGlGest * AaGlUr ;
-		AmUr = AbsAm * AmUrUr ;
-		BldUrRumAm = BldUrAm * AmUrUr ;
-		SaNRumAm = SaNnAm * AmUrUr ;
-		dUrea = KBldUrU * cBldUr ;
-		// BldUr1 = integ ( dBldUr , iBldUr ) 
-		BldUr = max ( 1e-9 , BldUr1 ) ; // Prevent a crash when AM goes negative. I don't have time to find the source
-		
-		// MUN calculations, CCP 3-28-07
-		cPun = cBldUr * 2 * 14 * 1000 / 10 ; // Converts cBldUr from mol Urea/l to mg N/dl.
-		cMun = 0.8555 * cPun -1.9555 ; // From Kauffman & St-Pierre, 2001, JDS, 84: 2284-2294 (mg/dl)
-		BldUrMUN = DMilk * ( cMun * 10 / 14 / 1000 / 2 ) ; // (moles urea/day transferred from Bld to milk)
 		
 		// Protein in Mammary gland (MamPm) and secreted (dMilkPm,TMilkPm)
 		
 		dPm = AaPmVis * MwtAa ; // Kg/d produced
-		dMamPm = dPm - dMilkPm ;
-		dMilkPm = MamPm * KMilk * MilkSW ;
-		// MamPm = integ ( dMamPm , iMamPm ) // Mammary PROTEIN
-		
-		// TMilkPm = integ ( dMilkPm , 1.0E-8 ) // AND TOTAL YIELD
-		
-		// GLUCOSE
-		// Glucose metabolism (Gl)
-		// **************
-		// Entries are from propionate(9.8555),lactate(4.05),glycerol(3.5555),Aa
-		// (1.8555)and absorption (4.7). Outputs are in lactose (8.3);
-		// to TG-glyceride and Gy (1.9/2), pentose cycle (1.4555) and TpCd
-		// (2.04/2) in Vis; to Cd (4.3) and lactate (La,4.9/2) in Oth, and to pentose
-		// cycle (2.8/2), TG-Gy (2.6555/2) La (3.2/2) and TpCd ((1.4 + 0.4555)/2)
-		// in adipose.
-		//   Reported (Forsberg) Ka for Gl for lactose synthesis is 8-10 mM
-		// so set at 9.0E-3. NADPH2 required from the pentose cycle
-		// for fatty acid synthesis is calculated in terms of moles Gl (GlHy)
-		// used since reaction rate is computed as acetate used per Ac
-		// incorporated.Stoichiometry for pentose cycle used is Gl to 3Cd +
-		// 6NADH2+Tp.Thus the stoichiometric coefficient (GLGlHy) is calculated
-		// as (1.7555 NADPH2/AcFa)/6NADPH2 per glucose used(=0.2555). These must be
-		// multplied by the fraction of NADPH2 generated via the pentose
-		// cycle specified as input for that tissue (fGlHyAdip and fGlHyVis)
-		// and AcTs flux to get actual pentose cycle flux. Related calculations
-		// are of ATP equivalent of amount of NADPH2 generated in
-		// the tricarboxylic acid cycle (tc) and of the reduced Ox consumption
-		// associated with this.These are in the oxidative metabolism sections.
-		// In adipose tissue, GlTpAdip was set to provide Tp in excess of that
-		// required for fatty acid esterification. This accomodates the
-		// possibility that Tp generation via GlHy can be less than TpTs,
-		// and provides sufficient Tp for oxidation (TpCd) and conversion to
-		// lactate (La) as has been observed in this tissue.
-		// Lactate from Oth and Adip are quantitatively converted to Gl in Vis.
-		
-		dGl = upGl + AaGlV1 + PrGlV1 + LaGlV1 + GyGlV1 - GLLmVis -
-			GlHyAdip - GlHyVis - GlTpAdip - GlTpVis - GlLaOth - GlCd ;
-		upGl = 0.1555 * absGl ;
 		AaGlV1 = AaGlVis * AaGlGl ;
-		PrGlV1 = PrGlVis * PrGlGl ;
-		PrGlVis = absPr * fPrGl ;
-		// GLUCOSE
-		LaGlV1 = ( LaGlAdip + LaGlOth + RumLaGl ) * LaGlGl ;
-		RumLaGl = absRumLa + RumLaP + gGlLa ;
-		gGlLa = 0.9555 * absGl * GlLaLa ;
-		// Gut GLucose metabolism to Lactate
-		GyGlVis = ( TsFaAdip + FaTmV1 ) * TgGyGy ;
-		GyGlV1 = GyGlVis * GyGlGl ;
-		// The following adjustment to VmGlLm was added to allow for greater fat and protein content
-		// in early and late lactation. MDH 3-6-06
-		
-		VmGlLm1Vis = VmGlLmVisPart * exp ( kVmGlLmSyn * ( 1 - exp ( - kVmGlLmDecay * DayMilk ) ) /
-			kVmGlLmDecay - kVmGlLmDeg * DayMilk ) ; // Dijkstras equation to represent Lm synth capacity
-		GLLmVis = VmGlLm1Vis * MamEnz / ( 1.0 + KGlLmVis / cGl + KAaLmVis / cAa ) ; // cAa should affect the Vm not Ks
-		GlHyAdip = AcTsAdip * fGlHyAdip * GlGlHy ;
-		GlHyVis = AcTmVis * fGlHyVis * GlGlHy ;
-		fGlHyAdip = pGlHyAdip ;
-		fGlHyVis = pGlHyVis ;
-		GlTpAdip = VmGlTpAdip * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KGlTpAdip / cGl ) ;
-		GlTpVis = VmGlTpVis * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KGlTpVis / cGl ) ;
-		GlLaOth = VmGlLaOth * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KGlLaOth / cGl ) ;
-		TpinAdip = GlHyAdip * GlHyTp + GlTpF1 ;
-		GlTpF1 = GlTpAdip * GlTpTp ;
-		TpinVis = GlHyVis * GlHyTp + GlTpV1 ;
-		GlTpV1 = GlTpVis * GlTpTp ;
-		LainOth = GlLaB1 ;
-		GlLaB1 = GlLaOth * GlLaLa ;
-		TpLaAdip = TpinAdip - TpTsAdip ;
-		TpCdVis = TpinVis - TpTmVis ;
 		TpTsAdip = ( FaTsF1 + AcTsF1 ) * TpTpTs ;
-		TpTmVis = ( FaTmV1 + AcTmV1 ) * TpTpTm ;
-		AcTmV1 = AcTmVis * AcTgTg ;
-		FaTmV1 = FaTmVis * FaTgTg ;
-		LaCdAdip = TpLaAdip * fLaCdAdip ;
-		LaGlAdip = TpLaAdip - LaCdAdip ;
-		GlGyT = ( TpTsAdip + TpTmVis ) * GyGlGl ;
-		LaCdOth = LainOth * fLaCdOth ;
-		LaGlOth = LainOth - LaCdOth ;
-		// Gl = integ ( dGl , iGl ) 
-		cGl = Gl / VolGl ;
-		
-		// ********************** Milk Yield ********************************
-		// Lactose in mammary gland(MamLm)and secreted (dMilkLm,TMilkLm) plus
-		// TOTAL MILK YIELD
-		
-		dLm = GLLmVis * GlLmLm * MwtLm ; // Kg/d produced
-		dMamLm = dLm - dMilkLm ;
-		dMilkLm = MamLm * KMilk * MilkSW ;
-		DMilk = dLm / fLm ; // This now has significant within day variation due to udder fill. MDH. Changed from dMamLm to dLm, 23-1-2014
-		// MamLm = integ ( dMamLm , iMamLm ) // Mammary LACTOSE
-		// TMilkLm = integ ( dMilkLm , 1.0E-8 ) // AND TOTAL YIELD
-		TVolMilk = TMilkLm / fLm ;
-		MamMilk = MamLm / fLm ;
-		dMamMilkAve = TAveMilkMam * ( MamMilk - MamMilkAve2 ) ;
-		// MamMilkAve = integ ( dMamMilkAve , iMamMilkAve ) 
-		
-		// OXIDATION
-		// ****************
-		// Oxidative metabolism (Ox,Cd).
-		// Computations based on energy needs expressed as rate of
-		// ADP formation (AtAd_), oxygen (Ox) uptake calculated from
-		// P/O ratio (PO), and Ac and Fa oxidation rates from ratios
-		// of Michaelis-Menton equations assuming Vmaxs for oxidation
-		// of each are equal. See separate documentation for details
-		
-		// General constants
-		
-		// Computation of effects of feed intake (absorbed energy) on basal
-		// energy expenditures.Absorbed energy is averaged (absEAve) over 20
-		// days (TAveabsE=1/20).Absorbed energy factor (absEF) is expressed in
-		// units of metabolic body weight.
-		
-		dabsEAve = TAveabsE * ( AbsE - absEAve ) ;
-		// absEAve = integ ( dabsEAve , iabsEAve ) 
-		absEF = absEAve / ( EBW *pow(1,1)* 0.7555 ) ;
-		// WtGrvUter added Apr 5, 2007 MDH to refect gestation status.
-		EBW1 = WtOth + WtAdip + WtVis + WtGrvUter + WaPool - WaPoolTarget ;
-		dEBW1 = dWtOth + dWtTsAdip + dWtVis + dWtGrvUter ; // WtCytAdip does not change during a run.
-		BW1 = EBW1 + RumVol + otGutCont ;
-		NonFatEBW = EBW1 - WtAdip ;
-		NonFatNonUterEBW = NonFatEBW - WtGrvUter ;
-		NonUterEBW = EBW1 - WtGrvUter ;
-		
-		// Oxidative Metabolism in Lean body mass (Oth)
-		// Energy expenditures in reference state expressed as ATP
-		// utilization are Basal(294)and protein resynthesis(50)for a sum of
-		// 344.Mandatory ATP generation because brain and kidney are in this
-		// element is GlLaOth*GlLaAT (4.7555*2.0=9.5) and LaCdOth*LaCdAT (4.6*18
-		// =82.8) for a sum of 92.3.!
-		
-		// KbasOth was moved so it can be defined diferently by Mindy
-		
-		// BEGIN  INCLUDE 'Activity_Energy_Expenditure.csl'
-		
-		// ! This file has an extracted section of Molly.csl with code that need to be refined and possibly
-		// ! re-defined by Mindy. Mindy would reduce KbasOth and simulate energy expenditure for activity
-		// ! dynamically in an "itemised" way, accounting explicitly for energy expenditure while lying,
-		// ! standing, walking and biting/chweing initial calibration should be made so that on  average
-		// ! activity total AtAdOth would be as before
-		
-		// ! Constants, variables, units
-		
-		// ! Mindy  / Iintrmittent_Eating calculate eerActivityAtp dynamically and use amuch lower kBasOth. See there.
-		// Basal energy expenditure rate coefficient bundles average activity inside
-		// Unit: mole/d Activity Energy Expenditure Rate. Molly does not calculate activity explicitly
-		
-		// END  INCLUDE 'Activity_Energy_Expenditure.csl'
-		AtAd = AtAdOth + AtAdAdip + AtAdVis + AtAdGest ;
-		AdAt = AdAtOth + AdAtAdip + AdAtVis ;
-		AtAdOth = basalOth + AtAdB1 ;
 		AtAdB1 = AaPOthOth * AaPxAD ;
-		basalOth = eerActivityAtp / 3 + ( KbasOth + KNaAtOth ) * WtOth *pow(1,1)* 0.7555 ; // GL Apr 2014: KBasalOth reduced from ~2.2 to XXX and eerActivityATP introduced
-		OldBasalOth = ( 2.2 + KNaAtOth ) * WtOth *pow(1,1)* 0.7555 ;
-		KNaAtOth = 0.8 + KNaOth * T3 * absEF ;
-		// BODY(lean body mass--Oth)
-		AdAtOth = AdAtB1 + AdAtB2 ;
-		AdAtB1 = GlLaOth * GlLaAt ;
-		AdAtB2 = LaCdOth * LaCdAt ;
-		
-		// Heat production in body
-		
-		basHtOth = basalOth * AtAdHT ; // Basal
-		AaPOthHt = AtAdB1 * AtAdHT ; // Protein TO
-		MHtOth = basHtOth + AaPOthHt ;
-		
-		// Oxidative metabolism in adipose (Adip)
-		
-		// Energy expenditures (AtAdAdip=169.2) are basalAdip(41.0), GlHyAdip (2.8),
-		// GlTpAdip (4.0),TpTsAdip*TpTsAD (2.6555*9(6 ATP to form acyl CoA plus
-		// 3 for NADH2 to reduce Tp)=24, and AcTsAdip*(tcHyAD*(1.0 - fGlHyAdip)
-		// =16*(5.2555*(1 - 0.6)+2.8555)=16*(2.1+2.8555)=79.6;tcHyAD is cost
-		// of NADPH2 from TCA cycle expressed in ATP per acetate(1.7555*3=5.2555)
-		// and ATP cFa is cost in ATP / Ac converted to Fa((8Ac-8AcCoA(=16AtAd)
-		// +7AcCoA-7Mal-CoA(=7AtAd))/8=2.8555).Oxidation of Tp yields 18.6555
-		// ATP and 6.4 ATP are generated in TpLaAdip.
-		// Reduction in oxygen uptake due to NADPH2 generation
-		// in Tc is HyAcFa*(1.0-fGlHyAdip)=1.7555*.4=0.7 in this version.
-		
-		AtAdAdip = basalAdip + AtAdF1 + AtAdF2 + AtAdF3 + AtAdF4 ;
-		basalAdip = ( KbasAdip + KNaAtAdip ) * WtAdip *pow(1,1)* 0.7555 ;
-		KNaAtAdip = 0.3 + KNaAdip * T3 * absEF ;
-		AtAdF1 = GlHyAdip * GlHyAD ;
-		AtAdF2 = GlTpAdip * GlTpAD ;
-		AtAdF3 = TpTsAdip * TpTgAD ;
-		// ADIPOSE
-		AtAdF4 = AcTsAdip * ( TcHyAd * ( 1.0 - fGlHyAdip ) + AcFaAd ) ;
-		AdAtAdip = AdAtF1 + AdAtF2 ;
-		AdAtF1 = TpLaAdip * TpLaAt ;
-		AdAtF2 = LaCdAdip * LaCdAt ;
-		
-		// Heat Production in adipose
-		basHtAdip = basalAdip * AtAdHT ; // Basal
-		HtF2 = AtAdF2 * AtAdHT ; // Gl to Tp
-		HtF3 = AtAdF3 * AtAdHT - AcTsH4 ; // Ts TO
-		MHtAdip = basHtAdip + HtF2 + HtF3 ;
-		
-		// Oxidative metabolism of viscera (Vis)
-		// Energy expend.(AtAdVis)are basalVis(339),TpTsVis(*TpTsAD=1.3*9=11.7),
-		// AcTmVis(16.8*(see Adip)=83.6),AaPrVis(41),AaPmVis(43),GlLmVis(16.6),GlHyVis
-		// (1.4555),GlTpVis(0.4),LaGl(16.2),absGl(3.5555),absAa(12.6).
-		// ATP formation from GyGlVis(14.4),TpCdVis(40.8),PrCdVis(156),BuCd(245)
-		
-		AtAdVis = basalVis + AtAdV1 + AtAdV2 + AtAdV3 + AtAdV4 + AtAdV5 + AtAdV6 +
-			AtAdV7 + AtAdV8 + AtAdV9 + AtAd10 + AtAd11 + AtAd12 + AtAd13 + AtAd14 +
-			ATAd15 ;
-		basalVis = ( KbasVis + KNaAtVis ) * WtVis *pow(1,1)* 0.7555 ;
-		KNaAtVis = 3.2 + KNaVis * T3 * OminFd ;
-		AtAdV1 = TpTmVis * TpTgAD ;
-		AtAdV2 = AcTmVis * ( TcHyAd * ( 1.0 - fGlHyVis ) + AcFaAd ) ;
 		AtAdV3 = AaPVisVis * AaPxAD ;
 		AtAdV4 = AaPmVis * AaPxAD ;
-		AtAdV5 = GLLmVis * GlLmAd ;
-		AtAdV6 = GlHyVis * GlHyAD ;
-		AtAdV7 = GlTpVis * GlTpAD ;
-		AtAdV8 = LaGlVis * LaGlAd ;
-		LaGlVis = LaGlAdip + LaGlOth + RumLaGl ;
-		// VISCERA
-		AtAdV9 = PrGlVis * PrGlAd ;
-		AtAd10 = absGl * absGlAd ;
-		AtAd11 = AbsAa * absAaAd ;
-		AtAd12 = KidWrk * EBW *pow(1,1)* 0.7555 ;
-		AtAd13 = HrtWrk * OXUP1 ;
-		AtAd14 = ResWrk * OXUP1 ;
-		ATAd15 = ( AaUrVis + AaUrGest + AmUr ) * AtAmUr ;
-		AdAtVis = AdAtV1 + AdAtV2 + AdAtV3 + AdAtV4 + AdAtV5 ;
-		AdAtV1 = GyGlVis * GyGlAt ;
-		AdAtV2 = TpCdVis * TpCdAt ;
-		AdAtV3 = PrCdVis * PrCdAt ;
-		AdAtV4 = BuCdVis * BuCdAt ;
-		PrCdVis = absPr * ( 1.0 - fPrGl ) ;
-		BuCdVis = absBu ;
-		AdAtV5 = gGlLa * GlLaAt ;
-		// Heat production in viscera
-		basHtVis = basalVis * AtAdHT ; // basal
-		HtV2 = AtAdV3 * AtAdHT ; // Protein TO
-		HtV3 = AtAdV7 * AtAdHT ; // Gl to Tp
-		HtV4 = AtAdV8 * AtAdHT ; // La to Gl
-		HtV5 = AtAd12 * AtAdHT ; // kidney work
-		HtV6 = AtAd13 * AtAdHT ; // heart work
-		HtV7 = AtAd14 * AtAdHT ; // respiration
-		HiV8 = ATAd15 * AtAdHT ; // urea synthesis
-		MHtVis = basHtVis + HtV2 + HtV3 + HtV4 + HtV5 + HtV6 + HtV7 + HiV8 ;
-		
-		// Heat production in the Gravid Uterus
-		// All oxidation in GrvUter driven by protein T/O
-		// It would be better to calculate the exact need as Ferrell did, but his equation
-		// is for beef cows not dairy cows.  The shortcut is to drive energy use by protein T/O
-		// in the GrvUter which likely accounts for a lot of the energy use.  But oxidation of AA
-		// is also considered separately so total gestation energy use must consider that.
-		// A value of 0.6 (60% T/O per day) for fGrvUterTO yields about the correct total energy
-		// usage per Ferrell. Need to fit this to observed data.
-		
-		AtAdGestGrth = ( AaPUter + AaPConc ) * AaPxAD ; // Protein deposition cost
-		AtAdGestTO = WtPGrvUter / MwtPVis * fGrvUterTO * AaPxAD ; // Protein T/O estimate
-		AtAdGest = AtAdGestGrth + AtAdGestTO ;
-		MHtGestGrth = AtAdGestGrth * AtAdHT ;
-		MHtGestTO = AtAdGestTO * AtAdHT ;
-		MHtGest = AtAdGest * AtAdHT ; // Maintence Heat of Gestation
-		
-		// Estimate of gross energy (mcal/d) deposited in the gravid uterus by C.L. Ferrell et al., 1976
-		// Simply used for comparative purposes
-		EGrvUterCLF = ( 69.7555 * exp ( ( 0.03555 -2.7555e-5 * DayGest ) * DayGest ) ) *
-			( 0.03555 -2 * 2.7555e-5 * DayGest ) / 1000 ;
-		
-		// Oxidation of glucose,acetate,and fatty acids
-		
-		ndAt = AtAd - AdAt ; // TOTAL OXIDATION
-		ndOx = ndAt / rtPOx ;
-		rtOx1 = cGl * ( cAc + KAcCd ) / ( cAc * ( cGl + KGlCd / AHor ) ) ;
-		rtOx2 = cFa * ( cAc + KAcCd ) / ( cAc * ( cFa + KFaCd ) ) ;
-		GlCd = ( ( ndOx * rtOx1 ) / ( rtOx1 + rtOx2 +1.0 ) ) / OxGlCd ;
-		FaCd = ( ( ndOx * rtOx2 ) / ( rtOx1 + rtOx2 +1.0 ) ) / OxFaCd ;
-		AcCd = ( ndOx / ( rtOx1 + rtOx2 +1.0 ) ) / OxAcCd ;
-		
-		rtPO = ( AcCd * AcCdAt + FaCd * FaCdAt + GlCd * GlCdAt ) / ( AcCd * OxAcCd
-			+ FaCd * OxFaCd + GlCd * OxGlCd ) ;
-		TcHyAdip = AcTsAdip * HyAcFa * ( 1.0 - fGlHyAdip ) ; // correction for NADH
-		TcHyVis = AcTmVis * HyAcFa * ( 1.0 - fGlHyVis ) ; // from ICD in TCA
-		dOx = ( LaCdOth + LaCdAdip ) * OxLaCd + TpCdVis * OxTpCd + PrCdVis * OxPrCd +
-			BuCdVis * OxBuCd + AcCd * OxAcCd + FaCd * OxFaCd + GlCd * OxGlCd
-			- TcHyAdip - TcHyVis ;
-		
-		// Calculation of heat equivalent of ATP .Note that HcombLa
-		// and HcombTp being very close to 1/2 glucose are set exactly to
-		// that so energy changes in glycolysis are not represented.
-		
-		AtHt1 = ( LaCdOth + LaCdAdip ) * HcombLa ;
-		AtHt2 = TpCdVis * HcombTp ;
-		AtHt3 = GyGlV1 * ( GlGyGY * HcombGy - HcombGl ) ; // gluconeogenesis from Gy
-		AtHt4 = PrCdVis * HcombPr ;
-		AtHt5 = BuCdVis * HcombBu ;
-		AtHt6 = GlCd * HcombGl ;
-		AtHt7 = AcCd * HcombAc ;
-		AtHt8 = FaCd * HcombFa ;
-		AtHt = AtHt1 + AtHt2 + AtHt3 + AtHt4 + AtHt5 + AtHt6 + AtHt7 + AtHt8 ;
-		AtAdH1 = AtHt / AtAd ;
-		
-		// NITROGEN BALANCE        11/07/91 jrk !
-		
-		dN = Nin - Nout ; // in kg N
-		
-		Nin = ( FPsFd + fPiFd + fNnFd ) * FdDMIn * 0.1555 + UrNFd ;
-		UrNFd = UrAmFd * MwtN ;
-		NSal = ( ( SaNnAm + BldUrAm ) * MwtN ) + ( SaPsAa * AaFvAm * MwtN ) ;
-		
-		Nabs = ( AbsAa * AaFvAm * MwtN ) + ( AbsAm * MwtN ) ;
-		// AbsAa & AbsAm in moles
-		NUr = dUrea * UrAmAm * MwtN ;
-		// NurTotal = integ ( NUr , 0.0 ) 
-		NBody = ( dAa + dPOth + dPVis + AaPGest ) * AaFvAm * MwtN ;
-		NMilk = dMilkPm * 0.1555 + BldUrMUN ;
-		NFec = FecPiT * 0.1555 ;
-		
-		Nout = NUr + NFec ;
-		Nret1 = NBody + NMilk ; // Nret1 should = Nret2 should = dN
-		Nret2 = Nabs - NUr ;
-		Ndig = Nin - NFec ; // should equal Nabs
-		Nbal = dN - Nret1 ;
-		RumDPrta = ( TPRTin - PiP - ( RumAaP * MwtAa ) - ( MiP * MiPiPI ) ) / TPRTin ;
-		
-		// Milk yield and composition
-		// MILK ENERGY
-		ELm = dLm * 2.0 * HcombGl / MwtLm ;
-		EPm = dPm * HcombAa / MwtAa ; // Changed from dMilkPm (milkout) to dPm, dTm, and dLm
-		ETm = dTm * HcombTg / MwtTm ; // MDH, 5-6-14
-		NEP = ELm + EPm + ETm ; // this is NEl, NEp would include growth and pregnancy
-		NetEff = NEP / ( NEP + HiP ) ;
-		// tNep = integ ( NEP , 0 ) 
-		// DAILY MILK COMPOSITION
-		propLm = dLmProd / ( dMilkProd +1.0e-9 ) ;
-		fPm = dPmProd / ( dMilkProd +1.0e-9 ) ;
-		fTm1 = dTmProd / ( dMilkProd +1.0e-9 ) ;
-		PcLm = propLm * 100 ;
-		PcPm = fPm * 100 ;
-		PcTm = fTm1 * 100 ;
-		FCM3h = 0.9555 * DMilk +35.7555 * dMilkTm ;
-		FCM4z1 = 0.8555 * DMilk +33.07 * dMilkTm ;
-		
-		// Estimates of heat production (HP)
-		MntHP = dMaint + HiM ; // ??There is a problem with maintenance HP. Way too high, MDH, 5-6-14
-		MEMBW = MntHP / ( EBW *pow(1,1)* 0.7555 ) ;
-		// HEAT PRODUCTION AND BODY
-		THP1 = MntHP + HiP ;
-		// ENERGY BALANCE
-		// Body energy balance
-		// Derived from (AaPGest*HcombAa)/EGrvUterCLF
-		dOthE = dPOth * HcombAa ;
-		dAdipE = dTsAdip * HcombTg ;
-		dVisE = dPVis * HcombAa ;
-		dGestE = AaPGest / fGestEPrt * HcombAa ; // Matched Ferrell's estimate which will be slightly
-		// low as a beef animal has a smaller Grv Uter
-		
-		// costs of Maintenance in animal(an)
-		dMaint = MHtOth + MHtAdip + MHtVis + MHtGest ;
-		dHiM4 = HiM1 + HiM2 + HiM3 ;
-		EB = dOthE + dAdipE + dVisE + dGestE ;
-		THP2 = MEI - EB - NEP ;
-		CorNEP = NEP + EB / .87 ;
-		
-		// Methane is calculated by the model above and by empirical
-		// equations below and is expressed as fractions of GE, DE,
-		// and ME.
-		
-		CH4EFd = CH4E / FdDMIn ; // methane (kcal)/kg feed
-		fCH4E = CH4E / FdGEin ;
-		fCH4DE = CH4E / DEI ;
-		fCH4ME = CH4E / MEI ;
-		
-		// Based on AgResearch Chamber data
-		// Based on AgResearch Chamber data
-		// Pablo requested May 2016 to be able to diable Mig effect on hidrogen
-		
-		dTCH4 = dDCH4 ;
-		dCsFvH = CsFvAc * 2.0 - CsFvPr * 1.0 + CsFvBu * 2.0 ;
-		dCsHy = CsFv * dCsFvH ;
-		dRumAaHy = RumAaFv * AaFvHy ;
-		dHyFlF = FlFd * 2.0 ;
-		dHyMi = ( HyMiG1 * G1 + HyMiG2 * G2 ) * ( MiG * KumarMigEq + ( 1.0 - KumarMigEq ) ) ; // This equation has been wrong since 1995. It was lacking MiG. Added MiG multiplier per Vetharanium 6-24-14, MDHdHyFlF=FlFd*2.0
-		dTHy = dCsHy + dRumAaHy - dHyMi - dHyFlF +2.0 * RumLaAc - RumLaPr - dHyEruct - dHyOther ;
-		dHyEruct = ( dCsHy + dRumAaHy - dHyMi - dHyFlF +2.0 * RumLaAc - RumLaPr ) * KHyEruct ; // Hydrogen eructation, g/d = mol/d, added 5-14-14, MDH
-		dHyOther = ( dCsHy + dRumAaHy - dHyMi - dHyFlF +2.0 * RumLaAc - RumLaPr - dHyEruct ) * KHyOther ; // Undefined loss of Hy, mol/d, added 5-19-14, MDH
-		dDCH4 = dTHy / 4.0 ; // Unit: moles/d
-		dCH4Kg = dDCH4 * MwtCH4 ; // Unit: Kg/d of Methane
-		dCH4g = dCH4Kg * 1000 ; // Unit: g/d of Methane
-		
-		// TCH4 = integ ( dTCH4 , iTCH4 ) // TCH4 is in moles
-		
-		CH4KGY = TCH4 * MwtCH4 ; // total kg methane
-		CH4Milk = CH4KGY / TVolMilk ; // kg methane/kg milk
-		TCH4E = TCH4 * HcombCH4 ; // total kcal methane
-		
-		netME = AccMEi / TotDMin ; // added 4/16/92 kcd
-		CH4GEi = TCH4E / AccGEi ; // to use for EPA CH4
-		CH4DEi = TCH4E / AccDEi ; // calculations
-		CH4MEi = TCH4E / AccMEi ; // added 7/23/92
-		
-		// Methane is calculated (BCH4) using Blaxter & Clapperton, 1965
-		
-		fFIM = FdDMIn / ( ( 100 * EBW *pow(1,1)* 0.7555 ) / ME ) ;
-		mult = MEI / ( F1 * 0.1555 * EBW *pow(1,1)* 0.7555 ) ;
-		
-		BCH4 = ( 1.3555 +0.1555 * appDE * 100 + mult * ( 2.3555 -0.05555 * appDE * 100 ) ) * F1 ;
-		
-		// TBCH4 = integ ( BCH4 , 1.0E-8 ) 
-		TBCH41 = ( TBCH4 * MwtCH4 ) / ( HcombCH4 * 4.1555 ) ;
-		
-		fBCH4E = BCH4 / FdGEin ;
-		fBCH4D = BCH4 / DEI ;
-		fBCH4M = BCH4 / MEI ;
-		BCH4Fd = BCH4 / FdDMIn ;
-		
-		// When NDFFd is given as an input, methane (MCH4) is also
-		// calulated using the equation described by Moe and
-		// Tyrrell, 1979
-		// Corrected so NDFFd not necessary as input jk 06/19/91
-		
-		// changed MCH4 to MCH4E - 2/2/95 kc!
-		// Units for MCH4E is Mcal - 2/2/95 kc!
-		
-		MCH4E = ( 3.4555 + 0.5555 * ( FdDMIn * ( fStFd + fScFd + fOaFd + fPeFd ) )
-			+ 1.7555 * ( FdDMIn * fHcFd ) + 2.6555 * ( FdDMIn * fCeFd ) ) * F1 / 4.1555 ;
-		
-		MCH4kg = ( MCH4E * MwtCH4 ) / ( HcombCH4 ) ; // units kg - eq. changed 2/2/95-kc
-		// TMCH4E = integ ( MCH4E , 1.0E-8 ) // TMCH4 to TMCH4E - 2/2/95
-		TMCH42 = ( TMCH4E * MwtCH4 ) / ( HcombCH4 ) ; // units kg - 2/2/95-kc
-		
-		fMCH4E = MCH4E / FdGEin ; // energy equ. using MCH4E - 2/2/95
-		fMCH4D = MCH4E / DEI ;
-		fMCH4M = MCH4E / MEI ;
 		
 		// procedural ( HiM , HiP = AtAdV5 , AtAdHT , AcTsAdip , AcTmVis , GLLmVis , AaPmVis ) 
 		if ( EPart == 0.0 ) goto label_81 ;
@@ -9879,6 +8567,1282 @@ public:
 		goto label_81 ;
 	label_81:
 		// end of procedural 
+		LHorSyn1 = kLHor * ( wLHorSensAa * LhorAa + wLHorSensGl * LhorGl + wLHorSensAdip * LhorAdip ) / VmLHorSyn ; // The expression in the brackets yields 1 when all drivers are on their baseline.
+		// TsFaAdip=(VmTsFaAdip**CHor1/(1.0+(KTsFaAdip/cTs)**Theta1))
+		// Replaced 12/87
+		TsFaAdip = VmTsFaAdip * ( EBW *pow(1,1)* 0.7555 ) * CHor1 * T3 / ( 1.0 + ( cFa / K1TsFa ) *pow(1,1)* EXP10
+			+ ( KTsFaAdip / cTs ) *pow(1,1)* Theta1 ) ;
+		AaAcV1 = AaGlVis * AaGlAc ;
+		dPOth = AaPOthOth - POthAaOth ;
+		dPVis = AaPVisVis - PVisAaVis ;
+		AaPUter = WtPUterSyn / MwtPVis ;
+		PUterAa = WtPUterDeg / MwtPVis ;
+		AtAdGestTO = WtPGrvUter / MwtPVis * fGrvUterTO * AaPxAD ; // Protein T/O estimate
+		
+		// procedural ( RequiredEnergy , FdCapMolly = DayMilk , NonUterEbwTarget , NonUterEBW ) 
+		
+		EnergyForActivity = 0 ; // (ActEnergyReq / MjoulesToATPConv / MEinMJ) / (0.02 * (17.0 * (MEinMJ/3.6/4.1555) - 2.0) + 0.5)
+		EnergyForPregnancy = EnergyForPregnancyFactor * 11.5 * WtGrvUter ; //
+		EnergyForGrowth = GrowthPerDay * 50.0 ; // Assuming 50MJ required for 1kg LW gain
+		EnergyCompensation = ( NonUterEbwTarget / NonUterEBW ) *pow(1,1)* kEnergyCompensation ; // Any extra/deficit in condition would decrease/increase intake, trying to simulate the extra hunger of low condition cows, and lower insentive to eat for fat cows
+		// ** 0.5 gives approx 1% more food for every 2% LW deficit in the non extreme range, and vice versa. ** 1 would give 1:1 relationship.
+		if ( DayMilk <= 0 ) { // Dry Cow
+			EnergyForMaintenance = NonUterEbwTarget *pow(1,1)* EnergyForDryCowMaintenancePower * EnergyForDryCowMaintenanceFactor ;
+			EnergyForMilk = 0 ;
+		} else { // Milking Cow
+			EnergyForMaintenance = NonUterEbwTarget *pow(1,1)* EnergyForMilkingCowMaintenancePower * EnergyForMilkingCowMaintenanceFactor ;
+			if ( DayMilk <= PeakIntakeDay ) {
+				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - ( 1.0 - DayMilk / PeakIntakeDay ) *pow(1,1)* EnergyForMilkPower ) ;
+			} else if ( DayMilk <= ( PeakIntakeDay + SmoothingPeriodDays ) ) {
+				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - IntakeDeclineSlope * ( SmoothingPeriodDays / 2.0 ) * ( ( DayMilk - PeakIntakeDay ) / SmoothingPeriodDays ) *pow(1,1)* 2.0 ) ;
+			} else {
+				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - IntakeDeclineSlope * ( SmoothingPeriodDays / 2.0 + ( DayMilk - ( PeakIntakeDay + SmoothingPeriodDays ) ) ) ) ;
+			}
+		}
+		
+		RequiredEnergy = ( EnergyForMaintenance // Molly's required intake, in MJ
+			+ EnergyForMilk //
+			+ EnergyForPregnancy //
+			+ EnergyForGrowth //
+			+ EnergyForActivity ) // Currently this one zero, avarage activity assumed and bundled in rEnergeyForMaintenance
+			* EnergyCompensation ; // Smaller than one for fat cows, largerthan 1 for skinny, on the long run brings cows that differ only in condition, to a similar state.
+		//
+		FdCapMolly = NonUterEbwTarget * CappingForIntake ; // in kgDM actual, WFM will not feed her more forage (pasture & silage) then this amount, but may feed things like grains on top of that
+		//
+		// end of procedural 
+		dWtPUter = WtPUterSyn - WtPUterDeg ;
+		// IncreasedUsDueToLowMfPublished = MamCells * MaxLossDueToLowMf * kMamCellsUsMfDecay * EXP(-kMamCellsUsMfDecay * CumulativeLowMfDays) ! This one is published because it is simple enough, and is identical to the IncreasedUsDueToLowMf BUT ONLY for a single period of non-2x-frequency. The above IncreasedUsDueToLowMf handles multiple periods of non-2x milking frequency elegantly but harder to describe in publication.
+		
+		// ***** AdiposeNew = estimation for LHOR sensitivity only ***********************************************
+		// Back Calculated Adipose for LHOR sensitivity. WtAdip not reliable
+		// calculates WtAdipNew as following NonUterEBW changes, excl preg, gut,and growth of
+		// young cows. For average condition cows most of net LW loss will come from fat.
+		// The lower the adipose is the less fat and more muscle will be lost / gained.
+		// The higher the adipose is the more fat and less muscle will be lost / gained.
+		
+		dNonUterEBW = derivt ( iNonUterEBW , NonUterEBW ) ;
+		BldUrMUN = DMilk * ( cMun * 10 / 14 / 1000 / 2 ) ; // (moles urea/day transferred from Bld to milk)
+		dWtGrvUter = WtConcSyn + dWtUter ;
+		fMamCellsAS = fMamCellsUS * MamCellsA / ( MamCellsQ + MamCellsA ) ; // Partition the total death rate between the Q and A pools
+		fMamCellsQS = fMamCellsUS * MamCellsQ / ( MamCellsQ + MamCellsA ) ; // Partition the total death rate between the Q and A pools
+		dTm = WtAcTm + WtFaTm ; // Kg/d Produced
+		LaCdOth = LainOth * fLaCdOth ;
+		LaGlOth = LainOth - LaCdOth ;
+		AtAdV1 = TpTmVis * TpTgAD ;
+		LHorSyn = InMilk * LHorSyn1 + ( 1 - InMilk ) * LHorDeg ; // Maintain base level while dry, the real game starts when she calves, otherwise we may have too much sesnitivity to the dry period situation of the cow
+		TpCdVis = TpinVis - TpTmVis ;
+		AtAdOth = basalOth + AtAdB1 ;
+		AaPOthHt = AtAdB1 * AtAdHT ; // Protein TO
+		AtAdF3 = TpTsAdip * TpTgAD ;
+		ATAd15 = ( AaUrVis + AaUrGest + AmUr ) * AtAmUr ;
+		HtV2 = AtAdV3 * AtAdHT ; // Protein TO
+		EPm = dPm * HcombAa / MwtAa ; // Changed from dMilkPm (milkout) to dPm, dTm, and dLm
+		WaMilk = DMilk - dLm - dPm - dTm - DMilk * kMilkAsh ;
+		dMamPm = dPm - dMilkPm ;
+		// Gut GLucose metabolism to Lactate
+		GyGlVis = ( TsFaAdip + FaTmV1 ) * TgGyGy ;
+		TpLaAdip = TpinAdip - TpTsAdip ;
+		// PLASMA LIPIDS-Fa
+		TsFaF1 = TsFaAdip * TgFaFa ;
+		dWtOth = dPOth * MwtPOth / fDWt ;
+		dWtVis = dPVis * MwtPVis / fDWt ;
+		// ENERGY BALANCE
+		// Body energy balance
+		// Derived from (AaPGest*HcombAa)/EGrvUterCLF
+		dOthE = dPOth * HcombAa ;
+		dVisE = dPVis * HcombAa ;
+		// KMinh = integ ( dKMilkInh , ikMilkInh ) 
+		
+		// Gil May 2012 MamEnz code moved to MamCells_MDH_in_deriv.csl / MamCells_DairyNZ_in_deriv.csl becsue to retain difference
+		
+		// ************************** LIPID METABOLISM(Fa,Ts) **********************
+		// Inputs to storage triacylglyceride pool (Ts) are fatty acid
+		// esterification(FaTsAdip*FaTsTs=6*0.3555=2.0)and lipogenesis from acetate
+		// (AcTs*AcTsTs=16*.042=0.6555). Output is lipolysis (TsFaAdip = 2.6555).
+		// Inputs to fatty acid plus triacylglyceride pool(Fa) are
+		// absorption (absFa = 1.0) from gut and lipolysis(TsFaAdip*TsFaFa
+		// =2.6555*3 = 8.0). Outputs are fatty acid (re)esterification
+		// (FaTsAdip=6.0),incorporation into milk fat(FaTmVis=1.8) and oxidation
+		// FaCd = 1.2). Rationale in setting VmTsFaAdip, KTsFaAdip and theta1 was
+		// that, in later versions VmTsFaAdip may be a function of catabolic
+		// hormone rather than having Estate as a general effector as is current.
+		// Also, Ts should not become rate limiting until cTs is less than 0.2.
+		// With KTsFaAdip set at .5 and theta1 at 5,cTs is not limiting until .2
+		// and then becomes very limiting. cFa is 0.5E-3 and cGl is 3.0E-3.
+		// KFaTsAdip was set at 1.6555E-4 to make cFa close to saturating and K1FaTs
+		// at 2.0E-3 to make the reaction responsive to Gl changes. Aggregation
+		// confounds KFaTmVis and VmFaTmVis so these were set to produce 1/2 Vmax
+		// in reference state.
+		
+		// revised constants VmFaTmVis and VmTsFaAdip 7/92 (kc)
+		dTsAdip = FaTsF1 + AcTsF1 - TsFaAdip ;
+		AaPGest = AaPConc + AaPUter - PUterAa ;
+		
+		// Heat production in the Gravid Uterus
+		// All oxidation in GrvUter driven by protein T/O
+		// It would be better to calculate the exact need as Ferrell did, but his equation
+		// is for beef cows not dairy cows.  The shortcut is to drive energy use by protein T/O
+		// in the GrvUter which likely accounts for a lot of the energy use.  But oxidation of AA
+		// is also considered separately so total gestation energy use must consider that.
+		// A value of 0.6 (60% T/O per day) for fGrvUterTO yields about the correct total energy
+		// usage per Ferrell. Need to fit this to observed data.
+		
+		AtAdGestGrth = ( AaPUter + AaPConc ) * AaPxAD ; // Protein deposition cost
+		AtAdGest = AtAdGestGrth + AtAdGestTO ;
+		
+		// END  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'
+		
+		if ( FeedInFlag == 1.0 ) { //
+			FdRat = FdRatWFM ; // Allocated feed - m files or WFM
+		} else { //
+			FdRat = RequiredEnergy / 11.5 ; // Fully fed automatically (standalone)
+		}
+		dLwExclUterGutAndGrowth = dNonUterEBW - GrowthPerDay ;
+		NMilk = dMilkPm * 0.1555 + BldUrMUN ;
+		dMamCellsS = fMamCellsAS + fMamCellsQS ;
+		AdAtB2 = LaCdOth * LaCdAt ;
+		MHtOth = basHtOth + AaPOthHt ;
+		ETm = dTm * HcombTg / MwtTm ; // MDH, 5-6-14
+		
+		dMamCellsA = InMilk * ( fMamCellsQA - fMamCellsAQ + fMamCellsPA - fMamCellsAS ) - 100 * ( 1 - InMilk ) * ( MamCellsA - 1e-12 ) ; // Second part empties the A pool withing few hours after dry off
+		dMamCellsQ = InMilk * ( fMamCellsAQ - fMamCellsQA - fMamCellsQS ) + 100 * ( 1 - InMilk ) * ( MamCells - MamCellsQ ) ; // Second part brings Q pool to have all MamCells when dry
+		dMamTm = dTm - dMilkTm ;
+		AdAtV2 = TpCdVis * TpCdAt ;
+		AtHt2 = TpCdVis * HcombTp ;
+		// LHor1 = integ ( dLHor , iLHor ) 
+		dLHor = LHorSyn - LHorDeg ;
+		HtF3 = AtAdF3 * AtAdHT - AcTsH4 ; // Ts TO
+		HiV8 = ATAd15 * AtAdHT ; // urea synthesis
+		NEP = ELm + EPm + ETm ; // this is NEl, NEp would include growth and pregnancy
+		GyGlV1 = GyGlVis * GyGlGl ;
+		LaCdAdip = TpLaAdip * fLaCdAdip ;
+		LaGlAdip = TpLaAdip - LaCdAdip ;
+		AdAtF1 = TpLaAdip * TpLaAt ;
+		AdAtV1 = GyGlVis * GyGlAt ;
+		
+		// Oxidative metabolism in adipose (Adip)
+		
+		// Energy expenditures (AtAdAdip=169.2) are basalAdip(41.0), GlHyAdip (2.8),
+		// GlTpAdip (4.0),TpTsAdip*TpTsAD (2.6555*9(6 ATP to form acyl CoA plus
+		// 3 for NADH2 to reduce Tp)=24, and AcTsAdip*(tcHyAD*(1.0 - fGlHyAdip)
+		// =16*(5.2555*(1 - 0.6)+2.8555)=16*(2.1+2.8555)=79.6;tcHyAD is cost
+		// of NADPH2 from TCA cycle expressed in ATP per acetate(1.7555*3=5.2555)
+		// and ATP cFa is cost in ATP / Ac converted to Fa((8Ac-8AcCoA(=16AtAd)
+		// +7AcCoA-7Mal-CoA(=7AtAd))/8=2.8555).Oxidation of Tp yields 18.6555
+		// ATP and 6.4 ATP are generated in TpLaAdip.
+		// Reduction in oxygen uptake due to NADPH2 generation
+		// in Tc is HyAcFa*(1.0-fGlHyAdip)=1.7555*.4=0.7 in this version.
+		
+		AtAdAdip = basalAdip + AtAdF1 + AtAdF2 + AtAdF3 + AtAdF4 ;
+		dWtTsAdip = dTsAdip * MwtTs ;
+		dAdipE = dTsAdip * HcombTg ;
+		MHtGest = AtAdGest * AtAdHT ; // Maintence Heat of Gestation
+		dGestE = AaPGest / fGestEPrt * HcombAa ; // Matched Ferrell's estimate which will be slightly
+		
+		// FEEDING MANAGEMENT
+		
+		// FdRat, FdDMin, and DailyDMin are all Kg dry matter
+		// consumed per day (FdRat is specified input from animal
+		// database(ie Event 2)).
+		// FDINT (feeding interval) and FDTM (time spent eating in
+		// each feeding interval0 are used in rumination, salivation
+		// and water dynamics functions so are left in at this time
+		// but may not function properly.  NES 8/99
+		
+		// Next block (up to RUMINATION) was merged From Molly86 for Mindy. Gil July 2012, including deletion of the Feeding Starategies section!
+		// Daily Feed and Nutrient Intakes
+		FdDMIn = FdRat ;
+		dWtAdipNew = dLwExclUterGutAndGrowth * ( 1 - exp ( -8 * WtAdipNew / ( WtAdipNew + NonUterEBW ) ) ) ; // The smaller the adipose the smaller the propertion of fat is from any weight gain / loss
+		// BODY(lean body mass--Oth)
+		AdAtOth = AdAtB1 + AdAtB2 ;
+		AdAtF2 = LaCdAdip * LaCdAt ;
+		MHtAdip = basHtAdip + HtF2 + HtF3 ;
+		
+		// Calculation of heat equivalent of ATP .Note that HcombLa
+		// and HcombTp being very close to 1/2 glucose are set exactly to
+		// that so energy changes in glycolysis are not represented.
+		
+		AtHt1 = ( LaCdOth + LaCdAdip ) * HcombLa ;
+		AtHt3 = GyGlV1 * ( GlGyGY * HcombGy - HcombGl ) ; // gluconeogenesis from Gy
+		AdAtAdip = AdAtF1 + AdAtF2 ;
+		EB = dOthE + dAdipE + dVisE + dGestE ;
+		DailyDMin = FdDMIn ;
+		// TotDMin = integ ( DailyDMin , 1.0E-9 ) 
+		// LpinFd=fLp*FdDMin
+		OminFd = fOmFd * FdDMIn ;
+		NdfinFd = fNDFFd * FdDMIn ;
+		
+		// procedural ( Rumntn , Eating , Rest = RUMNTNEQ , CWCF , DAY , TIME , 
+			// AMP1FT , MEAN1 , RumntnF , FdDMIn ) 
+		if ( RUMNTNEQ == 0.0 ) {
+			Eating = RumntnF ;
+			Rumntn = RumntnF ;
+			Rest = 1 - Rumntn ; // - Eating
+		} else {
+			// Determine whether the animal is eating, ruminating, or resting with Mindy Intake model, 4-25-2011, MDH
+			Rest = 0.0 ;
+			Rumntn = 0.0 ;
+			Eating = 0.0 ;
+			if ( FdDMIn > 0.1 ) {
+				Eating = 1.0 ;
+			} else if ( LPart > MinLPRumntn ) { // Ruminate until LP becomes less than or equal to the minimum LP size to stimulate rumination.
+				Rumntn = 1.0 ;
+			} else {
+				Rest = 1.0 ;
+			}
+		}
+		// end of procedural 
+		LPartSwal = FdDMIn * fLPartNutIng ; // LARGE PARTICLES
+		MPartSwal = FdDMIn * fMPartNutIng ;
+		SPartSwal = FdDMIn * fSPartNutIng ;
+		StinFd = fStFd * FdDMIn ;
+		StCsFd = FStsFd * FdDMIn ;
+		RumHcin = fHcFd * FdDMIn ;
+		RumCein = fCeFd * FdDMIn ;
+		PiPiFd = fPiFd * FdDMIn * ( 1 - fLPartSwal ) ;
+		TPRTin = ( FPsFd + fPiFd + fNnFd ) * FdDMIn ;
+		IndigFdFd = FdDMIn * fIndigFd * ( 1 - fLPartSwal ) ;
+		ScTCs = fScTFd * FdDMIn / MwtSc ;
+		PsAaFd = FPsFd * FdDMIn / MwtPs ;
+		UrAmFd = FUrFd * FdDMIn * UrAmAm / MwtUr ;
+		NnAmFd = fNnFd * FdDMIn * NnAmAM / MwtNn ; // RUMEN AMMONNIA-Am
+		AsAsFd = fAsFd * FdDMIn ;
+		FlFd = fLiFd * FdDMIn / ( MwtLiFd ) * LiFlFd ;
+		Fl1Fd = fFatFd * FdDMIn * FaFlFd / MwtFaFd ;
+		FvAcFd = fAcFd * FdDMIn / MwtAc ;
+		FvBuFd = fBuFd * FdDMIn / MwtBu ;
+		// assumes no Hc,Ce,Aa, GOTO La
+		FvLaFd = FdDMIn * FLaFd / MwtLa ;
+		ChChFd = fLiFd * FdDMIn / MwtLiFd * LiChFd * MwtCh ;
+		TStin = FdDMIn * fStFd ;
+		
+		// Computation of digestion coefficients for energy and energy terms.
+		FdGEin = GEFd * FdDMIn + InfPrt * 5.7 ;
+		Nintake = FdDMIn * ( FPsFd + fPiFd + FUrFd + fNnFd ) * 1000 * 0.1555 ;
+		
+		// When NDFFd is given as an input, methane (MCH4) is also
+		// calulated using the equation described by Moe and
+		// Tyrrell, 1979
+		// Corrected so NDFFd not necessary as input jk 06/19/91
+		
+		// changed MCH4 to MCH4E - 2/2/95 kc!
+		// Units for MCH4E is Mcal - 2/2/95 kc!
+		
+		MCH4E = ( 3.4555 + 0.5555 * ( FdDMIn * ( fStFd + fScFd + fOaFd + fPeFd ) )
+			+ 1.7555 * ( FdDMIn * fHcFd ) + 2.6555 * ( FdDMIn * fCeFd ) ) * F1 / 4.1555 ;
+		// (2002; JDS:85, 1176-1182) and Cassida and Stokes (1986; JDS:69,1282-1292)
+		RestWa = 1.4 * FdDMIn * 0.7555 ;
+		// 85 L/DAY with Rumntn=0.3555 at 500 kg EBW
+		// Only active during rumination
+		
+		EatSa = 3.2 * FdDMIn ; // L/Kg FdDMin. Redefined by Mindy to be: EatSa=2.6555*(EBW**0.7555)*Eating
+		EatWa = 3.3555 * FdDMIn * 0.7555 ;
+		EUrFd = EUr / FdDMIn ;
+		LPartRed = KLPartRed * LPart / LPartCor * Rumntn ;
+		MPartSPart = MPart * KMPartSPart * Rumntn ;
+		StHaFd = ( StinFd - StCsFd ) * ( 1 - fLPartSwal ) ; // error as fLPart was applied to StinFd previously, MDH 5-27-13
+		Cein = RumCein * ( 1 - fLPartSwal ) ;
+		StCs = StCsFd / MwtSt ; // SOLUBLE CARBOHYDRATES
+		KNaAtVis = 3.2 + KNaVis * T3 * OminFd ;
+		UrNFd = UrAmFd * MwtN ;
+		dHyFlF = FlFd * 2.0 ;
+		// END  INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one
+		// BEGIN  INCLUDE 'Intermittent_Eating_deriv.csl'
+		
+		// No intermittent eating for basic Molly
+		
+		// END  INCLUDE 'Intermittent_Eating_deriv.csl'
+		// BEGIN  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
+		// *************************************************
+		// COMPUTATION OF WATER DYNAMICS: different in MIndy
+		// *************************************************
+		// Salivation, drinking, water flow through rumen wall, rumen soluble,
+		// particulate and total rumen dry matter (RumDM) and rumen volume.
+		// Rumen volume can be calculated based upon RumDM/0.1555 which is the
+		// default or based upon water dynamics and osmolality when the rumen
+		// liquid volume equation(RumLiqVolEQ)is set to 1.0. The empirical
+		// equation for OSWa is not generally applicable and should not be used
+		// for continuous feeding and unusual diets e.g. high salt, NaHCO3, and
+		// thus should be closely monitored when RumLiqVolEQ is set to 1.0.
+		
+		RestSa = 0.8555 * ( EBW *pow(1,1)* 0.7555 ) * Rest ; // At 8 h resting, this equates to 70 ml/min which is below the 114 ml/min according to Maekawa et al.
+		// RestSa=6.0*(FdDMin/FdInt)*Rest*RestCor
+		// 60 L/DAY with Rumntn=0.3555
+		// Only runs when not feeding, corrected down for ruminating
+		RumntnSa = 2.4555 * ( EBW *pow(1,1)* 0.7555 ) * Rumntn ;
+		
+		// PASSAGE RATE CONSTANTS
+		// **********************
+		// KSPartP is now a fraction of KWAP, MDH 5-25-13
+		// KSPartP=2.6555*(FdDMin/ebw**0.7555)+1.00
+		// KWaP=1/((0.02555*(ebw**0.7555)/FdDMin)+0.1555)
+		// KSPartP & KWaP are in TURNOVERS PER DAY
+		// Equations derived by regression from Robinson 1985 Can.JAS 65:347
+		// and Evans 1981 Can.JAS 61:97
+		
+		// Inputs to the particle pools was altered to utilize seiving data, default seive is the Penn State Particle
+		// 	separator, but any sieve size can be used.  The feed seiving data is modified using a set of equations
+		// 	to reflect the effects of mastication during ingestion, and thus particle entry into the rumen reflects,
+		// 	the original particle size reduced by mastication.  A normal Penn State Shaker distribution is used as
+		// 	as a default.
+		// Initial rumen particle pool sizes were the mean of the seiving observations of Shaver et al., 1988. MDH
+		
+		// LARGE PARTICLE POOL(LPart in Kg); Retained on a 4.8 mm screen
+		// This is a real pool that is intended to represent the floating raft.  Starch was added to the pool, 5-21,2013
+		// 	to reflect entry of larger starch particles.  Assuming starch particle size reflects total diet
+		// 	particle size is likely an overestimate of starch entry into the LPart pool, but failing to include
+		// 	it as in the original model is clearly an underestimate. MDH
+		
+		// This pool was reduced in size and more dietary material is diverted through it
+		// necessitating a large increase in the rate constant, MDH
+		// Should be function of physical properties of feed!
+		// Should KLPartRed be a function of fermentation rate?
+		// Should entry be lagged for hydration??
+		
+		dLPart = LPartSwal - LPartRed ;
+		Hcin = RumHcin * ( 1 - fLPartSwal ) ;
+		SolOmP = CsP * MwtCs + FaP * MwtFl + RumAaP * MwtRumAa + ChChFd ; // Added ChChFd to be consistent with DMP, MDH. Mar 31, 2014
+		SaIn = EatSa + RestSa + RumntnSa ;
+		// RestWa=1.4555*(FdDMin/FdInt)*0.7555*RumntnCor*NOFEED
+		DrnkWa = EatWa + RestWa ;
+		LPartMPart = LPartRed * pLPartMPartComm ;
+		LPartSPart = LPartRed * ( 1 - pLPartMPartComm ) ;
+		LPartStHa = LPartRed * fLPartSt ;
+		LPartHcHc = LPartRed * fLPartHc ; // HOLOCELLULOSE-Hb
+		LPartCeCe = LPartRed * fLPartCe ; // HOLOCELLULOSE-Hb
+		LPartPiPi = LPartRed * fLPartPi ;
+		LPartIndigFdIndigFd = LPartRed * fLPartIndigFd ; // INDIGESTIBLE FEED
+		basalVis = ( KbasVis + KNaAtVis ) * WtVis *pow(1,1)* 0.7555 ;
+		Hbin = Cein + Hcin ;
+		SaNnAm = cBldUr * SaIn * UrAmAm ;
+		
+		// procedural ( RumLiqVol , fRumDM = RumLiqVolEQ , SaIn , DrnkWa , LPart , MPart , SPart ) 
+		RumOsMol = ( Cs / CsCor + Fl / FLCor + AM / AmCor + RumAc / RumAcCor +
+			RumPr / RumPrCor + RumBU / RumBuCor + RumLa / RumLaCor
+			+ RumAa / RumAaCor + As / MwtAs / ASCor * OsMolF ) / RumLiqVol ;
+		// Rumen Fluid OsMolality. As (soluble ash) multiflied by a factor
+		// to give moles of ions.  MwtAs=0.08555 was picked from NaHCO3
+		// Not clear why OsMolF is applied to AA.  This would appear to be a mistake and thus removed. MDH 2-19-14
+		// As plays a very minor role in driving Osmol.  VFA are the drivers.
+		// OsWa=0.7555*((RumOsMol-0.2555)*1000)-41.0   	  !Dobson , the negative intercept in this emprical equation causes mOsmol to run at 300, MDH 2-19-14
+		// Set the slope a little higher to keep osmolality down, MDH 2-19-14
+		OsWa = OsWaSlp * ( ( RumOsMol -0.2555 ) * 1000 ) + OsWaInt ; // Set the intercept to 0 to achieve a center around 280 mOsmol
+		fRumDM = 0.1555 ;
+		// 14.7% DM of rumen contents based on lactating cow data from
+		// VanVuuren 1999,JDS 82:143,Johnson 1991,JDS 74:933,Woodford 1988
+		// JDS 71:674,Shaver 1985,18th Rum Func Conf p45, DCM90(Purina),
+		// and Hartnell 1979,JAS 48:381
+		RumVol = RumDM / fRumDM ;
+		RumLiqVol = RumVol - RumDM ;
+		WaOut = RumLiqVol * KWAP ;
+		dRumLiqVol = WaIn - WaOut + OsWa ;
+		// end of procedural // OF PROCEDURAL
+		SaPsAa = cSaPs * SaIn ;
+		SaAs = fSaAs * SaIn ;
+		
+		Nin = ( FPsFd + fPiFd + fNnFd ) * FdDMIn * 0.1555 + UrNFd ;
+		LPartHbHb = LPartCeCe + LPartHcHc ;
+		// Heat production in viscera
+		basHtVis = basalVis * AtAdHT ; // basal
+		SaNRumAm = SaNnAm * AmUrUr ;
+		cVFA = TVFA / RumLiqVol ; // cVFA in Moles/liter
+		
+		HaMiP = ( HaMi / MiHaCor ) / RumLiqVol * WaOut * fPartP ;
+		HbMiP = ( HbMi / MIHbCor ) / RumLiqVol * WaOut * fPartP ;
+		HaP = Ha / HaCor / RumLiqVol * WaOut * fPartP ;
+		HcP = Hc / HcCor / RumLiqVol * WaOut * fPartP ;
+		CeP = Ce / CeCor / RumLiqVol * WaOut * fPartP ;
+		PiP = Pi / PICor / RumLiqVol * WaOut * fPartP ;
+		IndigFdP = IndigFd / IndigFdCor / RumLiqVol * WaOut * fPartP ;
+		cCs = ( Cs / CsCor ) / RumLiqVol ;
+		cRumAa = ( RumAa / RumAaCor ) / RumLiqVol ;
+		cAm = ( AM / AmCor ) / RumLiqVol ;
+		cAs = ( As / ASCor ) / RumLiqVol ;
+		// LACTATE
+		cRumLa = ( RumLa / RumLaCor ) / RumLiqVol ;
+		// Pi = integ ( dPi , iPi ) 
+		
+		// LIGNIN AND INSOLUBLE ASH (IndigFd in Kg)
+		dIndigFd = IndigFdFd + LPartIndigFdIndigFd - IndigFdP ;
+		// Hb = integ ( dHb , iHb ) 
+		
+		// INSOLUBLE PROTEIN (Pi in Kg) METABOLISM
+		// Sept. 20, 2004 solution against Bate5o2 data.
+		// Effect of added dietary fat on protein degradability added 12/90
+		// again this is an effect which is poorly supported.
+		dPi = PiPiFd + LPartPiPi - SPartPiAa - PiP ;
+		HbP = HcP + CeP ;
+		LgP = IndigFdP * fLgIndigFd ; // To Fit Duodenal Data Kg/d
+		AiP = IndigFdP * fAiIndigFd ;
+		FGAm = 1.0 / ( 1.0 + KFGAm / cAm ) ;
+		YAtp = 0.01555 + RumYAtp / ( 1.0 + KYAtAa / cRumAa ) ;
+		G2 = 0.5 / ( 1.0 + KYAtAa / cRumAa ) ;
+		
+		// ****************************************************************
+		// 	Passage Rates from the Rumen
+		ADFP = CeP + IndigFdP ;
+		// Total Duodenal Dry Matter Flow, Kg/d
+		
+		LgutHaGl = HaP * LgutDCHa / MwtSt ;
+		LgutHcFv = HcP * LgutDCHb / MwtHc * 0.8555 ;
+		LgutCeFv = CeP * LgutDCHb / MwtCe ;
+		LgutPiAa = PiP * LgutDCPi / MwtPi ;
+		LgutAi = LgutDCAi * IndigFdP * fAiFd / fIndigFd ;
+		
+		// FECES (Fec)
+		
+		FecHa = HaP * ( 1.0 - LgutDCHa ) ;
+		FecHC = HcP * ( 1.0 - LgutDCHb ) ;
+		FecCe = CeP * ( 1.0 - LgutDCHb ) ;
+		FecADF = FecCe + IndigFdP ;
+		FecLg = IndigFdP * fLgFd / fIndigFd ;
+		FecPi = PiP * ( 1.0 - LgutDCPi ) ;
+		FecAsh = AsP * ( 1.0 - LgutDCAs ) +
+			IndigFdP * fAiFd / fIndigFd * ( 1.0 - LgutDCAi ) ;
+		
+		// RUMEN pH CRumpH
+		// Rumen pH influences stoichiometry of fermentation (above) and
+		// hydrolytic rate constants for cellulose and hemicellulose.
+		// This is most relevant when meal rather than continuous feeding
+		// is implemented.  However, in the default it is left on
+		// (RumpHCON=1.0,FIXDPH=0.0).  (RumpHCON) RumpH control allows the
+		// RumpH equation to be shut off so a fixed pH (FIXDpH) can be used
+		
+		// pH predicted from Briggs et al., 1957 as used in Argyle and Baldwin, 1988
+		// RumpH=(7.2555-(10.0*cVFA+1.5*cRumLa))
+		RumpH = ( RumpHBase - ( vfaeff * cVFA +1.5 * cRumLa ) ) * RumpHCON + FIXDpH ;
+		MPartP = ( HaP + HcP + CeP + PiP + IndigFdP ) / fPartP * ( fMPart1 * KMPartP ) ;
+		SPartP = ( HaP + HcP + CeP + PiP + IndigFdP ) / fPartP * ( fSPart1 * KSPartP ) ;
+		IndigFdMiP = IndigFdP * cMiSPart ; // Passage of microbes in
+		PiMiP = PiP * cMiSPart ; // association with SPart
+		CsFv = VmCsFv * WaMi / ( 1.0 + KCsFv / cCs ) ;
+		RumAaFv = VmRumAaFv * WaMi / ( 1.0 + KRumAaFv / cRumAa ) ;
+		absRumAs = KAsabs * cAs ;
+		TOmP = SolOmP + HaP + HbP + PiP + LgP ;
+		BldUrAm = ( VmBldUrAm * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KBldUrAm / cBldUr + cAm / KiAm ) ) * UrAmAm ;
+		// HaMi = integ ( dHaMi , iMiHa ) 
+		// HbMi = integ ( dHbMi , iMiHb ) 
+		
+		// STARCH (St in Kg) OR ALPHA-HEXOSE (Ha in Kg) METABOLISM
+		dHa = StHaFd + LPartStHa - HaP - SPartHaCs ;
+		RumAaAc = AaFvAc * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
+		RumAaPr = AaFvPr * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
+		RumAaBu = AaFvBu * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
+		AtpF = CsFv * CsFvAt + RumAaFv * AaFvAt +0.7555 * NnAmFd * AaFvAt + RumLaFv * LaFvAt ;
+		AshP = AsP + AiP ; // Total Duodenal Ash, Kg/d
+		// Corrects kg hemicellulose
+		LgutHcAc = LgutHcFv * HcAcAc ;
+		// to moles hexose equivalents
+		LgutHcPr = LgutHcFv * HcPrPr ;
+		LgutHcBu = LgutHcFv * HcBuBu ;
+		LgutCeAc = LgutCeFv * CeAcAc ;
+		LgutCePr = LgutCeFv * CePrPr ;
+		LgutCeBu = LgutCeFv * CeBuBu ;
+		FecHb = HbP * ( 1.0 - LgutDCHb ) ;
+		G1 = 1.0 - G2 ;
+		SPartMiP = cMiSPart * ( SPartP + MPartP ) ;
+		// Ha = integ ( dHa , iHa ) 
+		
+		// HOLOCELLULOSE(Hc+Ce in Kg) OR BETA-HEXOSES(Hc and Ce in Kg)
+		// METABOLISM
+		
+		// The Hb equation should probably be sigmoid from pH 7.0 on down
+		// to pH 5.5 with the steapest decrease below 6.2 to 5.5, but there
+		// are not enough data to create that form.
+		
+		// procedural ( KHcCs , KCeCs = RumpH , KHcCs1 , KCeCs1 ) 
+		KHcCs = KHcCs1 ;
+		KCeCs = KCeCs1 ;
+		if ( RumpH >= 6.2 ) goto label_22 ;
+		KHcCs = KHcCs - ( KHcCs * 1.8555 * ( 6.2 - RumpH ) ) ;
+		KHcCs = max ( KHcCs , 0.0 ) ;
+		KCeCs = KCeCs - ( KCeCs * 1.8555 * ( 6.2 - RumpH ) ) ;
+		KCeCs = max ( KCeCs , 0.0 ) ;
+	label_22:
+		// end of procedural // OF PROCEDURAL
+		AaAm = RumAaFv * AaFvAm ;
+		
+		// Effect of added dietary fat on microbial yield (MiG) 12/14/90 jk
+		
+		// procedural ( MiMaAd = RumpH ) 
+		// Effect of pH on microbe maintenence requirement.
+		MiMaAd = 20 ;
+		// MOLES/KG/DAY
+		if ( RumpH >= 6.2 ) goto label_26 ;
+		if ( RumpH <= 5.4 ) goto label_25 ;
+		MiMaAd = MiMaAd + ( MiMaAd * ( ( 0.8 - ( RumpH -5.4 ) ) / 0.8 ) ) ;
+		goto label_26 ;
+	label_25: MiMaAd = 40 ;
+	label_26:
+		// end of procedural 
+		
+		// Need to calculate MPart and SPart in feces from ruminal outflow.  Subtract non NDF digested
+		// nutrients from the ruminal particle outlfow values to get feces, MDH Feb 11, 2014
+		FecMPart = MPartP ; // these do not account for intestinal digestion of MPart and SPart. Need to fix per above.
+		FecSPart = SPartP ;
+		dRumAaHy = RumAaFv * AaFvHy ;
+		// OF PROCEDURAL
+		
+		// ADJUSTMENT OF STOICHIOMETRIC COEFFICIENTS FOR RumpH
+		// Stiochiometric coefficients have pH effects embedded in them.
+		// These equations should probably be sigmoidal.
+		// Switch to pure lactate at pH 5.4 may not be correct, it is
+		// probably a logarithmic increase starting at 5.5.  These changes
+		// in stoichiometric coefficients parallel those suggested by
+		// the equation which corrects for systematic errors in CONSET
+		// due to increasing proportions of concentrate in the ration
+		// which was formulated by Murphy et al (1982).
+		
+		// procedural ( ScAc , ScPr , ScBu , ScLa , StAc , StPr , StBu , StLa = RumpH , 
+			// ScAcAc , ScPrPr , ScBuBu , ScLaLa , StAcAc , StPrPr , StBuBu , StLaLa ) 
+		ScAc = ScAcAc ;
+		ScPr = ScPrPr ;
+		ScBu = ScBuBu ;
+		ScLa = ScLaLa ;
+		StAc = StAcAc ;
+		StPr = StPrPr ;
+		StBu = StBuBu ;
+		StLa = StLaLa ;
+		if ( RumpH >= 6.2 ) goto label_24 ;
+		if ( RumpH <= 5.4 ) goto label_23 ;
+		ScAc = 0.7555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScAcAc -0.7555 ) ;
+		ScPr = 0.5555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScPrPr -0.5555 ) ;
+		ScBu = 0.4555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScBuBu -0.4555 ) ;
+		StAc = 0.6555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StAcAc -0.6555 ) ;
+		StPr = 0.8555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StPrPr -0.8555 ) ;
+		StBu = 0.2555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StBuBu -0.2555 ) ;
+		goto label_24 ;
+	label_23: ScAc = 0.0 ;
+		ScPr = 0.0 ;
+		ScBu = 0.0 ;
+		StAc = 0.0 ;
+		StPr = 0.0 ;
+		StBu = 0.0 ;
+		ScLa = 2.0 ;
+		StLa = 2.0 ;
+	label_24:
+		// end of procedural // OF PROCEDURAL
+		BldUrRumAm = BldUrAm * AmUrUr ;
+		
+		// SOLUBLE ASH(As in Kg)
+		
+		dAs = AsAsFd + SaAs + InfAs - AsP - absRumAs ;
+		absAc = absRumAc + LgutHcAc + LgutCeAc + RumAcP ;
+		MiP = SPartMiP + WaMiP ;
+		SPartHcCs = Hc / HcCor * KHcCs * cMiHb * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatHb ) ) ;
+		SPartCeCs = Ce / CeCor * KCeCs * cMiHb * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatHb ) ) ;
+		// I don t know why John has this in,RLB
+		AtpM = Mi / MICor * MiMaAd ;
+		
+		// Ammonia and urea metabolism
+		
+		dBldUr = AaUrVis + AaUrGest + AmUr - BldUrRumAm - SaNRumAm - BldUrMUN - dUrea ;
+		AtpG = AtpF - AtpM ;
+		// Hc = integ ( dHc , iHc ) 
+		
+		dCe = Cein + LPartCeCe - SPartCeCs - CeP ;
+		
+		// Effect of added dietary fat on organic matter digestibility (SPartHbCs)
+		// was added 12/90 but is very tentative as linear slope was derived
+		// from +/- fat data.
+		
+		dHc = Hcin + LPartHcHc - SPartHcCs - HcP ;
+		AbsAcE = absAc * HcombAc ;
+		MiPP = MiP * MiPiPI + MiP * MiNnNn ; // Microbial CP Passage
+		MiGl = MiP * MiHaHA * LgutDCHa / MwtSt ;
+		MiAa = MiP * MiPiPI * DCMiPi / MwtPi ;
+		// Computes digestion (Dg) of nutrients
+		MiLiDg = MiP * MiLiLI * DCMiLi / MwtMiLi ;
+		MiCh = ( MiP * MiLiLI / MwtMiLi ) * MiLiCh ;
+		FecMiHa = MiP * MiHaHA * ( 1.0 - LgutDCHa ) ;
+		FecMiLi = MiP * MiLiLI * ( 1.0 - DCMiLi ) ;
+		FecMiPi = MiP * MiPiPI * ( 1.0 - DCMiPi ) ; // KG.
+		FecMiNn = MiP * MiNnNn ;
+		LipidP = ( FaP * MwtFa ) + ( MiP * MiLiLI ) ; // Total Duodenal Lipid Flow, Kg/d
+		SPartHbCs = SPartCeCs + SPartHcCs ;
+		HcCs = SPartHcCs / MwtHc * 0.8555 ; // Converts kg of hemicellulose to moles of hexose equivalents.
+		CeCs = SPartCeCs / MwtCe ;
+		HbMiRum = cMiHb * SPartHcCs + cMiHb * SPartCeCs ; // released due to hydrolysis of particulate substrates
+		MPartDeg = ( SPartHaCs + SPartHcCs + SPartCeCs + SPartPiAa ) / fPartSA * ( fMPart1 * fMPartSA ) ;
+		SPartDeg = ( SPartHaCs + SPartHcCs + SPartCeCs + SPartPiAa ) / fPartSA * ( fSPart1 * fSPartSA ) ;
+		
+		NitP = ( ( RumAaP * MwtPs ) + PiP + ( MiP * MiPiPI ) + ( MiP * MiNnNn ) ) * .16 ; // Total Duodenal N Flow, Kg N/d
+		Nan = 1000 * 0.1555 * ( PiP + ( RumAaP * 0.1555 ) + ( MiP * 0.5555 ) + ( MiP * 0.09555 ) ) ;
+		
+		// For comparison to Clark papers
+		MiPrOm = MiP * MiPiPI / ( OminFd - TOmP ) ; // kg CP/kg OM True
+		HaPT = HaP + ( MiP * MiHaHA ) ; // To Fit Duodenal Data, Kg/d
+		TTOmP = TOmP + MiP ;
+		MirOma = MiP * MiPiPI / ( OminFd - TTOmP ) ; // Apparent
+		MiG = AtpG * YAtp * FGAm * FGFa ;
+		// Ce = integ ( dCe , iCe ) 
+		
+		dHb = Hbin + LPartHbHb - SPartHbCs - HbP ;
+		FecCh = ChChFd + MiCh * DCMiLi * MwtCh ;
+		
+		// **********************************
+		// MICROBES ASSOCIATED WITH SPart(kg/kg)
+		// **********************************
+		// Association of microbes with small particle Ha(MiHa) and Hb
+		// (MiHb). Was added to prevent increases in KHaCs from
+		// increasing digestion of Hb(due to more microbes) and vice versa
+		// i. e. to give specificity associated with small
+		// particles based upon substrate they grew on.
+		
+		Csin = ScTCs + StCs + HaCs + HcCs + CeCs ; // Fractions of Cs entry
+		// in the lower gut in moles.
+		MiFa = MiLiDg * MiLiFA ;
+		MiBu = MiLiDg * MiLiBu ;
+		MiPr = MiLiDg * MiLiPr ;
+		MiLGl = MiLiDg * MiLiGl ;
+		FecLipid = FecFa + FecMiLi ; // Total Fecal Lipid Flow, Kg/d
+		fCsHb = ( HcCs + CeCs ) / Csin ; // hydrolysis.
+		fHcCs = HcCs / Csin ;
+		FCeCs = CeCs / Csin ;
+		NANP = NitP ; // No accomodation for Ammonia passage. Is this correct? Probably blown off by drying.
+		FecPiT = FecMiPi + FecMiNn + FecPi ;
+		FecOm = FecHa + FecHb + FecPiT + FecMiLi + FecLg + FecCh + FecMiHa + FecFa ;
+		FecENG = ( FecHa * 4.1555 + FecHb * 4.1555 + ( FecMiPi + FecPi ) * 5.7 + FecMiLi * 7.2 +
+			FecLg * 8.3 + FecCh * 3.3555 + FecMiNn * 5.7 + FecMiHa * 4.1555 + FecFa * 9.5555 ) * F1 ;
+		
+		// **************************************************************
+		// INTERFACE OF MODELS---NUTRIENT ABSORBTION
+		// *************************************************************
+		// Absorbtion of nutrients
+		
+		absGl = LgutHaGl + CsP + MiGl + MiLGl ;
+		AbsAa = MiAa + LgutPiAa + RumAaP + InfPrt / 0.1555 ;
+		NANMNP = NANP - ( 0.1555 * MiPP ) ;
+		dHyMi = ( HyMiG1 * G1 + HyMiG2 * G2 ) * ( MiG * KumarMigEq + ( 1.0 - KumarMigEq ) ) ; // This equation has been wrong since 1995. It was lacking MiG. Added MiG multiplier per Vetharanium 6-24-14, MDHdHyFlF=FlFd*2.0
+		
+		// MEDIUM PARTICLE POOL (MPart in Kg); Retained on a 1.2 mm screen put passes a 4.8 mm screen
+		// Added in May of 2013 to allow representation of differential passage of particles from the
+		// 	rumen based on size and differental rates of fermentation based on surface area.
+		// 	This pool is a phantom pool that is used with SPart, another phantom pool,
+		// 	to mathematically partition the pools of Hc, Ce, Ha, Pi, and IndigFd into medium and
+		// 	small fractions to allow application of differential outflow and degradation. MDH
+		// Set to achieve steady state on the base diet, MDH
+		// ??Need to verify and update if needed
+		// A proportion of Liq Flow. An initial guess, MDH
+		dMPart = MPartSwal + LPartMPart - MPartSPart - MPartDeg - MPartP ;
+		
+		// SMALL PARTICLE POOLS(SPart in Kg); Passes a 1.2 mm screen
+		// A phantom pool that is used with MPart to mathematically partition Hc, Ce, Ha, Pi, and IndigFd.
+		dSPart = SPartSwal + LPartSPart + MPartSPart - SPartDeg - SPartP ;
+		
+		CsMiG = MiG * ( CsFv * CsFvAt / AtpF ) ; // Proportion of microbial
+		CsMi = MiG * ( CsMiG1 * G1 + CsMiG2 * G2 ) ;
+		RumAaMi = MiG * AaMiG2 * G2 ;
+		AmMi = MiG * ( AmMiG1 * G1 + AmMiG2 * G2 ) ;
+		
+		// WATER SOLUBLE CARBOHYDRATE(Sc in Kg;Cs in Moles)
+		
+		dCs = ScTCs + StCs + HaCs + HcCs + CeCs - CsFv - CsMi - CsP ;
+		FlMi = MiG * FlMiG ;
+		// OF PROCEDURAL
+		
+		dMi = MiG - MiP ;
+		FecDM = FecOm + FecAsh ;
+		// Cs = integ ( dCs , iCs ) 
+		
+		// AMINO ACID (RumAa in moles) METABOLISM
+		
+		dRumAa = PsAaFd + PiAa + SaPsAa - RumAaFv - RumAaMi - RumAaP ;
+		// RumAa = integ ( dRumAa , iRumAa ) 
+		
+		// AMMONIA (Am in moles)METABOLISM
+		
+		dAm = NnAmFd + AaAm + SaNnAm + BldUrAm - absRumAm - AmMi + UrAmFd ;
+		fScCs = ScTCs / Csin ;
+		fCsHa = HaCs / Csin ; // attributed to Ha at Hb
+		fStCs = ( StCs + HaCs ) / Csin ;
+		CsFvAc = ScAc * fScCs + StAc * fStCs + HcAcAc * fHcCs + CeAcAc * FCeCs ;
+		CsFvPr = ScPr * fScCs + StPr * fStCs + HcPrPr * fHcCs + CePrPr * FCeCs ;
+		CsFvBu = ScBu * fScCs + StBu * fStCs + HcBuBu * fHcCs +
+			CeBuBu * FCeCs ;
+		// Correction for absFa converts stearate (Fl) from
+		absFa = ( MiFa + LgutFaDg ) * MwtFl / MwtFa ;
+		
+		Nabs = ( AbsAa * AaFvAm * MwtN ) + ( AbsAm * MwtN ) ;
+		// revised constant VmAaPmVis 7/92 (kc)
+		
+		// AMINO ACID METABOLISM
+		dAa = AbsAa + POthAaOth + PVisAaVis - AaPOthOth - AaPVisVis - AaPmVis - AaGlVis - SaPsAa
+			- AaPGest - AaGlGest ;
+		appDE = ( FdGEin - FecENG ) / FdGEin ; // APPARRENT DIGESTIBLE ENERGY
+		DEI = FdGEin - FecENG ; // DIGESTIBLE ENERGY INTAKE
+		// Computes absorbtion of nutrients
+		absPr = absRumPr + MiPr + LgutHcPr + LgutCePr + RumPrP ;
+		// in whole gut in moles.This is
+		absBu = absRumBu + LgutHcBu + LgutCeBu + MiBu + RumBuP ;
+		absAaE = AbsAa * HcombAa ;
+		absGlE = absGl * HcombGl ;
+		upGl = 0.1555 * absGl ;
+		gGlLa = 0.9555 * absGl * GlLaLa ;
+		AtAd10 = absGl * absGlAd ;
+		AtAd11 = AbsAa * absAaAd ;
+		NFec = FecPiT * 0.1555 ;
+		HaMiG = CsMiG * fCsHa ; // growth attributable to
+		HbMiG = CsMiG * fCsHb ; // Cs formed from Ha and Hb hydrolysis
+		// As = integ ( dAs , iAs ) 
+		
+		// LONG CHAIN FATTY ACIDS(Fl,Fa in moles)
+		
+		dFl = FlFd + Fl1Fd - FlMi - FaP ;
+		CsFvLa = ScLa * fScCs + StLa * fStCs ;
+		
+		// Animal Water Balance Equations, MDH Jan 23, 2014
+		// assumed feces is 23% DM from Murphy 1992 review, JDS
+		// Assumed 1% Ash in milk
+		// Assumed half the maximal respiratory rate cited in Murphy, 1992 JDS
+		// Assumed 25% the maximal sweating rate cited in Murphy, 1992 JDS
+		WaFeces = FecDM / ( 1 - KWaFeces ) - FecDM ;
+		dCsFvH = CsFvAc * 2.0 - CsFvPr * 1.0 + CsFvBu * 2.0 ;
+		absFaE = absFa * HcombFa ;
+		
+		Nout = NUr + NFec ;
+		// NurTotal = integ ( NUr , 0.0 ) 
+		NBody = ( dAa + dPOth + dPVis + AaPGest ) * AaFvAm * MwtN ;
+		absPrE = absPr * HcombPr ;
+		absBuE = absBu * HcombBu ;
+		AbsE = AbsAcE + absPrE + absBuE + absFaE + absAaE + absGlE + absLaE ;
+		PrGlVis = absPr * fPrGl ;
+		PrCdVis = absPr * ( 1.0 - fPrGl ) ;
+		BuCdVis = absBu ;
+		AdAtV5 = gGlLa * GlLaAt ;
+		RumLaGl = absRumLa + RumLaP + gGlLa ;
+		// max retention on SPart is 0.8555 of those potentially released.
+		
+		MiHaMi = HaMiF * ( HaMiG + HaMiRum ) ; // Microbes on particles and those grown from Ha and Hb
+		MiHbMi = HbMiF * ( HbMiG + HbMiRum ) ; // hydrolysis and fermentation which remain in association with SP.
+		CsAc = CsFv * CsFvAc ;
+		CsPr = CsFv * CsFvPr ;
+		CsBu = CsFv * CsFvBu ;
+		WaUrine = DrnkWa - WaRespir - WaSweat - WaFeces - WaMilk ; // This will easily go negative if DRnkWa is inadequate. May at times during the day with intermittent feeding
+		WaConsumed = WaFeces + WaMilk + WaUrine + WaRespir + WaSweat ;
+		CsLa = CsFv * CsFvLa ;
+		dCsHy = CsFv * dCsFvH ;
+		LaGlVis = LaGlAdip + LaGlOth + RumLaGl ;
+		// GLUCOSE
+		LaGlV1 = ( LaGlAdip + LaGlOth + RumLaGl ) * LaGlGl ;
+		
+		// NITROGEN BALANCE        11/07/91 jrk !
+		
+		dN = Nin - Nout ; // in kg N
+		Nret1 = NBody + NMilk ; // Nret1 should = Nret2 should = dN
+		// Computation of effects of feed intake (absorbed energy) on basal
+		// energy expenditures.Absorbed energy is averaged (absEAve) over 20
+		// days (TAveabsE=1/20).Absorbed energy factor (absEF) is expressed in
+		// units of metabolic body weight.
+		
+		dabsEAve = TAveabsE * ( AbsE - absEAve ) ;
+		// VISCERA
+		AtAdV9 = PrGlVis * PrGlAd ;
+		AtHt4 = PrCdVis * HcombPr ;
+		AtHt5 = BuCdVis * HcombBu ;
+		PrGlV1 = PrGlVis * PrGlGl ;
+		AdAtV3 = PrCdVis * PrCdAt ;
+		AdAtV4 = BuCdVis * BuCdAt ;
+		AdAtVis = AdAtV1 + AdAtV2 + AdAtV3 + AdAtV4 + AdAtV5 ;
+		
+		dHaMi = SPartMiHa + MiHaMi - HaMiP - HaMiRum ;
+		dHbMi = SPartMiHb + MiHbMi - HbMiP - HbMiRum ;
+		// Fl = integ ( dFl , iFl ) 
+		
+		// VOLATILE FATTY ACIDS AND LACTATE(RumAc,RumPr,RumBu,RumLa in moles)
+		// Rate constants may not be equal as assumed here!
+		// KabsLa set to low level to define variable
+		// La fermentation may be needed
+		// CCP 9-13-06
+		
+		// ACETATE-RumAc
+		
+		dRumAc = FvAcFd + CsAc + RumAaAc + RumLaAc - absRumAc - RumAcP ;
+		
+		// PROPIONATE-RumPr
+		// infused ruminal propionate, mol/d
+		dRumPr = CsPr + RumAaPr + RumLaPr + InfRumPr - absRumPr - RumPrP ;
+		
+		// BUTYRATE-RumBu
+		dRumBu = CsBu + RumAaBu + FvBuFd - absRumBu - RumBuP ;
+		
+		// Lactate functions are in to define variables and
+		// are not based on hard data. Should add a fermentation
+		// equation,KabsLa is arbitrary.
+		
+		dRumLa = CsLa + FvLaFd - RumLaP - absRumLa - RumLaFv ;
+		dHyEruct = ( dCsHy + dRumAaHy - dHyMi - dHyFlF +2.0 * RumLaAc - RumLaPr ) * KHyEruct ; // Hydrogen eructation, g/d = mol/d, added 5-14-14, MDH
+		dHyOther = ( dCsHy + dRumAaHy - dHyMi - dHyFlF +2.0 * RumLaAc - RumLaPr - dHyEruct ) * KHyOther ; // Undefined loss of Hy, mol/d, added 5-19-14, MDH
+		dTHy = dCsHy + dRumAaHy - dHyMi - dHyFlF +2.0 * RumLaAc - RumLaPr - dHyEruct - dHyOther ;
+		AtAdV8 = LaGlVis * LaGlAd ;
+		AdAt = AdAtOth + AdAtAdip + AdAtVis ;
+		
+		// Oxidative metabolism of viscera (Vis)
+		// Energy expend.(AtAdVis)are basalVis(339),TpTsVis(*TpTsAD=1.3*9=11.7),
+		// AcTmVis(16.8*(see Adip)=83.6),AaPrVis(41),AaPmVis(43),GlLmVis(16.6),GlHyVis
+		// (1.4555),GlTpVis(0.4),LaGl(16.2),absGl(3.5555),absAa(12.6).
+		// ATP formation from GyGlVis(14.4),TpCdVis(40.8),PrCdVis(156),BuCd(245)
+		
+		AtAdVis = basalVis + AtAdV1 + AtAdV2 + AtAdV3 + AtAdV4 + AtAdV5 + AtAdV6 +
+			AtAdV7 + AtAdV8 + AtAdV9 + AtAd10 + AtAd11 + AtAd12 + AtAd13 + AtAd14 +
+			ATAd15 ;
+		dDCH4 = dTHy / 4.0 ; // Unit: moles/d
+		HtV4 = AtAdV8 * AtAdHT ; // La to Gl
+		
+		// Oxidative Metabolism in Lean body mass (Oth)
+		// Energy expenditures in reference state expressed as ATP
+		// utilization are Basal(294)and protein resynthesis(50)for a sum of
+		// 344.Mandatory ATP generation because brain and kidney are in this
+		// element is GlLaOth*GlLaAT (4.7555*2.0=9.5) and LaCdOth*LaCdAT (4.6*18
+		// =82.8) for a sum of 92.3.!
+		
+		// KbasOth was moved so it can be defined diferently by Mindy
+		
+		// BEGIN  INCLUDE 'Activity_Energy_Expenditure.csl'
+		
+		// ! This file has an extracted section of Molly.csl with code that need to be refined and possibly
+		// ! re-defined by Mindy. Mindy would reduce KbasOth and simulate energy expenditure for activity
+		// ! dynamically in an "itemised" way, accounting explicitly for energy expenditure while lying,
+		// ! standing, walking and biting/chweing initial calibration should be made so that on  average
+		// ! activity total AtAdOth would be as before
+		
+		// ! Constants, variables, units
+		
+		// ! Mindy  / Iintrmittent_Eating calculate eerActivityAtp dynamically and use amuch lower kBasOth. See there.
+		// Basal energy expenditure rate coefficient bundles average activity inside
+		// Unit: mole/d Activity Energy Expenditure Rate. Molly does not calculate activity explicitly
+		
+		// END  INCLUDE 'Activity_Energy_Expenditure.csl'
+		AtAd = AtAdOth + AtAdAdip + AtAdVis + AtAdGest ;
+		
+		// Oxidation of glucose,acetate,and fatty acids
+		
+		ndAt = AtAd - AdAt ; // TOTAL OXIDATION
+		dCH4Kg = dDCH4 * MwtCH4 ; // Unit: Kg/d of Methane
+		
+		// Based on AgResearch Chamber data
+		// Based on AgResearch Chamber data
+		// Pablo requested May 2016 to be able to diable Mig effect on hidrogen
+		
+		dTCH4 = dDCH4 ;
+		MHtVis = basHtVis + HtV2 + HtV3 + HtV4 + HtV5 + HtV6 + HtV7 + HiV8 ;
+		ndOx = ndAt / rtPOx ;
+		
+		dTCH4E = dTCH4 * HcombCH4 ;
+		// AccDEi = integ ( DEI , 1.0E-8 ) 
+		
+		CH4E = dTCH4 * HcombCH4 ; // APPARRENT AND CORRECTED
+		// low as a beef animal has a smaller Grv Uter
+		
+		// costs of Maintenance in animal(an)
+		dMaint = MHtOth + MHtAdip + MHtVis + MHtGest ;
+		GlCd = ( ( ndOx * rtOx1 ) / ( rtOx1 + rtOx2 +1.0 ) ) / OxGlCd ;
+		FaCd = ( ( ndOx * rtOx2 ) / ( rtOx1 + rtOx2 +1.0 ) ) / OxFaCd ;
+		AcCd = ( ndOx / ( rtOx1 + rtOx2 +1.0 ) ) / OxAcCd ;
+		
+		dGl = upGl + AaGlV1 + PrGlV1 + LaGlV1 + GyGlV1 - GLLmVis -
+			GlHyAdip - GlHyVis - GlTpAdip - GlTpVis - GlLaOth - GlCd ;
+		MEI = ( FdGEin - CH4E - EUr - FecENG ) ; // ENERGY
+		
+		// Estimates of heat production (HP)
+		MntHP = dMaint + HiM ; // ??There is a problem with maintenance HP. Way too high, MDH, 5-6-14
+		
+		dFa = absFa + TsFaF1 - FaTsAdip - FaTmVis - FaCd ;
+		// revised constant VmAcTmVis 7/92 (kc)
+		
+		dAc = absAc + AaAcV1 - AcTsAdip - AcTmVis - AcCd ;
+		AtHt6 = GlCd * HcombGl ;
+		AtHt7 = AcCd * HcombAc ;
+		AtHt8 = FaCd * HcombFa ;
+		HFerm = FdGEin - AbsE - FecENG - CH4E - EUr ;
+		mult = MEI / ( F1 * 0.1555 * EBW *pow(1,1)* 0.7555 ) ;
+		AtHt = AtHt1 + AtHt2 + AtHt3 + AtHt4 + AtHt5 + AtHt6 + AtHt7 + AtHt8 ;
+		CorMEi = MEI - HFerm ;
+		
+		BCH4 = ( 1.3555 +0.1555 * appDE * 100 + mult * ( 2.3555 -0.05555 * appDE * 100 ) ) * F1 ;
+	
+	} // end calculate_rate
+	
+	void post_processing ( ) {
+		
+		// post processing calculations from derivative
+		// TotWaConsumed = integ ( WaConsumed , 0.0 ) 
+		// TotWaUrine = integ ( WaUrine , 0.0 ) 
+		
+		// Urine output
+		
+		// procedural ( = TotWaUrine ) 
+		if ( t == 0 ) {
+			BladderVol = 0 ;
+		} else {
+			BladderVol = TotWaUrine - TotWaUrineLast ;
+		}
+		if ( BladderVol >= MaxBladderVol ) {
+			// Empty the bladder
+			UrinationVol = UrinationVol + BladderVol ;
+			TotWaUrineLast = TotWaUrine ;
+		}
+		// end of procedural 
+		
+		// !! Populate the particle size reduction working array (fBinFd)
+		// !! With the pre-ingested distribution of the current feed
+		
+		// procedural ( fBinFd = CurrentFeed , CurrStrat , iBinFd ) 
+		for ( int i = 1 ; i <= MaxFdScreens ; ++ i ) { // DO binLoop4 i = 1, maxFdScreens
+			fBinFd [ i - 1 ] = iBinFd [ CurrentFeed - 1 ][ i +1 - 1 ] / 100.0 ;
+		} // binLoop4: CONTINUE
+		// end of procedural 
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		// IntakeTotal = integ ( FdRat , 0 ) 
+		
+		// Unit: multiplier. Adaptor from actual mastication jaw movements to the arbitrary steps of the model which are on a finer scale.
+		kAcquisition = 0.3555 * kMastication ; // Unit: multiplier. Adaptor from actual acquisition jaw movements to the arbitrary steps of the model which are on a finer scale. Acquisition/Severing bites are expected to have very little effect (smaller k) compared to mastication bites.
+		// The ratio of 0.3555 was solved from Boudun grazing vs. Indoor cow identical diet.
+		// Unit: power. SpeciesFactor simulates ease of breakdown of the feed. It reduces mastication and increases breakdown effiecncy (simulated by cheating: increasing steps in the model!). However tougher feed should result in larger particle size, so we must avoid kSpecies=1 which will neutralize the species effect (i.e. with SpeciesFactor=1 the decreased breakdown effeciecny would cancel out exactly the effect of the increased mastication of tougher feed)
+		// Fitted to 21 datasets, Bailey 90, Loginbuhl 89, Shaver, Oshio, John&reid 87, however with mastication time left free as was unknown! Hence in future the k will be influenced by the feeds ease of breakdown, which will also reduce mastication time so end result will not change a lot.
+		// -"-
+		// Array of proprtions that pass from each bin to the next bin upon one mastication jaw mevement
+		
+		// procedural ( kComminuteOral = kComminuteOralMin , kComminuteOralMax ) 
+		for ( int i = 1 ; i <= MaxFdScreens ; ++ i ) { // do kc_loop i = 1,MaxFdScreens
+			kComminuteOral [ i - 1 ] = kComminuteOralMin + ( kComminuteOralMax - kComminuteOralMin ) * ( FdBinMeshSize [ i - 1 ] / FdBinMeshSize [ MaxFdScreens - 1 ] ) ;
+		} // kc_loop: Continue
+		// end of procedural 
+		
+		PsF = fMPartSwal + fSPartSwal ; // This needs to be revised, MDH Feb 10, 2014
+		
+		// Calculate the proportion of the feed that will remain in particulate form
+		fParticulateFd = fStFd - FStsFd + fCeFd + fHcFd + fLgFd + fAiFd + fPiFd ;
+		totFd = fScFd + fOaFd + fPeFd + FLaFd + fLiFd + fFatFd + fStFd + fHcFd + fCeFd + fLgFd +
+			FPsFd + fPiFd + fNnFd + FUrFd + fAsFd + fAiFd + fAcFd + fBuFd ;
+		// Gil Aug 20102 moved RUMNTEQ to mindy_init (=0 for molly; = 1 for mindy)
+		// Fraction of MBW. Set to achieve appropriate rumination times and LP pool sizes, added 04-25-2011, MDH
+		
+		MinLPRumntn = MinLPRumntnF * BWF *pow(1,1)* 0.7555 ;
+		AaFvFat = ( AaFvAc / 2 ) + ( AaFvPr / 2 ) + AaFvBu ;
+		// LPart = integ ( dLPart , iLPart ) 
+		LPart1 = LPart / LPartCor ;
+		// MPart = integ ( dMPart , iMPart ) 
+		LPartplusMPart = MPart + LPart / LPartCor ;
+		fLPartplusMPart = ( MPart + LPart / LPartCor ) / ( LPart / LPartCor + MPart + SPart ) ;
+		// IndigFd = integ ( dIndigFd , iIndigFd ) 
+		RumLg = IndigFd / IndigFdCor * fLgIndigFd + LPart / LPartCor * fLPartLg ;
+		Am1 = AM / AmCor ;
+		// RumAc = integ ( dRumAc , iRumAc ) 
+		RumAc1 = RumAc / RumAcCor ; // Uninflated Rumen Pool size for comparison to observed data
+		MPcAc = ( RumAc / RumAcCor ) / TVFA * 100 ; // Mole percent(MPc)
+		// RumPr = integ ( dRumPr , iRumPr ) 
+		RumPr1 = RumPr / RumPrCor ; // Uninflated Rumen Pool size for comparison to observed data
+		MPcPr = ( RumPr / RumPrCor ) / TVFA * 100 ;
+		// RumBU = integ ( dRumBu , iRumBu ) 
+		RumBu1 = RumBU / RumBuCor ; // Uninflated Rumen Pool size for comparison to observed data
+		MPcBu = ( RumBU / RumBuCor ) / TVFA * 100 ;
+		// RumLa = integ ( dRumLa , iRumLa ) 
+		RumLa1 = RumLa / RumLaCor ; // Uninflated Rumen Pool size for comparison to observed data
+		
+		// Growth with amino acids(G2)
+		
+		CdMiG2 = -0.05 ;
+		// Fixed MiCor additions to the following LP, SP, and Wa Mi pools, CCP 7/27/06
+		LPartMi = ( ( LPart / LPartCor ) / ( RumDM - Mi / MICor ) ) * ( Mi / MICor ) ;
+		RumCP = RumNit / .16 ;
+		RumADF = Ce / CeCor + IndigFd / IndigFdCor + LPart / LPartCor * fLPartADF ; // Rumen pool size of ADF and NDF, kg
+		RumOM = RumDM - As / ASCor - ( IndigFd / IndigFdCor * fAiIndigFd ) - LPart / LPartCor * fLPartAi ;
+		fLPartNDF_NDF = fLPartNDF / RumNDF ;
+		fMPartNDF_NDF = fMPart * RumNDF / RumNDF ;
+		fSPartNDF_NDF = fSPart * RumNDF / RumNDF ;
+		
+		// procedural ( = Cs , AM , RumPr , RumBU , RumAc , RumAa , As , Fl , Mi , RumLa , LPart , MPart , SPart ) 
+		SolDM = Cs * MwtCs / CsCor + AM * MwtAm / AmCor + RumPr * MwtPr / RumPrCor + RumBU * MwtBu
+			/ RumBuCor + RumAa * MwtRumAa / RumAaCor + As / ASCor + Fl * MwtFl / FLCor +
+			RumAc * MwtAc / RumAcCor + RumLa * MwtLa / RumLaCor ;
+		if ( t > 0 ) RumDM = LPart / LPartCor + MPart + SPart + SolDM + Mi / MICor ;
+		// end of procedural 
+		MEinMJ = ME * McalToMJ ; // Moved here to minimise diff with mark
+		
+		// DNA ACCRETION
+		// *************
+		
+		// OthDna = integ ( dOthDna , iOthDna ) 
+		// VisDna = integ ( dVisDna , iVisDna ) 
+		
+		// AMINO ACID AND NITROGEN METABOLISM
+		// **********************************
+		
+		// Amino acid metabolism (Aa) including protein turnover (P) in
+		//      Lean body mass (POth) and Viscera (PVis).
+		
+		// Inputs to Aa are absAa (12.6), POthAa (10.0) and PVisAa (8.2). TO
+		// from Proc.Nutr.Soc.39:43-52(Reeds and Lobley) at 18g/BW**0.7555.
+		// TO=2.0 kg/day or (/0.1555) 18.2 moles/day. Outputs are AaPOthOth (10),
+		// AaPVis (8.2), AaPm (8.6) and gluconeogenesis (AaGlVis=4.0).
+		// Biosynthetic reactions set at 1/2Vmax in reference state. Capacity
+		// for AaGlVis is very high (5x) relative to flux in fed (reference)
+		// state so set there. Compution of mass in Oth and Vis assumes
+		// that protein+H2O is 70% of wt at 25% dry matter (fractional
+		// dry wt=fDWt) and that remaining wt is constant(otWtOth,otWtVis).
+		// Aa pool size and volume increased 10x in this version.
+		// KPOthAaOth and KPVisAaVis adusted 05/01/91 to make equations functions
+		// of POth and PVis rather than cPOth and cPVis jk.
+		// VmAaGlVis now scaled to body size (BWF) jk 05/09/91
+		
+		POthfDr = POthAaOth / POth ;
+		PVisfDr = PVisAaVis / PVis ;
+		// MamPm = integ ( dMamPm , iMamPm ) // Mammary PROTEIN
+		
+		// TMilkPm = integ ( dMilkPm , 1.0E-8 ) // AND TOTAL YIELD
+		
+		// GLUCOSE
+		// Glucose metabolism (Gl)
+		// **************
+		// Entries are from propionate(9.8555),lactate(4.05),glycerol(3.5555),Aa
+		// (1.8555)and absorption (4.7). Outputs are in lactose (8.3);
+		// to TG-glyceride and Gy (1.9/2), pentose cycle (1.4555) and TpCd
+		// (2.04/2) in Vis; to Cd (4.3) and lactate (La,4.9/2) in Oth, and to pentose
+		// cycle (2.8/2), TG-Gy (2.6555/2) La (3.2/2) and TpCd ((1.4 + 0.4555)/2)
+		// in adipose.
+		//   Reported (Forsberg) Ka for Gl for lactose synthesis is 8-10 mM
+		// so set at 9.0E-3. NADPH2 required from the pentose cycle
+		// for fatty acid synthesis is calculated in terms of moles Gl (GlHy)
+		// used since reaction rate is computed as acetate used per Ac
+		// incorporated.Stoichiometry for pentose cycle used is Gl to 3Cd +
+		// 6NADH2+Tp.Thus the stoichiometric coefficient (GLGlHy) is calculated
+		// as (1.7555 NADPH2/AcFa)/6NADPH2 per glucose used(=0.2555). These must be
+		// multplied by the fraction of NADPH2 generated via the pentose
+		// cycle specified as input for that tissue (fGlHyAdip and fGlHyVis)
+		// and AcTs flux to get actual pentose cycle flux. Related calculations
+		// are of ATP equivalent of amount of NADPH2 generated in
+		// the tricarboxylic acid cycle (tc) and of the reduced Ox consumption
+		// associated with this.These are in the oxidative metabolism sections.
+		// In adipose tissue, GlTpAdip was set to provide Tp in excess of that
+		// required for fatty acid esterification. This accomodates the
+		// possibility that Tp generation via GlHy can be less than TpTs,
+		// and provides sufficient Tp for oxidation (TpCd) and conversion to
+		// lactate (La) as has been observed in this tissue.
+		// Lactate from Oth and Adip are quantitatively converted to Gl in Vis.
+		
+		// MamMilkAve = integ ( dMamMilkAve , iMamMilkAve ) 
+		
+		// OXIDATION
+		// ****************
+		// Oxidative metabolism (Ox,Cd).
+		// Computations based on energy needs expressed as rate of
+		// ADP formation (AtAd_), oxygen (Ox) uptake calculated from
+		// P/O ratio (PO), and Ac and Fa oxidation rates from ratios
+		// of Michaelis-Menton equations assuming Vmaxs for oxidation
+		// of each are equal. See separate documentation for details
+		
+		// General constants
+		
+		// Estimate of gross energy (mcal/d) deposited in the gravid uterus by C.L. Ferrell et al., 1976
+		// Simply used for comparative purposes
+		EGrvUterCLF = ( 69.7555 * exp ( ( 0.03555 -2.7555e-5 * DayGest ) * DayGest ) ) *
+			( 0.03555 -2 * 2.7555e-5 * DayGest ) / 1000 ;
+		PcLm = propLm * 100 ;
+		PcPm = fPm * 100 ;
+		PcTm = fTm1 * 100 ;
+		dHiM4 = HiM1 + HiM2 + HiM3 ;
+		CH4Milk = CH4KGY / TVolMilk ; // kg methane/kg milk
+		
+		netME = AccMEi / TotDMin ; // added 4/16/92 kcd
+		CH4GEi = TCH4E / AccGEi ; // to use for EPA CH4
+		CH4DEi = TCH4E / AccDEi ; // calculations
+		CH4MEi = TCH4E / AccMEi ; // added 7/23/92
+		
+		// TBCH4 = integ ( BCH4 , 1.0E-8 ) 
+		TBCH41 = ( TBCH4 * MwtCH4 ) / ( HcombCH4 * 4.1555 ) ;
+		// TMCH4E = integ ( MCH4E , 1.0E-8 ) // TMCH4 to TMCH4E - 2/2/95
+		TMCH42 = ( TMCH4E * MwtCH4 ) / ( HcombCH4 ) ; // units kg - 2/2/95-kc
+		// END  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
+		
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// !!!!!!!! Calve / Conceive / Dry Off / Advance pregnancy & lactation !!!!  Gil Feb 2010  !!!!!!!!!!!!!!
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		TVolMilkVol = TVolMilk / MilkDen ; // L, CCP 9-1-06
+		LW = BW + MamMilk ; // Unit: kg. Liveweight incl. milk ! Moved here to minimise diff with mark
+		cPOth = POth / WtOth ;
+		cPVis = PVis / WtVis ;
+		OldBasalOth = ( 2.2 + KNaAtOth ) * WtOth *pow(1,1)* 0.7555 ;
+		BCS = ( WtAdip - iWtAdip ) / 46.6 + iBCS ; // BW does not affect BCS within a run hence this equation vs init section
+		BCS_NZ = ( 9 * ( ( WtAdip - iWtAdip ) / 46.6 + ( 4 * iBCS +5 ) / 9 ) -5 ) / 4 ; // CCP's scale, 7-26-07
+		
+		// ********* Feed, Management, Environment, & Genetic inputs ************
+		// This section transfers values from the Event array to Model variables
+		
+		// BEGIN  INCLUDE 'CurrentEvent.csl'
+		
+		// END  INCLUDE 'CurrentEvent.csl'
+		
+		// BEGIN  INCLUDE 'FdRat_Deriv.csl'
+		
+		// Mindy sets feedInFlag to 2, but still she must not have the if statement
+		// below even though it is inactive it messes things up
+		// Hence the separation deriv (molly) vs. deriv_basic (mindy need RequiredEnergy too)
+		
+		// BEGIN  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'
+		
+		// procedural ( MaxEnergyForMilk = MilkSolids270MfAdjusted ) 
+		
+		MaxEnergyForMilk = EnergyForMilkFactor *
+			( ( 1.0 - xOadIntakeTadIntake ) * MilkSolids270MfAdjusted +
+			xOadIntakeTadIntake * KgMilkSolidsExpectedIn270Days ) ; // Once a days seem toeat more compared to their production.
+		// end of procedural 
+		PUter = WtPUter * MwtPVis ; // moles of AA in uterus
+		BW1 = EBW1 + RumVol + otGutCont ;
+		NonFatNonUterEBW = NonFatEBW - WtGrvUter ;
+		FCM3h = 0.9555 * DMilk +35.7555 * dMilkTm ;
+		FCM4z1 = 0.8555 * DMilk +33.07 * dMilkTm ;
+		// MamTm = integ ( dMamTm , iMamTm ) // AND TOTAL YIELD
+		// TMilkTm = integ ( dMilkTm , 1.0E-8 ) 
+		// Percent milk fat from de novo synthesis (PcTmFromScfa)added to
+		// be able to follow patterns with different diets and through
+		// lactation. 11/99. NES
+		PcTmFromScfa = ( AcTmV1 / ( AcTmV1 + FaTmV1 ) ) * 100 ;
+		
+		POthfSr = AaPOthOth / POth ;
+		// Fractional synthetic and degradation rates
+		PVisfSr = AaPVisVis / PVis ;
+		WtPGrvUterSyn = WtPConcSyn + WtPUterSyn ;
+		GlGyT = ( TpTsAdip + TpTmVis ) * GyGlGl ;
+		MHtGestTO = AtAdGestTO * AtAdHT ;
+		dWtPGrvUter = WtPConcSyn + dWtPUter ;
+		MHtGestGrth = AtAdGestGrth * AtAdHT ;
+		
+		ADFIn = fADFFd * FdRat ;
+		NDFIn = fNDFFd * FdRat ;
+		NetEff = NEP / ( NEP + HiP ) ;
+		// TsAdip = integ ( dTsAdip , iTsAdip ) 
+		// BCS prediction from Waltner et al., JDS 77:2570, MDH & NES
+		dBCS = dWtTsAdip / 46.6 ;
+		dEBW1 = dWtOth + dWtTsAdip + dWtVis + dWtGrvUter ; // WtCytAdip does not change during a run.
+		// TNdfIn = integ ( NdfinFd , 1.0E-9 ) 
+		AdfinFd = fADFFd * FdDMIn ;
+		RuAdfinFd = fRuAdfFd * FdDMIn ;
+		LginFd = fLgFd * FdDMIn ;
+		RuStinFd = fRUStFd * FdDMIn ;
+		ScinFd = fScFd * FdDMIn ;
+		CPinFd = fCPFd * FdDMIn ;
+		CPsinFd = FCPsFd * FdDMIn ;
+		RUPinFd = FRUPFd * FdDMIn ;
+		NpninFd = FNPNFd * FdDMIn ;
+		NninFd = fNnFd * FdDMIn ;
+		CFatinFd = FCFatFd * FdDMIn ;
+		AshinFd = fAshFd * FdDMIn ;
+		GE = FdGEin / FdDMIn ;
+		
+		// Methane is calculated (BCH4) using Blaxter & Clapperton, 1965
+		
+		fFIM = FdDMIn / ( ( 100 * EBW *pow(1,1)* 0.7555 ) / ME ) ;
+		// OF PROCEDURAL
+		
+		ObsMEi = ObsME * FdDMIn ;
+		ObsDEi = ObsDE * FdDMIn ;
+		ObsCH4E = ObsCH4 * FdDMIn ;
+		CorNEP = NEP + EB / .87 ;
+		
+		MCH4kg = ( MCH4E * MwtCH4 ) / ( HcombCH4 ) ; // units kg - eq. changed 2/2/95-kc
+		
+		fMCH4E = MCH4E / FdGEin ; // energy equ. using MCH4E - 2/2/95
+		ObsPredEUr = ObsEUr - EUrFd ;
+		
+		// termt ( ( t >= TSTP ) || ( STFLAG == 1.0 ) ) 
+		
+		// end of derivative // OF DERIVATIVE
+		
+		SolDMP = SolOmP + AsP ;
+		// OSMOLALITY FACTOR
+		
+		WaIn = SaIn + DrnkWa ;
+		
+		DilRate = WaOut / RumLiqVol / ( 24 ) ; // Dilution rate divided by 24 to get %/hr
+		cRumAc = ( RumAc / RumAcCor ) / RumLiqVol ;
+		cRumPr = ( RumPr / RumPrCor ) / RumLiqVol ;
+		cRumBu = ( RumBU / RumBuCor ) / RumLiqVol ;
+		MPartADFP = ( CeP + IndigFdP ) / fPartP * ( fMPart1 * KMPartP ) ;
+		SPartADFP = ( CeP + IndigFdP ) / fPartP * ( fSPart1 * KSPartP ) ;
+		
+		NDFP = HcP + ADFP ;
+		MPartNDFP = ( HcP + ADFP ) / fPartP * ( fMPart1 * KMPartP ) ;
+		SPartNDFP = ( HcP + ADFP ) / fPartP * ( fSPart1 * KSPartP ) ;
+		RumDCPrt = ( TPRTin - PiP - ( RumAaP * MwtAa ) ) / TPRTin ;
+		RumDCHa = 1.0 - HaP / StinFd ; // truely digested
+		RumDCHc = 1.0 - HcP / RumHcin ;
+		RumDCCe = 1.0 - CeP / RumCein ;
+		SPartMiPi = IndigFdMiP + PiMiP + HaMiP + HbMiP ;
+		RumDCndf = 1.0 - ( ( HcP + CeP + FecLg ) / ( fHcFd + fCeFd + fLgFd ) / FdDMIn ) ;
+		RumDCadf = 1.0 - ( ( CeP + FecLg ) / ( fCeFd + fLgFd ) / FdDMIn ) ;
+		DCHa = ( TStin - FecHa ) / TStin ;
+		
+		// DIGESTION COEFFICIENTS (DC)
+		// **********************
+		// RUMEN DIGESTION COEF.(RumDC)
+		RumDCOm = 1.0 - TOmP / OminFd ; // FOR TRUE ORGANIC MATTER
+		FecNDF = FecADF + FecHC ;
+		// gut to palmitate in animal.
+		absAs = absRumAs + LgutAs + LgutAi ;
+		OmPt = TOmP ; // true OM passage. Not sure why the above do not follow the standard. Added this variable to maintain historical data references, MDH
+		NSal = ( ( SaNnAm + BldUrAm ) * MwtN ) + ( SaPsAa * AaFvAm * MwtN ) ;
+		RumDCHb = 1.0 - HbP / ( FdDMIn * ( fHcFd + fCeFd ) ) ;
+		DCndf = 1.0 - ( ( FecHC + FecCe + FecLg ) / ( fHcFd + fCeFd + fLgFd ) / FdDMIn ) ;
+		DCadf = 1.0 - ( ( FecCe + FecLg ) / ( fCeFd + fLgFd ) / FdDMIn ) ;
+		DCLg = ( ( fLgFd * FdDMIn ) - FecLg ) / ( fLgFd * FdDMIn ) ;
+		
+		// For comparison to Beever et al.
+		DCCe = 1.0 - ( FecCe / ( fCeFd * FdDMIn ) ) ;
+		FecFMPart = FecMPart / ( FecMPart + FecSPart ) ;
+		FecFSPart = FecSPart / ( FecMPart + FecSPart ) ;
+		DCHb = ( Hbin - FecHb ) / Hbin ;
+		MiNP = MiP * ( MiPiPI + MiNnNn ) * .16 ;
+		MetabPP = MiP * MiPiPI * DCMiPi + PiP * LgutDCPi ; // Metabolizable Protein Passage, kg/d, original eqn wrong corrected 1-30-07 mdh
+		RumDPrta = ( TPRTin - PiP - ( RumAaP * MwtAa ) - ( MiP * MiPiPI ) ) / TPRTin ;
+		RumDCLiT = 1.0 - ( LipidP - MiP * MiLiLI ) / ( FCFatFd * FdRat ) ; // Truly Digested in the Rumen
+		Ndiff = ( Nintake - Nan ) / Nintake ;
+		RumDCHaT = 1.0 - HaPT / StinFd ; // apparent Ha digestion
+		CpP = NitP * 6.2555 ; // Total CP Passage to SI, kg/d
+		FecHaT = FecHa + FecMiHa ;
+		MiNOm = MiPrOm / 6.2555 ; // kg N/kg OM True
+		RumDCLiA = 1.0 - LipidP / ( FCFatFd * FdRat ) ; // Apparently Digested in the Rumen
+		OmPa = TTOmP ; // apparent OM passage from the rumen
+		RumDCOmA = 1.0 - TTOmP / OminFd ; // FOR APPARENT ORGANIC MATTER
+		MiNOma = MirOma / 6.2555 ; // Apparent
+		DMP = AshP + LipidP + ( NitP / .16 ) + LgP + CeP + HaPT + HcP + ChChFd ;
+		YAtpAp = MiG / AtpF ;
+		DCLipid = 1.0 - FecLipid / ( FCFatFd * FdRat ) ; // No Correction for Micribial Lipid
+		FecPiTN = FecPiT * .16 ;
+		DCOm = ( OminFd - FecOm ) / OminFd ;
+		DCPrt = ( TPRTin - FecPiT ) / TPRTin ;
+		RumDCN = ( Nintake - NANMNP ) / Nintake ;
+		
+		// Total Tract Digestion Coef. (DC)
+		DCDM = 1.0 - FecDM / FdDMIn ;
+		Ndig = Nin - NFec ; // should equal Nabs
+		DE = DEI / FdDMIn ; // DIGESTIBLE ENERGY
+		Nret2 = Nabs - NUr ;
+		ObsPredDE = ObsDE - DEI / FdDMIn ;
+		fMCH4D = MCH4E / DEI ;
+		// AccGEi = integ ( FdGEin , 1.0E-8 ) 
+		TDE = AbsE / FdGEin ;
+		RumAcSynth = CsAc + RumAaAc + RumLaAc ; // synthesized ruminal acetate
+		RumPrSynth = CsPr + RumAaPr + RumLaPr ;
+		AtpC = 2 * ( CsAc + RumAaAc ) + ( CsPr + RumAaPr ) + ( CsBu + RumAaBu ) + CsLa ;
+		RumBuSynth = CsBu + RumAaBu ;
+		Nbal = dN - Nret1 ;
+		dCH4g = dCH4Kg * 1000 ; // Unit: g/d of Methane
+		fCH4DE = CH4E / DEI ;
+		ObsPredCH4 = ObsCH4 - dTCH4E / FdDMIn ;
+		
+		// Methane is calculated by the model above and by empirical
+		// equations below and is expressed as fractions of GE, DE,
+		// and ME.
+		
+		CH4EFd = CH4E / FdDMIn ; // methane (kcal)/kg feed
+		fCH4E = CH4E / FdGEin ;
+		fCH4ME = CH4E / MEI ;
+		
+		rtPO = ( AcCd * AcCdAt + FaCd * FaCdAt + GlCd * GlCdAt ) / ( AcCd * OxAcCd
+			+ FaCd * OxFaCd + GlCd * OxGlCd ) ;
 		// OF PROCEDURAL
 		
 		// procedural ( RQ1 , GlTO = CsFv , GlHyAdip , FaCd , RQEQ ) 
@@ -9912,31 +9876,71 @@ public:
 		goto label_82 ;
 	label_82:
 		// end of procedural 
-		// OF PROCEDURAL
-		
-		ObsMEi = ObsME * FdDMIn ;
-		ObsDEi = ObsDE * FdDMIn ;
-		ObsCH4E = ObsCH4 * FdDMIn ;
-		
-		dTCH4E = dTCH4 * HcombCH4 ;
-		EUrFd = EUr / FdDMIn ;
+		dOx = ( LaCdOth + LaCdAdip ) * OxLaCd + TpCdVis * OxTpCd + PrCdVis * OxPrCd +
+			BuCdVis * OxBuCd + AcCd * OxAcCd + FaCd * OxFaCd + GlCd * OxGlCd
+			- TcHyAdip - TcHyVis ;
+		THP2 = MEI - EB - NEP ;
+		// AccMEi = integ ( MEI , 1.0E-8 ) 
+		ME1 = MEI / FdDMIn ;
+		fMCH4M = MCH4E / MEI ;
 		// added 4/28/92 kcd
 		
 		// ObsPred=observed minus predicted;Mcal/kg feed
 		
 		ObsPredME = ObsME - MEI / FdDMIn ;
-		ObsPredDE = ObsDE - DEI / FdDMIn ;
-		ObsPredCH4 = ObsCH4 - dTCH4E / FdDMIn ;
-		ObsPredEUr = ObsEUr - EUrFd ;
+		// HEAT PRODUCTION AND BODY
+		THP1 = MntHP + HiP ;
+		MEMBW = MntHP / ( EBW *pow(1,1)* 0.7555 ) ;
+		AtAdH1 = AtHt / AtAd ;
+		CorME = CorMEi / FdDMIn ;
+		BCH4Fd = BCH4 / FdDMIn ;
 		
-		// termt ( ( t >= TSTP ) || ( STFLAG == 1.0 ) ) 
+		fBCH4E = BCH4 / FdGEin ;
+		fBCH4D = BCH4 / DEI ;
+		fBCH4M = BCH4 / MEI ;
 		
-		// end of derivative // OF DERIVATIVE
+		// post processing calculations from dynamic
+		// dynamic 
+		// Determine if the calcualted slope for RumPartSize is positive and write a message
+		// to the screen if it is.
+		
+		if ( RumPartSizeSlp > 0.0 ) {
+			// CALL DISSTR(bufferslp); ! write the message
+			// CALL DISSTR(' '); ! write a blank line
+			// else if(RumPartSizeInt.gt.0.5) then
+			// CALL DISSTR(bufferint); ! write the message
+			// else
+			// 	Continue
+		}
+		
+		dNdfIn = TNdfIn - TNdfInYest ;
+		dRumntn = TotRumntn - TotRumntnYest ;
+		dRest = TotRest - TotRestYest ;
+		dEating = TotEating - TotEatingYest ;
+		dNep = tNep - tNepYest ;
+		MilkProdDiel = TVolMilk - TVolMilkYest ; // Unit: kg. Cummulative milk produced since last midnight. See also dMilkProd
+		dMilkVol = dMilkProd / MilkDen ;
+		
+		// !! Maintain some DAILY cummulatives (that is, like integ, but reset to zero every midnight).
+		// !! Best for fitting intermittent potentially short term flows like FdRat, DrnkWa and WeUrine,
+		// !! As fitting the momentary value may lose accuracy significantly. Fitting the "Total" integ
+		// !! on the other hand has the prioblem of not knowing what the carry over of the pre-run is.
+		FdRatDiel = IntakeTotal - IntakeYest ; // Unit: kgDM. Daily cummlative DM intake. Being reset to zero at midnight
+		UrinationVolDiel = UrinationVol - UrinationVolYest ; // Unit: litre. Daily cummlative urination volume. Being reset to zero at midnight
+		UrinationCountDiel = UrinationCount - UrinationCountYest ; // Unit: urinationEvents. Daily cummlative count. Being reset to zero at midnight
+		DrnkWaDiel = DrnkWaTot - DrnkWaYest ; // Unit litre. Daily cummlative drinking volume. Being reset to zero at midnight
+		
+		// Include code to allow intermittent feeding of a supplement
+		// BEGIN  Include 'Intermittent_Eating_Discrete.csl'	! Summarize meals
+		
+		// No intermittent eating for basic Molly
+		// END  Include 'Intermittent_Eating_Discrete.csl'	! Summarize meals
+		// BEGIN  Include 'Mindy_Discrete.csl'                ! Discrete include section for changing swards when Mindy intake submodel is used. MDH 6/1/2011
+		
+		// No Mindy code in this project
+		// END  Include 'Mindy_Discrete.csl'                ! Discrete include section for changing swards when Mindy intake submodel is used. MDH 6/1/2011
+		
 		// end of dynamic // OF DYNAMIC
-	
-	} // end calculate_rate
-	
-	void post_processing ( ) {
 	
 	} // end post_processing
 	
