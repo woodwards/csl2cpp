@@ -7391,14 +7391,6 @@ public:
 		
 		TIME = t ;
 		
-		// END  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'
-		
-		if ( FeedInFlag == 1.0 ) { //
-			FdRat = FdRatWFM ; // Allocated feed - m files or WFM
-		} else { //
-			FdRat = RequiredEnergy / 11.5 ; // Fully fed automatically (standalone)
-		}
-		
 		// END  INCLUDE 'FdRat_Deriv.csl'
 		// BEGIN  INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one
 		// ** Include Proximate Nutrient inputs in the Derivative Section
@@ -7812,34 +7804,6 @@ public:
 		// La moved to a separate pool
 		fScTFd = fScFd + OaSc + PeSc + LiSc + FatSc ;
 		
-		// FEEDING MANAGEMENT
-		
-		// FdRat, FdDMin, and DailyDMin are all Kg dry matter
-		// consumed per day (FdRat is specified input from animal
-		// database(ie Event 2)).
-		// FDINT (feeding interval) and FDTM (time spent eating in
-		// each feeding interval0 are used in rumination, salivation
-		// and water dynamics functions so are left in at this time
-		// but may not function properly.  NES 8/99
-		
-		// Next block (up to RUMINATION) was merged From Molly86 for Mindy. Gil July 2012, including deletion of the Feeding Starategies section!
-		// Daily Feed and Nutrient Intakes
-		FdDMIn = FdRat ;
-		// (2002; JDS:85, 1176-1182) and Cassida and Stokes (1986; JDS:69,1282-1292)
-		RestWa = 1.4 * FdDMIn * 0.7555 ;
-		// 85 L/DAY with Rumntn=0.3555 at 500 kg EBW
-		// Only active during rumination
-		
-		EatSa = 3.2 * FdDMIn ; // L/Kg FdDMin. Redefined by Mindy to be: EatSa=2.6555*(EBW**0.7555)*Eating
-		EatWa = 3.3555 * FdDMIn * 0.7555 ;
-		// RestWa=1.4555*(FdDMin/FdInt)*0.7555*RumntnCor*NOFEED
-		DrnkWa = EatWa + RestWa ;
-		DailyDMin = FdDMIn ;
-		// TotDMin = integ ( DailyDMin , 1.0E-9 ) 
-		// LpinFd=fLp*FdDMin
-		OminFd = fOmFd * FdDMIn ;
-		NdfinFd = fNDFFd * FdDMIn ;
-		
 		// RUMINATION!
 		// ***********
 		// Next block (up to !STOICHIOMETRIC) was merged From Molly86 for Mindy. Gil July 2012
@@ -7861,96 +7825,6 @@ public:
 		
 		DAY = 1.0 ;
 		CWCF = 1.0 * ( 0.1555 +0.5555 * CWC ) ;
-		
-		// procedural ( Rumntn , Eating , Rest = RUMNTNEQ , CWCF , DAY , TIME , 
-			// AMP1FT , MEAN1 , RumntnF , FdDMIn ) 
-		if ( RUMNTNEQ == 0.0 ) {
-			Eating = RumntnF ;
-			Rumntn = RumntnF ;
-			Rest = 1 - Rumntn ; // - Eating
-		} else {
-			// Determine whether the animal is eating, ruminating, or resting with Mindy Intake model, 4-25-2011, MDH
-			Rest = 0.0 ;
-			Rumntn = 0.0 ;
-			Eating = 0.0 ;
-			if ( FdDMIn > 0.1 ) {
-				Eating = 1.0 ;
-			} else if ( LPart > MinLPRumntn ) { // Ruminate until LP becomes less than or equal to the minimum LP size to stimulate rumination.
-				Rumntn = 1.0 ;
-			} else {
-				Rest = 1.0 ;
-			}
-		}
-		// end of procedural 
-		// RestSa=6.0*(FdDMin/FdInt)*Rest*RestCor
-		// 60 L/DAY with Rumntn=0.3555
-		// Only runs when not feeding, corrected down for ruminating
-		RumntnSa = 2.4555 * ( EBW *pow(1,1)* 0.7555 ) * Rumntn ;
-		// END  INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one
-		// BEGIN  INCLUDE 'Intermittent_Eating_deriv.csl'
-		
-		// No intermittent eating for basic Molly
-		
-		// END  INCLUDE 'Intermittent_Eating_deriv.csl'
-		// BEGIN  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
-		// *************************************************
-		// COMPUTATION OF WATER DYNAMICS: different in MIndy
-		// *************************************************
-		// Salivation, drinking, water flow through rumen wall, rumen soluble,
-		// particulate and total rumen dry matter (RumDM) and rumen volume.
-		// Rumen volume can be calculated based upon RumDM/0.1555 which is the
-		// default or based upon water dynamics and osmolality when the rumen
-		// liquid volume equation(RumLiqVolEQ)is set to 1.0. The empirical
-		// equation for OSWa is not generally applicable and should not be used
-		// for continuous feeding and unusual diets e.g. high salt, NaHCO3, and
-		// thus should be closely monitored when RumLiqVolEQ is set to 1.0.
-		
-		RestSa = 0.8555 * ( EBW *pow(1,1)* 0.7555 ) * Rest ; // At 8 h resting, this equates to 70 ml/min which is below the 114 ml/min according to Maekawa et al.
-		SaIn = EatSa + RestSa + RumntnSa ;
-		
-		// procedural ( RumLiqVol , fRumDM = RumLiqVolEQ , SaIn , DrnkWa , LPart , MPart , SPart ) 
-		RumOsMol = ( Cs / CsCor + Fl / FLCor + AM / AmCor + RumAc / RumAcCor +
-			RumPr / RumPrCor + RumBU / RumBuCor + RumLa / RumLaCor
-			+ RumAa / RumAaCor + As / MwtAs / ASCor * OsMolF ) / RumLiqVol ;
-		// Rumen Fluid OsMolality. As (soluble ash) multiflied by a factor
-		// to give moles of ions.  MwtAs=0.08555 was picked from NaHCO3
-		// Not clear why OsMolF is applied to AA.  This would appear to be a mistake and thus removed. MDH 2-19-14
-		// As plays a very minor role in driving Osmol.  VFA are the drivers.
-		// OsWa=0.7555*((RumOsMol-0.2555)*1000)-41.0   	  !Dobson , the negative intercept in this emprical equation causes mOsmol to run at 300, MDH 2-19-14
-		// Set the slope a little higher to keep osmolality down, MDH 2-19-14
-		OsWa = OsWaSlp * ( ( RumOsMol -0.2555 ) * 1000 ) + OsWaInt ; // Set the intercept to 0 to achieve a center around 280 mOsmol
-		fRumDM = 0.1555 ;
-		// 14.7% DM of rumen contents based on lactating cow data from
-		// VanVuuren 1999,JDS 82:143,Johnson 1991,JDS 74:933,Woodford 1988
-		// JDS 71:674,Shaver 1985,18th Rum Func Conf p45, DCM90(Purina),
-		// and Hartnell 1979,JAS 48:381
-		RumVol = RumDM / fRumDM ;
-		RumLiqVol = RumVol - RumDM ;
-		WaOut = RumLiqVol * KWAP ;
-		dRumLiqVol = WaIn - WaOut + OsWa ;
-		// end of procedural // OF PROCEDURAL
-		
-		// TotRumntn = integ ( Rumntn , 0.0 ) 
-		// TotEating = integ ( Eating , 0.0 ) 
-		// TotRest = integ ( Rest , 0.0 ) 
-		
-		// STOICHIOMETRIC COEFFICIENTS FOR FERMENTATION
-		// Three sets of values are included. One is for, largely,forage
-		// diets(FORSET),one is for 50:50 forage:concentrate diets(MIXSET)
-		// The third set is for,largely,concentrate diets(CONSET).FORSET and
-		// CONSET are from Murphy et al,JAS 55:411-421,(1982).MIXSET is an
-		// average of the other two since these apply to less than 50% and
-		// more than 50% concentrate, respectfully. Valerate was separated
-		// to 1/2Bu+1Pr to maintain carbon and hydrogen balance. Values are
-		// in moles of VFA produced per mole of glucose fermented. 1 mole of
-		// glucose gives 2 moles of Ac or Pr but only one mole of butyrate.
-		// Amino acid fermentation stoichiomietry adjusted 08/26/91 to
-		// Murphy model to reflect C, H and O balance.  Heavy propionate
-		// reflects Pr+1/2 Bu from Bcfa.  H2 (or CH4) is VERY HIGHLY!
-		// DEPENDENT on proportion of Bcfa produced.  Expressed as moles
-		// VFA produced per mole Aa fermented with an average C/Aa=5.08.
-		
-		LaPrPr = 0.1555 ;
 		// for Simusolv fitting
 		
 		// procedural ( ScAcAc , StAcAc , HcAcAc , CeAcAc = FORSET , MIXSET , CONSET ) 
@@ -8012,44 +7886,6 @@ public:
 	label_13:
 		// end of procedural 
 		TVFA = RumAc / RumAcCor + RumPr / RumPrCor + RumBU / RumBuCor ;
-		cVFA = TVFA / RumLiqVol ; // cVFA in Moles/liter
-		LPartSwal = FdDMIn * fLPartNutIng ; // LARGE PARTICLES
-		LPartRed = KLPartRed * LPart / LPartCor * Rumntn ;
-		
-		// PASSAGE RATE CONSTANTS
-		// **********************
-		// KSPartP is now a fraction of KWAP, MDH 5-25-13
-		// KSPartP=2.6555*(FdDMin/ebw**0.7555)+1.00
-		// KWaP=1/((0.02555*(ebw**0.7555)/FdDMin)+0.1555)
-		// KSPartP & KWaP are in TURNOVERS PER DAY
-		// Equations derived by regression from Robinson 1985 Can.JAS 65:347
-		// and Evans 1981 Can.JAS 61:97
-		
-		// Inputs to the particle pools was altered to utilize seiving data, default seive is the Penn State Particle
-		// 	separator, but any sieve size can be used.  The feed seiving data is modified using a set of equations
-		// 	to reflect the effects of mastication during ingestion, and thus particle entry into the rumen reflects,
-		// 	the original particle size reduced by mastication.  A normal Penn State Shaker distribution is used as
-		// 	as a default.
-		// Initial rumen particle pool sizes were the mean of the seiving observations of Shaver et al., 1988. MDH
-		
-		// LARGE PARTICLE POOL(LPart in Kg); Retained on a 4.8 mm screen
-		// This is a real pool that is intended to represent the floating raft.  Starch was added to the pool, 5-21,2013
-		// 	to reflect entry of larger starch particles.  Assuming starch particle size reflects total diet
-		// 	particle size is likely an overestimate of starch entry into the LPart pool, but failing to include
-		// 	it as in the original model is clearly an underestimate. MDH
-		
-		// This pool was reduced in size and more dietary material is diverted through it
-		// necessitating a large increase in the rate constant, MDH
-		// Should be function of physical properties of feed!
-		// Should KLPartRed be a function of fermentation rate?
-		// Should entry be lagged for hydration??
-		
-		dLPart = LPartSwal - LPartRed ;
-		MPartSwal = FdDMIn * fMPartNutIng ;
-		LPartMPart = LPartRed * pLPartMPartComm ;
-		MPartSPart = MPart * KMPartSPart * Rumntn ;
-		SPartSwal = FdDMIn * fSPartNutIng ;
-		LPartSPart = LPartRed * ( 1 - pLPartMPartComm ) ;
 		// SPart = integ ( dSPart , iSPart ) 
 		
 		// Fractional particle pool sizes
@@ -8085,382 +7921,52 @@ public:
 		fPartSA = ( fMPart1 * fMPartSA + fSPart1 * fSPartSA ) ;
 		fPartP = ( fMPart1 * KMPartP + fSPart1 * KSPartP ) ;
 		
-		HaMiP = ( HaMi / MiHaCor ) / RumLiqVol * WaOut * fPartP ;
-		HbMiP = ( HbMi / MIHbCor ) / RumLiqVol * WaOut * fPartP ;
-		
 		cMiHa = ( HaMi / MiHaCor ) / ( Ha / HaCor ) ; // Concentration (kg/kg) of
 		cMiHb = ( HbMi / MIHbCor ) / ( Hb / HbCor ) ; // microbes associated with Ha and Hb
 		
 		HaMiF = VmMiHa / ( 1.0 + KMiHaF / ( ( Ha / HaCor ) / ( SPart + MPart ) ) ) ; // Fraction of potentially released microbes actually
 		HbMiF = VmMiHb / ( 1.0 + KMiHbF / ( ( Hb / HbCor ) / ( SPart + MPart ) ) ) ; // dependent on fractions of Ha and Hb in SPart where
-		StinFd = fStFd * FdDMIn ;
-		StCsFd = FStsFd * FdDMIn ;
-		StHaFd = ( StinFd - StCsFd ) * ( 1 - fLPartSwal ) ; // error as fLPart was applied to StinFd previously, MDH 5-27-13
-		LPartStHa = LPartRed * fLPartSt ;
 		SPartHaCs = KHaCs * Ha / HaCor * cMiHa * fPartSA ;
 		
 		HaMiRum = cMiHa * SPartHaCs ; // Microbes already associated with SPart potentially
-		HaP = Ha / HaCor / RumLiqVol * WaOut * fPartP ;
-		// HaMi = integ ( dHaMi , iMiHa ) 
-		// HbMi = integ ( dHbMi , iMiHb ) 
-		
-		// STARCH (St in Kg) OR ALPHA-HEXOSE (Ha in Kg) METABOLISM
-		dHa = StHaFd + LPartStHa - HaP - SPartHaCs ;
-		RumHcin = fHcFd * FdDMIn ;
-		Hcin = RumHcin * ( 1 - fLPartSwal ) ;
-		LPartHcHc = LPartRed * fLPartHc ; // HOLOCELLULOSE-Hb
-		HcP = Hc / HcCor / RumLiqVol * WaOut * fPartP ;
-		RumCein = fCeFd * FdDMIn ;
-		Cein = RumCein * ( 1 - fLPartSwal ) ;
-		LPartCeCe = LPartRed * fLPartCe ; // HOLOCELLULOSE-Hb
-		CeP = Ce / CeCor / RumLiqVol * WaOut * fPartP ;
-		Hbin = Cein + Hcin ;
-		LPartHbHb = LPartCeCe + LPartHcHc ;
-		HbP = HcP + CeP ;
-		PiPiFd = fPiFd * FdDMIn * ( 1 - fLPartSwal ) ;
-		LPartPiPi = LPartRed * fLPartPi ;
-		PiP = Pi / PICor / RumLiqVol * WaOut * fPartP ;
-		TPRTin = ( FPsFd + fPiFd + fNnFd ) * FdDMIn ;
-		IndigFdFd = FdDMIn * fIndigFd * ( 1 - fLPartSwal ) ;
-		LPartIndigFdIndigFd = LPartRed * fLPartIndigFd ; // INDIGESTIBLE FEED
-		IndigFdP = IndigFd / IndigFdCor / RumLiqVol * WaOut * fPartP ;
-		MPartP = ( HaP + HcP + CeP + PiP + IndigFdP ) / fPartP * ( fMPart1 * KMPartP ) ;
-		SPartP = ( HaP + HcP + CeP + PiP + IndigFdP ) / fPartP * ( fSPart1 * KSPartP ) ;
-		// Pi = integ ( dPi , iPi ) 
-		
-		// LIGNIN AND INSOLUBLE ASH (IndigFd in Kg)
-		dIndigFd = IndigFdFd + LPartIndigFdIndigFd - IndigFdP ;
-		LgP = IndigFdP * fLgIndigFd ; // To Fit Duodenal Data Kg/d
-		AiP = IndigFdP * fAiIndigFd ;
-		cCs = ( Cs / CsCor ) / RumLiqVol ;
-		ScTCs = fScTFd * FdDMIn / MwtSc ;
-		StCs = StCsFd / MwtSt ; // SOLUBLE CARBOHYDRATES
 		HaCs = SPartHaCs / MwtSt ; // CS
 		CsP = KWAP * Cs / CsCor ;
-		cRumAa = ( RumAa / RumAaCor ) / RumLiqVol ;
-		PsAaFd = FPsFd * FdDMIn / MwtPs ;
 		RumAaP = KWAP * RumAa / RumAaCor ; // AMINO ACIDS-RumAa
-		SaPsAa = cSaPs * SaIn ;
-		UrAmFd = FUrFd * FdDMIn * UrAmAm / MwtUr ;
-		NnAmFd = fNnFd * FdDMIn * NnAmAM / MwtNn ; // RUMEN AMMONNIA-Am
 		// AM2 = integ ( dAm , iAm ) 
 		AM = max ( 1e-9 , AM2 ) ; // Prevent a crash when AM goes negative. I don't have time to find the source
 		// BldUr transport accross rumen wall inhibited by Am.
 		absRumAm = KAmabs * AM / AmCor ;
-		cAm = ( AM / AmCor ) / RumLiqVol ;
-		AsAsFd = fAsFd * FdDMIn ;
-		SaAs = fSaAs * SaIn ;
 		InfAs = InfNaCl + InfNaBicarb ;
 		AsP = As / ASCor * KWAP ;
-		AshP = AsP + AiP ; // Total Duodenal Ash, Kg/d
-		cAs = ( As / ASCor ) / RumLiqVol ;
-		absRumAs = KAsabs * cAs ;
-		
-		// SOLUBLE ASH(As in Kg)
-		
-		dAs = AsAsFd + SaAs + InfAs - AsP - absRumAs ;
-		FlFd = fLiFd * FdDMIn / ( MwtLiFd ) * LiFlFd ;
-		Fl1Fd = fFatFd * FdDMIn * FaFlFd / MwtFaFd ;
 		// FATTY ACIDS
 		FaP = KWAP * Fl / FLCor ;
-		FvAcFd = fAcFd * FdDMIn / MwtAc ;
 		absRumAc = KabsAc * RumAc / RumAcCor ;
 		RumAcP = ( RumAc / RumAcCor ) * KWAP ;
 		RumPrP = ( RumPr / RumPrCor ) * KWAP ;
 		absRumPr = KabsPr * RumPr / RumPrCor ;
-		FvBuFd = fBuFd * FdDMIn / MwtBu ;
 		absRumBu = KabsBu * RumBU / RumBuCor ;
 		RumBuP = ( RumBU / RumBuCor ) * KWAP ;
-		// assumes no Hc,Ce,Aa, GOTO La
-		FvLaFd = FdDMIn * FLaFd / MwtLa ;
 		RumLaP = ( RumLa / RumLaCor ) * KWAP ;
-		// LACTATE
-		cRumLa = ( RumLa / RumLaCor ) / RumLiqVol ;
-		
-		// RUMEN pH CRumpH
-		// Rumen pH influences stoichiometry of fermentation (above) and
-		// hydrolytic rate constants for cellulose and hemicellulose.
-		// This is most relevant when meal rather than continuous feeding
-		// is implemented.  However, in the default it is left on
-		// (RumpHCON=1.0,FIXDPH=0.0).  (RumpHCON) RumpH control allows the
-		// RumpH equation to be shut off so a fixed pH (FIXDpH) can be used
-		
-		// pH predicted from Briggs et al., 1957 as used in Argyle and Baldwin, 1988
-		// RumpH=(7.2555-(10.0*cVFA+1.5*cRumLa))
-		RumpH = ( RumpHBase - ( vfaeff * cVFA +1.5 * cRumLa ) ) * RumpHCON + FIXDpH ;
-		// Ha = integ ( dHa , iHa ) 
-		
-		// HOLOCELLULOSE(Hc+Ce in Kg) OR BETA-HEXOSES(Hc and Ce in Kg)
-		// METABOLISM
-		
-		// The Hb equation should probably be sigmoid from pH 7.0 on down
-		// to pH 5.5 with the steapest decrease below 6.2 to 5.5, but there
-		// are not enough data to create that form.
-		
-		// procedural ( KHcCs , KCeCs = RumpH , KHcCs1 , KCeCs1 ) 
-		KHcCs = KHcCs1 ;
-		KCeCs = KCeCs1 ;
-		if ( RumpH >= 6.2 ) goto label_22 ;
-		KHcCs = KHcCs - ( KHcCs * 1.8555 * ( 6.2 - RumpH ) ) ;
-		KHcCs = max ( KHcCs , 0.0 ) ;
-		KCeCs = KCeCs - ( KCeCs * 1.8555 * ( 6.2 - RumpH ) ) ;
-		KCeCs = max ( KCeCs , 0.0 ) ;
-	label_22:
-		// end of procedural // OF PROCEDURAL
-		SPartCeCs = Ce / CeCor * KCeCs * cMiHb * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatHb ) ) ;
-		CeCs = SPartCeCs / MwtCe ;
-		// Hc = integ ( dHc , iHc ) 
-		
-		dCe = Cein + LPartCeCe - SPartCeCs - CeP ;
-		SPartHcCs = Hc / HcCor * KHcCs * cMiHb * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatHb ) ) ;
-		SPartHbCs = SPartCeCs + SPartHcCs ;
-		// Ce = integ ( dCe , iCe ) 
-		
-		dHb = Hbin + LPartHbHb - SPartHbCs - HbP ;
-		HbMiRum = cMiHb * SPartHcCs + cMiHb * SPartCeCs ; // released due to hydrolysis of particulate substrates
-		
-		// Effect of added dietary fat on organic matter digestibility (SPartHbCs)
-		// was added 12/90 but is very tentative as linear slope was derived
-		// from +/- fat data.
-		
-		dHc = Hcin + LPartHcHc - SPartHcCs - HcP ;
-		HcCs = SPartHcCs / MwtHc * 0.8555 ; // Converts kg of hemicellulose to moles of hexose equivalents.
-		
-		// **********************************
-		// MICROBES ASSOCIATED WITH SPart(kg/kg)
-		// **********************************
-		// Association of microbes with small particle Ha(MiHa) and Hb
-		// (MiHb). Was added to prevent increases in KHaCs from
-		// increasing digestion of Hb(due to more microbes) and vice versa
-		// i. e. to give specificity associated with small
-		// particles based upon substrate they grew on.
-		
-		Csin = ScTCs + StCs + HaCs + HcCs + CeCs ; // Fractions of Cs entry
-		fCsHa = HaCs / Csin ; // attributed to Ha at Hb
-		fStCs = ( StCs + HaCs ) / Csin ;
-		FCeCs = CeCs / Csin ;
-		fScCs = ScTCs / Csin ;
-		fCsHb = ( HcCs + CeCs ) / Csin ; // hydrolysis.
-		fHcCs = HcCs / Csin ;
-		// OF PROCEDURAL
-		
-		// ADJUSTMENT OF STOICHIOMETRIC COEFFICIENTS FOR RumpH
-		// Stiochiometric coefficients have pH effects embedded in them.
-		// These equations should probably be sigmoidal.
-		// Switch to pure lactate at pH 5.4 may not be correct, it is
-		// probably a logarithmic increase starting at 5.5.  These changes
-		// in stoichiometric coefficients parallel those suggested by
-		// the equation which corrects for systematic errors in CONSET
-		// due to increasing proportions of concentrate in the ration
-		// which was formulated by Murphy et al (1982).
-		
-		// procedural ( ScAc , ScPr , ScBu , ScLa , StAc , StPr , StBu , StLa = RumpH , 
-			// ScAcAc , ScPrPr , ScBuBu , ScLaLa , StAcAc , StPrPr , StBuBu , StLaLa ) 
-		ScAc = ScAcAc ;
-		ScPr = ScPrPr ;
-		ScBu = ScBuBu ;
-		ScLa = ScLaLa ;
-		StAc = StAcAc ;
-		StPr = StPrPr ;
-		StBu = StBuBu ;
-		StLa = StLaLa ;
-		if ( RumpH >= 6.2 ) goto label_24 ;
-		if ( RumpH <= 5.4 ) goto label_23 ;
-		ScAc = 0.7555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScAcAc -0.7555 ) ;
-		ScPr = 0.5555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScPrPr -0.5555 ) ;
-		ScBu = 0.4555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScBuBu -0.4555 ) ;
-		StAc = 0.6555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StAcAc -0.6555 ) ;
-		StPr = 0.8555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StPrPr -0.8555 ) ;
-		StBu = 0.2555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StBuBu -0.2555 ) ;
-		goto label_24 ;
-	label_23: ScAc = 0.0 ;
-		ScPr = 0.0 ;
-		ScBu = 0.0 ;
-		StAc = 0.0 ;
-		StPr = 0.0 ;
-		StBu = 0.0 ;
-		ScLa = 2.0 ;
-		StLa = 2.0 ;
-	label_24:
-		// end of procedural // OF PROCEDURAL
-		CsFvAc = ScAc * fScCs + StAc * fStCs + HcAcAc * fHcCs + CeAcAc * FCeCs ;
-		CsFvLa = ScLa * fScCs + StLa * fStCs ;
-		CsFvBu = ScBu * fScCs + StBu * fStCs + HcBuBu * fHcCs +
-			CeBuBu * FCeCs ;
-		CsFvPr = ScPr * fScCs + StPr * fStCs + HcPrPr * fHcCs + CePrPr * FCeCs ;
 		absRumLa = RumLa * KabsLa / RumLaCor ;
-		
-		// MICROBIAL FUNCTIONS (Mi in Kg)
-		// ********************************
-		
-		// MICROBIAL GROWTH PARAMETRS
-		
-		// ATP generation and microbial growth and composition
-		// CsFvAt is set at 4.0 molesATP/mole Cs but is really
-		// a variable.
-		
-		// Growth without amino acids (G1)
-		// Moles nutrient/Kg microbe formed
-		// Recalculated 14 Feb,1984 to conform to elemental composition
-		// and paths of Reichl and Baldwin(JDS 58:879(1975)) with diet
-		// lipid as the source of long chain fatty acids(1.2 moles
-		// /mole Li)
-		
-		FlMiG = 0.2555 ;
-		
-		// Microbe composition (Kg/Kg)
-		// NOTE:Organic Matter only
-		
-		// Lipid composition in mole/mole
-		
-		MwtMiLi = 0.6555 ;
-		
-		// Effect of added dietary fat on microbial yield (MiG) 12/14/90 jk
-		
-		// procedural ( MiMaAd = RumpH ) 
-		// Effect of pH on microbe maintenence requirement.
-		MiMaAd = 20 ;
-		// MOLES/KG/DAY
-		if ( RumpH >= 6.2 ) goto label_26 ;
-		if ( RumpH <= 5.4 ) goto label_25 ;
-		MiMaAd = MiMaAd + ( MiMaAd * ( ( 0.8 - ( RumpH -5.4 ) ) / 0.8 ) ) ;
-		goto label_26 ;
-	label_25: MiMaAd = 40 ;
-	label_26:
-		// end of procedural 
-		// I don t know why John has this in,RLB
-		AtpM = Mi / MICor * MiMaAd ;
-		FGAm = 1.0 / ( 1.0 + KFGAm / cAm ) ;
 		FGFa = 1 + ( fFatFd / fLiFd * KFatFG ) ;
-		YAtp = 0.01555 + RumYAtp / ( 1.0 + KYAtAa / cRumAa ) ;
-		G2 = 0.5 / ( 1.0 + KYAtAa / cRumAa ) ;
-		G1 = 1.0 - G2 ;
 		SPartMi = ( ( SPart + MPart ) / ( RumDM - Mi / MICor ) ) * ( Mi / MICor ) ;
 		WaMi = Mi / MICor * SolDM / ( RumDM - Mi / MICor ) ;
-		RumAaFv = VmRumAaFv * WaMi / ( 1.0 + KRumAaFv / cRumAa ) ;
-		AaAm = RumAaFv * AaFvAm ;
-		RumAaAc = AaFvAc * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
-		RumAaBu = AaFvBu * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
-		RumAaPr = AaFvPr * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
-		CsFv = VmCsFv * WaMi / ( 1.0 + KCsFv / cCs ) ;
-		CsAc = CsFv * CsFvAc ;
-		CsLa = CsFv * CsFvLa ;
-		CsPr = CsFv * CsFvPr ;
-		CsBu = CsFv * CsFvBu ;
-		
-		// BUTYRATE-RumBu
-		dRumBu = CsBu + RumAaBu + FvBuFd - absRumBu - RumBuP ;
 		WaMiP = KWAP * WaMi ;
 		cMiSPart = SPartMi / ( SPart + MPart ) ;
-		PiMiP = PiP * cMiSPart ; // association with SPart
 		SPartMiHb = KMiHb * Hb / HbCor * cMiSPart ;
+		SPartPiAa = Pi / PICor * KPiAa * cMiSPart * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatPi ) ) ;
+		PiAa = SPartPiAa / MwtPs ;
 		
 		SPartMiHa = KMiHa * Ha / HaCor * cMiSPart ; // Microbes attached
-		SPartPiAa = Pi / PICor * KPiAa * cMiSPart * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatPi ) ) ;
-		MPartDeg = ( SPartHaCs + SPartHcCs + SPartCeCs + SPartPiAa ) / fPartSA * ( fMPart1 * fMPartSA ) ;
-		
-		// MEDIUM PARTICLE POOL (MPart in Kg); Retained on a 1.2 mm screen put passes a 4.8 mm screen
-		// Added in May of 2013 to allow representation of differential passage of particles from the
-		// 	rumen based on size and differental rates of fermentation based on surface area.
-		// 	This pool is a phantom pool that is used with SPart, another phantom pool,
-		// 	to mathematically partition the pools of Hc, Ce, Ha, Pi, and IndigFd into medium and
-		// 	small fractions to allow application of differential outflow and degradation. MDH
-		// Set to achieve steady state on the base diet, MDH
-		// ??Need to verify and update if needed
-		// A proportion of Liq Flow. An initial guess, MDH
-		dMPart = MPartSwal + LPartMPart - MPartSPart - MPartDeg - MPartP ;
-		// Hb = integ ( dHb , iHb ) 
-		
-		// INSOLUBLE PROTEIN (Pi in Kg) METABOLISM
-		// Sept. 20, 2004 solution against Bate5o2 data.
-		// Effect of added dietary fat on protein degradability added 12/90
-		// again this is an effect which is poorly supported.
-		dPi = PiPiFd + LPartPiPi - SPartPiAa - PiP ;
-		SPartDeg = ( SPartHaCs + SPartHcCs + SPartCeCs + SPartPiAa ) / fPartSA * ( fSPart1 * fSPartSA ) ;
-		
-		// SMALL PARTICLE POOLS(SPart in Kg); Passes a 1.2 mm screen
-		// A phantom pool that is used with MPart to mathematically partition Hc, Ce, Ha, Pi, and IndigFd.
-		dSPart = SPartSwal + LPartSPart + MPartSPart - SPartDeg - SPartP ;
-		PiAa = SPartPiAa / MwtPs ;
-		IndigFdMiP = IndigFdP * cMiSPart ; // Passage of microbes in
-		SPartMiP = cMiSPart * ( SPartP + MPartP ) ;
-		MiP = SPartMiP + WaMiP ;
-		HaPT = HaP + ( MiP * MiHaHA ) ; // To Fit Duodenal Data, Kg/d
-		LipidP = ( FaP * MwtFa ) + ( MiP * MiLiLI ) ; // Total Duodenal Lipid Flow, Kg/d
 		cMiWa = WaMi / SolDM ;
 		RumLaFv = KLaFv * cMiWa * RumLa / RumLaCor ;
 		RumLaPr = RumLaFv * LaPrPr ;
-		
-		// PROPIONATE-RumPr
-		// infused ruminal propionate, mol/d
-		dRumPr = CsPr + RumAaPr + RumLaPr + InfRumPr - absRumPr - RumPrP ;
-		AtpF = CsFv * CsFvAt + RumAaFv * AaFvAt +0.7555 * NnAmFd * AaFvAt + RumLaFv * LaFvAt ;
-		AtpG = AtpF - AtpM ;
-		MiG = AtpG * YAtp * FGAm * FGFa ;
-		// OF PROCEDURAL
-		
-		dMi = MiG - MiP ;
-		RumAaMi = MiG * AaMiG2 * G2 ;
-		// Cs = integ ( dCs , iCs ) 
-		
-		// AMINO ACID (RumAa in moles) METABOLISM
-		
-		dRumAa = PsAaFd + PiAa + SaPsAa - RumAaFv - RumAaMi - RumAaP ;
-		AmMi = MiG * ( AmMiG1 * G1 + AmMiG2 * G2 ) ;
-		CsMi = MiG * ( CsMiG1 * G1 + CsMiG2 * G2 ) ;
-		
-		// WATER SOLUBLE CARBOHYDRATE(Sc in Kg;Cs in Moles)
-		
-		dCs = ScTCs + StCs + HaCs + HcCs + CeCs - CsFv - CsMi - CsP ;
-		FlMi = MiG * FlMiG ;
-		// As = integ ( dAs , iAs ) 
-		
-		// LONG CHAIN FATTY ACIDS(Fl,Fa in moles)
-		
-		dFl = FlFd + Fl1Fd - FlMi - FaP ;
-		
-		CsMiG = MiG * ( CsFv * CsFvAt / AtpF ) ; // Proportion of microbial
-		HbMiG = CsMiG * fCsHb ; // Cs formed from Ha and Hb hydrolysis
-		MiHbMi = HbMiF * ( HbMiG + HbMiRum ) ; // hydrolysis and fermentation which remain in association with SP.
-		dHbMi = SPartMiHb + MiHbMi - HbMiP - HbMiRum ;
-		HaMiG = CsMiG * fCsHa ; // growth attributable to
-		// max retention on SPart is 0.8555 of those potentially released.
-		
-		MiHaMi = HaMiF * ( HaMiG + HaMiRum ) ; // Microbes on particles and those grown from Ha and Hb
-		
-		dHaMi = SPartMiHa + MiHaMi - HaMiP - HaMiRum ;
-		
-		// Lactate functions are in to define variables and
-		// are not based on hard data. Should add a fermentation
-		// equation,KabsLa is arbitrary.
-		
-		dRumLa = CsLa + FvLaFd - RumLaP - absRumLa - RumLaFv ;
 		RumLaAc = RumLaFv * LaAcAc ;
-		// Fl = integ ( dFl , iFl ) 
-		
-		// VOLATILE FATTY ACIDS AND LACTATE(RumAc,RumPr,RumBu,RumLa in moles)
-		// Rate constants may not be equal as assumed here!
-		// KabsLa set to low level to define variable
-		// La fermentation may be needed
-		// CCP 9-13-06
-		
-		// ACETATE-RumAc
-		
-		dRumAc = FvAcFd + CsAc + RumAaAc + RumLaAc - absRumAc - RumAcP ;
 		// Mi = integ ( dMi , iMi ) 
 		
 		// Total Ruminal DM, SolDM, N and CP, kg
 		RumNit = ( RumAa / RumAaCor * MwtPs + Pi / PICor + Mi * MiPiPI + Mi * MiNnNn + fLPartPi * LPart / LPartCor ) * .16 + AM * .14 ;
 		RumNDF = Hc / HcCor + Ce / CeCor + IndigFd / IndigFdCor + LPart / LPartCor * fLPartNDF ;
-		
-		// ****************************************************************
-		// 	Passage Rates from the Rumen
-		ADFP = CeP + IndigFdP ;
-		
-		NitP = ( ( RumAaP * MwtPs ) + PiP + ( MiP * MiPiPI ) + ( MiP * MiNnNn ) ) * .16 ; // Total Duodenal N Flow, Kg N/d
-		NANP = NitP ; // No accomodation for Ammonia passage. Is this correct? Probably blown off by drying.
-		MiPP = MiP * MiPiPI + MiP * MiNnNn ; // Microbial CP Passage
-		NANMNP = NANP - ( 0.1555 * MiPP ) ;
 		
 		// BEGIN  INCLUDE 'EXPERIMENTAL_BIAS_Vectors_in_deriv.csl'
 		
@@ -8471,111 +7977,13 @@ public:
 		// ************************
 		
 		otGutCont = 1 * IntakeDay ; // Changed to a daily summary value to accomodate within day eating patterns. MDH 5-23-11
-		ChChFd = fLiFd * FdDMIn / MwtLiFd * LiChFd * MwtCh ;
-		SolOmP = CsP * MwtCs + FaP * MwtFl + RumAaP * MwtRumAa + ChChFd ; // Added ChChFd to be consistent with DMP, MDH. Mar 31, 2014
-		// Total Duodenal Dry Matter Flow, Kg/d
-		
-		LgutHaGl = HaP * LgutDCHa / MwtSt ;
-		MiGl = MiP * MiHaHA * LgutDCHa / MwtSt ;
-		MiAa = MiP * MiPiPI * DCMiPi / MwtPi ;
-		// Computes digestion (Dg) of nutrients
-		MiLiDg = MiP * MiLiLI * DCMiLi / MwtMiLi ;
-		// in the lower gut in moles.
-		MiFa = MiLiDg * MiLiFA ;
 		LgutFaDg = LgutDCFa * FaP ;
-		MiBu = MiLiDg * MiLiBu ;
-		MiPr = MiLiDg * MiLiPr ;
-		MiLGl = MiLiDg * MiLiGl ;
-		MiCh = ( MiP * MiLiLI / MwtMiLi ) * MiLiCh ;
-		LgutHcFv = HcP * LgutDCHb / MwtHc * 0.8555 ;
-		// Corrects kg hemicellulose
-		LgutHcAc = LgutHcFv * HcAcAc ;
-		// to moles hexose equivalents
-		LgutHcPr = LgutHcFv * HcPrPr ;
-		LgutHcBu = LgutHcFv * HcBuBu ;
-		LgutCeFv = CeP * LgutDCHb / MwtCe ;
-		LgutCeAc = LgutCeFv * CeAcAc ;
-		LgutCePr = LgutCeFv * CePrPr ;
-		LgutCeBu = LgutCeFv * CeBuBu ;
-		LgutPiAa = PiP * LgutDCPi / MwtPi ;
 		LgutAs = LgutDCAs * AsP ;
-		LgutAi = LgutDCAi * IndigFdP * fAiFd / fIndigFd ;
-		
-		// FECES (Fec)
-		
-		FecHa = HaP * ( 1.0 - LgutDCHa ) ;
-		FecMiHa = MiP * MiHaHA * ( 1.0 - LgutDCHa ) ;
-		FecHb = HbP * ( 1.0 - LgutDCHb ) ;
-		FecHC = HcP * ( 1.0 - LgutDCHb ) ;
-		FecCe = CeP * ( 1.0 - LgutDCHb ) ;
-		FecADF = FecCe + IndigFdP ;
-		FecLg = IndigFdP * fLgFd / fIndigFd ;
 		FecFa = FaP * ( 1 - LgutDCFa ) * MwtFl ;
-		FecMiLi = MiP * MiLiLI * ( 1.0 - DCMiLi ) ;
-		FecLipid = FecFa + FecMiLi ; // Total Fecal Lipid Flow, Kg/d
-		FecMiPi = MiP * MiPiPI * ( 1.0 - DCMiPi ) ; // KG.
-		FecMiNn = MiP * MiNnNn ;
-		FecPi = PiP * ( 1.0 - LgutDCPi ) ;
-		FecPiT = FecMiPi + FecMiNn + FecPi ;
-		FecAsh = AsP * ( 1.0 - LgutDCAs ) +
-			IndigFdP * fAiFd / fIndigFd * ( 1.0 - LgutDCAi ) ;
-		FecCh = ChChFd + MiCh * DCMiLi * MwtCh ;
-		FecOm = FecHa + FecHb + FecPiT + FecMiLi + FecLg + FecCh + FecMiHa + FecFa ;
-		FecENG = ( FecHa * 4.1555 + FecHb * 4.1555 + ( FecMiPi + FecPi ) * 5.7 + FecMiLi * 7.2 +
-			FecLg * 8.3 + FecCh * 3.3555 + FecMiNn * 5.7 + FecMiHa * 4.1555 + FecFa * 9.5555 ) * F1 ;
-		FecDM = FecOm + FecAsh ;
-		
-		// Animal Water Balance Equations, MDH Jan 23, 2014
-		// assumed feces is 23% DM from Murphy 1992 review, JDS
-		// Assumed 1% Ash in milk
-		// Assumed half the maximal respiratory rate cited in Murphy, 1992 JDS
-		// Assumed 25% the maximal sweating rate cited in Murphy, 1992 JDS
-		WaFeces = FecDM / ( 1 - KWaFeces ) - FecDM ;
-		
-		// Need to calculate MPart and SPart in feces from ruminal outflow.  Subtract non NDF digested
-		// nutrients from the ruminal particle outlfow values to get feces, MDH Feb 11, 2014
-		FecMPart = MPartP ; // these do not account for intestinal digestion of MPart and SPart. Need to fix per above.
-		FecSPart = SPartP ;
-		TOmP = SolOmP + HaP + HbP + PiP + LgP ;
-		TTOmP = TOmP + MiP ;
-		TStin = FdDMIn * fStFd ;
-		
-		// Computation of digestion coefficients for energy and energy terms.
-		FdGEin = GEFd * FdDMIn + InfPrt * 5.7 ;
-		appDE = ( FdGEin - FecENG ) / FdGEin ; // APPARRENT DIGESTIBLE ENERGY
-		DEI = FdGEin - FecENG ; // DIGESTIBLE ENERGY INTAKE
-		Nintake = FdDMIn * ( FPsFd + fPiFd + FUrFd + fNnFd ) * 1000 * 0.1555 ;
-		Nan = 1000 * 0.1555 * ( PiP + ( RumAaP * 0.1555 ) + ( MiP * 0.5555 ) + ( MiP * 0.09555 ) ) ;
-		
-		// For comparison to Clark papers
-		MiPrOm = MiP * MiPiPI / ( OminFd - TOmP ) ; // kg CP/kg OM True
-		MirOma = MiP * MiPiPI / ( OminFd - TTOmP ) ; // Apparent
-		
-		// **************************************************************
-		// INTERFACE OF MODELS---NUTRIENT ABSORBTION
-		// *************************************************************
-		// Absorbtion of nutrients
-		
-		absGl = LgutHaGl + CsP + MiGl + MiLGl ;
-		AbsAa = MiAa + LgutPiAa + RumAaP + InfPrt / 0.1555 ;
-		absAc = absRumAc + LgutHcAc + LgutCeAc + RumAcP ;
-		// Computes absorbtion of nutrients
-		absPr = absRumPr + MiPr + LgutHcPr + LgutCePr + RumPrP ;
-		// in whole gut in moles.This is
-		absBu = absRumBu + LgutHcBu + LgutCeBu + MiBu + RumBuP ;
 		// input to cow model.
 		AbsAm = absRumAm ;
-		// Correction for absFa converts stearate (Fl) from
-		absFa = ( MiFa + LgutFaDg ) * MwtFl / MwtFa ;
 		absLa = absRumLa + RumLaP ;
-		AbsAcE = absAc * HcombAc ;
-		absPrE = absPr * HcombPr ;
-		absBuE = absBu * HcombBu ;
-		absFaE = absFa * HcombFa ;
-		absAaE = AbsAa * HcombAa ;
-		absGlE = absGl * HcombGl ;
 		absLaE = absLa * HcombLa ;
-		AbsE = AbsAcE + absPrE + absBuE + absFaE + absAaE + absGlE + absLaE ;
 		
 		// **********************************************************
 		// DYNAMIC ELEMENTS OF ANIMAL SUBMODEL
@@ -8641,6 +8049,9 @@ public:
 		}
 		// end of procedural 
 		
+		// ****************** Uterine Tissue and Protein Mass ********************
+		WtUterPart = iWtUter * exp ( ( kUterSyn - kUterSynDecay * GestLength ) * GestLength ) ;
+		
 		// ********************* Conceptus plus Fluid Mass ***********************
 		WtConcAgeFactor = 1.0 - 0.02555 * ( 4.001 - min ( 4.0 , AgeInYears ) ) *pow(1,1)* 2.3555 ; // GL. This yields 0.8555 for 2 years old; 0.9555 for 3 & 1.0 for 4+ Based on DairyNZ data
 		WtUter = WtConcAgeFactor * WtConcBreedFactor *
@@ -8649,13 +8060,13 @@ public:
 		WtUterDeg = ( WtUter - iWtUter ) * kUterDeg * NonPreg ;
 		WtPUterDeg = WtUterDeg * fPUter ;
 		PUterAa = WtPUterDeg / MwtPVis ;
-		
-		WtPUter = WtUter * fPUter ; // kg protein in uterus
 		WtUterSyn = WtUter * ( kUterSyn -2 * kUterSynDecay * DayGest ) * Preg ;
 		dWtUter = WtUterSyn - WtUterDeg ;
 		WtPUterSyn = WtUterSyn * fPUter ;
 		dWtPUter = WtPUterSyn - WtPUterDeg ;
 		AaPUter = WtPUterSyn / MwtPVis ;
+		
+		WtPUter = WtUter * fPUter ; // kg protein in uterus
 		WtConc = WtConcAgeFactor * WtConcBreedFactor *
 			iWtConc * exp ( ( kConcSyn - kConcSynDecay * DayGest ) * DayGest ) ;
 		WtConcSyn = WtConc * ( kConcSyn -2 * kConcSynDecay * DayGest ) * Preg ;
@@ -8704,9 +8115,7 @@ public:
 		PreCalvingMamCells = MamCellsPart * exp ( - uTMamCells * ( 1 - exp ( K1MamCells * DayMilk ) ) / K1MamCells + lambdaMamCells * DayMilk ) ; // Oroginal Dijkstra
 		PostCalvingMamCells = MamCellsA + MamCellsQ ;
 		fMamCellsAQ = MamCellsA * kMamAQBase ; // GL: removed KMINH as there are alternative explicit MF drivers
-		kMamCellsQA = ( kMamCellsQAPrePeak + // Baseline value
-			MamCellsQaKickStartFactor * ( kMamCellsQAStart - kMamCellsQAPrePeak ) + // Adds the kickstart boost which decays to nearly nothing after dew days
-			MamCellsQaPreToPostFactor * ( kMamCellsQAPostPeak - kMamCellsQAPrePeak ) ) ; // Adds the trasnsition portion towards the final post peak value
+		MamCellsQaPreToPostFactor = 1 / ( 1 + exp ( kMamCellsTransitionSteepness * ( kMamCellsTransitionDim - DayMilk ) ) ) ;
 		// CumulativeLowMfDays = integ ( DailyMfDiff , 0 ) // Keep track of the cummulative number of 1x eqivalent days on low liking freq, e.g 20 days on 1.5x or 10 days on 1x both grow cumulativeLowMfDiff by 10.
 		LowMfDecay = exp ( - kMamCellsUsMfDecay * CumulativeLowMfDays ) ; // The longer on low MF the slower the senescence
 		LHor = FixedLhorSW * LHorBase + ( 1 - FixedLhorSW ) * LHor1 ;
@@ -8766,7 +8175,23 @@ public:
 			InMilk = 1.0 ;
 		}
 		// end of procedural 
-		fMamCellsPA = InMilk * MamCellsPart * ( BaseMamCellsTurnOver + uTMamCells * exp ( - MamCellsProliferationDecayRate * DayMilk ) ) ; // Approximation of the growth rate derived from Dijkstra's MamCells eq.
+		MamCells = ( InMilk * PostCalvingMamCells ) + ( ( 1 - InMilk ) * PreCalvingMamCells ) ;
+		IncreasedUsDueToLowMf = -1 * MamCells * MaxLossDueToLowMf * derivt ( 0 , LowMfDecay ) ;
+		
+		// MamCellsA = integ ( dMamCellsA , iMamCellsA ) 
+		// MamCellsQ = integ ( dMamCellsQ , iMamCellsQ ) 
+		// MamCellsS = integ ( dMamCellsS , iMamCellsS ) // We don't really need this pool, only to verify that there is approx 100% turnover over 250 days of lactation
+		
+		// ****** kMamCellsQa ***************************************************************************
+		// To Delay the peak without tempering with MamCells peaking at 10 DIM, a variable QA rate function
+		// was needed. Rather than being constant, kMamCellsQA is now very fast during first week of lactaion,
+		// low afterwards for few weeks and than gradually stabilises on the final value for post peak lactation.
+		// This final value is the major driver of the steady state proportion of active cells (pMamCellsA)
+		
+		MamCellsQaKickStartFactor = InMilk * ( exp ( - kMamCellsQAKickStartDecay * DayMilk ) ) ;
+		kMamCellsQA = ( kMamCellsQAPrePeak + // Baseline value
+			MamCellsQaKickStartFactor * ( kMamCellsQAStart - kMamCellsQAPrePeak ) + // Adds the kickstart boost which decays to nearly nothing after dew days
+			MamCellsQaPreToPostFactor * ( kMamCellsQAPostPeak - kMamCellsQAPrePeak ) ) ; // Adds the trasnsition portion towards the final post peak value
 		
 		// **** Active, Quiescent and Senecenced cell dynamics  *********************************************
 		// Pools are: A(Active); Q(Quiescent); S(Senecenced); U(Udder=A+Q); P (Proliferated = endless stand by pool).
@@ -8774,15 +8199,14 @@ public:
 		// Fluxes are: PA; AQ; QA; AS; QS; US = AS+QS
 		
 		fMamCellsQA = InMilk * MamCellsQ * kMamCellsQA * kMamCellsQaMfAdjustment ;
-		MamCells = ( InMilk * PostCalvingMamCells ) + ( ( 1 - InMilk ) * PreCalvingMamCells ) ;
-		IncreasedUsDueToLowMf = -1 * MamCells * MaxLossDueToLowMf * derivt ( 0 , LowMfDecay ) ;
+		fMamCellsPA = InMilk * MamCellsPart * ( BaseMamCellsTurnOver + uTMamCells * exp ( - MamCellsProliferationDecayRate * DayMilk ) ) ; // Approximation of the growth rate derived from Dijkstra's MamCells eq.
 		fMamCellsUS = InMilk * MamCellsPart * ( ( kMamCellsDeclineBase * exp ( - MamCellsDecayRateOfSenescence * DayMilk ) + BaseMamCellsTurnOver ) ) + IncreasedUsDueToLowMf ; // Approximation of the senescence rate derived from Dijkstra's MamCells eq, PLUS dymaically calculated increase loss due to low milking frequency
 		fMamCellsAS = fMamCellsUS * MamCellsA / ( MamCellsQ + MamCellsA ) ; // Partition the total death rate between the Q and A pools
 		
 		dMamCellsA = InMilk * ( fMamCellsQA - fMamCellsAQ + fMamCellsPA - fMamCellsAS ) - 100 * ( 1 - InMilk ) * ( MamCellsA - 1e-12 ) ; // Second part empties the A pool withing few hours after dry off
 		fMamCellsQS = fMamCellsUS * MamCellsQ / ( MamCellsQ + MamCellsA ) ; // Partition the total death rate between the Q and A pools
-		dMamCellsS = fMamCellsAS + fMamCellsQS ;
 		dMamCellsQ = InMilk * ( fMamCellsAQ - fMamCellsQA - fMamCellsQS ) + 100 * ( 1 - InMilk ) * ( MamCells - MamCellsQ ) ; // Second part brings Q pool to have all MamCells when dry
+		dMamCellsS = fMamCellsAS + fMamCellsQS ;
 		
 		// Spike smoothing example - keep
 		// AaSmoothed  = Integ(dAaSmoothed,AaBase)
@@ -8790,6 +8214,16 @@ public:
 		// END  INCLUDE 'MamCells_deriv.csl'
 		
 		MilkingFrequency = 1.0 / MilkInt ; // Gil May 2012 added to make the merged code compile
+		
+		// **** Misc **************************************************************************************
+		
+		// MilkingFrequencyLag = integ ( derivMilkingFrequencyLag , 2 ) // Lagging Mf moves down fast but slow to catch up after MF changed upwards.
+		if ( MilkingFrequency < MilkingFrequencyLag ) {
+			derivMilkingFrequencyLag = kMilkingFrequencyLagDown * ( MilkingFrequency - MilkingFrequencyLag ) ; // fast change from higher MilkingFrequency to a lower MilkingFrequency
+		} else {
+			derivMilkingFrequencyLag = kMilkingFrequencyLagUp * ( MilkingFrequency - MilkingFrequencyLag ) ; // slow recovery from low MilkingFrequency to higher MilkingFrequency
+		}
+		DailyMfDiff = max ( 0. , ( 2 - MilkingFrequency ) * InMilk ) ; // DailyMfDiff would be 1 while on once a day; 0.5 while on 1.5 a day etc.
 		
 		// procedural ( MilkSolids270MfAdjusted = MilkingFrequency , InMilk ) 
 		
@@ -8804,20 +8238,12 @@ public:
 		
 		MilkSolids270MfAdjusted = KgMilkSolidsExpectedIn270Days * MilkingFrequencyAgeAdjustment * MilkingFrequencyBaseAdjustment ; // Expected yield on actual milking frequency
 		// end of procedural 
-		DailyMfDiff = max ( 0. , ( 2 - MilkingFrequency ) * InMilk ) ; // DailyMfDiff would be 1 while on once a day; 0.5 while on 1.5 a day etc.
-		
-		// **** Misc **************************************************************************************
-		
-		// MilkingFrequencyLag = integ ( derivMilkingFrequencyLag , 2 ) // Lagging Mf moves down fast but slow to catch up after MF changed upwards.
-		if ( MilkingFrequency < MilkingFrequencyLag ) {
-			derivMilkingFrequencyLag = kMilkingFrequencyLagDown * ( MilkingFrequency - MilkingFrequencyLag ) ; // fast change from higher MilkingFrequency to a lower MilkingFrequency
-		} else {
-			derivMilkingFrequencyLag = kMilkingFrequencyLagUp * ( MilkingFrequency - MilkingFrequencyLag ) ; // slow recovery from low MilkingFrequency to higher MilkingFrequency
-		}
 		MilkInhDeg = KMinh * KMilkInhDeg ;
 		WtTsAdip = MwtTs * TsAdip ;
 		// TRIGLYCERIDE-TsAdip
 		WtAdip = WtCytAdip + WtTsAdip ;
+		// Adds cFa as feedback term and T3 as effector of VMAX
+		cTs = TsAdip / WtAdip ;
 		// Adds injected INS as effector of Gl uptake
 		cFa = Fa / VolFa ;
 		// TsFaAdip=(VmTsFaAdip**CHor1/(1.0+(KTsFaAdip/cTs)**Theta1))
@@ -8852,6 +8278,9 @@ public:
 		dVmAcTs = K1VAct * AHor1 * INS - K2VAct * VmAcTs ;
 		cAc = Ac / VolAc ;
 		
+		// DNA ACCRETION
+		// *************
+		
 		dOthDna = ( KDnaOth *pow(1,1)* ExpOth2 ) * ( ( OthDnaMx - OthDna ) / OthDnaMx ) ;
 		dVisDna = ( KDnaVis *pow(1,1)* ExpV2 ) * ( ( VisDnaMx - VisDna ) / VisDnaMx ) ;
 		POthAaOth = KPOthAaOth * POth ;
@@ -8884,36 +8313,22 @@ public:
 		AaPVisVis = VmAaPVisVis * VisDna / ( 1.0 + KAaPVisVis / ( AHor * cAa ) ) ;
 		dPVis = AaPVisVis - PVisAaVis ;
 		dWtVis = dPVis * MwtPVis / fDWt ;
-		AaGlGest = WtGrvUter * kAaGlGest * cAa ; // I think I have accounted for heat and ATP correctly
 		AaGlVis = VmAaGlVis * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KAaGlVis / cAa ) ; // GLUCONEOGENESIS
 		AaAcV1 = AaGlVis * AaGlAc ;
+		AaGlGest = WtGrvUter * kAaGlGest * cAa ; // I think I have accounted for heat and ATP correctly
 		AaUrVis = AaGlVis * AaGlUr ;
 		AaUrGest = AaGlGest * AaGlUr ;
 		AmUr = AbsAm * AmUrUr ;
 		// BldUr1 = integ ( dBldUr , iBldUr ) 
 		BldUr = max ( 1e-9 , BldUr1 ) ; // Prevent a crash when AM goes negative. I don't have time to find the source
 		cBldUr = ( BldUr / BldUrCor ) / BldUrVol ;
-		SaNnAm = cBldUr * SaIn * UrAmAm ;
-		SaNRumAm = SaNnAm * AmUrUr ;
 		dUrea = KBldUrU * cBldUr ;
 		EUr = dUrea * HcombUr ; // METABOLIZABLE
-		BldUrAm = ( VmBldUrAm * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KBldUrAm / cBldUr + cAm / KiAm ) ) * UrAmAm ;
-		// RumAa = integ ( dRumAa , iRumAa ) 
-		
-		// AMMONIA (Am in moles)METABOLISM
-		
-		dAm = NnAmFd + AaAm + SaNnAm + BldUrAm - absRumAm - AmMi + UrAmFd ;
-		BldUrRumAm = BldUrAm * AmUrUr ;
 		
 		// MUN calculations, CCP 3-28-07
 		cPun = cBldUr * 2 * 14 * 1000 / 10 ; // Converts cBldUr from mol Urea/l to mg N/dl.
 		cMun = 0.8555 * cPun -1.9555 ; // From Kauffman & St-Pierre, 2001, JDS, 84: 2284-2294 (mg/dl)
-		upGl = 0.1555 * absGl ;
 		AaGlV1 = AaGlVis * AaGlGl ;
-		PrGlVis = absPr * fPrGl ;
-		PrGlV1 = PrGlVis * PrGlGl ;
-		gGlLa = 0.9555 * absGl * GlLaLa ;
-		RumLaGl = absRumLa + RumLaP + gGlLa ;
 		// The following adjustment to VmGlLm was added to allow for greater fat and protein content
 		// in early and late lactation. MDH 3-6-06
 		
@@ -8925,8 +8340,29 @@ public:
 		cGl = Gl / VolGl ;
 		GlTpVis = VmGlTpVis * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KGlTpVis / cGl ) ;
 		GlTpV1 = GlTpVis * GlTpTp ;
+		FaTsAdip = VmFaTsAdip * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KFaTsAdip / cFa + K1FaTs / ( AHor * INS * cGl ) ) ;
+		FaTsF1 = FaTsAdip * FaTgTg ;
+		GlTpAdip = VmGlTpAdip * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KGlTpAdip / cGl ) ;
+		GlTpF1 = GlTpAdip * GlTpTp ;
+		FaTmVis = ( VmFaTmVis * MamEnz ) * ( INS *pow(1,1)* P1 ) / ( 1.0 + KFaTmVis / cFa + K1FaTm / cGl ) ;
+		FaTmV1 = FaTmVis * FaTgTg ;
+		// Gut GLucose metabolism to Lactate
+		GyGlVis = ( TsFaAdip + FaTmV1 ) * TgGyGy ;
+		GyGlV1 = GyGlVis * GyGlGl ;
+		WtFaTm = FaTmV1 * MwtTm ;
+		
+		// MILK PROTEIN SYNTHESIS
+		AaPmVis = VmAaPmVis * MamEnz / ( 1.0 + KAaPmVis / cAa + KGlLmVis / cGl ) ;
+		
+		// Protein in Mammary gland (MamPm) and secreted (dMilkPm,TMilkPm)
+		
+		dPm = AaPmVis * MwtAa ; // Kg/d produced
 		AcTmVis = VmAcTmVis * MamEnz * INS *pow(1,1)* P1 / ( 1.0 + KAcTmVis / cAc + K1AcTm / cGl ) ;
+		GlHyVis = AcTmVis * fGlHyVis * GlGlHy ;
+		TpinVis = GlHyVis * GlHyTp + GlTpV1 ;
 		AcTmV1 = AcTmVis * AcTgTg ;
+		TpTmVis = ( FaTmV1 + AcTmV1 ) * TpTpTm ;
+		TpCdVis = TpinVis - TpTmVis ;
 		// Adds INS as effector
 		// Ac = integ ( dAc , iAc ) 
 		
@@ -8934,20 +8370,7 @@ public:
 		// Grams milk fat from de novo (WtAcTm) and pre-formed (WtFaTm)
 		// calculations added 11/99. NES
 		WtAcTm = AcTmV1 * MwtTm ;
-		GlHyVis = AcTmVis * fGlHyVis * GlGlHy ;
-		TpinVis = GlHyVis * GlHyTp + GlTpV1 ;
-		
-		// MILK PROTEIN SYNTHESIS
-		AaPmVis = VmAaPmVis * MamEnz / ( 1.0 + KAaPmVis / cAa + KGlLmVis / cGl ) ;
-		// revised constant VmAaPmVis 7/92 (kc)
-		
-		// AMINO ACID METABOLISM
-		dAa = AbsAa + POthAaOth + PVisAaVis - AaPOthOth - AaPVisVis - AaPmVis - AaGlVis - SaPsAa
-			- AaPGest - AaGlGest ;
-		
-		// Protein in Mammary gland (MamPm) and secreted (dMilkPm,TMilkPm)
-		
-		dPm = AaPmVis * MwtAa ; // Kg/d produced
+		dTm = WtAcTm + WtFaTm ; // Kg/d Produced
 		
 		if ( cGl < cGlTarget ) {
 			LhorGl = 1 - kLHorSensGl * ( 1 - ( cGl / cGlTarget ) ) *pow(1,1)* xLHorSensGl ;
@@ -8961,13 +8384,7 @@ public:
 		AcTsAdip = VmAcTs / ( 1.0 + KAcTsAdip / cAc + K1AcTs / ( AHor * cGl ) ) ;
 		// BODY FAT OR STORAGE
 		AcTsF1 = AcTsAdip * AcTgTg ;
-		GlHyAdip = AcTsAdip * fGlHyAdip * GlGlHy ;
-		GLLmVis = VmGlLm1Vis * MamEnz / ( 1.0 + KGlLmVis / cGl + KAaLmVis / cAa ) ; // cAa should affect the Vm not Ks
-		GlTpAdip = VmGlTpAdip * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KGlTpAdip / cGl ) ;
-		GlTpF1 = GlTpAdip * GlTpTp ;
-		TpinAdip = GlHyAdip * GlHyTp + GlTpF1 ;
-		FaTsAdip = VmFaTsAdip * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KFaTsAdip / cFa + K1FaTs / ( AHor * INS * cGl ) ) ;
-		FaTsF1 = FaTsAdip * FaTgTg ;
+		TpTsAdip = ( FaTsF1 + AcTsF1 ) * TpTpTs ;
 		// KMinh = integ ( dKMilkInh , ikMilkInh ) 
 		
 		// Gil May 2012 MamEnz code moved to MamCells_MDH_in_deriv.csl / MamCells_DairyNZ_in_deriv.csl becsue to retain difference
@@ -8994,7 +8411,8 @@ public:
 		// revised constants VmFaTmVis and VmTsFaAdip 7/92 (kc)
 		dTsAdip = FaTsF1 + AcTsF1 - TsFaAdip ;
 		dWtTsAdip = dTsAdip * MwtTs ;
-		TpTsAdip = ( FaTsF1 + AcTsF1 ) * TpTpTs ;
+		GlHyAdip = AcTsAdip * fGlHyAdip * GlGlHy ;
+		TpinAdip = GlHyAdip * GlHyTp + GlTpF1 ;
 		TpLaAdip = TpinAdip - TpTsAdip ;
 		LaCdAdip = TpLaAdip * fLaCdAdip ;
 		LaGlAdip = TpLaAdip - LaCdAdip ;
@@ -9003,20 +8421,7 @@ public:
 		LainOth = GlLaB1 ;
 		LaCdOth = LainOth * fLaCdOth ;
 		LaGlOth = LainOth - LaCdOth ;
-		// GLUCOSE
-		LaGlV1 = ( LaGlAdip + LaGlOth + RumLaGl ) * LaGlGl ;
-		FaTmVis = ( VmFaTmVis * MamEnz ) * ( INS *pow(1,1)* P1 ) / ( 1.0 + KFaTmVis / cFa + K1FaTm / cGl ) ;
-		FaTmV1 = FaTmVis * FaTgTg ;
-		WtFaTm = FaTmV1 * MwtTm ;
-		dTm = WtAcTm + WtFaTm ; // Kg/d Produced
-		TpTmVis = ( FaTmV1 + AcTmV1 ) * TpTpTm ;
-		TpCdVis = TpinVis - TpTmVis ;
-		// Gut GLucose metabolism to Lactate
-		GyGlVis = ( TsFaAdip + FaTmV1 ) * TgGyGy ;
-		GyGlV1 = GyGlVis * GyGlGl ;
-		
-		dGl = upGl + AaGlV1 + PrGlV1 + LaGlV1 + GyGlV1 - GLLmVis -
-			GlHyAdip - GlHyVis - GlTpAdip - GlTpVis - GlLaOth - GlCd ;
+		GLLmVis = VmGlLm1Vis * MamEnz / ( 1.0 + KGlLmVis / cGl + KAaLmVis / cAa ) ; // cAa should affect the Vm not Ks
 		
 		// ********************** Milk Yield ********************************
 		// Lactose in mammary gland(MamLm)and secreted (dMilkLm,TMilkLm) plus
@@ -9025,13 +8430,7 @@ public:
 		dLm = GLLmVis * GlLmLm * MwtLm ; // Kg/d produced
 		DMilk = dLm / fLm ; // This now has significant within day variation due to udder fill. MDH. Changed from dMamLm to dLm, 23-1-2014
 		WaMilk = DMilk - dLm - dPm - dTm - DMilk * kMilkAsh ;
-		WaUrine = DrnkWa - WaRespir - WaSweat - WaFeces - WaMilk ; // This will easily go negative if DRnkWa is inadequate. May at times during the day with intermittent feeding
-		WaConsumed = WaFeces + WaMilk + WaUrine + WaRespir + WaSweat ;
 		BldUrMUN = DMilk * ( cMun * 10 / 14 / 1000 / 2 ) ; // (moles urea/day transferred from Bld to milk)
-		
-		// Ammonia and urea metabolism
-		
-		dBldUr = AaUrVis + AaUrGest + AmUr - BldUrRumAm - SaNRumAm - BldUrMUN - dUrea ;
 		// MamLm = integ ( dMamLm , iMamLm ) // Mammary LACTOSE
 		// TMilkLm = integ ( dMilkLm , 1.0E-8 ) // AND TOTAL YIELD
 		TVolMilk = TMilkLm / fLm ;
@@ -9046,30 +8445,699 @@ public:
 		if ( DayMilk <= 0 ) MilkSW = 0 ; // Turn off milking when dry
 		if ( MamMilk <= ResidMamMilk ) MilkSW = 0.0 ; // Turn off milking when udder empty
 		// end of procedural 
+		dMilkLm = MamLm * KMilk * MilkSW ;
+		dMamLm = dLm - dMilkLm ;
 		dMilkTm = MamTm * KMilk * MilkSW ; // Mammary MILK FAT
 		dMamTm = dTm - dMilkTm ;
 		dMilkPm = MamPm * KMilk * MilkSW ;
 		dMamPm = dPm - dMilkPm ;
-		dMilkLm = MamLm * KMilk * MilkSW ;
-		dMamLm = dLm - dMilkLm ;
 		MilkInhSyn = ( 1 * MamMilk ) / ( KMilkI + MamMilk ) ; // Changed to prevent negative values, Apr 23, 2008 MDH
 		
 		// RETAINED MILK EFFECTS, Altered Apr 23, 2008 to smooth effects on milk production
 		
 		dKMilkInh = MilkInhSyn - MilkInhDeg ;
 		dMamMilkAve = TAveMilkMam * ( MamMilk - MamMilkAve2 ) ;
-		// Computation of effects of feed intake (absorbed energy) on basal
-		// energy expenditures.Absorbed energy is averaged (absEAve) over 20
-		// days (TAveabsE=1/20).Absorbed energy factor (absEF) is expressed in
-		// units of metabolic body weight.
-		
-		dabsEAve = TAveabsE * ( AbsE - absEAve ) ;
 		// absEAve = integ ( dabsEAve , iabsEAve ) 
 		absEF = absEAve / ( EBW *pow(1,1)* 0.7555 ) ;
 		// WtGrvUter added Apr 5, 2007 MDH to refect gestation status.
 		EBW1 = WtOth + WtAdip + WtVis + WtGrvUter + WaPool - WaPoolTarget ;
 		NonFatEBW = EBW1 - WtAdip ;
 		NonUterEBW = EBW1 - WtGrvUter ;
+		
+		// procedural ( RequiredEnergy , FdCapMolly = DayMilk , NonUterEbwTarget , NonUterEBW ) 
+		
+		EnergyForActivity = 0 ; // (ActEnergyReq / MjoulesToATPConv / MEinMJ) / (0.02 * (17.0 * (MEinMJ/3.6/4.1555) - 2.0) + 0.5)
+		EnergyForPregnancy = EnergyForPregnancyFactor * 11.5 * WtGrvUter ; //
+		EnergyForGrowth = GrowthPerDay * 50.0 ; // Assuming 50MJ required for 1kg LW gain
+		EnergyCompensation = ( NonUterEbwTarget / NonUterEBW ) *pow(1,1)* kEnergyCompensation ; // Any extra/deficit in condition would decrease/increase intake, trying to simulate the extra hunger of low condition cows, and lower insentive to eat for fat cows
+		// ** 0.5 gives approx 1% more food for every 2% LW deficit in the non extreme range, and vice versa. ** 1 would give 1:1 relationship.
+		if ( DayMilk <= 0 ) { // Dry Cow
+			EnergyForMaintenance = NonUterEbwTarget *pow(1,1)* EnergyForDryCowMaintenancePower * EnergyForDryCowMaintenanceFactor ;
+			EnergyForMilk = 0 ;
+		} else { // Milking Cow
+			EnergyForMaintenance = NonUterEbwTarget *pow(1,1)* EnergyForMilkingCowMaintenancePower * EnergyForMilkingCowMaintenanceFactor ;
+			if ( DayMilk <= PeakIntakeDay ) {
+				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - ( 1.0 - DayMilk / PeakIntakeDay ) *pow(1,1)* EnergyForMilkPower ) ;
+			} else if ( DayMilk <= ( PeakIntakeDay + SmoothingPeriodDays ) ) {
+				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - IntakeDeclineSlope * ( SmoothingPeriodDays / 2.0 ) * ( ( DayMilk - PeakIntakeDay ) / SmoothingPeriodDays ) *pow(1,1)* 2.0 ) ;
+			} else {
+				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - IntakeDeclineSlope * ( SmoothingPeriodDays / 2.0 + ( DayMilk - ( PeakIntakeDay + SmoothingPeriodDays ) ) ) ) ;
+			}
+		}
+		
+		RequiredEnergy = ( EnergyForMaintenance // Molly's required intake, in MJ
+			+ EnergyForMilk //
+			+ EnergyForPregnancy //
+			+ EnergyForGrowth //
+			+ EnergyForActivity ) // Currently this one zero, avarage activity assumed and bundled in rEnergeyForMaintenance
+			* EnergyCompensation ; // Smaller than one for fat cows, largerthan 1 for skinny, on the long run brings cows that differ only in condition, to a similar state.
+		//
+		FdCapMolly = NonUterEbwTarget * CappingForIntake ; // in kgDM actual, WFM will not feed her more forage (pasture & silage) then this amount, but may feed things like grains on top of that
+		//
+		// end of procedural 
+		
+		// END  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'
+		
+		if ( FeedInFlag == 1.0 ) { //
+			FdRat = FdRatWFM ; // Allocated feed - m files or WFM
+		} else { //
+			FdRat = RequiredEnergy / 11.5 ; // Fully fed automatically (standalone)
+		}
+		
+		// FEEDING MANAGEMENT
+		
+		// FdRat, FdDMin, and DailyDMin are all Kg dry matter
+		// consumed per day (FdRat is specified input from animal
+		// database(ie Event 2)).
+		// FDINT (feeding interval) and FDTM (time spent eating in
+		// each feeding interval0 are used in rumination, salivation
+		// and water dynamics functions so are left in at this time
+		// but may not function properly.  NES 8/99
+		
+		// Next block (up to RUMINATION) was merged From Molly86 for Mindy. Gil July 2012, including deletion of the Feeding Starategies section!
+		// Daily Feed and Nutrient Intakes
+		FdDMIn = FdRat ;
+		ScTCs = fScTFd * FdDMIn / MwtSc ;
+		IndigFdFd = FdDMIn * fIndigFd * ( 1 - fLPartSwal ) ;
+		// assumes no Hc,Ce,Aa, GOTO La
+		FvLaFd = FdDMIn * FLaFd / MwtLa ;
+		ChChFd = fLiFd * FdDMIn / MwtLiFd * LiChFd * MwtCh ;
+		SolOmP = CsP * MwtCs + FaP * MwtFl + RumAaP * MwtRumAa + ChChFd ; // Added ChChFd to be consistent with DMP, MDH. Mar 31, 2014
+		NdfinFd = fNDFFd * FdDMIn ;
+		TStin = FdDMIn * fStFd ;
+		PiPiFd = fPiFd * FdDMIn * ( 1 - fLPartSwal ) ;
+		LPartSwal = FdDMIn * fLPartNutIng ; // LARGE PARTICLES
+		MPartSwal = FdDMIn * fMPartNutIng ;
+		PsAaFd = FPsFd * FdDMIn / MwtPs ;
+		AsAsFd = fAsFd * FdDMIn ;
+		NnAmFd = fNnFd * FdDMIn * NnAmAM / MwtNn ; // RUMEN AMMONNIA-Am
+		UrAmFd = FUrFd * FdDMIn * UrAmAm / MwtUr ;
+		
+		// Computation of digestion coefficients for energy and energy terms.
+		FdGEin = GEFd * FdDMIn + InfPrt * 5.7 ;
+		StCsFd = FStsFd * FdDMIn ;
+		StCs = StCsFd / MwtSt ; // SOLUBLE CARBOHYDRATES
+		// (2002; JDS:85, 1176-1182) and Cassida and Stokes (1986; JDS:69,1282-1292)
+		RestWa = 1.4 * FdDMIn * 0.7555 ;
+		EatWa = 3.3555 * FdDMIn * 0.7555 ;
+		// RestWa=1.4555*(FdDMin/FdInt)*0.7555*RumntnCor*NOFEED
+		DrnkWa = EatWa + RestWa ;
+		TPRTin = ( FPsFd + fPiFd + fNnFd ) * FdDMIn ;
+		SPartSwal = FdDMIn * fSPartNutIng ;
+		FvAcFd = fAcFd * FdDMIn / MwtAc ;
+		RumCein = fCeFd * FdDMIn ;
+		Cein = RumCein * ( 1 - fLPartSwal ) ;
+		DailyDMin = FdDMIn ;
+		// 85 L/DAY with Rumntn=0.3555 at 500 kg EBW
+		// Only active during rumination
+		
+		EatSa = 3.2 * FdDMIn ; // L/Kg FdDMin. Redefined by Mindy to be: EatSa=2.6555*(EBW**0.7555)*Eating
+		Fl1Fd = fFatFd * FdDMIn * FaFlFd / MwtFaFd ;
+		
+		// procedural ( Rumntn , Eating , Rest = RUMNTNEQ , CWCF , DAY , TIME , 
+			// AMP1FT , MEAN1 , RumntnF , FdDMIn ) 
+		if ( RUMNTNEQ == 0.0 ) {
+			Eating = RumntnF ;
+			Rumntn = RumntnF ;
+			Rest = 1 - Rumntn ; // - Eating
+		} else {
+			// Determine whether the animal is eating, ruminating, or resting with Mindy Intake model, 4-25-2011, MDH
+			Rest = 0.0 ;
+			Rumntn = 0.0 ;
+			Eating = 0.0 ;
+			if ( FdDMIn > 0.1 ) {
+				Eating = 1.0 ;
+			} else if ( LPart > MinLPRumntn ) { // Ruminate until LP becomes less than or equal to the minimum LP size to stimulate rumination.
+				Rumntn = 1.0 ;
+			} else {
+				Rest = 1.0 ;
+			}
+		}
+		// end of procedural 
+		// RestSa=6.0*(FdDMin/FdInt)*Rest*RestCor
+		// 60 L/DAY with Rumntn=0.3555
+		// Only runs when not feeding, corrected down for ruminating
+		RumntnSa = 2.4555 * ( EBW *pow(1,1)* 0.7555 ) * Rumntn ;
+		LPartRed = KLPartRed * LPart / LPartCor * Rumntn ;
+		LPartCeCe = LPartRed * fLPartCe ; // HOLOCELLULOSE-Hb
+		LPartSPart = LPartRed * ( 1 - pLPartMPartComm ) ;
+		LPartStHa = LPartRed * fLPartSt ;
+		LPartMPart = LPartRed * pLPartMPartComm ;
+		LPartHcHc = LPartRed * fLPartHc ; // HOLOCELLULOSE-Hb
+		LPartHbHb = LPartCeCe + LPartHcHc ;
+		
+		// PASSAGE RATE CONSTANTS
+		// **********************
+		// KSPartP is now a fraction of KWAP, MDH 5-25-13
+		// KSPartP=2.6555*(FdDMin/ebw**0.7555)+1.00
+		// KWaP=1/((0.02555*(ebw**0.7555)/FdDMin)+0.1555)
+		// KSPartP & KWaP are in TURNOVERS PER DAY
+		// Equations derived by regression from Robinson 1985 Can.JAS 65:347
+		// and Evans 1981 Can.JAS 61:97
+		
+		// Inputs to the particle pools was altered to utilize seiving data, default seive is the Penn State Particle
+		// 	separator, but any sieve size can be used.  The feed seiving data is modified using a set of equations
+		// 	to reflect the effects of mastication during ingestion, and thus particle entry into the rumen reflects,
+		// 	the original particle size reduced by mastication.  A normal Penn State Shaker distribution is used as
+		// 	as a default.
+		// Initial rumen particle pool sizes were the mean of the seiving observations of Shaver et al., 1988. MDH
+		
+		// LARGE PARTICLE POOL(LPart in Kg); Retained on a 4.8 mm screen
+		// This is a real pool that is intended to represent the floating raft.  Starch was added to the pool, 5-21,2013
+		// 	to reflect entry of larger starch particles.  Assuming starch particle size reflects total diet
+		// 	particle size is likely an overestimate of starch entry into the LPart pool, but failing to include
+		// 	it as in the original model is clearly an underestimate. MDH
+		
+		// This pool was reduced in size and more dietary material is diverted through it
+		// necessitating a large increase in the rate constant, MDH
+		// Should be function of physical properties of feed!
+		// Should KLPartRed be a function of fermentation rate?
+		// Should entry be lagged for hydration??
+		
+		dLPart = LPartSwal - LPartRed ;
+		LPartPiPi = LPartRed * fLPartPi ;
+		LPartIndigFdIndigFd = LPartRed * fLPartIndigFd ; // INDIGESTIBLE FEED
+		MPartSPart = MPart * KMPartSPart * Rumntn ;
+		// END  INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one
+		// BEGIN  INCLUDE 'Intermittent_Eating_deriv.csl'
+		
+		// No intermittent eating for basic Molly
+		
+		// END  INCLUDE 'Intermittent_Eating_deriv.csl'
+		// BEGIN  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
+		// *************************************************
+		// COMPUTATION OF WATER DYNAMICS: different in MIndy
+		// *************************************************
+		// Salivation, drinking, water flow through rumen wall, rumen soluble,
+		// particulate and total rumen dry matter (RumDM) and rumen volume.
+		// Rumen volume can be calculated based upon RumDM/0.1555 which is the
+		// default or based upon water dynamics and osmolality when the rumen
+		// liquid volume equation(RumLiqVolEQ)is set to 1.0. The empirical
+		// equation for OSWa is not generally applicable and should not be used
+		// for continuous feeding and unusual diets e.g. high salt, NaHCO3, and
+		// thus should be closely monitored when RumLiqVolEQ is set to 1.0.
+		
+		RestSa = 0.8555 * ( EBW *pow(1,1)* 0.7555 ) * Rest ; // At 8 h resting, this equates to 70 ml/min which is below the 114 ml/min according to Maekawa et al.
+		SaIn = EatSa + RestSa + RumntnSa ;
+		SaPsAa = cSaPs * SaIn ;
+		SaNnAm = cBldUr * SaIn * UrAmAm ;
+		SaNRumAm = SaNnAm * AmUrUr ;
+		SaAs = fSaAs * SaIn ;
+		
+		// procedural ( RumLiqVol , fRumDM = RumLiqVolEQ , SaIn , DrnkWa , LPart , MPart , SPart ) 
+		RumOsMol = ( Cs / CsCor + Fl / FLCor + AM / AmCor + RumAc / RumAcCor +
+			RumPr / RumPrCor + RumBU / RumBuCor + RumLa / RumLaCor
+			+ RumAa / RumAaCor + As / MwtAs / ASCor * OsMolF ) / RumLiqVol ;
+		// Rumen Fluid OsMolality. As (soluble ash) multiflied by a factor
+		// to give moles of ions.  MwtAs=0.08555 was picked from NaHCO3
+		// Not clear why OsMolF is applied to AA.  This would appear to be a mistake and thus removed. MDH 2-19-14
+		// As plays a very minor role in driving Osmol.  VFA are the drivers.
+		// OsWa=0.7555*((RumOsMol-0.2555)*1000)-41.0   	  !Dobson , the negative intercept in this emprical equation causes mOsmol to run at 300, MDH 2-19-14
+		// Set the slope a little higher to keep osmolality down, MDH 2-19-14
+		OsWa = OsWaSlp * ( ( RumOsMol -0.2555 ) * 1000 ) + OsWaInt ; // Set the intercept to 0 to achieve a center around 280 mOsmol
+		fRumDM = 0.1555 ;
+		// 14.7% DM of rumen contents based on lactating cow data from
+		// VanVuuren 1999,JDS 82:143,Johnson 1991,JDS 74:933,Woodford 1988
+		// JDS 71:674,Shaver 1985,18th Rum Func Conf p45, DCM90(Purina),
+		// and Hartnell 1979,JAS 48:381
+		RumVol = RumDM / fRumDM ;
+		RumLiqVol = RumVol - RumDM ;
+		WaOut = RumLiqVol * KWAP ;
+		dRumLiqVol = WaIn - WaOut + OsWa ;
+		// end of procedural // OF PROCEDURAL
+		cVFA = TVFA / RumLiqVol ; // cVFA in Moles/liter
+		HcP = Hc / HcCor / RumLiqVol * WaOut * fPartP ;
+		FecHC = HcP * ( 1.0 - LgutDCHb ) ;
+		LgutHcFv = HcP * LgutDCHb / MwtHc * 0.8555 ;
+		LgutHcBu = LgutHcFv * HcBuBu ;
+		// Corrects kg hemicellulose
+		LgutHcAc = LgutHcFv * HcAcAc ;
+		// to moles hexose equivalents
+		LgutHcPr = LgutHcFv * HcPrPr ;
+		IndigFdP = IndigFd / IndigFdCor / RumLiqVol * WaOut * fPartP ;
+		FecLg = IndigFdP * fLgFd / fIndigFd ;
+		IndigFdMiP = IndigFdP * cMiSPart ; // Passage of microbes in
+		// Pi = integ ( dPi , iPi ) 
+		
+		// LIGNIN AND INSOLUBLE ASH (IndigFd in Kg)
+		dIndigFd = IndigFdFd + LPartIndigFdIndigFd - IndigFdP ;
+		AiP = IndigFdP * fAiIndigFd ;
+		AshP = AsP + AiP ; // Total Duodenal Ash, Kg/d
+		LgutAi = LgutDCAi * IndigFdP * fAiFd / fIndigFd ;
+		LgP = IndigFdP * fLgIndigFd ; // To Fit Duodenal Data Kg/d
+		FecAsh = AsP * ( 1.0 - LgutDCAs ) +
+			IndigFdP * fAiFd / fIndigFd * ( 1.0 - LgutDCAi ) ;
+		cAs = ( As / ASCor ) / RumLiqVol ;
+		absRumAs = KAsabs * cAs ;
+		
+		// SOLUBLE ASH(As in Kg)
+		
+		dAs = AsAsFd + SaAs + InfAs - AsP - absRumAs ;
+		HbMiP = ( HbMi / MIHbCor ) / RumLiqVol * WaOut * fPartP ;
+		cRumAa = ( RumAa / RumAaCor ) / RumLiqVol ;
+		YAtp = 0.01555 + RumYAtp / ( 1.0 + KYAtAa / cRumAa ) ;
+		RumAaFv = VmRumAaFv * WaMi / ( 1.0 + KRumAaFv / cRumAa ) ;
+		RumAaPr = AaFvPr * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
+		RumAaAc = AaFvAc * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
+		AaAm = RumAaFv * AaFvAm ;
+		RumAaBu = AaFvBu * ( RumAaFv + ( 0.7555 * NnAmFd ) ) ;
+		G2 = 0.5 / ( 1.0 + KYAtAa / cRumAa ) ;
+		G1 = 1.0 - G2 ;
+		HaP = Ha / HaCor / RumLiqVol * WaOut * fPartP ;
+		// Total Duodenal Dry Matter Flow, Kg/d
+		
+		LgutHaGl = HaP * LgutDCHa / MwtSt ;
+		
+		// FECES (Fec)
+		
+		FecHa = HaP * ( 1.0 - LgutDCHa ) ;
+		// LACTATE
+		cRumLa = ( RumLa / RumLaCor ) / RumLiqVol ;
+		
+		// RUMEN pH CRumpH
+		// Rumen pH influences stoichiometry of fermentation (above) and
+		// hydrolytic rate constants for cellulose and hemicellulose.
+		// This is most relevant when meal rather than continuous feeding
+		// is implemented.  However, in the default it is left on
+		// (RumpHCON=1.0,FIXDPH=0.0).  (RumpHCON) RumpH control allows the
+		// RumpH equation to be shut off so a fixed pH (FIXDpH) can be used
+		
+		// pH predicted from Briggs et al., 1957 as used in Argyle and Baldwin, 1988
+		// RumpH=(7.2555-(10.0*cVFA+1.5*cRumLa))
+		RumpH = ( RumpHBase - ( vfaeff * cVFA +1.5 * cRumLa ) ) * RumpHCON + FIXDpH ;
+		
+		// MICROBIAL FUNCTIONS (Mi in Kg)
+		// ********************************
+		
+		// MICROBIAL GROWTH PARAMETRS
+		
+		// ATP generation and microbial growth and composition
+		// CsFvAt is set at 4.0 molesATP/mole Cs but is really
+		// a variable.
+		
+		// Growth without amino acids (G1)
+		// Moles nutrient/Kg microbe formed
+		// Recalculated 14 Feb,1984 to conform to elemental composition
+		// and paths of Reichl and Baldwin(JDS 58:879(1975)) with diet
+		// lipid as the source of long chain fatty acids(1.2 moles
+		// /mole Li)
+		
+		FlMiG = 0.2555 ;
+		
+		// Growth with amino acids(G2)
+		
+		CdMiG2 = -0.05 ;
+		
+		// Microbe composition (Kg/Kg)
+		// NOTE:Organic Matter only
+		
+		// Lipid composition in mole/mole
+		
+		MwtMiLi = 0.6555 ;
+		
+		// Effect of added dietary fat on microbial yield (MiG) 12/14/90 jk
+		
+		// procedural ( MiMaAd = RumpH ) 
+		// Effect of pH on microbe maintenence requirement.
+		MiMaAd = 20 ;
+		// MOLES/KG/DAY
+		if ( RumpH >= 6.2 ) goto label_26 ;
+		if ( RumpH <= 5.4 ) goto label_25 ;
+		MiMaAd = MiMaAd + ( MiMaAd * ( ( 0.8 - ( RumpH -5.4 ) ) / 0.8 ) ) ;
+		goto label_26 ;
+	label_25: MiMaAd = 40 ;
+	label_26:
+		// end of procedural 
+		// I don t know why John has this in,RLB
+		AtpM = Mi / MICor * MiMaAd ;
+		// OF PROCEDURAL
+		
+		// ADJUSTMENT OF STOICHIOMETRIC COEFFICIENTS FOR RumpH
+		// Stiochiometric coefficients have pH effects embedded in them.
+		// These equations should probably be sigmoidal.
+		// Switch to pure lactate at pH 5.4 may not be correct, it is
+		// probably a logarithmic increase starting at 5.5.  These changes
+		// in stoichiometric coefficients parallel those suggested by
+		// the equation which corrects for systematic errors in CONSET
+		// due to increasing proportions of concentrate in the ration
+		// which was formulated by Murphy et al (1982).
+		
+		// procedural ( ScAc , ScPr , ScBu , ScLa , StAc , StPr , StBu , StLa = RumpH , 
+			// ScAcAc , ScPrPr , ScBuBu , ScLaLa , StAcAc , StPrPr , StBuBu , StLaLa ) 
+		ScAc = ScAcAc ;
+		ScPr = ScPrPr ;
+		ScBu = ScBuBu ;
+		ScLa = ScLaLa ;
+		StAc = StAcAc ;
+		StPr = StPrPr ;
+		StBu = StBuBu ;
+		StLa = StLaLa ;
+		if ( RumpH >= 6.2 ) goto label_24 ;
+		if ( RumpH <= 5.4 ) goto label_23 ;
+		ScAc = 0.7555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScAcAc -0.7555 ) ;
+		ScPr = 0.5555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScPrPr -0.5555 ) ;
+		ScBu = 0.4555 + ( ( RumpH -5.4 ) / 0.8 ) * ( ScBuBu -0.4555 ) ;
+		StAc = 0.6555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StAcAc -0.6555 ) ;
+		StPr = 0.8555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StPrPr -0.8555 ) ;
+		StBu = 0.2555 + ( ( RumpH -5.4 ) / 0.8 ) * ( StBuBu -0.2555 ) ;
+		goto label_24 ;
+	label_23: ScAc = 0.0 ;
+		ScPr = 0.0 ;
+		ScBu = 0.0 ;
+		StAc = 0.0 ;
+		StPr = 0.0 ;
+		StBu = 0.0 ;
+		ScLa = 2.0 ;
+		StLa = 2.0 ;
+	label_24:
+		// end of procedural // OF PROCEDURAL
+		// Ha = integ ( dHa , iHa ) 
+		
+		// HOLOCELLULOSE(Hc+Ce in Kg) OR BETA-HEXOSES(Hc and Ce in Kg)
+		// METABOLISM
+		
+		// The Hb equation should probably be sigmoid from pH 7.0 on down
+		// to pH 5.5 with the steapest decrease below 6.2 to 5.5, but there
+		// are not enough data to create that form.
+		
+		// procedural ( KHcCs , KCeCs = RumpH , KHcCs1 , KCeCs1 ) 
+		KHcCs = KHcCs1 ;
+		KCeCs = KCeCs1 ;
+		if ( RumpH >= 6.2 ) goto label_22 ;
+		KHcCs = KHcCs - ( KHcCs * 1.8555 * ( 6.2 - RumpH ) ) ;
+		KHcCs = max ( KHcCs , 0.0 ) ;
+		KCeCs = KCeCs - ( KCeCs * 1.8555 * ( 6.2 - RumpH ) ) ;
+		KCeCs = max ( KCeCs , 0.0 ) ;
+	label_22:
+		// end of procedural // OF PROCEDURAL
+		SPartCeCs = Ce / CeCor * KCeCs * cMiHb * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatHb ) ) ;
+		CeCs = SPartCeCs / MwtCe ;
+		SPartHcCs = Hc / HcCor * KHcCs * cMiHb * fPartSA * ( 1 - ( fFatFd / fLiFd * KFatHb ) ) ;
+		MPartDeg = ( SPartHaCs + SPartHcCs + SPartCeCs + SPartPiAa ) / fPartSA * ( fMPart1 * fMPartSA ) ;
+		HbMiRum = cMiHb * SPartHcCs + cMiHb * SPartCeCs ; // released due to hydrolysis of particulate substrates
+		SPartHbCs = SPartCeCs + SPartHcCs ;
+		SPartDeg = ( SPartHaCs + SPartHcCs + SPartCeCs + SPartPiAa ) / fPartSA * ( fSPart1 * fSPartSA ) ;
+		HcCs = SPartHcCs / MwtHc * 0.8555 ; // Converts kg of hemicellulose to moles of hexose equivalents.
+		
+		// **********************************
+		// MICROBES ASSOCIATED WITH SPart(kg/kg)
+		// **********************************
+		// Association of microbes with small particle Ha(MiHa) and Hb
+		// (MiHb). Was added to prevent increases in KHaCs from
+		// increasing digestion of Hb(due to more microbes) and vice versa
+		// i. e. to give specificity associated with small
+		// particles based upon substrate they grew on.
+		
+		Csin = ScTCs + StCs + HaCs + HcCs + CeCs ; // Fractions of Cs entry
+		FCeCs = CeCs / Csin ;
+		fCsHa = HaCs / Csin ; // attributed to Ha at Hb
+		fStCs = ( StCs + HaCs ) / Csin ;
+		fScCs = ScTCs / Csin ;
+		CsFvLa = ScLa * fScCs + StLa * fStCs ;
+		fCsHb = ( HcCs + CeCs ) / Csin ; // hydrolysis.
+		fHcCs = HcCs / Csin ;
+		CsFvAc = ScAc * fScCs + StAc * fStCs + HcAcAc * fHcCs + CeAcAc * FCeCs ;
+		CsFvPr = ScPr * fScCs + StPr * fStCs + HcPrPr * fHcCs + CePrPr * FCeCs ;
+		CsFvBu = ScBu * fScCs + StBu * fStCs + HcBuBu * fHcCs +
+			CeBuBu * FCeCs ;
+		cCs = ( Cs / CsCor ) / RumLiqVol ;
+		CsFv = VmCsFv * WaMi / ( 1.0 + KCsFv / cCs ) ;
+		AtpF = CsFv * CsFvAt + RumAaFv * AaFvAt +0.7555 * NnAmFd * AaFvAt + RumLaFv * LaFvAt ;
+		AtpG = AtpF - AtpM ;
+		CsBu = CsFv * CsFvBu ;
+		CsLa = CsFv * CsFvLa ;
+		
+		// Lactate functions are in to define variables and
+		// are not based on hard data. Should add a fermentation
+		// equation,KabsLa is arbitrary.
+		
+		dRumLa = CsLa + FvLaFd - RumLaP - absRumLa - RumLaFv ;
+		CsAc = CsFv * CsFvAc ;
+		// Fl = integ ( dFl , iFl ) 
+		
+		// VOLATILE FATTY ACIDS AND LACTATE(RumAc,RumPr,RumBu,RumLa in moles)
+		// Rate constants may not be equal as assumed here!
+		// KabsLa set to low level to define variable
+		// La fermentation may be needed
+		// CCP 9-13-06
+		
+		// ACETATE-RumAc
+		
+		dRumAc = FvAcFd + CsAc + RumAaAc + RumLaAc - absRumAc - RumAcP ;
+		CsPr = CsFv * CsFvPr ;
+		
+		// PROPIONATE-RumPr
+		// infused ruminal propionate, mol/d
+		dRumPr = CsPr + RumAaPr + RumLaPr + InfRumPr - absRumPr - RumPrP ;
+		PiP = Pi / PICor / RumLiqVol * WaOut * fPartP ;
+		PiMiP = PiP * cMiSPart ; // association with SPart
+		FecPi = PiP * ( 1.0 - LgutDCPi ) ;
+		// Hb = integ ( dHb , iHb ) 
+		
+		// INSOLUBLE PROTEIN (Pi in Kg) METABOLISM
+		// Sept. 20, 2004 solution against Bate5o2 data.
+		// Effect of added dietary fat on protein degradability added 12/90
+		// again this is an effect which is poorly supported.
+		dPi = PiPiFd + LPartPiPi - SPartPiAa - PiP ;
+		LgutPiAa = PiP * LgutDCPi / MwtPi ;
+		
+		HaMiP = ( HaMi / MiHaCor ) / RumLiqVol * WaOut * fPartP ;
+		CeP = Ce / CeCor / RumLiqVol * WaOut * fPartP ;
+		MPartP = ( HaP + HcP + CeP + PiP + IndigFdP ) / fPartP * ( fMPart1 * KMPartP ) ;
+		
+		// Need to calculate MPart and SPart in feces from ruminal outflow.  Subtract non NDF digested
+		// nutrients from the ruminal particle outlfow values to get feces, MDH Feb 11, 2014
+		FecMPart = MPartP ; // these do not account for intestinal digestion of MPart and SPart. Need to fix per above.
+		
+		// MEDIUM PARTICLE POOL (MPart in Kg); Retained on a 1.2 mm screen put passes a 4.8 mm screen
+		// Added in May of 2013 to allow representation of differential passage of particles from the
+		// 	rumen based on size and differental rates of fermentation based on surface area.
+		// 	This pool is a phantom pool that is used with SPart, another phantom pool,
+		// 	to mathematically partition the pools of Hc, Ce, Ha, Pi, and IndigFd into medium and
+		// 	small fractions to allow application of differential outflow and degradation. MDH
+		// Set to achieve steady state on the base diet, MDH
+		// ??Need to verify and update if needed
+		// A proportion of Liq Flow. An initial guess, MDH
+		dMPart = MPartSwal + LPartMPart - MPartSPart - MPartDeg - MPartP ;
+		SPartP = ( HaP + HcP + CeP + PiP + IndigFdP ) / fPartP * ( fSPart1 * KSPartP ) ;
+		FecSPart = SPartP ;
+		
+		// SMALL PARTICLE POOLS(SPart in Kg); Passes a 1.2 mm screen
+		// A phantom pool that is used with MPart to mathematically partition Hc, Ce, Ha, Pi, and IndigFd.
+		dSPart = SPartSwal + LPartSPart + MPartSPart - SPartDeg - SPartP ;
+		SPartMiP = cMiSPart * ( SPartP + MPartP ) ;
+		MiP = SPartMiP + WaMiP ;
+		MiPP = MiP * MiPiPI + MiP * MiNnNn ; // Microbial CP Passage
+		Nan = 1000 * 0.1555 * ( PiP + ( RumAaP * 0.1555 ) + ( MiP * 0.5555 ) + ( MiP * 0.09555 ) ) ;
+		LipidP = ( FaP * MwtFa ) + ( MiP * MiLiLI ) ; // Total Duodenal Lipid Flow, Kg/d
+		FecMiLi = MiP * MiLiLI * ( 1.0 - DCMiLi ) ;
+		FecLipid = FecFa + FecMiLi ; // Total Fecal Lipid Flow, Kg/d
+		MiAa = MiP * MiPiPI * DCMiPi / MwtPi ;
+		AbsAa = MiAa + LgutPiAa + RumAaP + InfPrt / 0.1555 ;
+		// OthDna = integ ( dOthDna , iOthDna ) 
+		// VisDna = integ ( dVisDna , iVisDna ) 
+		
+		// AMINO ACID AND NITROGEN METABOLISM
+		// **********************************
+		
+		// Amino acid metabolism (Aa) including protein turnover (P) in
+		//      Lean body mass (POth) and Viscera (PVis).
+		
+		// Inputs to Aa are absAa (12.6), POthAa (10.0) and PVisAa (8.2). TO
+		// from Proc.Nutr.Soc.39:43-52(Reeds and Lobley) at 18g/BW**0.7555.
+		// TO=2.0 kg/day or (/0.1555) 18.2 moles/day. Outputs are AaPOthOth (10),
+		// AaPVis (8.2), AaPm (8.6) and gluconeogenesis (AaGlVis=4.0).
+		// Biosynthetic reactions set at 1/2Vmax in reference state. Capacity
+		// for AaGlVis is very high (5x) relative to flux in fed (reference)
+		// state so set there. Compution of mass in Oth and Vis assumes
+		// that protein+H2O is 70% of wt at 25% dry matter (fractional
+		// dry wt=fDWt) and that remaining wt is constant(otWtOth,otWtVis).
+		// Aa pool size and volume increased 10x in this version.
+		// KPOthAaOth and KPVisAaVis adusted 05/01/91 to make equations functions
+		// of POth and PVis rather than cPOth and cPVis jk.
+		// VmAaGlVis now scaled to body size (BWF) jk 05/09/91
+		
+		// revised constant VmAaPmVis 7/92 (kc)
+		
+		// AMINO ACID METABOLISM
+		dAa = AbsAa + POthAaOth + PVisAaVis - AaPOthOth - AaPVisVis - AaPmVis - AaGlVis - SaPsAa
+			- AaPGest - AaGlGest ;
+		absAaE = AbsAa * HcombAa ;
+		FecMiPi = MiP * MiPiPI * ( 1.0 - DCMiPi ) ; // KG.
+		
+		NitP = ( ( RumAaP * MwtPs ) + PiP + ( MiP * MiPiPI ) + ( MiP * MiNnNn ) ) * .16 ; // Total Duodenal N Flow, Kg N/d
+		NANP = NitP ; // No accomodation for Ammonia passage. Is this correct? Probably blown off by drying.
+		NANMNP = NANP - ( 0.1555 * MiPP ) ;
+		HaPT = HaP + ( MiP * MiHaHA ) ; // To Fit Duodenal Data, Kg/d
+		MiGl = MiP * MiHaHA * LgutDCHa / MwtSt ;
+		FecMiHa = MiP * MiHaHA * ( 1.0 - LgutDCHa ) ;
+		MiCh = ( MiP * MiLiLI / MwtMiLi ) * MiLiCh ;
+		FecCh = ChChFd + MiCh * DCMiLi * MwtCh ;
+		// Computes digestion (Dg) of nutrients
+		MiLiDg = MiP * MiLiLI * DCMiLi / MwtMiLi ;
+		MiLGl = MiLiDg * MiLiGl ;
+		
+		// **************************************************************
+		// INTERFACE OF MODELS---NUTRIENT ABSORBTION
+		// *************************************************************
+		// Absorbtion of nutrients
+		
+		absGl = LgutHaGl + CsP + MiGl + MiLGl ;
+		absGlE = absGl * HcombGl ;
+		upGl = 0.1555 * absGl ;
+		gGlLa = 0.9555 * absGl * GlLaLa ;
+		RumLaGl = absRumLa + RumLaP + gGlLa ;
+		// GLUCOSE
+		LaGlV1 = ( LaGlAdip + LaGlOth + RumLaGl ) * LaGlGl ;
+		MiPr = MiLiDg * MiLiPr ;
+		MiBu = MiLiDg * MiLiBu ;
+		// in the lower gut in moles.
+		MiFa = MiLiDg * MiLiFA ;
+		// Correction for absFa converts stearate (Fl) from
+		absFa = ( MiFa + LgutFaDg ) * MwtFl / MwtFa ;
+		absFaE = absFa * HcombFa ;
+		FecMiNn = MiP * MiNnNn ;
+		FecPiT = FecMiPi + FecMiNn + FecPi ;
+		
+		// ****************************************************************
+		// 	Passage Rates from the Rumen
+		ADFP = CeP + IndigFdP ;
+		HbP = HcP + CeP ;
+		TOmP = SolOmP + HaP + HbP + PiP + LgP ;
+		TTOmP = TOmP + MiP ;
+		FecHb = HbP * ( 1.0 - LgutDCHb ) ;
+		FecOm = FecHa + FecHb + FecPiT + FecMiLi + FecLg + FecCh + FecMiHa + FecFa ;
+		FecDM = FecOm + FecAsh ;
+		
+		// Animal Water Balance Equations, MDH Jan 23, 2014
+		// assumed feces is 23% DM from Murphy 1992 review, JDS
+		// Assumed 1% Ash in milk
+		// Assumed half the maximal respiratory rate cited in Murphy, 1992 JDS
+		// Assumed 25% the maximal sweating rate cited in Murphy, 1992 JDS
+		WaFeces = FecDM / ( 1 - KWaFeces ) - FecDM ;
+		WaUrine = DrnkWa - WaRespir - WaSweat - WaFeces - WaMilk ; // This will easily go negative if DRnkWa is inadequate. May at times during the day with intermittent feeding
+		WaConsumed = WaFeces + WaMilk + WaUrine + WaRespir + WaSweat ;
+		FecENG = ( FecHa * 4.1555 + FecHb * 4.1555 + ( FecMiPi + FecPi ) * 5.7 + FecMiLi * 7.2 +
+			FecLg * 8.3 + FecCh * 3.3555 + FecMiNn * 5.7 + FecMiHa * 4.1555 + FecFa * 9.5555 ) * F1 ;
+		appDE = ( FdGEin - FecENG ) / FdGEin ; // APPARRENT DIGESTIBLE ENERGY
+		DEI = FdGEin - FecENG ; // DIGESTIBLE ENERGY INTAKE
+		LgutCeFv = CeP * LgutDCHb / MwtCe ;
+		LgutCeAc = LgutCeFv * CeAcAc ;
+		absAc = absRumAc + LgutHcAc + LgutCeAc + RumAcP ;
+		AbsAcE = absAc * HcombAc ;
+		LgutCeBu = LgutCeFv * CeBuBu ;
+		// in whole gut in moles.This is
+		absBu = absRumBu + LgutHcBu + LgutCeBu + MiBu + RumBuP ;
+		absBuE = absBu * HcombBu ;
+		LgutCePr = LgutCeFv * CePrPr ;
+		// Computes absorbtion of nutrients
+		absPr = absRumPr + MiPr + LgutHcPr + LgutCePr + RumPrP ;
+		absPrE = absPr * HcombPr ;
+		AbsE = AbsAcE + absPrE + absBuE + absFaE + absAaE + absGlE + absLaE ;
+		// MamMilkAve = integ ( dMamMilkAve , iMamMilkAve ) 
+		
+		// OXIDATION
+		// ****************
+		// Oxidative metabolism (Ox,Cd).
+		// Computations based on energy needs expressed as rate of
+		// ADP formation (AtAd_), oxygen (Ox) uptake calculated from
+		// P/O ratio (PO), and Ac and Fa oxidation rates from ratios
+		// of Michaelis-Menton equations assuming Vmaxs for oxidation
+		// of each are equal. See separate documentation for details
+		
+		// General constants
+		
+		// Computation of effects of feed intake (absorbed energy) on basal
+		// energy expenditures.Absorbed energy is averaged (absEAve) over 20
+		// days (TAveabsE=1/20).Absorbed energy factor (absEF) is expressed in
+		// units of metabolic body weight.
+		
+		dabsEAve = TAveabsE * ( AbsE - absEAve ) ;
+		PrGlVis = absPr * fPrGl ;
+		PrGlV1 = PrGlVis * PrGlGl ;
+		// Hc = integ ( dHc , iHc ) 
+		
+		dCe = Cein + LPartCeCe - SPartCeCs - CeP ;
+		FecCe = CeP * ( 1.0 - LgutDCHb ) ;
+		FecADF = FecCe + IndigFdP ;
+		cAm = ( AM / AmCor ) / RumLiqVol ;
+		FGAm = 1.0 / ( 1.0 + KFGAm / cAm ) ;
+		MiG = AtpG * YAtp * FGAm * FGFa ;
+		// OF PROCEDURAL
+		
+		dMi = MiG - MiP ;
+		
+		CsMiG = MiG * ( CsFv * CsFvAt / AtpF ) ; // Proportion of microbial
+		HbMiG = CsMiG * fCsHb ; // Cs formed from Ha and Hb hydrolysis
+		MiHbMi = HbMiF * ( HbMiG + HbMiRum ) ; // hydrolysis and fermentation which remain in association with SP.
+		dHbMi = SPartMiHb + MiHbMi - HbMiP - HbMiRum ;
+		HaMiG = CsMiG * fCsHa ; // growth attributable to
+		// max retention on SPart is 0.8555 of those potentially released.
+		
+		MiHaMi = HaMiF * ( HaMiG + HaMiRum ) ; // Microbes on particles and those grown from Ha and Hb
+		
+		dHaMi = SPartMiHa + MiHaMi - HaMiP - HaMiRum ;
+		AmMi = MiG * ( AmMiG1 * G1 + AmMiG2 * G2 ) ;
+		RumAaMi = MiG * AaMiG2 * G2 ;
+		// Cs = integ ( dCs , iCs ) 
+		
+		// AMINO ACID (RumAa in moles) METABOLISM
+		
+		dRumAa = PsAaFd + PiAa + SaPsAa - RumAaFv - RumAaMi - RumAaP ;
+		CsMi = MiG * ( CsMiG1 * G1 + CsMiG2 * G2 ) ;
+		
+		// WATER SOLUBLE CARBOHYDRATE(Sc in Kg;Cs in Moles)
+		
+		dCs = ScTCs + StCs + HaCs + HcCs + CeCs - CsFv - CsMi - CsP ;
+		FlMi = MiG * FlMiG ;
+		BldUrAm = ( VmBldUrAm * ( EBW *pow(1,1)* 0.7555 ) / ( 1.0 + KBldUrAm / cBldUr + cAm / KiAm ) ) * UrAmAm ;
+		// RumAa = integ ( dRumAa , iRumAa ) 
+		
+		// AMMONIA (Am in moles)METABOLISM
+		
+		dAm = NnAmFd + AaAm + SaNnAm + BldUrAm - absRumAm - AmMi + UrAmFd ;
+		BldUrRumAm = BldUrAm * AmUrUr ;
+		
+		// Ammonia and urea metabolism
+		
+		dBldUr = AaUrVis + AaUrGest + AmUr - BldUrRumAm - SaNRumAm - BldUrMUN - dUrea ;
+		StinFd = fStFd * FdDMIn ;
+		StHaFd = ( StinFd - StCsFd ) * ( 1 - fLPartSwal ) ; // error as fLPart was applied to StinFd previously, MDH 5-27-13
+		// HaMi = integ ( dHaMi , iMiHa ) 
+		// HbMi = integ ( dHbMi , iMiHb ) 
+		
+		// STARCH (St in Kg) OR ALPHA-HEXOSE (Ha in Kg) METABOLISM
+		dHa = StHaFd + LPartStHa - HaP - SPartHaCs ;
+		Nintake = FdDMIn * ( FPsFd + fPiFd + FUrFd + fNnFd ) * 1000 * 0.1555 ;
+		FvBuFd = fBuFd * FdDMIn / MwtBu ;
+		
+		// BUTYRATE-RumBu
+		dRumBu = CsBu + RumAaBu + FvBuFd - absRumBu - RumBuP ;
+		RumHcin = fHcFd * FdDMIn ;
+		Hcin = RumHcin * ( 1 - fLPartSwal ) ;
+		Hbin = Cein + Hcin ;
+		// Ce = integ ( dCe , iCe ) 
+		
+		dHb = Hbin + LPartHbHb - SPartHbCs - HbP ;
+		
+		// Effect of added dietary fat on organic matter digestibility (SPartHbCs)
+		// was added 12/90 but is very tentative as linear slope was derived
+		// from +/- fat data.
+		
+		dHc = Hcin + LPartHcHc - SPartHcCs - HcP ;
+		FlFd = fLiFd * FdDMIn / ( MwtLiFd ) * LiFlFd ;
+		// As = integ ( dAs , iAs ) 
+		
+		// LONG CHAIN FATTY ACIDS(Fl,Fa in moles)
+		
+		dFl = FlFd + Fl1Fd - FlMi - FaP ;
+		// TotDMin = integ ( DailyDMin , 1.0E-9 ) 
+		// LpinFd=fLp*FdDMin
+		OminFd = fOmFd * FdDMIn ;
+		MirOma = MiP * MiPiPI / ( OminFd - TTOmP ) ; // Apparent
+		
+		// For comparison to Clark papers
+		MiPrOm = MiP * MiPiPI / ( OminFd - TOmP ) ; // kg CP/kg OM True
 		// IncreasedUsDueToLowMfPublished = MamCells * MaxLossDueToLowMf * kMamCellsUsMfDecay * EXP(-kMamCellsUsMfDecay * CumulativeLowMfDays) ! This one is published because it is simple enough, and is identical to the IncreasedUsDueToLowMf BUT ONLY for a single period of non-2x-frequency. The above IncreasedUsDueToLowMf handles multiple periods of non-2x milking frequency elegantly but harder to describe in publication.
 		
 		// ***** AdiposeNew = estimation for LHOR sensitivity only ***********************************************
@@ -9135,6 +9203,17 @@ public:
 		AtAdV4 = AaPmVis * AaPxAD ;
 		AtAdV5 = GLLmVis * GlLmAd ;
 		AtAdV6 = GlHyVis * GlHyAD ;
+		AtAdV7 = GlTpVis * GlTpAD ;
+		LaGlVis = LaGlAdip + LaGlOth + RumLaGl ;
+		AtAdV8 = LaGlVis * LaGlAd ;
+		// VISCERA
+		AtAdV9 = PrGlVis * PrGlAd ;
+		AtAd10 = absGl * absGlAd ;
+		AtAd11 = AbsAa * absAaAd ;
+		AtAd12 = KidWrk * EBW *pow(1,1)* 0.7555 ;
+		AtAd13 = HrtWrk * OXUP1 ;
+		AtAd14 = ResWrk * OXUP1 ;
+		ATAd15 = ( AaUrVis + AaUrGest + AmUr ) * AtAmUr ;
 		
 		// Oxidative metabolism of viscera (Vis)
 		// Energy expend.(AtAdVis)are basalVis(339),TpTsVis(*TpTsAD=1.3*9=11.7),
@@ -9145,13 +9224,6 @@ public:
 		AtAdVis = basalVis + AtAdV1 + AtAdV2 + AtAdV3 + AtAdV4 + AtAdV5 + AtAdV6 +
 			AtAdV7 + AtAdV8 + AtAdV9 + AtAd10 + AtAd11 + AtAd12 + AtAd13 + AtAd14 +
 			ATAd15 ;
-		AtAdV7 = GlTpVis * GlTpAD ;
-		LaGlVis = LaGlAdip + LaGlOth + RumLaGl ;
-		AtAdV8 = LaGlVis * LaGlAd ;
-		AtAd12 = KidWrk * EBW *pow(1,1)* 0.7555 ;
-		AtAd13 = HrtWrk * OXUP1 ;
-		AtAd14 = ResWrk * OXUP1 ;
-		ATAd15 = ( AaUrVis + AaUrGest + AmUr ) * AtAmUr ;
 		AdAtV1 = GyGlVis * GyGlAt ;
 		AdAtV2 = TpCdVis * TpCdAt ;
 		PrCdVis = absPr * ( 1.0 - fPrGl ) ;
@@ -9219,13 +9291,51 @@ public:
 		rtOx1 = cGl * ( cAc + KAcCd ) / ( cAc * ( cGl + KGlCd / AHor ) ) ;
 		rtOx2 = cFa * ( cAc + KAcCd ) / ( cAc * ( cFa + KFaCd ) ) ;
 		GlCd = ( ( ndOx * rtOx1 ) / ( rtOx1 + rtOx2 +1.0 ) ) / OxGlCd ;
+		// MamPm = integ ( dMamPm , iMamPm ) // Mammary PROTEIN
+		
+		// TMilkPm = integ ( dMilkPm , 1.0E-8 ) // AND TOTAL YIELD
+		
+		// GLUCOSE
+		// Glucose metabolism (Gl)
+		// **************
+		// Entries are from propionate(9.8555),lactate(4.05),glycerol(3.5555),Aa
+		// (1.8555)and absorption (4.7). Outputs are in lactose (8.3);
+		// to TG-glyceride and Gy (1.9/2), pentose cycle (1.4555) and TpCd
+		// (2.04/2) in Vis; to Cd (4.3) and lactate (La,4.9/2) in Oth, and to pentose
+		// cycle (2.8/2), TG-Gy (2.6555/2) La (3.2/2) and TpCd ((1.4 + 0.4555)/2)
+		// in adipose.
+		//   Reported (Forsberg) Ka for Gl for lactose synthesis is 8-10 mM
+		// so set at 9.0E-3. NADPH2 required from the pentose cycle
+		// for fatty acid synthesis is calculated in terms of moles Gl (GlHy)
+		// used since reaction rate is computed as acetate used per Ac
+		// incorporated.Stoichiometry for pentose cycle used is Gl to 3Cd +
+		// 6NADH2+Tp.Thus the stoichiometric coefficient (GLGlHy) is calculated
+		// as (1.7555 NADPH2/AcFa)/6NADPH2 per glucose used(=0.2555). These must be
+		// multplied by the fraction of NADPH2 generated via the pentose
+		// cycle specified as input for that tissue (fGlHyAdip and fGlHyVis)
+		// and AcTs flux to get actual pentose cycle flux. Related calculations
+		// are of ATP equivalent of amount of NADPH2 generated in
+		// the tricarboxylic acid cycle (tc) and of the reduced Ox consumption
+		// associated with this.These are in the oxidative metabolism sections.
+		// In adipose tissue, GlTpAdip was set to provide Tp in excess of that
+		// required for fatty acid esterification. This accomodates the
+		// possibility that Tp generation via GlHy can be less than TpTs,
+		// and provides sufficient Tp for oxidation (TpCd) and conversion to
+		// lactate (La) as has been observed in this tissue.
+		// Lactate from Oth and Adip are quantitatively converted to Gl in Vis.
+		
+		dGl = upGl + AaGlV1 + PrGlV1 + LaGlV1 + GyGlV1 - GLLmVis -
+			GlHyAdip - GlHyVis - GlTpAdip - GlTpVis - GlLaOth - GlCd ;
 		FaCd = ( ( ndOx * rtOx2 ) / ( rtOx1 + rtOx2 +1.0 ) ) / OxFaCd ;
 		
 		dFa = absFa + TsFaF1 - FaTsAdip - FaTmVis - FaCd ;
 		AcCd = ( ndOx / ( rtOx1 + rtOx2 +1.0 ) ) / OxAcCd ;
+		
 		// revised constant VmAcTmVis 7/92 (kc)
 		
 		dAc = absAc + AaAcV1 - AcTsAdip - AcTmVis - AcCd ;
+		TcHyAdip = AcTsAdip * HyAcFa * ( 1.0 - fGlHyAdip ) ; // correction for NADH
+		TcHyVis = AcTmVis * HyAcFa * ( 1.0 - fGlHyVis ) ; // from ICD in TCA
 		
 		// Calculation of heat equivalent of ATP .Note that HcombLa
 		// and HcombTp being very close to 1/2 glucose are set exactly to
@@ -9460,28 +9570,32 @@ public:
 		fParticulateFd = fStFd - FStsFd + fCeFd + fHcFd + fLgFd + fAiFd + fPiFd ;
 		totFd = fScFd + fOaFd + fPeFd + FLaFd + fLiFd + fFatFd + fStFd + fHcFd + fCeFd + fLgFd +
 			FPsFd + fPiFd + fNnFd + FUrFd + fAsFd + fAiFd + fAcFd + fBuFd ;
-		// TNdfIn = integ ( NdfinFd , 1.0E-9 ) 
-		AdfinFd = fADFFd * FdDMIn ;
-		RuAdfinFd = fRuAdfFd * FdDMIn ;
-		LginFd = fLgFd * FdDMIn ;
-		RuStinFd = fRUStFd * FdDMIn ;
-		ScinFd = fScFd * FdDMIn ;
-		CPinFd = fCPFd * FdDMIn ;
-		CPsinFd = FCPsFd * FdDMIn ;
-		RUPinFd = FRUPFd * FdDMIn ;
-		NpninFd = FNPNFd * FdDMIn ;
-		NninFd = fNnFd * FdDMIn ;
-		CFatinFd = FCFatFd * FdDMIn ;
-		AshinFd = fAshFd * FdDMIn ;
 		// Gil Aug 20102 moved RUMNTEQ to mindy_init (=0 for molly; = 1 for mindy)
 		// Fraction of MBW. Set to achieve appropriate rumination times and LP pool sizes, added 04-25-2011, MDH
 		
 		MinLPRumntn = MinLPRumntnF * BWF *pow(1,1)* 0.7555 ;
 		
-		DilRate = WaOut / RumLiqVol / ( 24 ) ; // Dilution rate divided by 24 to get %/hr
-		// OSMOLALITY FACTOR
+		// TotRumntn = integ ( Rumntn , 0.0 ) 
+		// TotEating = integ ( Eating , 0.0 ) 
+		// TotRest = integ ( Rest , 0.0 ) 
 		
-		WaIn = SaIn + DrnkWa ;
+		// STOICHIOMETRIC COEFFICIENTS FOR FERMENTATION
+		// Three sets of values are included. One is for, largely,forage
+		// diets(FORSET),one is for 50:50 forage:concentrate diets(MIXSET)
+		// The third set is for,largely,concentrate diets(CONSET).FORSET and
+		// CONSET are from Murphy et al,JAS 55:411-421,(1982).MIXSET is an
+		// average of the other two since these apply to less than 50% and
+		// more than 50% concentrate, respectfully. Valerate was separated
+		// to 1/2Bu+1Pr to maintain carbon and hydrogen balance. Values are
+		// in moles of VFA produced per mole of glucose fermented. 1 mole of
+		// glucose gives 2 moles of Ac or Pr but only one mole of butyrate.
+		// Amino acid fermentation stoichiomietry adjusted 08/26/91 to
+		// Murphy model to reflect C, H and O balance.  Heavy propionate
+		// reflects Pr+1/2 Bu from Bcfa.  H2 (or CH4) is VERY HIGHLY!
+		// DEPENDENT on proportion of Bcfa produced.  Expressed as moles
+		// VFA produced per mole Aa fermented with an average C/Aa=5.08.
+		
+		LaPrPr = 0.1555 ;
 		AaFvFat = ( AaFvAc / 2 ) + ( AaFvPr / 2 ) + AaFvBu ;
 		// LPart = integ ( dLPart , iLPart ) 
 		LPart1 = LPart / LPartCor ;
@@ -9491,36 +9605,20 @@ public:
 		// IndigFd = integ ( dIndigFd , iIndigFd ) 
 		RumLg = IndigFd / IndigFdCor * fLgIndigFd + LPart / LPartCor * fLPartLg ;
 		Am1 = AM / AmCor ;
-		cRumAc = ( RumAc / RumAcCor ) / RumLiqVol ;
 		// RumAc = integ ( dRumAc , iRumAc ) 
 		RumAc1 = RumAc / RumAcCor ; // Uninflated Rumen Pool size for comparison to observed data
 		MPcAc = ( RumAc / RumAcCor ) / TVFA * 100 ; // Mole percent(MPc)
-		cRumPr = ( RumPr / RumPrCor ) / RumLiqVol ;
 		// RumPr = integ ( dRumPr , iRumPr ) 
 		RumPr1 = RumPr / RumPrCor ; // Uninflated Rumen Pool size for comparison to observed data
 		MPcPr = ( RumPr / RumPrCor ) / TVFA * 100 ;
-		cRumBu = ( RumBU / RumBuCor ) / RumLiqVol ;
 		// RumBU = integ ( dRumBu , iRumBu ) 
 		RumBu1 = RumBU / RumBuCor ; // Uninflated Rumen Pool size for comparison to observed data
 		MPcBu = ( RumBU / RumBuCor ) / TVFA * 100 ;
 		// RumLa = integ ( dRumLa , iRumLa ) 
 		RumLa1 = RumLa / RumLaCor ; // Uninflated Rumen Pool size for comparison to observed data
-		
-		// Growth with amino acids(G2)
-		
-		CdMiG2 = -0.05 ;
 		// Fixed MiCor additions to the following LP, SP, and Wa Mi pools, CCP 7/27/06
 		LPartMi = ( ( LPart / LPartCor ) / ( RumDM - Mi / MICor ) ) * ( Mi / MICor ) ;
-		AtpC = 2 * ( CsAc + RumAaAc ) + ( CsPr + RumAaPr ) + ( CsBu + RumAaBu ) + CsLa ;
-		RumBuSynth = CsBu + RumAaBu ;
-		SPartMiPi = IndigFdMiP + PiMiP + HaMiP + HbMiP ;
-		RumPrSynth = CsPr + RumAaPr + RumLaPr ;
-		YAtpAp = MiG / AtpF ;
-		RumAcSynth = CsAc + RumAaAc + RumLaAc ; // synthesized ruminal acetate
 		RumCP = RumNit / .16 ;
-		
-		ADFIn = fADFFd * FdRat ;
-		NDFIn = fNDFFd * FdRat ;
 		RumADF = Ce / CeCor + IndigFd / IndigFdCor + LPart / LPartCor * fLPartADF ; // Rumen pool size of ADF and NDF, kg
 		RumOM = RumDM - As / ASCor - ( IndigFd / IndigFdCor * fAiIndigFd ) - LPart / LPartCor * fLPartAi ;
 		fLPartNDF_NDF = fLPartNDF / RumNDF ;
@@ -9533,85 +9631,10 @@ public:
 			RumAc * MwtAc / RumAcCor + RumLa * MwtLa / RumLaCor ;
 		if ( t > 0 ) RumDM = LPart / LPartCor + MPart + SPart + SolDM + Mi / MICor ;
 		// end of procedural 
-		MPartADFP = ( CeP + IndigFdP ) / fPartP * ( fMPart1 * KMPartP ) ;
-		SPartADFP = ( CeP + IndigFdP ) / fPartP * ( fSPart1 * KSPartP ) ;
-		
-		NDFP = HcP + ADFP ;
-		MPartNDFP = ( HcP + ADFP ) / fPartP * ( fMPart1 * KMPartP ) ;
-		SPartNDFP = ( HcP + ADFP ) / fPartP * ( fSPart1 * KSPartP ) ;
-		MiNP = MiP * ( MiPiPI + MiNnNn ) * .16 ;
-		CpP = NitP * 6.2555 ; // Total CP Passage to SI, kg/d
-		MetabPP = MiP * MiPiPI * DCMiPi + PiP * LgutDCPi ; // Metabolizable Protein Passage, kg/d, original eqn wrong corrected 1-30-07 mdh
-		DMP = AshP + LipidP + ( NitP / .16 ) + LgP + CeP + HaPT + HcP + ChChFd ;
-		FecHaT = FecHa + FecMiHa ;
-		FecNDF = FecADF + FecHC ;
-		FecPiTN = FecPiT * .16 ;
-		FecFMPart = FecMPart / ( FecMPart + FecSPart ) ;
-		FecFSPart = FecSPart / ( FecMPart + FecSPart ) ;
-		
-		SolDMP = SolOmP + AsP ;
-		OmPt = TOmP ; // true OM passage. Not sure why the above do not follow the standard. Added this variable to maintain historical data references, MDH
-		OmPa = TTOmP ; // apparent OM passage from the rumen
-		
-		// DIGESTION COEFFICIENTS (DC)
-		// **********************
-		// RUMEN DIGESTION COEF.(RumDC)
-		RumDCOm = 1.0 - TOmP / OminFd ; // FOR TRUE ORGANIC MATTER
-		RumDCOmA = 1.0 - TTOmP / OminFd ; // FOR APPARENT ORGANIC MATTER
-		RumDCPrt = ( TPRTin - PiP - ( RumAaP * MwtAa ) ) / TPRTin ;
-		RumDCndf = 1.0 - ( ( HcP + CeP + FecLg ) / ( fHcFd + fCeFd + fLgFd ) / FdDMIn ) ;
-		RumDCadf = 1.0 - ( ( CeP + FecLg ) / ( fCeFd + fLgFd ) / FdDMIn ) ;
-		RumDCHa = 1.0 - HaP / StinFd ; // truely digested
-		RumDCHaT = 1.0 - HaPT / StinFd ; // apparent Ha digestion
-		RumDCHc = 1.0 - HcP / RumHcin ;
-		RumDCCe = 1.0 - CeP / RumCein ;
-		RumDCHb = 1.0 - HbP / ( FdDMIn * ( fHcFd + fCeFd ) ) ;
-		RumDCLiA = 1.0 - LipidP / ( FCFatFd * FdRat ) ; // Apparently Digested in the Rumen
-		RumDCLiT = 1.0 - ( LipidP - MiP * MiLiLI ) / ( FCFatFd * FdRat ) ; // Truly Digested in the Rumen
-		
-		// Total Tract Digestion Coef. (DC)
-		DCDM = 1.0 - FecDM / FdDMIn ;
-		DCOm = ( OminFd - FecOm ) / OminFd ;
-		DCPrt = ( TPRTin - FecPiT ) / TPRTin ;
-		DCLipid = 1.0 - FecLipid / ( FCFatFd * FdRat ) ; // No Correction for Micribial Lipid
-		DCndf = 1.0 - ( ( FecHC + FecCe + FecLg ) / ( fHcFd + fCeFd + fLgFd ) / FdDMIn ) ;
-		DCadf = 1.0 - ( ( FecCe + FecLg ) / ( fCeFd + fLgFd ) / FdDMIn ) ;
-		DCHb = ( Hbin - FecHb ) / Hbin ;
-		DCLg = ( ( fLgFd * FdDMIn ) - FecLg ) / ( fLgFd * FdDMIn ) ;
-		DCHa = ( TStin - FecHa ) / TStin ;
-		DE = DEI / FdDMIn ; // DIGESTIBLE ENERGY
-		GE = FdGEin / FdDMIn ;
-		
-		// For comparison to Beever et al.
-		DCCe = 1.0 - ( FecCe / ( fCeFd * FdDMIn ) ) ;
-		RumDCN = ( Nintake - NANMNP ) / Nintake ;
-		Ndiff = ( Nintake - Nan ) / Nintake ;
-		MiNOm = MiPrOm / 6.2555 ; // kg N/kg OM True
-		MiNOma = MirOma / 6.2555 ; // Apparent
-		// gut to palmitate in animal.
-		absAs = absRumAs + LgutAs + LgutAi ;
-		// AccGEi = integ ( FdGEin , 1.0E-8 ) 
-		TDE = AbsE / FdGEin ;
-		
-		// ****************** Uterine Tissue and Protein Mass ********************
-		WtUterPart = iWtUter * exp ( ( kUterSyn - kUterSynDecay * GestLength ) * GestLength ) ;
 		PUter = WtPUter * MwtPVis ; // moles of AA in uterus
 		WtPGrvUterSyn = WtPConcSyn + WtPUterSyn ;
 		dWtPGrvUter = WtPConcSyn + dWtPUter ;
 		MEinMJ = ME * McalToMJ ; // Moved here to minimise diff with mark
-		MamCellsQaPreToPostFactor = 1 / ( 1 + exp ( kMamCellsTransitionSteepness * ( kMamCellsTransitionDim - DayMilk ) ) ) ;
-		
-		// MamCellsA = integ ( dMamCellsA , iMamCellsA ) 
-		// MamCellsQ = integ ( dMamCellsQ , iMamCellsQ ) 
-		// MamCellsS = integ ( dMamCellsS , iMamCellsS ) // We don't really need this pool, only to verify that there is approx 100% turnover over 250 days of lactation
-		
-		// ****** kMamCellsQa ***************************************************************************
-		// To Delay the peak without tempering with MamCells peaking at 10 DIM, a variable QA rate function
-		// was needed. Rather than being constant, kMamCellsQA is now very fast during first week of lactaion,
-		// low afterwards for few weeks and than gradually stabilises on the final value for post peak lactation.
-		// This final value is the major driver of the steady state proportion of active cells (pMamCellsA)
-		
-		MamCellsQaKickStartFactor = InMilk * ( exp ( - kMamCellsQAKickStartDecay * DayMilk ) ) ;
 		
 		// ********* Feed, Management, Environment, & Genetic inputs ************
 		// This section transfers values from the Event array to Model variables
@@ -9634,37 +9657,8 @@ public:
 			( ( 1.0 - xOadIntakeTadIntake ) * MilkSolids270MfAdjusted +
 			xOadIntakeTadIntake * KgMilkSolidsExpectedIn270Days ) ; // Once a days seem toeat more compared to their production.
 		// end of procedural 
-		// Adds cFa as feedback term and T3 as effector of VMAX
-		cTs = TsAdip / WtAdip ;
 		BCS = ( WtAdip - iWtAdip ) / 46.6 + iBCS ; // BW does not affect BCS within a run hence this equation vs init section
 		BCS_NZ = ( 9 * ( ( WtAdip - iWtAdip ) / 46.6 + ( 4 * iBCS +5 ) / 9 ) -5 ) / 4 ; // CCP's scale, 7-26-07
-		
-		// DNA ACCRETION
-		// *************
-		
-		// OthDna = integ ( dOthDna , iOthDna ) 
-		// VisDna = integ ( dVisDna , iVisDna ) 
-		
-		// AMINO ACID AND NITROGEN METABOLISM
-		// **********************************
-		
-		// Amino acid metabolism (Aa) including protein turnover (P) in
-		//      Lean body mass (POth) and Viscera (PVis).
-		
-		// Inputs to Aa are absAa (12.6), POthAa (10.0) and PVisAa (8.2). TO
-		// from Proc.Nutr.Soc.39:43-52(Reeds and Lobley) at 18g/BW**0.7555.
-		// TO=2.0 kg/day or (/0.1555) 18.2 moles/day. Outputs are AaPOthOth (10),
-		// AaPVis (8.2), AaPm (8.6) and gluconeogenesis (AaGlVis=4.0).
-		// Biosynthetic reactions set at 1/2Vmax in reference state. Capacity
-		// for AaGlVis is very high (5x) relative to flux in fed (reference)
-		// state so set there. Compution of mass in Oth and Vis assumes
-		// that protein+H2O is 70% of wt at 25% dry matter (fractional
-		// dry wt=fDWt) and that remaining wt is constant(otWtOth,otWtVis).
-		// Aa pool size and volume increased 10x in this version.
-		// KPOthAaOth and KPVisAaVis adusted 05/01/91 to make equations functions
-		// of POth and PVis rather than cPOth and cPVis jk.
-		// VmAaGlVis now scaled to body size (BWF) jk 05/09/91
-		
 		cPOth = POth / WtOth ;
 		cPVis = PVis / WtVis ;
 		POthfDr = POthAaOth / POth ;
@@ -9673,49 +9667,16 @@ public:
 		POthfSr = AaPOthOth / POth ;
 		// Fractional synthetic and degradation rates
 		PVisfSr = AaPVisVis / PVis ;
-		// MamPm = integ ( dMamPm , iMamPm ) // Mammary PROTEIN
-		
-		// TMilkPm = integ ( dMilkPm , 1.0E-8 ) // AND TOTAL YIELD
-		
-		// GLUCOSE
-		// Glucose metabolism (Gl)
-		// **************
-		// Entries are from propionate(9.8555),lactate(4.05),glycerol(3.5555),Aa
-		// (1.8555)and absorption (4.7). Outputs are in lactose (8.3);
-		// to TG-glyceride and Gy (1.9/2), pentose cycle (1.4555) and TpCd
-		// (2.04/2) in Vis; to Cd (4.3) and lactate (La,4.9/2) in Oth, and to pentose
-		// cycle (2.8/2), TG-Gy (2.6555/2) La (3.2/2) and TpCd ((1.4 + 0.4555)/2)
-		// in adipose.
-		//   Reported (Forsberg) Ka for Gl for lactose synthesis is 8-10 mM
-		// so set at 9.0E-3. NADPH2 required from the pentose cycle
-		// for fatty acid synthesis is calculated in terms of moles Gl (GlHy)
-		// used since reaction rate is computed as acetate used per Ac
-		// incorporated.Stoichiometry for pentose cycle used is Gl to 3Cd +
-		// 6NADH2+Tp.Thus the stoichiometric coefficient (GLGlHy) is calculated
-		// as (1.7555 NADPH2/AcFa)/6NADPH2 per glucose used(=0.2555). These must be
-		// multplied by the fraction of NADPH2 generated via the pentose
-		// cycle specified as input for that tissue (fGlHyAdip and fGlHyVis)
-		// and AcTs flux to get actual pentose cycle flux. Related calculations
-		// are of ATP equivalent of amount of NADPH2 generated in
-		// the tricarboxylic acid cycle (tc) and of the reduced Ox consumption
-		// associated with this.These are in the oxidative metabolism sections.
-		// In adipose tissue, GlTpAdip was set to provide Tp in excess of that
-		// required for fatty acid esterification. This accomodates the
-		// possibility that Tp generation via GlHy can be less than TpTs,
-		// and provides sufficient Tp for oxidation (TpCd) and conversion to
-		// lactate (La) as has been observed in this tissue.
-		// Lactate from Oth and Adip are quantitatively converted to Gl in Vis.
-		
-		// TsAdip = integ ( dTsAdip , iTsAdip ) 
-		// BCS prediction from Waltner et al., JDS 77:2570, MDH & NES
-		dBCS = dWtTsAdip / 46.6 ;
-		GlGyT = ( TpTsAdip + TpTmVis ) * GyGlGl ;
 		// MamTm = integ ( dMamTm , iMamTm ) // AND TOTAL YIELD
 		// TMilkTm = integ ( dMilkTm , 1.0E-8 ) 
 		// Percent milk fat from de novo synthesis (PcTmFromScfa)added to
 		// be able to follow patterns with different diets and through
 		// lactation. 11/99. NES
 		PcTmFromScfa = ( AcTmV1 / ( AcTmV1 + FaTmV1 ) ) * 100 ;
+		GlGyT = ( TpTsAdip + TpTmVis ) * GyGlGl ;
+		// TsAdip = integ ( dTsAdip , iTsAdip ) 
+		// BCS prediction from Waltner et al., JDS 77:2570, MDH & NES
+		dBCS = dWtTsAdip / 46.6 ;
 		// END  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
 		
 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -9724,59 +9685,99 @@ public:
 		
 		TVolMilkVol = TVolMilk / MilkDen ; // L, CCP 9-1-06
 		LW = BW + MamMilk ; // Unit: kg. Liveweight incl. milk ! Moved here to minimise diff with mark
-		// MamMilkAve = integ ( dMamMilkAve , iMamMilkAve ) 
-		
-		// OXIDATION
-		// ****************
-		// Oxidative metabolism (Ox,Cd).
-		// Computations based on energy needs expressed as rate of
-		// ADP formation (AtAd_), oxygen (Ox) uptake calculated from
-		// P/O ratio (PO), and Ac and Fa oxidation rates from ratios
-		// of Michaelis-Menton equations assuming Vmaxs for oxidation
-		// of each are equal. See separate documentation for details
-		
-		// General constants
-		
 		dEBW1 = dWtOth + dWtTsAdip + dWtVis + dWtGrvUter ; // WtCytAdip does not change during a run.
 		BW1 = EBW1 + RumVol + otGutCont ;
 		NonFatNonUterEBW = NonFatEBW - WtGrvUter ;
+		CPsinFd = FCPsFd * FdDMIn ;
+		RUPinFd = FRUPFd * FdDMIn ;
+		RuStinFd = fRUStFd * FdDMIn ;
+		NninFd = fNnFd * FdDMIn ;
 		
-		// procedural ( RequiredEnergy , FdCapMolly = DayMilk , NonUterEbwTarget , NonUterEBW ) 
+		SolDMP = SolOmP + AsP ;
+		GE = FdGEin / FdDMIn ;
+		CFatinFd = FCFatFd * FdDMIn ;
+		AshinFd = fAshFd * FdDMIn ;
+		NpninFd = FNPNFd * FdDMIn ;
+		CPinFd = fCPFd * FdDMIn ;
+		// OSMOLALITY FACTOR
 		
-		EnergyForActivity = 0 ; // (ActEnergyReq / MjoulesToATPConv / MEinMJ) / (0.02 * (17.0 * (MEinMJ/3.6/4.1555) - 2.0) + 0.5)
-		EnergyForPregnancy = EnergyForPregnancyFactor * 11.5 * WtGrvUter ; //
-		EnergyForGrowth = GrowthPerDay * 50.0 ; // Assuming 50MJ required for 1kg LW gain
-		EnergyCompensation = ( NonUterEbwTarget / NonUterEBW ) *pow(1,1)* kEnergyCompensation ; // Any extra/deficit in condition would decrease/increase intake, trying to simulate the extra hunger of low condition cows, and lower insentive to eat for fat cows
-		// ** 0.5 gives approx 1% more food for every 2% LW deficit in the non extreme range, and vice versa. ** 1 would give 1:1 relationship.
-		if ( DayMilk <= 0 ) { // Dry Cow
-			EnergyForMaintenance = NonUterEbwTarget *pow(1,1)* EnergyForDryCowMaintenancePower * EnergyForDryCowMaintenanceFactor ;
-			EnergyForMilk = 0 ;
-		} else { // Milking Cow
-			EnergyForMaintenance = NonUterEbwTarget *pow(1,1)* EnergyForMilkingCowMaintenancePower * EnergyForMilkingCowMaintenanceFactor ;
-			if ( DayMilk <= PeakIntakeDay ) {
-				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - ( 1.0 - DayMilk / PeakIntakeDay ) *pow(1,1)* EnergyForMilkPower ) ;
-			} else if ( DayMilk <= ( PeakIntakeDay + SmoothingPeriodDays ) ) {
-				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - IntakeDeclineSlope * ( SmoothingPeriodDays / 2.0 ) * ( ( DayMilk - PeakIntakeDay ) / SmoothingPeriodDays ) *pow(1,1)* 2.0 ) ;
-			} else {
-				EnergyForMilk = MaxEnergyForMilk * ( 1.0 - IntakeDeclineSlope * ( SmoothingPeriodDays / 2.0 + ( DayMilk - ( PeakIntakeDay + SmoothingPeriodDays ) ) ) ) ;
-			}
-		}
+		WaIn = SaIn + DrnkWa ;
+		cRumAc = ( RumAc / RumAcCor ) / RumLiqVol ;
 		
-		RequiredEnergy = ( EnergyForMaintenance // Molly's required intake, in MJ
-			+ EnergyForMilk //
-			+ EnergyForPregnancy //
-			+ EnergyForGrowth //
-			+ EnergyForActivity ) // Currently this one zero, avarage activity assumed and bundled in rEnergeyForMaintenance
-			* EnergyCompensation ; // Smaller than one for fat cows, largerthan 1 for skinny, on the long run brings cows that differ only in condition, to a similar state.
-		//
-		FdCapMolly = NonUterEbwTarget * CappingForIntake ; // in kgDM actual, WFM will not feed her more forage (pasture & silage) then this amount, but may feed things like grains on top of that
-		//
-		// end of procedural 
+		DilRate = WaOut / RumLiqVol / ( 24 ) ; // Dilution rate divided by 24 to get %/hr
+		cRumBu = ( RumBU / RumBuCor ) / RumLiqVol ;
+		// gut to palmitate in animal.
+		absAs = absRumAs + LgutAs + LgutAi ;
+		cRumPr = ( RumPr / RumPrCor ) / RumLiqVol ;
+		DCHa = ( TStin - FecHa ) / TStin ;
+		RumBuSynth = CsBu + RumAaBu ;
+		RumAcSynth = CsAc + RumAaAc + RumLaAc ; // synthesized ruminal acetate
+		AtpC = 2 * ( CsAc + RumAaAc ) + ( CsPr + RumAaPr ) + ( CsBu + RumAaBu ) + CsLa ;
+		RumPrSynth = CsPr + RumAaPr + RumLaPr ;
+		RumDCPrt = ( TPRTin - PiP - ( RumAaP * MwtAa ) ) / TPRTin ;
+		SPartMiPi = IndigFdMiP + PiMiP + HaMiP + HbMiP ;
+		FecFSPart = FecSPart / ( FecMPart + FecSPart ) ;
+		FecFMPart = FecMPart / ( FecMPart + FecSPart ) ;
+		MiNP = MiP * ( MiPiPI + MiNnNn ) * .16 ;
+		RumDCLiA = 1.0 - LipidP / ( FCFatFd * FdRat ) ; // Apparently Digested in the Rumen
+		RumDCLiT = 1.0 - ( LipidP - MiP * MiLiLI ) / ( FCFatFd * FdRat ) ; // Truly Digested in the Rumen
+		DCLipid = 1.0 - FecLipid / ( FCFatFd * FdRat ) ; // No Correction for Micribial Lipid
+		CpP = NitP * 6.2555 ; // Total CP Passage to SI, kg/d
+		MetabPP = MiP * MiPiPI * DCMiPi + PiP * LgutDCPi ; // Metabolizable Protein Passage, kg/d, original eqn wrong corrected 1-30-07 mdh
+		FecHaT = FecHa + FecMiHa ;
+		FecPiTN = FecPiT * .16 ;
+		DCPrt = ( TPRTin - FecPiT ) / TPRTin ;
+		SPartADFP = ( CeP + IndigFdP ) / fPartP * ( fSPart1 * KSPartP ) ;
+		MPartADFP = ( CeP + IndigFdP ) / fPartP * ( fMPart1 * KMPartP ) ;
+		
+		NDFP = HcP + ADFP ;
+		MPartNDFP = ( HcP + ADFP ) / fPartP * ( fMPart1 * KMPartP ) ;
+		SPartNDFP = ( HcP + ADFP ) / fPartP * ( fSPart1 * KSPartP ) ;
+		OmPa = TTOmP ; // apparent OM passage from the rumen
+		OmPt = TOmP ; // true OM passage. Not sure why the above do not follow the standard. Added this variable to maintain historical data references, MDH
+		RumDCHb = 1.0 - HbP / ( FdDMIn * ( fHcFd + fCeFd ) ) ;
+		
+		// Total Tract Digestion Coef. (DC)
+		DCDM = 1.0 - FecDM / FdDMIn ;
+		DE = DEI / FdDMIn ; // DIGESTIBLE ENERGY
+		// AccGEi = integ ( FdGEin , 1.0E-8 ) 
+		TDE = AbsE / FdGEin ;
+		DMP = AshP + LipidP + ( NitP / .16 ) + LgP + CeP + HaPT + HcP + ChChFd ;
+		DCadf = 1.0 - ( ( FecCe + FecLg ) / ( fCeFd + fLgFd ) / FdDMIn ) ;
+		DCndf = 1.0 - ( ( FecHC + FecCe + FecLg ) / ( fHcFd + fCeFd + fLgFd ) / FdDMIn ) ;
+		FecNDF = FecADF + FecHC ;
+		
+		// For comparison to Beever et al.
+		DCCe = 1.0 - ( FecCe / ( fCeFd * FdDMIn ) ) ;
+		RumDCadf = 1.0 - ( ( CeP + FecLg ) / ( fCeFd + fLgFd ) / FdDMIn ) ;
+		RumDCCe = 1.0 - CeP / RumCein ;
+		RumDCndf = 1.0 - ( ( HcP + CeP + FecLg ) / ( fHcFd + fCeFd + fLgFd ) / FdDMIn ) ;
+		YAtpAp = MiG / AtpF ;
+		LginFd = fLgFd * FdDMIn ;
+		RumDCHa = 1.0 - HaP / StinFd ; // truely digested
+		RumDCHaT = 1.0 - HaPT / StinFd ; // apparent Ha digestion
+		RumDCN = ( Nintake - NANMNP ) / Nintake ;
+		Ndiff = ( Nintake - Nan ) / Nintake ;
+		RuAdfinFd = fRuAdfFd * FdDMIn ;
+		DCHb = ( Hbin - FecHb ) / Hbin ;
+		RumDCHc = 1.0 - HcP / RumHcin ;
+		// TNdfIn = integ ( NdfinFd , 1.0E-9 ) 
+		AdfinFd = fADFFd * FdDMIn ;
+		ScinFd = fScFd * FdDMIn ;
+		DCOm = ( OminFd - FecOm ) / OminFd ;
+		
+		// DIGESTION COEFFICIENTS (DC)
+		// **********************
+		// RUMEN DIGESTION COEF.(RumDC)
+		RumDCOm = 1.0 - TOmP / OminFd ; // FOR TRUE ORGANIC MATTER
+		MiNOma = MirOma / 6.2555 ; // Apparent
+		MiNOm = MiPrOm / 6.2555 ; // kg N/kg OM True
+		RumDCOmA = 1.0 - TTOmP / OminFd ; // FOR APPARENT ORGANIC MATTER
+		DCLg = ( ( fLgFd * FdDMIn ) - FecLg ) / ( fLgFd * FdDMIn ) ;
+		NDFIn = fNDFFd * FdRat ;
+		
+		ADFIn = fADFFd * FdRat ;
 		OldBasalOth = ( 2.2 + KNaAtOth ) * WtOth *pow(1,1)* 0.7555 ;
-		// VISCERA
-		AtAdV9 = PrGlVis * PrGlAd ;
-		AtAd10 = absGl * absGlAd ;
-		AtAd11 = AbsAa * absAaAd ;
 		MHtGestGrth = AtAdGestGrth * AtAdHT ;
 		MHtGestTO = AtAdGestTO * AtAdHT ;
 		
@@ -9787,8 +9788,6 @@ public:
 		
 		rtPO = ( AcCd * AcCdAt + FaCd * FaCdAt + GlCd * GlCdAt ) / ( AcCd * OxAcCd
 			+ FaCd * OxFaCd + GlCd * OxGlCd ) ;
-		TcHyAdip = AcTsAdip * HyAcFa * ( 1.0 - fGlHyAdip ) ; // correction for NADH
-		TcHyVis = AcTmVis * HyAcFa * ( 1.0 - fGlHyVis ) ; // from ICD in TCA
 		dOx = ( LaCdOth + LaCdAdip ) * OxLaCd + TpCdVis * OxTpCd + PrCdVis * OxPrCd +
 			BuCdVis * OxBuCd + AcCd * OxAcCd + FaCd * OxFaCd + GlCd * OxGlCd
 			- TcHyAdip - TcHyVis ;
@@ -9806,9 +9805,10 @@ public:
 		dHiM4 = HiM1 + HiM2 + HiM3 ;
 		CorNEP = NEP + EB / .87 ;
 		fCH4E = CH4E / FdGEin ;
+		THP2 = MEI - EB - NEP ;
 		// AccMEi = integ ( MEI , 1.0E-8 ) 
 		ME1 = MEI / FdDMIn ;
-		THP2 = MEI - EB - NEP ;
+		CorME = CorMEi / FdDMIn ;
 		fCH4ME = CH4E / MEI ;
 		
 		// Methane is calculated by the model above and by empirical
@@ -9816,7 +9816,6 @@ public:
 		// and ME.
 		
 		CH4EFd = CH4E / FdDMIn ; // methane (kcal)/kg feed
-		CorME = CorMEi / FdDMIn ;
 		fCH4DE = CH4E / DEI ;
 		dCH4g = dCH4Kg * 1000 ; // Unit: g/d of Methane
 		CH4Milk = CH4KGY / TVolMilk ; // kg methane/kg milk

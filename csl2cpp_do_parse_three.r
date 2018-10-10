@@ -69,7 +69,7 @@ while (any(collapsible1 | collapsible2)){
     index$set[i-1] <- paste_sort(c(index$set[i-1], index$set[i]))
     index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]))
   } else { # analyse procedural declaration
-    # index$code[i-1] <- "*** collapsed procedural ***"
+    index$code[i-1] <- "*** collapsed procedural ***"
     # act_set <- paste_sort(c(index$set[i], "procedural"))
     # act_used <- index$used[i]
     # if (act_set == index$set[i-1] & act_used == index$used[i-1]){
@@ -93,17 +93,17 @@ while (any(collapsible1 | collapsible2)){
   collapsible2 <- hyphens > hyphens_base + 1 & hyphens == max(hyphens)
 }
 
-# collapse comments and blanks into line below (has to be done after blocks)
-comments <- index$line_type %in% c("comment", "blank", "constant")
-while (any(comments)){
-  i <- which(comments)[[1]] # first comment
+# collapse non-active lines into line below (has to be done after blocks)
+inactive <- index$set=="" | index$used==""
+while (any(inactive)){
+  i <- which(inactive)[[1]] # first comment
   if (i<nrow(index)){
     index$begin[i+1] <- index$begin[i]
   } else { # last line needs special treatment
     index$end[i-1] <- index$end[i]
   }
   index <- index[-i, ] # remove line
-  comments <- index$line_type %in% c("comment", "blank", "constant")
+  inactive <- index$set=="" | index$used==""
 }
 
 # analyse variables (also used in csl2cpp_make.r) FIXME do I need this actually?
