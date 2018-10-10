@@ -960,6 +960,7 @@ for (i in 1:nrow(csl)){
 
     # these lines are not needed in C++
     csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+    csl$line_type[i] <- "comment"
     csl$handled[i] <- TRUE
 
   }
@@ -1005,6 +1006,7 @@ for (i in 1:nrow(csl)){
 
       # } not needed
       csl$tail[i] <- paste("// end of", csl$line_type[j], csl$tail[i])
+      csl$line_type[i] <- "comment"
       csl$handled[i] <- TRUE
 
     } else { # closes an ifthen or discrete

@@ -6,9 +6,7 @@
 temp_file <- paste(path_name, "checkpoint_after_parse_two.RData", sep="/")
 load(file=temp_file) # recover progress
 
-cat(file=stderr(), "sorting derivative section code", "\n")
-override_procedural_declarations <- FALSE
-cat(file=stderr(), "override procedural declarations :", override_procedural_declarations, "\n")
+cat("sorting derivative section code", "\n")
 
 # provides index to csl to allow easier sorting
 i <- which(csl$section=="derivative")
@@ -29,14 +27,18 @@ index <- data_frame(line = i,
                     moved = FALSE
                     )
 
-# paste two comma separated strings (not vectorised)
-paste_two <- function(a, b){
-  if (a=="" | b==""){
-    return(max(a, b, na.rm=TRUE))
-  } else {
-    all <- unique(c(str_split(a, ",", simplify=TRUE)[1,], str_split(b, ",", simplify=TRUE)[1,]))
-    return(str_c(all, collapse=","))
-  }
+# paste and unique and sort a vector of comma separated strings (not vectorised)
+paste_sort <- function(x){
+  x <- str_split(x[!is.na(x)], ",", simplify=TRUE)
+  x <- sort(setdiff(unique(x), ""))
+  x <- max(str_c(x, collapse=","),"")
+  return(x)
+}
+
+# sort var lists
+for (i in 1:nrow(index)){
+  index$set[i] <- paste_sort(index$set[i])
+  index$used[i] <- paste_sort(index$used[i])
 }
 
 # collapse continuations
@@ -45,30 +47,54 @@ while (length(cont_lines)>0){
   i <- max(cont_lines) + 1 # continuation character is on previous line
   index$end[i-1] <- index$end[i]
   index$code[i-1] <- "*** collapsed continuation ***"
-  index$set[i-1] <- paste_two(index$set[i-1], index$set[i])
-  index$used[i-1] <- paste_two(index$used[i-1], index$used[i])
+  index$set[i-1] <- paste_sort(c(index$set[i-1], index$set[i]))
+  index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]))
   index$cont[i-1] <- ""
   index <- index[-i, ] # remove line
   cont_lines <- which(index$cont>"")
 }
 
-# collapse blocks
-non_base <- index$block != base & lag(index$block,1) != base # valid lines to collapse
-while (any(non_base)){
-  i <- max(which( index$block == max(index$block[non_base]) )) # most indented block
+# collapse blocks upwards (the logic is a bit tricky to get right)
+hyphens_base <- str_count(base, "-")
+# 1. >base blocks that have identical block to previous
+# 2. lines at the highest indent level >base+1
+hyphens <- str_count(index$block, "-")
+collapsible1 <- hyphens > hyphens_base & index$block == lag(index$block, 1)
+collapsible2 <- hyphens > hyphens_base + 1 & hyphens == max(hyphens)
+while (any(collapsible1 | collapsible2)){
+  i <- max(which(collapsible1 | collapsible2)) # choose a line
   index$end[i-1] <- index$end[i]
-  index$code[i-1] <- "*** collapsed block ***"
-  # stopifnot(index$line_type[i-1] != "procedural")
-  if (index$line_type[i-1] != "procedural" | override_procedural_declarations){ # procedural set=used list normally overrides reality
-    index$set[i-1] <- paste_two(index$set[i-1], index$set[i])
-    index$used[i-1] <- paste_two(index$used[i-1], index$used[i])
+  if (index$line_type[i-1] != "procedural"){
+    index$code[i-1] <- "*** collapsed block ***"
+    index$set[i-1] <- paste_sort(c(index$set[i-1], index$set[i]))
+    index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]))
+  } else { # analyse procedural declaration
+    # index$code[i-1] <- "*** collapsed procedural ***"
+    # act_set <- paste_sort(c(index$set[i], "procedural"))
+    # act_used <- index$used[i]
+    # if (act_set == index$set[i-1] & act_used == index$used[i-1]){
+    #   cat("line", index$line[i-1], ": procedural honest\n")
+    # } else {
+    #   cat("line", index$line[i-1], ": procedural dishonest\n")
+    #   cat("declared set  :", index$set[i-1], "\n")
+    #   cat("actual   set  :", act_set, "\n")
+    #   cat("declared used :", index$used[i-1], "\n")
+    #   cat("actual used   :", act_used, "\n")
+    # }
+    # override_procedural_declaration <- FALSE # would be nice but sort fails
+    # if (override_procedural_declaration){
+    #   index$set[i-1] <- act_set
+    #   index$used[i-1] <- act_used
+    # }
   }
   index <- index[-i, ] # remove line
-  non_base <- index$block != base & lag(index$block,1) != base # valid lines to collapse
+  hyphens <- str_count(index$block, "-")
+  collapsible1 <- hyphens > hyphens_base & index$block == lag(index$block, 1)
+  collapsible2 <- hyphens > hyphens_base + 1 & hyphens == max(hyphens)
 }
 
-# collapse comments into block below
-comments <- index$code == ""
+# collapse comments and blanks into line below (has to be done after blocks)
+comments <- index$line_type %in% c("comment", "blank", "constant")
 while (any(comments)){
   i <- which(comments)[[1]] # first comment
   if (i<nrow(index)){
@@ -77,7 +103,7 @@ while (any(comments)){
     index$end[i-1] <- index$end[i]
   }
   index <- index[-i, ] # remove line
-  comments <- index$code == ""
+  comments <- index$line_type %in% c("comment", "blank", "constant")
 }
 
 # analyse variables (also used in csl2cpp_make.r) FIXME do I need this actually?
@@ -109,7 +135,6 @@ uninitialised <- which(token_list %in% used_but_not_set & token_set_line == 0)
 # loop until no problems
 jump_max <- "1"
 pass <- 0
-# stop()
 while(any(jump_max>"")){
 
   # count passes
@@ -133,7 +158,7 @@ while(any(jump_max>"")){
     if (index$set[i]>""){
       set <- str_split(index$set[i], ",", simplify=TRUE)
       notused <- intersect(set, set_but_not_used)
-      index$notused[i] <- paste(notused, collapse=",")
+      index$notused[i] <- paste_sort(notused)
       set <- setdiff(set, set_but_not_used) # ignore "post processing"
       var_set[set] <- index$line[i]
     }
@@ -143,7 +168,7 @@ while(any(jump_max>"")){
       used <- setdiff(used, used_but_not_set) # ignore "constants"
       used <- setdiff(used, names(var_set))
       if (length(used)>0){ # record any used but unset
-        index$unset[i] <- paste(used, collapse=",")
+        index$unset[i] <- paste_sort(used)
         index$unsetline[i] <- paste(var_set_all[used], collapse=",") # line number where last set
       } else {
         index$unset[i] <- ""
@@ -160,8 +185,9 @@ while(any(jump_max>"")){
   jump_i <- match( as.integer(jump_max) , index$line ) + runif(nrow(index)) # avoid identical
   cat("sorting pass", pass, ":" , sum(jump_line), "jumps remaining\n")
   if (any(jump_line)){
-    j <- jump_line # or chose one
-    index$newline[j] <- i[j]
+    j <- which(jump_line) # all lines
+    # j <- sample(which(jump_line),1) # choose jump(s)
+    index$newline[j] <- jump_i[j]
     index$moved[j] <- TRUE
     index <- arrange(index, newline)
   }

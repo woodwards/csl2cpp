@@ -38,6 +38,7 @@ xx <- bind_rows(xx)
 
 pull_variables_from_model()
 x1 <- get_molly_variables()
+View(x1)
 
 # p1 <- ggplot() +
 # 	geom_point(data=cpp, mapping=aes(x=x, y=xd), colour="blue") +
