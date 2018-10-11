@@ -24,7 +24,7 @@ index <- data_frame(line = i,
                     unsetline = "", # where unset is last set
                     notused = "",
                     newline = "",
-                    moved = FALSE
+                    saved = 0
                     )
 
 # paste and unique and sort a vector of comma separated strings (not vectorised)
@@ -81,11 +81,11 @@ while (any(collapsible1 | collapsible2)){
     #   cat("declared used :", index$used[i-1], "\n")
     #   cat("actual used   :", act_used, "\n")
     # }
-    # override_procedural_declaration <- FALSE # would be nice but sort fails
-    # if (override_procedural_declaration){
-    #   index$set[i-1] <- act_set
-    #   index$used[i-1] <- act_used
-    # }
+    override_procedural_declaration <- FALSE # would be nice but sort fails
+    if (override_procedural_declaration){
+      index$set[i-1] <- index$set[i]
+      index$used[i-1] <- index$used[i]
+    }
   }
   index <- index[-i, ] # remove line
   hyphens <- str_count(index$block, "-")
@@ -124,75 +124,144 @@ n_variable <- length(variable)
 
 # overall analysis
 used_all <- unique(unlist(str_split(index$used, ",")))
-used_all <- c(used_all, rate)
 set_all <- unique(unlist(str_split(index$set, ",")))
 used_but_not_set <- setdiff(used_all, set_all) # can be considered constants (includes t and state)
-set_but_not_used <- setdiff(set_all, used_all) # can be considered post-processing
+set_but_not_used <- setdiff(set_all, c(used_all, rate)) # can be considered post-processing
 
 # see if any were not initialised
 uninitialised <- which(token_list %in% used_but_not_set & token_set_line == 0)
 
+# simon's method
 # loop until no problems
-jump_max <- "1"
-pass <- 0
-while(any(jump_max>"")){
+# jump_to <- "1"
+# pass <- 0
+# while(any(jump_to>"")){
+#
+#   if (TRUE){
+#
+#     # count passes
+#     pass <- pass + 1
+#
+#     # locate variable usage
+#     var_set <- c() # set so far (excluding those which are not used in derivative)
+#     for (i in 1:nrow(index)){
+#       # record any set that will be used
+#       if (index$set[i]>""){
+#         set <- str_split(index$set[i], ",", simplify=TRUE)
+#         set <- setdiff(set, set_but_not_used) # ignore "post processing"
+#         var_set[set] <- index$line[i]
+#       }
+#     }
+#     var_set_all <- var_set
+#     # find unset variables
+#     var_set <- c()
+#     for (i in 1:nrow(index)){
+#       # record any set that will be used
+#       if (index$set[i]>""){
+#         set <- str_split(index$set[i], ",", simplify=TRUE)
+#         notused <- intersect(set, set_but_not_used)
+#         index$notused[i] <- paste_sort(notused)
+#         set <- setdiff(set, set_but_not_used) # ignore "post processing"
+#         var_set[set] <- index$line[i]
+#       }
+#       # record any used but not set
+#       if (index$used[i]>""){
+#         used <- str_split(index$used[i], ",", simplify=TRUE)
+#         used <- setdiff(used, used_but_not_set) # ignore "constants"
+#         used <- setdiff(used, set) # ignore vars on the right hand side
+#         used <- setdiff(used, names(var_set))
+#         if (length(used)>0){ # record any used but currently unset
+#           index$unset[i] <- paste_sort(used)
+#           index$unsetline[i] <- paste(var_set_all[used], collapse=",") # line number where last set
+#         } else {
+#           index$unset[i] <- ""
+#           index$unsetline[i] <- ""
+#         }
+#       }
+#     }
+#
+#     # sort
+#     index$newline <- 1:nrow(index)
+#     jump_list <- str_split(index$unsetline, ",")
+#     jump_to <- unlist(lapply(jump_list, function(x) max(unlist(x)))) # jump for each line
+#     jump_line <- jump_to > ""
+#     jump_i <- match( as.integer(jump_to) , index$line ) + runif(nrow(index)) # avoid identical
+#     cat("sorting pass", pass, ":" , sum(jump_line), "jumps remaining\n")
+#
+#   }
+#
+#   if (any(jump_line)){
+#
+#     # j <- which(jump_line) # all lines
+#     j <- head(which(jump_line), 1) # choose jumps
+#     index$newline[j] <- jump_i[j]
+#     index$moved[j] <- TRUE
+#     index <- arrange(index, newline)
+#
+#   }
+#
+# }
 
-  # count passes
-  pass <- pass + 1
-
-  # locate variable usage
-  var_set <- c() # set so far (excluding those which are not used in derivative)
-  for (i in 1:nrow(index)){
-    # record any set that will be used
-    if (index$set[i]>""){
-      set <- str_split(index$set[i], ",", simplify=TRUE)
-      set <- setdiff(set, set_but_not_used) # ignore "post processing"
-      var_set[set] <- index$line[i]
-    }
+# ACSLX manual algorithm
+# locate variable usage
+var_set_all <- c()
+for (i in 1:nrow(index)){
+  if (index$set[i]>""){
+    set <- str_split(index$set[i], ",", simplify=TRUE)
+    set <- setdiff(set, set_but_not_used) # ignore "post processing"
+    var_set_all[set] <- i
   }
-  var_set_all <- var_set
-  # find unset variables
-  var_set <- c()
-  for (i in 1:nrow(index)){
-    # record any set that will be used
+}
+var_set <- c()
+# var_set[c("dOx", "GlTO")] <- 0
+saved <- 0
+i <- 1
+while (i <= nrow(index)){
+
+  if (index$saved[i]>0){ # already saved
+
+    i <- i + 1
+
+  } else { # unsaved
+
+    # set
     if (index$set[i]>""){
       set <- str_split(index$set[i], ",", simplify=TRUE)
-      notused <- intersect(set, set_but_not_used)
-      index$notused[i] <- paste_sort(notused)
-      set <- setdiff(set, set_but_not_used) # ignore "post processing"
-      var_set[set] <- index$line[i]
+    } else {
+      set <- ""
     }
-    # record any used but not set
+
+    # used but not available
     if (index$used[i]>""){
       used <- str_split(index$used[i], ",", simplify=TRUE)
-      used <- setdiff(used, used_but_not_set) # ignore "constants"
-      used <- setdiff(used, names(var_set))
-      if (length(used)>0){ # record any used but unset
-        index$unset[i] <- paste_sort(used)
-        index$unsetline[i] <- paste(var_set_all[used], collapse=",") # line number where last set
-      } else {
-        index$unset[i] <- ""
-        index$unsetline[i] <- ""
-      }
+      used <- setdiff(used, used_but_not_set) # ignore "constants" including t and state
+      used <- setdiff(used, set) # ignore set on this line (ACSLX p3-4)
+      used <- setdiff(used, names(var_set)) # ignore already set
+      index$unset[i] <- paste_sort(used)
+      index$unsetline[i] <- paste(var_set_all[used], collapse=",") # line number where last set
+    } else {
+      used <- ""
+      index$unset[i] <- ""
+      index$unsetline[i] <- ""
     }
-  }
 
-  # sort
-  index$newline <- 1:nrow(index)
-  jump_list <- str_split(index$unsetline, ",")
-  jump_max <- unlist(lapply(jump_list, function(x) max(unlist(x)))) # max jump for each line
-  jump_line <- jump_max > ""
-  jump_i <- match( as.integer(jump_max) , index$line ) + runif(nrow(index)) # avoid identical
-  cat("sorting pass", pass, ":" , sum(jump_line), "jumps remaining\n")
-  if (any(jump_line)){
-    j <- which(jump_line) # all lines
-    # j <- sample(which(jump_line),1) # choose jump(s)
-    index$newline[j] <- jump_i[j]
-    index$moved[j] <- TRUE
-    index <- arrange(index, newline)
-  }
+    # save line if all used variables are set
+    if (length(used)==0){
+      saved <- saved + 1
+      index$saved[i] <- saved # save line
+      cat("saved", saved, "\n")
+      notused <- intersect(set, set_but_not_used) # identify "post processing"
+      index$notused[i] <- paste_sort(notused)
+      var_set[set] <- saved # expand list of set vars
+      i <- 1 # go back to top and recheck unsaved
+    } else {
+      i <-  i + 1 # don't save, continue
+    }
 
-}
+  } # end if
+
+} # end while
+index <- arrange(index, saved) # sort lines
 
 # save progress
 temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
