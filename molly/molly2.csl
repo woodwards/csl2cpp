@@ -2304,7 +2304,7 @@ CONSTANT iTCH4=1.0E-9
 CONSTANT iDEi=70,iMEi=60.0,VmAcTsAdip=0.3555
 
 PROCEDURAL (FCM4z,OXUP1,MamMilkAve2,rtPOx,VolGl,VolAc,VolFa, &
-     VolAa,BldUrVol,ME,fTm,AtAdht,EBW= T,iEBW,dOx)
+     VolAa,BldUrVol,ME,fTm,AtAdht,EBW= T,iEBW)
         IF( T.LE.1.0E-6) GO TO P
         rtPOx = rtPO      
         fTm=fTm1
@@ -4287,7 +4287,7 @@ BCH4=(1.3555+0.1555*appDE*100+mult*(2.3555-0.05555*appDE*100))*f1
         fMCH4M=MCH4E/MEI
 
 CONSTANT EPart=1.0
-PROCEDURAL (HiM,HiP=AtAdV5,AtAdHt,AcTsAdip,AcTmVis,GlLmVis,AaPmVis,GlTO)
+PROCEDURAL (HiM,HiP=AtAdV5,AtAdHt,AcTsAdip,AcTmVis,GlLmVis,AaPmVis)
 IF (EPart.EQ.0.0) GO TO 81
 !Calculation of energy costs of specific processes 
 
@@ -4363,7 +4363,7 @@ GO TO 81
 END  
 !OF PROCEDURAL 
 CONSTANT RQEQ=1.0
-PROCEDURAL (RQ1,GlTO=CsFv,GlHyAdip,FaCd,RQEQ,dOx)
+PROCEDURAL (RQ1,GlTO=CsFv,GlHyAdip,FaCd,RQEQ)
 IF (RQEQ.EQ.0.0) GO TO 82
 
 !Cd from fermentation 

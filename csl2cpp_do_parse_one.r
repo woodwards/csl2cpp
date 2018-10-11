@@ -31,13 +31,14 @@ csl <- csl %>%
   )
 
 # start of line keywords (e.g. not including INTEG)
-# don't try to handle indenting for do, has_label, goto, if_goto
+# don't try to handle indenting for has_label, goto, if_goto
+# for do loops, replace the continue with enddo
 # (these structures must be protected from sorting by being placed inside procedurals)
 declaration <- c("constant", "algorithm", "nsteps", "maxterval", "character",
                  "parameter", "cinterval", "integer", "logical", "doubleprecision")
-keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal") # +if_then, increase indent
-keyword2 <- c("end", "endif") # decrease indent
-keyword3 <- c("termt", "schedule", "interval", "if", "do", "goto", "continue") # + has_label + if_goto, no change to indent
+keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do") # +if_then, increase indent
+keyword2 <- c("end", "endif", "enddo") # decrease indent
+keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue") # + has_label + if_goto, no change to indent
 keyword4 <- c("else") # +else_if_then, decrease and increase indent
 keyword <- c(declaration, keyword1, keyword2, keyword3, keyword4)
 
@@ -46,6 +47,7 @@ stack <- c()
 indent <- 0 # current indent level
 max_indent <- 10
 block <- rep(0, max_indent) # ids for blocks at different indent levels
+do_labels <- c()
 
 # create regex strings for detection
 integ_str <- "token.+equals.+integ.+openbracket.+closebracket"
@@ -80,6 +82,10 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
   if (this_line_label > ""){
     has_label <- TRUE
     this_line_body <- str_replace(this_line_body, this_line_label, "") # strip label
+    # is label end of do loop?
+    if (str_to_lower(str_replace(this_line_label, ":", "")) %in% do_labels){
+      this_line_body <- str_replace(this_line_body, regex("continue", ignore_case=TRUE), "enddo")
+    }
   } else {
     has_label <- FALSE
   }
@@ -180,6 +186,9 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
     array_assign ~ "arrayassign",
     TRUE ~ "unknown" # other
   )
+  if (csl$line_type[i]=="do"){
+    do_labels <- c(do_labels, value2)
+  }
 
   # indent FIXME not working correctly because of tangled GOTO statements
   if ((type1 == "token" && value1 %in% keyword1) || if_then){ # increase indent

@@ -13,7 +13,7 @@
 temp_file <- paste(path_name, "checkpoint_after_parse_one.RData", sep="/")
 load(file=temp_file) # recover progress
 
-cat(file=stderr(), "organising declarations, initialisation, calculation", "\n")
+cat(file=stderr(), "translating declarations, initialisation, calculation", "\n")
 
 csl <- csl %>%
   mutate(
@@ -843,7 +843,7 @@ for (i in 1:nrow(csl)){
     if (labeli <= i){
       stop("illegal reference to earlier label in do loop")
     }
-    if (csl$line_type[labeli]  != "continue"){
+    if (csl$line_type[labeli]  != "enddo"){
       stop("illegal operation after label of do loop")
     }
     csl$label[labeli] <- "" # remove label
