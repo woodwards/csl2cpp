@@ -54,7 +54,7 @@ temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
 load(temp_file)
 cat(file=stderr(), "making cpp code", "\n")
 source("csl2cpp_make.r") # load functions
-cpp <- make_cpp(csl, tokens, model_name,  delay_post=TRUE)
+cpp <- make_cpp(csl, tokens, model_name, index, delay_post=TRUE)
 cpp_df <- as_data_frame(cpp)
 cat(file=stderr(), "writing cpp code", "\n")
 source("csl2cpp_write.r") # load functions

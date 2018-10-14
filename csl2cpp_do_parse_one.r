@@ -49,7 +49,7 @@ max_indent <- 10
 block <- rep(0, max_indent) # ids for blocks at different indent levels
 do_labels <- c()
 
-# create regex strings for detection
+# create regex strings for detection (these could be made faster by working on split code)
 integ_str <- "token.+equals.+integ.+openbracket.+closebracket"
 if_then_str <- "token.+if.+openbracket.+closebracket.+token.+then"
 if_goto_str <- "token.+if.+openbracket.+closebracket.+token.+goto"
@@ -175,11 +175,11 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
   }
   csl$line_type[i] <- case_when(
     is_continuation ~ "continuation", # i.e. same as previous line
-    has_integ ~ "integ",
+    has_integ ~ "integ", # special kind of assignment?
     if_then ~ "ifthen",
     if_goto ~ "ifgoto",
     else_if_then ~ "elseifthen",
-    type1 == "token" && value1 %in% keyword ~ value1, # keyword
+    type1 == "token" && value1 %in% keyword ~ value1, # line_type <- keyword
     type1 == "blank" & has_tail ~ "comment", # comment only
     type1 == "blank" ~ "blank", # blank line
     type1 == "token" && type2 == "equals" ~  "assign",
@@ -190,7 +190,7 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
     do_labels <- c(do_labels, value2)
   }
 
-  # indent FIXME not working correctly because of tangled GOTO statements
+  # indent (no attempt to indent goto, ifgoto)
   if ((type1 == "token" && value1 %in% keyword1) || if_then){ # increase indent
     csl$indent[i] <- indent
     indent <- indent + 1
@@ -267,5 +267,6 @@ tokens <- data.frame(name = token, line = token_line, stringsAsFactors = FALSE) 
   )
 
 # save progress
+rm(list=setdiff(ls(), c("csl", "tokens", "path_name", "silent", lsf.str())))
 temp_file <- paste(path_name, "checkpoint_after_parse_one.RData", sep="/")
 save.image(temp_file)

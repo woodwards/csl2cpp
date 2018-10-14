@@ -5,10 +5,10 @@
 # combine separate declaration and initialisation of variables in CSL, has to be one line in C++
 # CSL constants are not actually constant, just initialised to the value
 # convert some CSL tokens into C++ equivalents
-# keep track of lines
+# identify lines where tokens are set and used, don't worry about dependence
 # http://www.neurophys.wisc.edu/comp/docs/not017/
-# are we going to completely automate, or only mostly.
-# some things are hard to automate but fairly easy to translate manually (goto, mod, pow)
+# are we going to completely automate translation, or only mostly?
+# some things are hard to automate but fairly easy to translate manually (goto, pow)
 
 temp_file <- paste(path_name, "checkpoint_after_parse_one.RData", sep="/")
 load(file=temp_file) # recover progress
@@ -41,6 +41,13 @@ csl$tail <- str_trim(str_replace(csl$tail, "^! ?", "// "))
 # token_list is used to standardise case of user tokens
 # token_list is also used to translate some language keywords
 token_list <- setNames(tokens$name, tokens$lower) # indexed by lower case
+declaration <- c("constant", "algorithm", "nsteps", "maxterval", "character",
+                 "parameter", "cinterval", "integer", "logical", "doubleprecision")
+keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do") # +if_then, increase indent
+keyword2 <- c("end", "endif", "enddo") # decrease indent
+keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue") # + has_label + if_goto, no change to indent
+keyword4 <- c("else") # +else_if_then, decrease and increase indent
+keyword <- c(declaration, keyword1, keyword2, keyword3, keyword4)
 reserved <- c(keyword, "t", "integ",
               "max", "exp", "min", "log", "sqrt",
               "cos", "sin", "acos", "asin", "tan", "atan") # convert these keywords to lower case
@@ -50,16 +57,18 @@ token_list[c("mod", "aint")] <- c("fmod", "floor") # translate these
 token_list[c("integer", "logical", "doubleprecision", "real", "character")] <- c("int", "bool", "double", "double", "string") # translate these
 
 # keeping track of tokens
-# declare, set, reset, use
+# declared, set, used
 # need to identify inputs and outputs from statements/blocks of statements
 token_decl_line <- setNames(rep(0L, length(token_list)), token_list)
 token_decl_type <- setNames(rep("", length(token_list)), token_list)
 token_decl_type["t"] <- "double"
 token_set_line <- setNames(rep(0L, length(token_list)), token_list) # only in calc
 token_set_line[names(token_list) %in% reserved] <- 1 # assume reserved words are set?
+token_uninit <- setNames(rep(NA, length(token_list)), token_list) # only in calc
 token_used_line <- setNames(rep(0L, length(token_list)), token_list) # only in calc
-token_constant <- setNames(rep("", length(token_list)), token_list) # collect consts (i.e., PARAMETER)
 token_value <- setNames(rep(NA, length(token_list)), token_list) # and values
+token_value[reserved] <- 1 # give these a nominal value
+token_value[c("mod", "aint")] <- 1 # give these a nominal value
 token_variable <- setNames(rep("", length(token_list)), token_list) # collect variables
 
 # boolean and a few other conversions (WARNING: new values come first, old names come second!)
@@ -209,11 +218,11 @@ for (i in 1:nrow(csl)){
   }
 
   #### pause at specific line ####
-  # stopifnot(i<1133)
+  # stopifnot(i<1172)
 
   #### begin handling line types ####
 
-  #### handle parameter ####
+  #### handle line_type = parameter ####
   if (csl$line_type[i] %in% c("parameter")){
 
     # delete first and last brackets
@@ -263,14 +272,14 @@ for (i in 1:nrow(csl)){
     }
     token_decl_line[parse_list[k+1]] <- i
     token_decl_type[parse_list[k+1]] <- csl$type[i]
-    token_variable[parse_list[k+1]] <- ""
-    token_constant[parse_list[k+1]] <- parse_list[k+1]
+    token_variable[parse_list[k+1]] <- parse_list[k+1]
     token_value[parse_list[k+1]] <- as.numeric(parse_list[k+5])
     token_set_line[parse_list[k+1]] <- i
+    csl$set[i] <- parse_list[k+1]
     csl$handled[i] <- TRUE
 
   }
-  #### handle integer, character, doubleprecision, logical, dimension (including arrays) ####
+  #### handle line_type = integer, character, doubleprecision, logical, dimension (including arrays) ####
   if (csl$line_type[i] %in% c("integer", "character", "doubleprecision", "logical", "dimension")){
 
     # these are explicit declarations
@@ -308,6 +317,7 @@ for (i in 1:nrow(csl)){
         # token_variable[parse_list[4]] <- parse_list[4] # FIXME currently not visible
         token_decl_line[parse_list[4]] <- i
         token_decl_type[parse_list[4]] <- csl$type[i]
+        token_variable[parse_list[4]] <- parse_list[4]
         csl$handled[i] <- TRUE
 
       } else if (length(j) == 1){
@@ -330,6 +340,7 @@ for (i in 1:nrow(csl)){
         # token_variable[parse_list[4]] <- parse_list[4] # FIXME currently not visible
         token_decl_line[parse_list[4]] <- i
         token_decl_type[parse_list[4]] <- csl$type[i]
+        token_variable[parse_list[4]] <- parse_list[4]
         csl$handled[i] <- TRUE
 
       } else {
@@ -356,7 +367,6 @@ for (i in 1:nrow(csl)){
       csl$type[i] <- this_type
       csl$decl[i] <- paste(parse_list[k+1], collapse=" , ") # variable list
       csl$dend[i] <- ";"
-
       # deal with previous declarations of these variables
       bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
       if (any(bad)){
@@ -394,7 +404,7 @@ for (i in 1:nrow(csl)){
       }
       token_set_line[parse_list[k+1]] <- i
       token_value[parse_list[k+1]] <- as.numeric(parse_list[k+5]) # FIXME simplistic
-      # csl$set[i] <- paste(parse_list[k+1], collapse=",") # only track calculated vars
+      csl$set[i] <- paste(parse_list[k+1], collapse=",")
 
       # which tokens get used (any not preceeded by comma) really the compiler can handle this
       odds <- seq(1, length(parse_list)-1, 2)
@@ -424,172 +434,7 @@ for (i in 1:nrow(csl)){
     } # end non-array declaration and initialisation
 
   }
-  #### handle integ ####
-  if (csl$line_type[i] %in% c("integ")){
-
-    # only handles integ statements of particular simple forms
-    csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
-
-    # a = integ( b , c ), no expressions allowed
-    if (str_to_lower(paste(parse_list[c(4, 6, 8, 12, 16, 18)], collapse="")) == "=integ(,)na"){
-
-      jj <- parse_list[2]
-      # declare state variable
-      if (token_decl_line[jj] != 0){
-        message <- paste("previously declared integ:", jj)
-        cat("line", i, message, "\n")
-        # don't declare again
-      } else {
-        csl$static[i] <- ""
-        csl$type[i] <- "double" # state vars are double
-        csl$decl[i] <- jj
-        csl$dend[i] <- ";"
-        token_variable[jj] <- jj
-        token_decl_line[jj] <- i
-        token_decl_type[jj] <- csl$type[i]
-      }
-      # initial condition of state variable
-      if (token_set_line[jj] != 0){
-        message <- paste("previously initialised integ:", jj)
-        cat("line", i, message, "\n")
-      }
-      # initialise even if already initialised
-      csl$init[i] <- paste(parse_list[c(2, 4, 14)], collapse=" ")
-      csl$delim[i] <- ";"
-      token_set_line[jj] <- i
-      token_value[parse_list[2]] <- 0 # placeholder only
-      # csl$set[i] <- jj # don't track state vars
-      if (parse_list[13] == "token"){ # because could be a numeric constant
-        token_used_line[parse_list[14]] <- i
-        csl$used[i] <- parse_list[14]
-      }
-      # integration rate of state variable
-      csl$integ[i] <- paste(parse_list[c(2, 4, 10)], collapse=" ")
-      if (parse_list[9] == "token"){ # could be a number
-        token_used_line[parse_list[10]] <- i
-        csl$used[i] <- parse_list[10]
-      }
-      csl$handled[i] <- TRUE
-
-    } else if (str_to_lower(paste(parse_list[c(4, 6, 8, 12, 14, 16, 20, 24, 26, 28)], collapse="")) == "=max(,integ(,))na"){
-
-      jj <- parse_list[2]
-      # declare state variable
-      if (token_decl_line[jj] != 0){
-        message <- paste("previously declared integ:", jj)
-        cat("line", i, message, "\n")
-        # don't declare again
-      } else {
-        csl$static[i] <- ""
-        csl$type[i] <- "double" # state vars are double
-        csl$decl[i] <- jj
-        csl$dend[i] <- ";"
-        token_variable[jj] <- jj
-        token_decl_line[jj] <- i
-        token_decl_type[jj] <- csl$type[i]
-      }
-      # initial condition of state variable
-      if (token_set_line[jj] != 0){
-        message <- paste("previously initialised integ:", jj)
-        cat("line", i, message, "\n")
-      }
-      # initialise even if already initialised
-      csl$init[i] <- paste(parse_list[c(2, 4, 6, 8, 10, 12, 22, 24)], collapse=" ")
-      csl$delim[i] = ";"
-      token_set_line[jj] <- i
-      token_value[parse_list[2]] <- 0 # FIXME placeholder only
-      # csl$set[i] <- jj # don't track state vars
-      if (parse_list[21] == "token"){ # because could be a numeric constant
-        token_used_line[parse_list[22]] <- i
-        csl$used[i] <- parse_list[22]
-      }
-      # integration rate of state variable
-      csl$integ[i] <- paste(parse_list[c(2, 4, 6, 8, 10, 12, 18, 24)], collapse=" ")
-      if (parse_list[17] == "token"){ # could be a number
-        token_used_line[parse_list[18]] <- i
-        csl$used[i] <- parse_list[18]
-      }
-      csl$handled[i] <- TRUE
-
-    } else {
-
-      # can't handle this type
-      odds <- seq(1, length(parse_list)-1, 2)
-      message <- paste("unhandled form of integ:", paste(parse_list[odds+1], collapse=" "))
-      cat("line", i, message, "\n")
-
-    }
-
-  }
-  #### handle assign, arrayassign ####
-  if (csl$line_type[i] %in% c("assign", "arrayassign")){
-
-    # implicit declaration of left hand side (non-array)
-    if (!is_continuation){
-      if (csl$line_type[i] %in% c("assign")){
-        odds <- seq(1, length(parse_list)-1, 2)
-        k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) %in% "equals" ) * 2 - 1
-        if (length(k)>1){
-          stop("multiple assignments on a line should have been separated")
-        }
-        token_set_line[parse_list[k+1]] <- i
-        token_value[parse_list[k+1]] <- 0 # placeholder only
-        csl$set[i] <- parse_list[k+1]
-        bad <- token_decl_line[parse_list[k+1]] != 0 # already declared (actually not bad)
-        if (any(!bad)){ # declare these ones
-          for (jj in parse_list[k+1][!bad]){
-            csl$static[i] <- ""
-            csl$type[i] <- "double"
-            csl$decl[i] <- jj
-            csl$dend[i] <- ";"
-            token_variable[jj] <- jj
-            token_decl_line[jj] <- i
-            token_decl_type[jj] <- csl$type[i]
-          }
-        }
-      } else { # arrayassign
-        k <- 1
-        token_set_line[parse_list[k+1]] <- i
-        token_value[parse_list[k+1]] <- 0 # placeholder only
-        csl$set[i] <- parse_list[k+1]
-      }
-    }
-    # some assignments have labels
-    if (csl$label[i]>""){
-      new_label <- paste("label_", csl$label[i], " ", sep="")
-    } else {
-      new_label=""
-    }
-    # assignment
-    odds <- seq(1, length(parse_list)-1, 2)
-    temp <- paste(new_label, paste(parse_list[odds+1], collapse=" "), sep="")
-    if (major_section == "header"){
-      stop("can't assign in header")
-    } else if (major_section == "initial"){
-      csl$init[i] <- temp
-      csl$delim[i] <- ifelse(will_continue, "", ";")
-    } else if (major_section == "discrete"){ # discrete section
-      csl$disc[i] <- temp
-      csl$delim[i] <- ifelse(will_continue, "", ";")
-    } else { # dynamic section
-      csl$calc[i] <- temp
-      csl$delim[i] <- ifelse(will_continue, "", ";")
-    }
-    if (is_continuation | csl$line_type[i] %in% c("assign")){
-      odds <- seq(1, length(parse_list)-1, 2)
-      k <- which(parse_list[odds] == "token" & !(lead(parse_list[odds], 1) %in% c("equals", "openbracket"))) * 2 - 1 # FIXME not quite right for arrays
-      token_used_line[parse_list[k+1]] <- i
-      csl$used[i] <- paste(unique(parse_list[k+1]), collapse=",")
-      csl$handled[i] <- TRUE
-    } else { # array assign first line
-      odds <- seq(1, length(parse_list)-1, 2)
-      k <- which(parse_list[odds] == "token" & odds > 1 & !(lead(parse_list[odds], 1) %in% c("equals", "openbracket"))) * 2 - 1 # FIXME not quite right for arrays
-      token_used_line[parse_list[k+1]] <- i
-      csl$used[i] <- paste(unique(parse_list[k+1]), collapse=",")
-      csl$handled[i] <- TRUE
-    }
-  }
-  #### handle constant, algorithm, nsteps, maxterval, cinterval, minterval ####
+  #### handle line_type = constant, algorithm, nsteps, maxterval, cinterval, minterval ####
   if (csl$line_type[i] %in% c("constant", "algorithm", "nsteps", "maxterval", "cinterval", "minterval")){
 
     # note: a CSL CONSTANT is just an initialiser, values can be changed later!!!
@@ -643,13 +488,13 @@ for (i in 1:nrow(csl)){
     }
     token_set_line[parse_list[k+1]] <- i
     if (is_array){
-      token_value[parse_list[k+1]] <- 0 # placeholder only
+      token_value[parse_list[k+1]] <- 555 # placeholder only
     } else if (any(token_decl_type[parse_list[k+1]] %in% c("bool", "string"))){
-      token_value[parse_list[k+1]] <- 0 # placeholder only
+      token_value[parse_list[k+1]] <- 555 # placeholder only
     } else {
       token_value[parse_list[k+1]] <- as.numeric(parse_list[k+5])
     }
-    # csl$set[i] <- paste(parse_list[k+1], collapse=",") # only track calculated vars
+    csl$set[i] <- paste(parse_list[k+1], collapse=",")
 
     # initialise non-array variables
     if (!is_array){ # easy, just copy line and convert , to ;
@@ -731,6 +576,177 @@ for (i in 1:nrow(csl)){
       csl$handled[i] <- TRUE
     }
 
+  }
+  #### handle line_type = integ ####
+  if (csl$line_type[i] %in% c("integ")){
+
+    # only handles integ statements of particular simple forms
+    csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+
+    # a = integ( b , c ), no expressions allowed
+    if (str_to_lower(paste(parse_list[c(4, 6, 8, 12, 16, 18)], collapse="")) == "=integ(,)na"){
+
+      jj <- parse_list[2]
+      # declare state variable
+      if (token_decl_line[jj] != 0){
+        message <- paste("previously declared integ:", jj)
+        cat("line", i, message, "\n")
+        # don't declare again
+      } else {
+        csl$static[i] <- ""
+        csl$type[i] <- "double" # state vars are double
+        csl$decl[i] <- jj
+        csl$dend[i] <- ";"
+        token_variable[jj] <- jj
+        token_decl_line[jj] <- i
+        token_decl_type[jj] <- csl$type[i]
+      }
+      # initial condition of state variable
+      if (token_set_line[jj] != 0){
+        message <- paste("previously initialised integ:", jj)
+        cat("line", i, message, "\n")
+      }
+      # initialise even if already initialised
+      csl$init[i] <- paste(parse_list[c(2, 4, 14)], collapse=" ")
+      csl$delim[i] <- ";"
+      token_set_line[jj] <- i
+      token_value[parse_list[2]] <- 555 # placeholder only
+      csl$set[i] <- jj
+      if (parse_list[13] == "token"){ # because could be a numeric constant
+        token_used_line[parse_list[14]] <- i
+        csl$used[i] <- parse_list[14]
+      }
+      # integration rate of state variable
+      csl$integ[i] <- paste(parse_list[c(2, 4, 10)], collapse=" ")
+      if (parse_list[9] == "token"){ # could be a number
+        token_used_line[parse_list[10]] <- i
+        csl$used[i] <- parse_list[10]
+      }
+      csl$handled[i] <- TRUE
+
+    } else if (str_to_lower(paste(parse_list[c(4, 6, 8, 12, 14, 16, 20, 24, 26, 28)], collapse="")) == "=max(,integ(,))na"){
+
+      jj <- parse_list[2]
+      # declare state variable
+      if (token_decl_line[jj] != 0){
+        message <- paste("previously declared integ:", jj)
+        cat("line", i, message, "\n")
+        # don't declare again
+      } else {
+        csl$static[i] <- ""
+        csl$type[i] <- "double" # state vars are double
+        csl$decl[i] <- jj
+        csl$dend[i] <- ";"
+        token_variable[jj] <- jj
+        token_decl_line[jj] <- i
+        token_decl_type[jj] <- csl$type[i]
+      }
+      # initial condition of state variable
+      if (token_set_line[jj] != 0){
+        message <- paste("previously initialised integ:", jj)
+        cat("line", i, message, "\n")
+      }
+      # initialise even if already initialised
+      csl$init[i] <- paste(parse_list[c(2, 4, 6, 8, 10, 12, 22, 24)], collapse=" ")
+      csl$delim[i] = ";"
+      token_set_line[jj] <- i
+      token_value[parse_list[2]] <- 555 # placeholder only
+      csl$set[i] <- jj
+      if (parse_list[21] == "token"){ # because could be a numeric constant
+        token_used_line[parse_list[22]] <- i
+        csl$used[i] <- parse_list[22]
+      }
+      # integration rate of state variable
+      csl$integ[i] <- paste(parse_list[c(2, 4, 6, 8, 10, 12, 18, 24)], collapse=" ")
+      if (parse_list[17] == "token"){ # could be a number
+        token_used_line[parse_list[18]] <- i
+        csl$used[i] <- parse_list[18]
+      }
+      csl$handled[i] <- TRUE
+
+    } else {
+
+      # can't handle this type
+      odds <- seq(1, length(parse_list)-1, 2)
+      message <- paste("unhandled form of integ:", paste(parse_list[odds+1], collapse=" "))
+      cat("line", i, message, "\n")
+
+    }
+
+  }
+  #### handle line_type = assign, arrayassign ####
+  if (csl$line_type[i] %in% c("assign", "arrayassign")){
+
+    # implicit declaration of left hand side (non-array)
+    if (!is_continuation){
+      if (csl$line_type[i] %in% c("assign")){
+        odds <- seq(1, length(parse_list)-1, 2)
+        k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) %in% "equals" ) * 2 - 1
+        if (length(k)>1){
+          stop("multiple assignments on a line should have been separated")
+        }
+        token_set_line[parse_list[k+1]] <- i
+        j <- which( parse_list[odds] == "token" & !(lead(parse_list[odds], 1) %in% "equals") ) * 2 - 1
+        bad <- is.na(token_value[parse_list[j+1]]) # uninitialised
+        token_uninit[parse_list[j+1][bad]] <- parse_list[j+1]
+        token_value[parse_list[k+1]] <- sum(token_value[parse_list[j+1]])
+        csl$set[i] <- parse_list[k+1]
+        bad <- token_decl_line[parse_list[k+1]] != 0 # already declared (actually not bad)
+        if (any(!bad)){ # declare these ones
+          for (jj in parse_list[k+1][!bad]){
+            csl$static[i] <- ""
+            csl$type[i] <- "double"
+            csl$decl[i] <- jj
+            csl$dend[i] <- ";"
+            token_variable[jj] <- jj
+            token_decl_line[jj] <- i
+            token_decl_type[jj] <- csl$type[i]
+          }
+        }
+      } else { # arrayassign
+        k <- 1
+        token_set_line[parse_list[k+1]] <- i
+        j <- which( parse_list[odds] == "token" & !(lead(parse_list[odds], 1) %in% "equals") ) * 2 - 1
+        bad <- is.na(token_value[parse_list[j+1]]) # uninitialised
+        token_uninit[parse_list[j+1][bad]] <- parse_list[j+1]
+        token_value[parse_list[k+1]] <- sum(token_value[parse_list[j+1]])
+        csl$set[i] <- parse_list[k+1]
+      }
+    }
+    # some assignments have labels
+    if (csl$label[i]>""){
+      new_label <- paste("label_", csl$label[i], " ", sep="")
+    } else {
+      new_label=""
+    }
+    # assignment
+    odds <- seq(1, length(parse_list)-1, 2)
+    temp <- paste(new_label, paste(parse_list[odds+1], collapse=" "), sep="")
+    if (major_section == "header"){
+      stop("can't assign in header")
+    } else if (major_section == "initial"){
+      csl$init[i] <- temp
+      csl$delim[i] <- ifelse(will_continue, "", ";")
+    } else if (major_section == "discrete"){ # discrete section
+      csl$disc[i] <- temp
+      csl$delim[i] <- ifelse(will_continue, "", ";")
+    } else { # dynamic section
+      csl$calc[i] <- temp
+      csl$delim[i] <- ifelse(will_continue, "", ";")
+    }
+    if (is_continuation | csl$line_type[i] %in% c("assign")){
+      odds <- seq(1, length(parse_list)-1, 2)
+      k <- which(parse_list[odds] == "token" & !(lead(parse_list[odds], 1) %in% c("equals", "openbracket"))) * 2 - 1 # FIXME not quite right for arrays
+      token_used_line[parse_list[k+1]] <- i
+      csl$used[i] <- paste(unique(parse_list[k+1]), collapse=",")
+      csl$handled[i] <- TRUE
+    } else { # array assign first line
+      odds <- seq(1, length(parse_list)-1, 2)
+      k <- which(parse_list[odds] == "token" & odds > 1 & !(lead(parse_list[odds], 1) %in% c("equals", "openbracket"))) * 2 - 1 # FIXME not quite right for arrays
+      token_used_line[parse_list[k+1]] <- i
+      csl$used[i] <- paste(unique(parse_list[k+1]), collapse=",")
+      csl$handled[i] <- TRUE
+    }
   }
   #### handle line_type = if ####
   if (csl$line_type[i] %in% c("if")){
@@ -869,7 +885,7 @@ for (i in 1:nrow(csl)){
     csl$tail[i] <- paste("//", csl$code[i])
     csl$tail[labeli] <- paste("//", csl$code[labeli])
     token_set_line[parse_list[6]] <- i
-    token_value[parse_list[6]] <- 0 # placeholder only
+    token_value[parse_list[6]] <- 555 # placeholder only
     csl$set[i] <- parse_list[6]
     odds <- seq(1, length(parse_list)-1, 2)
     k <- which( parse_list[odds] == "token" & odds > 7 & !(lead(parse_list[odds], 1) %in% c("openbracket")) ) * 2 - 1
@@ -1038,8 +1054,6 @@ for (i in 1:nrow(csl)){
 } # end loop
 
 # add collected info back into tokens
-# unique(token_decl_type[token_variable>""])
-setdiff(token_variable, token_list) # FIXME should be nothing
 tokens <- data_frame(
   name=token_list,
   lower=names(token_list),
@@ -1047,7 +1061,6 @@ tokens <- data_frame(
   decl_type=token_decl_type,
   set_line=token_set_line,
   used_line=token_used_line,
-  constant=token_constant,
   value=token_value,
   variable=token_variable
   ) %>%
@@ -1056,6 +1069,7 @@ tokens <- data_frame(
   arrange(value)
 
 # save progress
+rm(list=setdiff(ls(), c("csl", "tokens", "path_name", "silent", lsf.str())))
 temp_file <- paste(path_name, "checkpoint_after_parse_two.RData", sep="/")
 save.image(temp_file)
 
@@ -1071,8 +1085,8 @@ save.image(temp_file)
 if (FALSE){
   View(filter(csl, line_type=="procedural"))
   View(filter(csl, handled==FALSE))
-  View(filter(csl, section=="dynamic"))
+  View(filter(csl, section=="initial"))
   View(filter(csl, used>""|set>""))
-  View(filter(csl, !is.na(stack)))
+  View(filter(tokens, used_line<set_line & used_line>0))
 }
 

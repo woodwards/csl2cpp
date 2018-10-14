@@ -1,8 +1,13 @@
 #### third pass - sorting dynamic lines into calc and post processing ####
 # thoughts:
-# taking unnecessary lines out of calculate_rates will speed it up a lot.
+# some ACSL model might have several sections to be sorted, currently only handle one
+# taking unnecessary lines out of calculate_rates to post_processing could speed it up a lot.
 # procedurals group lines together and make it harder to sort
 # can't handle implicit systems
+# user should ensure variables are initialised and equations/procedurals are sortable
+# but if not, we still want a result
+# need to handle variables that are not initialised (ACSLX sets these to strange values, in C++ they are NA)
+# how to handle unsortable lines?
 
 temp_file <- paste(path_name, "checkpoint_after_parse_two.RData", sep="/")
 load(file=temp_file) # recover progress
@@ -13,7 +18,7 @@ override_proc_set <- TRUE # would be nice but sort fails
 override_proc_used <- FALSE # would be nice but sort fails
 sorting_method <- "simon"
 # sorting_method <- "acslx"
-# sorting_method <- "none"
+sorting_method <- "none"
 cat("override procedural set list :", override_proc_set, "\n")
 cat("override procedural used list :", override_proc_used, "\n")
 cat("sorting method :", sorting_method, "\n")
@@ -28,7 +33,9 @@ index <- data_frame(line = i,
                     code = csl$calc[i],
                     line_type = csl$line_type[i],
                     set = csl$set[i], # outputs
+                    set_hid = "",
                     used = csl$used[i], # inputs
+                    used_hid = "",
                     cont = csl$cont[i], # continuation
                     unset = "", # unsorted
                     unsetline = "", # where unset is last set
@@ -39,6 +46,7 @@ index <- data_frame(line = i,
                     )
 
 # paste and unique and sort a vector of comma separated strings (not vectorised)
+# supplying a second argument also allows you to remove elements (using setdiff)
 paste_sort <- function(x,y=""){
   x <- str_split(x[!is.na(x)], ",", simplify=TRUE)
   y <- str_split(y[!is.na(y)], ",", simplify=TRUE)
@@ -47,38 +55,10 @@ paste_sort <- function(x,y=""){
   x <- max(str_c(x, collapse=","),"")
   return(x)
 }
-
-# sort var lists
-for (i in 1:nrow(index)){
-  index$set[i] <- paste_sort(index$set[i])
-  index$used[i] <- paste_sort(index$used[i], index$set[i]) # remove circular dependencies? dangerous?
+# do reverse of paste_sort() (not vectorised)
+comma_split <- function(s){
+  if (is.na(s)) { "" } else { str_split(s, ",", simplify=TRUE)[1,] }
 }
-
-# analyse variables (also used in csl2cpp_make.r)
-integ <- csl$integ[csl$integ > ""]
-state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
-rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", "")) # expressions, not just var names
-rate <- str_replace_all(rate, "= ", "")
-# handle "max ( const , ? )"
-i <- which(str_detect(rate, "^max \\( "))
-temp <- str_split(rate, " ") # list of vectors of strings
-for (ii in i){
-  rate[ii] <- temp[[ii]][5]
-}
-n_state <- length(state)
-constant <- tokens$constant[tokens$constant>""]
-variable <- tokens$variable[tokens$variable>"" & tokens$decl_type!="string" & tokens$constant==""]
-n_variable <- length(variable)
-
-# overall analysis
-# but this includes variables hidden inside procedurals
-used_all <- unique(unlist(str_split(index$used, ",")))
-set_all <- unique(unlist(str_split(index$set, ",")))
-used_but_not_set <- setdiff(used_all, set_all) # can be considered constants (includes t and state)
-set_but_not_used <- setdiff(set_all, c(used_all, rate)) # can be considered post-processing
-
-# see if any were not initialised (should be empty)
-uninitialised <- which(token_list %in% used_but_not_set & token_set_line == 0)
 
 #### collapse continuations ####
 cat("collapse continuations", "\n")
@@ -88,7 +68,7 @@ while (length(cont_lines)>0){
   index$end[i-1] <- index$end[i]
   index$code[i-1] <- "*** collapsed continuation ***"
   index$set[i-1] <- paste_sort(c(index$set[i-1], index$set[i]))
-  index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]), c(index$set[i-1], index$set[i]))
+  index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]))
   index$cont[i-1] <- ""
   index <- index[-i, ] # remove line
   cont_lines <- which(index$cont>"")
@@ -109,7 +89,7 @@ while (any(collapsible)){
   index$end[i-1] <- index$end[i]
   index$code[i-1] <- paste("*** collapsed", index$line_type[i-1], "***")
   index$set[i-1] <- paste_sort(c(index$set[i-1], index$set[i]))
-  index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]), c(index$set[i-1], index$set[i]))
+  index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]))
   index <- index[-i, ] # remove line
   hyphens <- str_count(index$block, "-")
   collapsible1 <- index$block == lag(index$block, 1) & lag(index$line_type, 1) %in% c("ifthen", "do")
@@ -124,6 +104,7 @@ cat("collapse procedurals with goto, ifgoto", "\n")
 has_goto <- unique(index$block[index$line_type %in% c("goto", "ifgoto")])
 for (blocki in has_goto){ # collapse these blocks
   lines <- which(index$block==blocki)
+  lines <- min(lines):max(lines)
   if (length(lines)>1){ # not collapsed yet
     cat("collapsing", blocki, "\n")
     # stopifnot(blocki!="1-2-5-17")
@@ -133,10 +114,14 @@ for (blocki in has_goto){ # collapse these blocks
     index$end[i] <- index$end[tail(j, 1)]
     index$code[i] <- paste("*** collapsed procedural ***")
     if (override_proc_set){
-      index$set[i] <- paste_sort(index$set[j]) # ignore procedural declaration?
+      index$set[i] <- paste_sort(index$set[j]) # ignore procedural declaration
+    } else {
+      index$set_hid[i] <- paste_sort(index$set[j], index$set[i]) # these were hid
     }
     if (override_proc_used){
-      index$used[i] <- paste_sort(index$used[j], index$set[j])
+      index$used[i] <- paste_sort(index$used[j]) # ignore procedural declaration
+    } else {
+      index$used_hid[i] <- paste_sort(index$used[j], index$used[i]) # these were hid
     }
     has_for_rate <- any(index$dep[j] %in% c("for_rate"))
     index$dep[i] <- if_else(has_for_rate, "for_rate", "")
@@ -149,19 +134,24 @@ cat("collapse other procedurals", "\n")
 has_proc <- unique(index$block[index$line_type %in% c("procedural")])
 for (blocki in has_proc){ # collapse these blocks
   lines <- which(index$block==blocki)
+  lines <- min(lines):max(lines)
   if (length(lines)>1){ # not collapsed yet
     cat("collapsing", blocki, "\n")
-    # stopifnot(blocki!="1-2-5-17")
+    # stopifnot(blocki!="1-2-5-27")
     i <- head(lines, 1)
     stopifnot(index$line_type[i]=="procedural")
     j <- tail(lines, -1)
     index$end[i] <- index$end[tail(j, 1)]
     index$code[i] <- paste("*** collapsed procedural ***")
     if (override_proc_set){
-      index$set[i] <- paste_sort(index$set[j]) # ignore procedural declaration?
+      index$set[i] <- paste_sort(index$set[j]) # ignore procedural declaration
+    } else {
+      index$set_hid[i] <- paste_sort(index$set[j], index$set[i]) # these were hid
     }
     if (override_proc_used){
-      index$used[i] <- paste_sort(index$used[j], index$set[j])
+      index$used[i] <- paste_sort(index$used[j]) # ignore procedural declaration
+    } else {
+      index$used_hid[i] <- paste_sort(index$used[j], index$used[i]) # these were hid
     }
     has_for_rate <- any(index$dep[j] %in% c("for_rate"))
     index$dep[i] <- if_else(has_for_rate, "for_rate", "")
@@ -169,7 +159,35 @@ for (blocki in has_proc){ # collapse these blocks
   }
 }
 
-#### analyse variable dependency ####
+#### analyse equation dependency ####
+
+# extract model state and rate variables
+integ <- csl$integ[csl$integ > ""]
+state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
+rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
+rate <- str_replace_all(rate, "= ", "")
+i <- which(str_detect(rate, "^max \\( ")) # handle = max ( , ) form
+temp <- str_split(rate, " ") # returns list of vectors of strings
+for (ii in i){
+  rate[ii] <- temp[[ii]][5]
+}
+
+# identify variables that will be set prior to this section FIXME to do
+ignore <- c("integ", "algorithm", "maxterval", "minterval", "cinterval", "nsteps", "termt",
+            "constant", "integer", "logical", "parameter",
+            "doubleprecision", "real", "character")
+
+# do overall input outpus analysis of current section
+# (includes variables hidden inside procedurals)
+used_here <- unique(unlist(str_split(index$used, ",")))
+set_here <- unique(unlist(str_split(index$set, ",")))
+used_but_not_set <- setdiff(used_here, set_here) # can be considered constants (includes t and state)
+set_but_not_used <- setdiff(set_here, c(used_here, rate)) # can be considered post-processing
+
+
+
+# identify which equations are needed to calculate the rate FIXME track variable lists
+# keep a list of variables set, needed
 cat("analyse equation dependency", "\n")
 var_dep <- c()
 var_dep[rate] <- "rate"
@@ -179,7 +197,7 @@ inactive <- c("integ", "comment", "blank", "derivative",
               "algorithm", "maxterval", "minterval", "cinterval", "nsteps", "termt",
               "constant", "integer", "logical",
               "doubleprecision", "real", "character")
-index$dep[nrow(index)] <- "inactive" # end of derivative, other end may be needed
+index$dep[nrow(index)] <- "inactive" # end of derivative
 sweep <- c(seq(nrow(index), 1, -1), seq(2, nrow(index), 1))
 nsweep <- 0
 change <- TRUE
@@ -191,13 +209,15 @@ while (change){
     if (index$line_type[i] %in% inactive) {
       index$dep[i] <- "inactive"
     } else { # is a known variable getting set?
-      set <- str_split(index$set[i], ",", simplify=TRUE)
+      set <- paste_sort(c(index$set[i], index$set_hid[i]))
+      set <- comma_split(set)
       set_types <- var_dep[set]
       if (any(set_types %in% c("state", "t"))){
         stop(paste("index line", i, ": illegally set state variable or t"))
       } else if (any(set_types %in% c("rate", "for_rate"))){
         index$dep[i] <- "for_rate"
-        used <- str_split(index$used[i], ",", simplify=TRUE)
+        used <- paste_sort(c(index$used[i], index$used_hid[i]))
+        used <- comma_split(used)
         used_types <- var_dep[used]
         if (any(is.na(used_types))){
           var_dep[used[is.na(used_types)]] <- "for_rate" # new var
@@ -244,7 +264,8 @@ if (sorting_method=="simon"){
       for (i in for_rate){
         # record any set that will be used
         if (index$set[i]>""){
-          set <- str_split(index$set[i], ",", simplify=TRUE)
+          set <- index$set[i]
+          set <- comma_split(set)
           set <- setdiff(set, set_but_not_used) # ignore "post processing"
           var_set_all[set] <- index$line[i]
         }
@@ -254,15 +275,15 @@ if (sorting_method=="simon"){
       for (i in for_rate){
         # record any set that will be used
         if (index$set[i]>""){
-          set <- str_split(index$set[i], ",", simplify=TRUE)
-          # notused <- intersect(set, set_but_not_used)
-          # index$notused[i] <- paste_sort(notused)
+          set <- index$set[i]
+          set <- comma_split(set)
           set <- setdiff(set, set_but_not_used) # ignore "post processing"
           var_set[set] <- index$line[i]
         }
         # record any used but not yet set
         if (index$used[i]>""){
-          used <- str_split(index$used[i], ",", simplify=TRUE)
+          used <- index$used[i]
+          used <- comma_split(used)
           used <- setdiff(used, used_but_not_set) # ignore "constants"
           used <- setdiff(used, names(var_set)) # set so far
           if (length(used)>0){ # record any used but currently unset
@@ -274,7 +295,7 @@ if (sorting_method=="simon"){
 
       # sort
       index$newline <- 1:nrow(index)
-      jump_list <- str_split(index$unsetline, ",")
+      jump_list <- str_split(index$unsetline, ",") # returns matrix of strings
       jump_to <- unlist(lapply(jump_list, function(x) max(unlist(x)))) # jump for each line
       jump_line <- jump_to > ""
       jump_i <- match( as.integer(jump_to) , index$line ) + runif(nrow(index)) # avoid identical
@@ -292,6 +313,32 @@ if (sorting_method=="simon"){
     }
 
   }
+
+  # find unset variables remaining (using actual procedural set used lists)
+  for_rate <- which(index$dep == "for_rate")
+  index$unset <- ""
+  var_set <- c()
+  for (i in for_rate){
+    # record any set
+    set <- paste_sort(c(index$set[i], index$set_hid[i]))
+    if (set>""){
+      set <- comma_split(set)
+      var_set[set] <- i
+    }
+    # check actual used
+    used <- paste_sort(c(index$used[i], index$used_hid[i]))
+    if (used>""){
+      used <- comma_split(used)
+      used <- setdiff(used, used_but_not_set) # ignore "constants"
+      used <- setdiff(used, names(var_set)) # set so far
+      if (length(used)>0){ # record any used but currently unset
+        index$unset[i] <- paste_sort(used)
+      }
+    }
+  }
+  uninitialised <- paste_sort(index$unset[for_rate])
+  cat("warning, uninitialised variables :", uninitialised, "\n")
+
 } # end of simon's method
 
 #### acslx sorting method ####
@@ -302,7 +349,7 @@ if (sorting_method=="acslx"){
   var_set_all <- c()
   for (i in 1:nrow(index)){
     if (index$set[i]>""){
-      set <- str_split(index$set[i], ",", simplify=TRUE)
+      set <- comma_split(index$set[i])
       var_set_all[set] <- i
     }
   }
@@ -321,16 +368,15 @@ if (sorting_method=="acslx"){
 
       # set
       if (index$set[i]>""){
-        set <- str_split(index$set[i], ",", simplify=TRUE)
+        set <- comma_split(index$set[i])
       } else {
         set <- ""
       }
 
       # used but not available
       if (index$used[i]>""){
-        used <- str_split(index$used[i], ",", simplify=TRUE)
+        used <- comma_split(index$used[i])
         used <- setdiff(used, used_but_not_set) # ignore "constants" including t and state
-        used <- setdiff(used, set) # ignore set on this line (ACSLX p3-4)
         used <- setdiff(used, names(var_set)) # ignore already set
         index$unset[i] <- paste_sort(used)
         index$unsetline[i] <- paste(var_set_all[used], collapse=",") # line number where last set

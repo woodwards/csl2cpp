@@ -20,7 +20,7 @@ smoosh <- function(...){
     str_squish()
 }
 
-make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
+make_cpp <- function(csl, tokens, model_name, index, delay_post=TRUE){
 
   cat("delay post processing :", delay_post, "\n")
 
@@ -34,6 +34,9 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	n_variable <- length(variable)
 	cat("n state :", n_state, "\n")
 	cat("n visible :", n_variable, "\n")
+
+	# uninitialised variables due to illegal procedural use
+	uninitialised <- str_split(paste_sort(index$unset), ",", simplify=TRUE)[1,]
 
 	# browser()
 
@@ -152,7 +155,10 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
   	cpp <- put_lines(cpp, indent, lines)
   	cpp <- put_lines(cpp, 2, "")
   }
-	cpp <- put_lines(cpp, 1, c("} // end initialise_model", ""))
+	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables like ACSLX"))
+	lines <- paste(uninitialised, "= 5.5555e33 ;")
+	cpp <- put_lines(cpp, 2, lines)
+	cpp <- put_lines(cpp, 1, c("", "} // end initialise_model", ""))
 	cat("initialisation lines :", sum(rows), "\n")
 
 	# pull variables from model (and constants?)
@@ -190,7 +196,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 
 	#### derivt function ####
 	cpp <- put_lines(cpp, 1, c("double derivt( double dx0, double x ) {", "",
-	                           "\treturn( x / t ) ;", "",
+	                           "\treturn( 0.0 ) ;", "",
 	                           "}", ""))
 
 	#### calculate rate ####

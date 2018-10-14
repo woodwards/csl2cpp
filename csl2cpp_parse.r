@@ -29,13 +29,14 @@ insert_row <- function(existingDF, newrow, r){
 
 # split a line of code into tokens, strings, comments, etc
 code_split <- function(code){
-  remaining <- str_trim(code)
+  remaining <- code
   outlist <- vector("list", 50)
   outi <- 1
   # regex metacharacters are . \ | ( ) [ { ^ $ * + ?
   # regex inside character classes also ^ - \ ]
   # we must ensure only one pattern is matched (not easy!)
   patterns <- c(
+    blank="^[:blank:]+",
     comment="^!.*",
     string="^\\'.*\\'", # ACSL allows single quotes only, C++ double quotes for strings
     token="^[:alpha:]+[[:alnum:]_]*",
@@ -67,16 +68,17 @@ code_split <- function(code){
   }
   # next item analysis
   while (str_length(remaining) > 0){ # loop through elements
-    next_match <- str_match(remaining, regex(patterns, ignore_case=TRUE))[,1]
-    matchj <- which(!is.na(next_match)) # compare to all patterns
-    stopifnot(length(matchj) == 1) # only one pattern should match
-    matchj <- matchj[[1]] # take first pattern if stopifnot() disabled
-    outlist[[outi]] <- names(patterns)[matchj]
-    outi <- outi + 1
-    outlist[[outi]] <- next_match[matchj]
-    outi <- outi + 1
-    remaining <- str_trim(str_replace(remaining, regex(patterns[matchj], ignore_case=TRUE), ""))
-
+    next_match <- str_match(remaining, regex(patterns, ignore_case=TRUE))[,1] # compare to all patterns
+    matchj <- which(!is.na(next_match))
+    stopifnot(length(matchj) == 1) # exactly one pattern should match
+    pattern <- names(patterns)[matchj]
+    if (pattern!="blank"){ # discard blanks
+      outlist[[outi]] <- pattern
+      outi <- outi + 1
+      outlist[[outi]] <- next_match[matchj]
+      outi <- outi + 1
+    }
+    remaining <- str_replace(remaining, regex(patterns[matchj], ignore_case=TRUE), "")
   }
   return(compact(outlist)) # drop NULLs from list
 }
