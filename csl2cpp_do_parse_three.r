@@ -6,7 +6,6 @@
 # can't handle implicit systems
 # user should ensure variables are initialised and equations/procedurals are sortable
 # but if not, we still want a result
-# need to handle variables that are not initialised (ACSLX sets these to strange values, in C++ they are NA)
 # how to handle unsortable lines?
 
 temp_file <- paste(path_name, "checkpoint_after_parse_two.RData", sep="/")
@@ -14,10 +13,10 @@ load(file=temp_file) # recover progress
 
 cat("sorting derivative section code", "\n")
 
-override_proc_set <- TRUE # would be nice but sort fails
-override_proc_used <- FALSE # would be nice but sort fails
+override_proc_set <- TRUE # helps sort
+override_proc_used <- FALSE # would be nice but sort might fail
 sorting_method <- "simon"
-# sorting_method <- "acslx"
+sorting_method <- "acslx"
 # sorting_method <- "none"
 cat("override procedural set list :", override_proc_set, "\n")
 cat("override procedural used list :", override_proc_used, "\n")
@@ -38,67 +37,16 @@ comma_split <- function(s){
   if (is.na(s)) { "" } else { str_split(s, ",", simplify=TRUE)[1,] }
 }
 
-#### analyse variable initialisation ###
-cat("analyse initialisation\n")
-status <- setNames(rep("uninit", nrow(tokens)), tokens$name)
-status[tokens$name[!is.na(tokens$decl_value)]] <- "set" # parameter/constexpr value set in declarations
-status["procedural"] <- "set" # only used to avoid empty set list on procedurals
-status["t"] <- "set" # set by driver
-# in theory the status of variables can change through the code
-rows <- which(csl$section %in% c("header", "initial") |
-              csl$line_type %in% c("constant", "integer", "logical", "doubleprecision",
-                                   "real", "character"))
-csl$assumed <- ""
-did_continue <- FALSE
-for (i in rows){
-  if (did_continue){ # accumulate variable lists
-    set <- c(set, comma_split(csl$set[i]))
-    used <- c(used, comma_split(csl$used[i]))
-  } else { # split variable lists
-    set <- comma_split(csl$set[i])
-    used <- comma_split(csl$used[i])
-    line_type <- csl$line_type[i]
-  }
-  will_continue <- csl$cont[i] > ""
-  if (will_continue){ # go to next line
-    did_continue <- TRUE
-  } else { # will not continue, so analyse
-    set <- set[set>""]
-    used <- used[used>""]
-    if (!any(used>"")){ # set only (e.g. initialisation with constant)
-      bad <- status[set] == "uninit"
-      status[set[bad]] <- "set"
-    } else if (!any(set>"")){ # used only (e.g. ifthen)
-      bad <- status[used] == "uninit"
-      status[used[bad]] <- "assumed"
-      csl$assumed[i] <- paste_sort(used[bad])
-    } else { # set and used (e.g. assignment)
-      bad <- status[used] == "uninit"
-      status[used[bad]] <- "assumed"
-      csl$assumed[i] <- paste_sort(used[bad])
-      if (any(status[used]!="set")){
-        status[set] <- "from_assumed"
-      } else { # all set
-        status[set] <- "set" # note : assumes any procedural declaration is correct
-      }
-    }
-    did_continue <- FALSE
-  }
+# FIXME should really do this for each SORT and DERIVATIVE block
+# FIXME provide the index for the whole csl? not just for one block
+if (sum(csl$line_type=="derivative")>1) {
+  stop("sorting of multiple derivative blocks not handled")
+} else if (sum(csl$line_type=="sort")>0){
+  stop("sorting of sort blocks not handled")
 }
-temp <- data_frame(name=names(status),
-                   status=status,
-                   type=tokens$decl_type[match(names(status), tokens$name)]) %>%
-  arrange(status)
-cat("variables used without initialisation :", paste(names(status)[status=="assumed"], collapse=", "), "\n")
-# a handful of variables are "assumed", i.e. used without being set first
-# they are all double in our case
-# some might also be set in discrete, but it's difficult to analyse whether this will occur
 
 # provides index to csl to allow easier sorting
 i <- which(csl$section=="derivative")
-if (max(i)-min(i)+1!=length(i)) {
-  stop("multiple derivative blocks not handled")
-}
 base <- min(csl$block[i]) # lines in this block can be sorted
 index <- data_frame(line = i,
                     block = csl$block[i],
@@ -119,7 +67,7 @@ index <- data_frame(line = i,
                     dep = "" # equation dependency
                     )
 
-# these lines have no effect in sorted code block (at most they effect decl and init)
+# these lines have no effect on sorting of code block (at most they effect decl and init)
 inactive <- c("integ", "comment", "blank", "derivative", "end",
               "algorithm", "maxterval", "minterval", "cinterval", "nsteps", "termt",
               "constant", "integer", "logical", "doubleprecision", "real", "character")
@@ -239,17 +187,7 @@ for (ii in i){
   rate[ii] <- temp[[ii]][5]
 }
 
-# do overall input outpus analysis of current section
-# (includes variables hidden inside procedurals)
-set_init <- names(status)[status!="uninit"] # known status
-set_discrete <- unique(unlist(str_split(csl$set[csl$section=="discrete"], ","))) # not guaranteed
-used_here <- unique(unlist(str_split(index$used, ","))) # ignoring sorting
-set_here <- unique(unlist(str_split(index$set, ","))) # ignoring sorting
-used_but_not_set <- setdiff(used_here, set_here) # can be considered constants (includes t and state)
-set_but_not_used <- setdiff(set_here, c(used_here, rate)) # can be considered post-processing
-setdiff(used_but_not_set, names(status)[status!="uninit"])
-
-# identify which equations are needed to calculate the rate FIXME track variable lists
+# identify which equations are needed to calculate the rate
 # keep a list of variables set, needed
 cat("analyse equation dependency", "\n")
 var_dep <- c()
@@ -372,31 +310,6 @@ if (sorting_method=="simon"){
 
   }
 
-  # find unset variables remaining (using actual procedural set used lists)
-  for_rate <- which(index$dep == "for_rate")
-  index$unset <- ""
-  var_set <- c()
-  for (i in for_rate){
-    # record any set
-    set <- paste_sort(c(index$set[i], index$set_hid[i]))
-    if (set>""){
-      set <- comma_split(set)
-      var_set[set] <- i
-    }
-    # check actual used
-    used <- paste_sort(c(index$used[i], index$used_hid[i]))
-    if (used>""){
-      used <- comma_split(used)
-      used <- setdiff(used, used_but_not_set) # ignore "constants"
-      used <- setdiff(used, names(var_set)) # set so far
-      if (length(used)>0){ # record any used but currently unset
-        index$unset[i] <- paste_sort(used)
-      }
-    }
-  }
-  uninitialised <- paste_sort(index$unset[for_rate])
-  cat("warning, uninitialised variables :", uninitialised, "\n")
-
 } # end of simon's method
 
 #### acslx sorting method ####
@@ -448,11 +361,11 @@ if (sorting_method=="acslx"){
       if (index$dep[i]==""){
         saved <- saved + 1
         index$saved[i] <- saved # save line
-        # cat("saved", saved, "\n")
+        cat("saved", saved, "\n")
       } else if (length(used)==0){
         saved <- saved + 1
         index$saved[i] <- saved # save line
-        # cat("saved", saved, "\n")
+        cat("saved", saved, "\n")
         var_set[set] <- saved # expand list of set vars
         i <- 1 # go back to top and recheck unsaved
       } else {
@@ -462,12 +375,19 @@ if (sorting_method=="acslx"){
     } # end if
 
   } # end while
-  failed <- index$saved == 0
-  cat("failed to sort", ceiling(sum(failed)/nrow(index)*100), "%\n")
+  failed <- sum(index$saved == 0)
+  if (failed>0){
+    cat("failed to sort", failed, "of", nrow(index), "lines\n")
+  } else {
+    cat("successfully sorted", nrow(index), "lines\n")
+  }
   index <- arrange(index, saved) # sort lines
+
 } # end of ACSLX method
 
 #### save progress ####
+stop()
+rm(list=setdiff(ls(), c("csl", "tokens", "path_name", "silent", "index", lsf.str())))
 temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
 save.image(temp_file)
 
