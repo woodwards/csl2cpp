@@ -48,9 +48,10 @@ keyword2 <- c("end", "endif", "enddo") # decrease indent
 keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue") # + has_label + if_goto, no change to indent
 keyword4 <- c("else") # +else_if_then, decrease and increase indent
 keyword <- c(declaration, keyword1, keyword2, keyword3, keyword4)
-reserved <- c(keyword, "t", "integ",
+reserved <- c(keyword, "t", "integ", "derivt",
               "max", "exp", "min", "log", "sqrt",
               "cos", "sin", "acos", "asin", "tan", "atan") # convert these keywords to lower case
+reserved <- c(reserved, "fmod", "floor", "int", "bool", "double", "double", "string") # reserve these too
 token_list[names(token_list) %in% reserved] <- str_to_lower(token_list[names(token_list) %in% reserved])
 token_list[c("then", "end", "endif")] <- c("{", "}", "}") # translate these
 token_list[c("mod", "aint")] <- c("fmod", "floor") # translate these
@@ -566,7 +567,7 @@ for (i in 1:nrow(csl)){
       # integration rate of state variable
       csl$integ[i] <- paste(parse_list[c(2, 4, 10)], collapse=" ")
       if (parse_list[9] == "token"){ # could be a number
-        csl$used[i] <- paste(csl$used[i], parse_list[10], collapse=",")
+        csl$used[i] <- paste(csl$used[i], parse_list[10], sep=",")
       }
       csl$handled[i] <- TRUE
 
@@ -596,7 +597,7 @@ for (i in 1:nrow(csl)){
       # integration rate of state variable
       csl$integ[i] <- paste(parse_list[c(2, 4, 6, 8, 10, 12, 18, 24)], collapse=" ")
       if (parse_list[17] == "token"){ # could be a number
-        csl$used[i] <- paste(csl$used[i], parse_list[18], collapse=",")
+        csl$used[i] <- paste(csl$used[i], parse_list[18], sep=",")
       }
       csl$handled[i] <- TRUE
 

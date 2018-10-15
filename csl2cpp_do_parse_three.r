@@ -18,13 +18,87 @@ override_proc_set <- TRUE # would be nice but sort fails
 override_proc_used <- FALSE # would be nice but sort fails
 sorting_method <- "simon"
 # sorting_method <- "acslx"
-sorting_method <- "none"
+# sorting_method <- "none"
 cat("override procedural set list :", override_proc_set, "\n")
 cat("override procedural used list :", override_proc_used, "\n")
 cat("sorting method :", sorting_method, "\n")
 
+# paste and unique and sort a vector of comma separated strings (not vectorised)
+# supplying a second argument also allows you to remove elements (using setdiff)
+paste_sort <- function(x,y=""){
+  x <- str_split(x[!is.na(x)], ",", simplify=TRUE)
+  y <- str_split(y[!is.na(y)], ",", simplify=TRUE)
+  x <- setdiff(x, y) # remove elements of y
+  x <- sort(setdiff(unique(x), ""))
+  x <- max(str_c(x, collapse=","),"")
+  return(x)
+}
+# do reverse of paste_sort() (not vectorised)
+comma_split <- function(s){
+  if (is.na(s)) { "" } else { str_split(s, ",", simplify=TRUE)[1,] }
+}
+
+#### analyse variable initialisation ###
+cat("analyse initialisation\n")
+status <- setNames(rep("uninit", nrow(tokens)), tokens$name)
+status[tokens$name[!is.na(tokens$decl_value)]] <- "set" # parameter/constexpr value set in declarations
+status["procedural"] <- "set" # only used to avoid empty set list on procedurals
+status["t"] <- "set" # set by driver
+# in theory the status of variables can change through the code
+rows <- which(csl$section %in% c("header", "initial") |
+              csl$line_type %in% c("constant", "integer", "logical", "doubleprecision",
+                                   "real", "character"))
+csl$assumed <- ""
+did_continue <- FALSE
+for (i in rows){
+  if (did_continue){ # accumulate variable lists
+    set <- c(set, comma_split(csl$set[i]))
+    used <- c(used, comma_split(csl$used[i]))
+  } else { # split variable lists
+    set <- comma_split(csl$set[i])
+    used <- comma_split(csl$used[i])
+    line_type <- csl$line_type[i]
+  }
+  will_continue <- csl$cont[i] > ""
+  if (will_continue){ # go to next line
+    did_continue <- TRUE
+  } else { # will not continue, so analyse
+    set <- set[set>""]
+    used <- used[used>""]
+    if (!any(used>"")){ # set only (e.g. initialisation with constant)
+      bad <- status[set] == "uninit"
+      status[set[bad]] <- "set"
+    } else if (!any(set>"")){ # used only (e.g. ifthen)
+      bad <- status[used] == "uninit"
+      status[used[bad]] <- "assumed"
+      csl$assumed[i] <- paste_sort(used[bad])
+    } else { # set and used (e.g. assignment)
+      bad <- status[used] == "uninit"
+      status[used[bad]] <- "assumed"
+      csl$assumed[i] <- paste_sort(used[bad])
+      if (any(status[used]!="set")){
+        status[set] <- "from_assumed"
+      } else { # all set
+        status[set] <- "set" # note : assumes any procedural declaration is correct
+      }
+    }
+    did_continue <- FALSE
+  }
+}
+temp <- data_frame(name=names(status),
+                   status=status,
+                   type=tokens$decl_type[match(names(status), tokens$name)]) %>%
+  arrange(status)
+cat("variables used without initialisation :", paste(names(status)[status=="assumed"], collapse=", "), "\n")
+# a handful of variables are "assumed", i.e. used without being set first
+# they are all double in our case
+# some might also be set in discrete, but it's difficult to analyse whether this will occur
+
 # provides index to csl to allow easier sorting
 i <- which(csl$section=="derivative")
+if (max(i)-min(i)+1!=length(i)) {
+  stop("multiple derivative blocks not handled")
+}
 base <- min(csl$block[i]) # lines in this block can be sorted
 index <- data_frame(line = i,
                     block = csl$block[i],
@@ -45,20 +119,13 @@ index <- data_frame(line = i,
                     dep = "" # equation dependency
                     )
 
-# paste and unique and sort a vector of comma separated strings (not vectorised)
-# supplying a second argument also allows you to remove elements (using setdiff)
-paste_sort <- function(x,y=""){
-  x <- str_split(x[!is.na(x)], ",", simplify=TRUE)
-  y <- str_split(y[!is.na(y)], ",", simplify=TRUE)
-  x <- setdiff(x, y) # remove elements of y
-  x <- sort(setdiff(unique(x), ""))
-  x <- max(str_c(x, collapse=","),"")
-  return(x)
-}
-# do reverse of paste_sort() (not vectorised)
-comma_split <- function(s){
-  if (is.na(s)) { "" } else { str_split(s, ",", simplify=TRUE)[1,] }
-}
+# these lines have no effect in sorted code block (at most they effect decl and init)
+inactive <- c("integ", "comment", "blank", "derivative", "end",
+              "algorithm", "maxterval", "minterval", "cinterval", "nsteps", "termt",
+              "constant", "integer", "logical", "doubleprecision", "real", "character")
+index$used[index$line_type %in% inactive] <- ""
+index$set[index$line_type %in% inactive] <- ""
+index$dep[index$line_type %in% inactive] <- "inactive"
 
 #### collapse continuations ####
 cat("collapse continuations", "\n")
@@ -172,19 +239,15 @@ for (ii in i){
   rate[ii] <- temp[[ii]][5]
 }
 
-# identify variables that will be set prior to this section FIXME to do
-ignore <- c("integ", "algorithm", "maxterval", "minterval", "cinterval", "nsteps", "termt",
-            "constant", "integer", "logical", "parameter",
-            "doubleprecision", "real", "character")
-
 # do overall input outpus analysis of current section
 # (includes variables hidden inside procedurals)
-used_here <- unique(unlist(str_split(index$used, ",")))
-set_here <- unique(unlist(str_split(index$set, ",")))
+set_init <- names(status)[status!="uninit"] # known status
+set_discrete <- unique(unlist(str_split(csl$set[csl$section=="discrete"], ","))) # not guaranteed
+used_here <- unique(unlist(str_split(index$used, ","))) # ignoring sorting
+set_here <- unique(unlist(str_split(index$set, ","))) # ignoring sorting
 used_but_not_set <- setdiff(used_here, set_here) # can be considered constants (includes t and state)
 set_but_not_used <- setdiff(set_here, c(used_here, rate)) # can be considered post-processing
-
-
+setdiff(used_but_not_set, names(status)[status!="uninit"])
 
 # identify which equations are needed to calculate the rate FIXME track variable lists
 # keep a list of variables set, needed
@@ -193,11 +256,6 @@ var_dep <- c()
 var_dep[rate] <- "rate"
 var_dep[state] <- "state"
 var_dep["t"] <- "t"
-inactive <- c("integ", "comment", "blank", "derivative",
-              "algorithm", "maxterval", "minterval", "cinterval", "nsteps", "termt",
-              "constant", "integer", "logical",
-              "doubleprecision", "real", "character")
-index$dep[nrow(index)] <- "inactive" # end of derivative
 sweep <- c(seq(nrow(index), 1, -1), seq(2, nrow(index), 1))
 nsweep <- 0
 change <- TRUE
