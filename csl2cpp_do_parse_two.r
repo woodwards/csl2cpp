@@ -45,7 +45,7 @@ declaration <- c("constant", "algorithm", "nsteps", "maxterval", "character",
                  "parameter", "cinterval", "integer", "logical", "doubleprecision")
 keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do") # +if_then, increase indent
 keyword2 <- c("end", "endif", "enddo") # decrease indent
-keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue") # + has_label + if_goto, no change to indent
+keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue", "sort") # + has_label + if_goto, no change to indent
 keyword4 <- c("else") # +else_if_then, decrease and increase indent
 keyword <- c(declaration, keyword1, keyword2, keyword3, keyword4)
 reserved <- c(keyword, "t", "integ", "derivt",
@@ -87,12 +87,12 @@ for (i in 1:nrow(csl)){
     # new major section
     major_section_stack <- c(csl$line_type[i], major_section_stack)
     major_section <- major_section_stack[1]
-    cat("line", i, "major section starts:", major_section, "\n")
+    cat("code line", csl$line_number[i], "major section starts:", major_section, "\n")
   } else if (csl$line_type[i] == "end" ){
     # check for end of major section
     if (csl$line_type[csl$stack[i]] %in% major_sections){
       major_section <- major_section_stack[1]
-      cat("line", i, "major section ends:", major_section, "\n")
+      cat("code line", csl$line_number[i], "major section ends:", major_section, "\n")
       major_section_stack <- tail(major_section_stack, -1)
     } else {
       major_section <- major_section_stack[1]
@@ -237,7 +237,7 @@ for (i in 1:nrow(csl)){
     bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
     if (any(bad)){
       message <- paste("parameter on existing variable:", paste(parse_list[k+1][bad], collapse=" "))
-      cat("line", i, message, "\n")
+      cat("code line", csl$line_number[i], message, "\n")
       # delete previous declarations
       for (j in parse_list[k+1][bad]){
         # remove j from previous declaration
@@ -253,7 +253,7 @@ for (i in 1:nrow(csl)){
           csl$decl[token_decl_line[j]] <- "" # delete decl
           csl$dend[token_decl_line[j]] <- ""
         }
-        cat("removed declaration of", j, "on line", token_decl_line[j], "\n")
+        cat("removed declaration of", j, "on code line", csl$line_number[token_decl_line[j]], "\n")
       }
     }
     token_decl_line[parse_list[k+1]] <- i
@@ -292,7 +292,7 @@ for (i in 1:nrow(csl)){
         # single dimension fixed size array
         message <- paste("detected 1d array:", parse_str)
         arrays <- c(arrays, parse_str)
-        cat("line", i, message, "\n")
+        cat("code line", csl$line_number[i], message, "\n")
         csl$static[i] <- ""
         csl$type[i] <- paste("std::array< double ,", parse_list[8], "> ")
         csl$decl[i] <- parse_list[4]
@@ -313,7 +313,7 @@ for (i in 1:nrow(csl)){
         # https://stackoverflow.com/questions/11610338/how-to-initialise-a-member-array-of-class-in-the-constructor
         message <- paste("detected 2d array:", parse_str)
         arrays <- c(arrays, parse_str)
-        cat("line", i, message, "\n")
+        cat("code line", csl$line_number[i], message, "\n")
         csl$static[i] <- ""
         csl$type[i] <- paste("std::array< std::array< double ,", parse_list[8], "> ,", parse_list[12], "> ") # need to reverse indices
         csl$decl[i] <- parse_list[4]
@@ -351,7 +351,7 @@ for (i in 1:nrow(csl)){
       bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
       if (any(bad)){
         message <- paste("redeclaration:", paste(parse_list[k+1][bad], collapse=" "))
-        cat("line", i, message, "\n")
+        cat("code line", csl$line_number[i], message, "\n")
         # delete previous declaration
         for (j in parse_list[k+1][bad]){
           # remove j from previous declaration
@@ -367,7 +367,7 @@ for (i in 1:nrow(csl)){
             csl$decl[token_decl_line[j]] <- "" # delete decl
             csl$dend[token_decl_line[j]] <- ""
           }
-          cat("removed declaration of", j, "on line", token_decl_line[j], "\n")
+          cat("removed declaration of", j, "on code line", csl$line_number[token_decl_line[j]], "\n")
         }
       }
       token_decl_line[parse_list[k+1]] <- i
@@ -547,7 +547,7 @@ for (i in 1:nrow(csl)){
       # declare state variable
       if (token_decl_line[jj] != 0){
         message <- paste("previously declared integ:", jj)
-        cat("line", i, message, "\n")
+        cat("code line", csl$line_number[i], message, "\n")
         # don't declare again
       } else {
         csl$static[i] <- ""
@@ -577,7 +577,7 @@ for (i in 1:nrow(csl)){
       # declare state variable
       if (token_decl_line[jj] != 0){
         message <- paste("previously declared integ:", jj)
-        cat("line", i, message, "\n")
+        cat("code line", csl$line_number[i], message, "\n")
         # don't declare again
       } else {
         csl$static[i] <- ""
@@ -606,7 +606,7 @@ for (i in 1:nrow(csl)){
       # can't handle this type
       odds <- seq(1, length(parse_list)-1, 2)
       message <- paste("unhandled form of integ:", paste(parse_list[odds+1], collapse=" "))
-      cat("line", i, message, "\n")
+      cat("code line", csl$line_number[i], message, "\n")
 
     }
 
@@ -782,6 +782,16 @@ for (i in 1:nrow(csl)){
     }
     csl$label[labeli] <- "" # remove label
     csl$indent[(i+1):(labeli-1)] <- csl$indent[(i+1):(labeli-1)] + 1 # increase indent
+    # declaration
+    bad <- token_decl_line[parse_list[6]] != 0 # already declared (actually not bad)
+    if (!bad){ # declare
+      csl$static[i] <- ""
+      csl$type[i] <- "double"
+      csl$decl[i] <- parse_list[6]
+      csl$dend[i] <- ";"
+      token_decl_line[parse_list[6]] <- i
+      token_decl_type[parse_list[6]] <- csl$type[i]
+    }
     # construct loop
     temp <- paste("for ( int", parse_list[6], "=", parse_list[10], ";", parse_list[6], "<=", parse_list[14], "; ++", parse_list[6], ") {", collapse=" ")
     if (major_section == "initial"){
@@ -851,7 +861,7 @@ for (i in 1:nrow(csl)){
   #### handle line_type = program, derivative, initial, discrete, dynamic, terminal, procedural ####
   if (csl$line_type[i] %in% c("program", "initial", "derivative", "discrete", "dynamic", "terminal", "procedural")){
 
-    # these blocks are not needed in C++
+    # these blocks are not needed in C++, remove indent
     if (!is_continuation && csl$line_type[i] %in% c("program", "initial", "derivative", "dynamic", "terminal", "procedural")){
       endi <- csl$stack[i]
       csl$indent[(i+1):(endi-1)] <- csl$indent[(i+1):(endi-1)] - 1 # remove indent
@@ -884,7 +894,7 @@ for (i in 1:nrow(csl)){
 
   }
   #### handle line_type = termt ####
-  if (csl$line_type[i] %in% c("termt")){
+  if (csl$line_type[i] %in% c("termt", "sort")){
 
     # these lines are not needed in C++
     csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
@@ -965,6 +975,8 @@ for (i in 1:nrow(csl)){
 } # end loop
 
 # add collected info back into tokens
+token_decl_line["t"] <- 1
+token_decl_line["procedural"] <- 1
 tokens <- data_frame(
   name=token_list,
   lower=names(token_list),
@@ -975,6 +987,7 @@ tokens <- data_frame(
   filter(decl_line>0)
 
 # save progress
+# stop()
 rm(list=setdiff(ls(), c("csl", "tokens", "path_name", "silent", lsf.str())))
 temp_file <- paste(path_name, "checkpoint_after_parse_two.RData", sep="/")
 save.image(temp_file)

@@ -31,8 +31,10 @@ if (csl_file == "molly/Molly.csl"){
 temp_file <- paste(path_name, "checkpoint_after_read.RData", sep="/")
 save.image(temp_file) # save progress
 
-# separate code into tokens
+# parse and translate
 cat(file=stderr(), "parsing code", "\n")
+
+# separate code into tokens
 source("csl2cpp_do_parse_one.r")
 
 # plot code for fun!
@@ -46,11 +48,14 @@ print(plot1)
 # translate to C++
 source("csl2cpp_do_parse_two.r")
 
-# sort lines
+# find unitialised variables
 source("csl2cpp_do_parse_three.r")
 
+# sort lines
+source("csl2cpp_do_parse_four.r")
+
 # make C++ code
-temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
+temp_file <- paste(path_name, "checkpoint_after_parse_four.RData", sep="/")
 load(temp_file)
 cat(file=stderr(), "making cpp code", "\n")
 source("csl2cpp_make.r") # load functions

@@ -36,7 +36,7 @@ make_cpp <- function(csl, tokens, model_name, index, delay_post=TRUE){
 	cat("n visible :", n_variable, "\n")
 
 	# uninitialised variables due to illegal procedural use
-	uninitialised <- str_split(paste_sort(index$unset), ",", simplify=TRUE)[1,]
+	assumed_all <- tokens$name[tokens$set_status=="assumed"]
 
 	# browser()
 
