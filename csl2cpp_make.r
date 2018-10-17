@@ -20,7 +20,7 @@ smoosh <- function(...){
     str_squish()
 }
 
-make_cpp <- function(csl, tokens, model_name, index, delay_post=TRUE){
+make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 
   cat("delay post processing :", delay_post, "\n")
 
@@ -29,19 +29,18 @@ make_cpp <- function(csl, tokens, model_name, index, delay_post=TRUE){
   state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
 	rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", "")) # rate expressions
 	n_state <- length(state)
-	constant <- tokens$constant[tokens$constant>""]
-	variable <- tokens$variable[tokens$variable>"" & tokens$decl_type!="string" & tokens$constant==""]
+	variable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto") & is.na(tokens$decl_value)]
 	n_variable <- length(variable)
 	cat("n state :", n_state, "\n")
 	cat("n visible :", n_variable, "\n")
 
-	# uninitialised variables due to illegal procedural use
+	# uninitialised variables after sort
 	assumed_all <- tokens$name[tokens$set_status=="assumed"]
 
 	# browser()
 
 	# create an empty vector of strings
-	cpp <- vector("character", nrow(csl) + 200) # estimate output length
+	cpp <- vector("character", nrow(csl) * 3 + 200) # estimate output length
 	attr(cpp, "row") <- 0 # create an attribute for the row counter
 
 	# header
@@ -145,19 +144,30 @@ make_cpp <- function(csl, tokens, model_name, index, delay_post=TRUE){
 	#### initialise model ####
 	cpp <- put_lines(cpp, 1, c("void initialise_model ( double a_time ) {"))
 	cpp <- put_lines(cpp, 2, c("", "// initialise t", "t = a_time;", ""))
-	rows <- csl$section == "initial" | csl$init > "" # include init lines from other places
+	# unitialised variables
+	if (assumed_all>""){
+  	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables as per ACSLX"))
+  	lines <- paste(assumed_all, "= 5.5555e33 ;")
+  	cpp <- put_lines(cpp, 2, lines)
+	}
+	# model initialisation
+	rows <- (csl$section == "initial" | csl$init > "") & csl$line_type != "integ" # include init lines from other places
   if (any(rows)){
-  	cpp <- put_lines(cpp, 2, "// initialise model")
+  	cpp <- put_lines(cpp, 2, c("", "// initialise model"))
   	lines <- if_else(csl$init[rows] > "",
   	                 smoosh(csl$init[rows], csl$delim[rows], csl$tail[rows]),
   	                 csl$tail[rows])
   	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
   	cpp <- put_lines(cpp, indent, lines)
-  	cpp <- put_lines(cpp, 2, "")
   }
-	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables like ACSLX"))
-	lines <- paste(uninitialised, "= 5.5555e33 ;")
-	cpp <- put_lines(cpp, 2, lines)
+	# state variable initial conditions
+	rows <- csl$line_type == "integ"
+	lines <- if_else(csl$init[rows] > "",
+	                 smoosh(csl$init[rows], csl$delim[rows], csl$tail[rows]),
+	                 csl$tail[rows])
+	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
+	cpp <- put_lines(cpp, indent, lines)
+	# close off
 	cpp <- put_lines(cpp, 1, c("", "} // end initialise_model", ""))
 	cat("initialisation lines :", sum(rows), "\n")
 
@@ -202,17 +212,8 @@ make_cpp <- function(csl, tokens, model_name, index, delay_post=TRUE){
 	#### calculate rate ####
 	cpp <- put_lines(cpp, 1, "void calculate_rate ( ) {")
 	cpp <- put_lines(cpp, 2, c("", "// derivative calculations"))
-	# rows <- csl$section %in% c("derivative") # unsorted (wrong)
 	# using derivative section sorting index
-	incl <- which(delay_post==FALSE | index$set!=index$notused) # which index blocks to include
-	rows <- vector("integer", sum(index$end[incl] - index$begin[incl] + 1))
-	pos <- 1
-	for (i in incl){
-	  lines <- index$begin[i]:index$end[i]
-	  pend <- pos + length(lines) - 1
-    rows[pos:pend] <- lines
-    pos <- pend + 1
-	}
+	rows <- which(csl$section %in% c("derivative") & (csl$dep == "for_rate" | delay_post==FALSE)) # which lines to include
 	lines <- if_else(csl$calc[rows] > "",
 	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
 	                 csl$tail[rows])
@@ -225,15 +226,7 @@ make_cpp <- function(csl, tokens, model_name, index, delay_post=TRUE){
 	cpp <- put_lines(cpp, 1, "void post_processing ( ) {")
 	cpp <- put_lines(cpp, 2, c("", "// post processing calculations from derivative"))
 	# using derivative section sorting index
-	incl <- which(delay_post==TRUE & index$set==index$notused) # which index blocks to include
-	rows <- vector("integer", sum(index$end[incl] - index$begin[incl] + 1))
-	pos <- 1
-	for (i in incl){
-	  lines <- index$begin[i]:index$end[i]
-	  pend <- pos + length(lines) - 1
-	  rows[pos:pend] <- lines
-	  pos <- pend + 1
-	}
+	rows <- which(csl$section %in% c("derivative") & (csl$dep == "" & delay_post==TRUE)) # which lines to include
 	lines <- if_else(csl$calc[rows] > "",
 	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
 	                 csl$tail[rows])
@@ -259,7 +252,7 @@ make_cpp <- function(csl, tokens, model_name, index, delay_post=TRUE){
 	                           "set_state( a_state );",
 	                           "calculate_rate();", "",
 	                           "// return rate"))
-	lines <- paste("a_rate[", 0:(n_state-1), "]", rate, ";", sep="")
+	lines <- paste("a_rate[", 0:(n_state-1), "] ", rate, ";", sep="")
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end operator", ""))
 

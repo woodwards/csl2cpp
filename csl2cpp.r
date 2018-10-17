@@ -36,7 +36,6 @@ cat(file=stderr(), "parsing code", "\n")
 
 # separate code into tokens
 source("csl2cpp_do_parse_one.r")
-
 # plot code for fun!
 y <- 1:nrow(csl)
 plot1 <- ggplot() +
@@ -48,18 +47,16 @@ print(plot1)
 # translate to C++
 source("csl2cpp_do_parse_two.r")
 
-# find unitialised variables
+# sort lines and analyse variable dependence
+source("csl2cpp_dependence.r") # load functions
 source("csl2cpp_do_parse_three.r")
 
-# sort lines
-source("csl2cpp_do_parse_four.r")
-
 # make C++ code
-temp_file <- paste(path_name, "checkpoint_after_parse_four.RData", sep="/")
+temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
 load(temp_file)
 cat(file=stderr(), "making cpp code", "\n")
 source("csl2cpp_make.r") # load functions
-cpp <- make_cpp(csl, tokens, model_name, index, delay_post=TRUE)
+cpp <- make_cpp(csl, tokens, model_name, delay_post=TRUE)
 cpp_df <- as_data_frame(cpp)
 cat(file=stderr(), "writing cpp code", "\n")
 source("csl2cpp_write.r") # load functions
