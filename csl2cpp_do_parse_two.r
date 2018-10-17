@@ -259,7 +259,7 @@ for (i in 1:nrow(csl)){
     token_decl_line[parse_list[k+1]] <- i
     token_decl_type[parse_list[k+1]] <- csl$type[i]
     token_decl_value[parse_list[k+1]] <- as.numeric(parse_list[k+5])
-    csl$set[i] <- parse_list[k+1]
+    csl$set[i] <- paste(parse_list[k+1], collapse=",")
     csl$handled[i] <- TRUE
 
   }
@@ -400,15 +400,16 @@ for (i in 1:nrow(csl)){
     } # end non-array declaration and initialisation
 
   }
-  #### handle line_type = constant, algorithm, nsteps, maxterval, cinterval, minterval ####
-  if (csl$line_type[i] %in% c("constant", "algorithm", "nsteps", "maxterval", "cinterval", "minterval")){
+  #### handle line_type = constant ####
+  if (csl$line_type[i] %in% c("constant")){
 
     # note: a CSL CONSTANT is just an initialiser, values can be changed later!!!
+    # the value is set before the INITIAL section
     # CONSTANT is used to
     # (a) declare and initialise a list of variables (lots of = signs)
     # (b) initialise a declared array (single = on first line)
     # both of these can have continuation
-    # FIXME can't handle simple initialisations that break across lines
+    # FIXME can't handle simple initialisations that break across lines?
 
     # get array size (array will/must be already declared)
     if (!is_continuation){
@@ -439,31 +440,51 @@ for (i in 1:nrow(csl)){
         this_array <- ""
       }
     }
-    # implicit declare variables if needed (arrays are already declared)
-    odds <- seq(1, length(parse_list)-1, 2)
-    k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) %in% "equals" ) * 2 - 1
-    bad <- token_decl_line[parse_list[k+1]] == 0 # not declared
-    if (any(bad)){ # declare these ones
-      csl$static[i] <- ""
-      csl$type[i] <- "double"
-      csl$decl[i] <- paste(parse_list[k+1][bad], collapse=" , ")
-      csl$dend[i] <- ";"
-      token_decl_line[parse_list[k+1][bad]] <- i
-      token_decl_type[parse_list[k+1][bad]] <- csl$type[i]
-    }
-    csl$set[i] <- paste(parse_list[k+1], collapse=",")
 
-    # initialise non-array variables
-    if (!is_array){ # easy, just copy line and convert , to ;
+    # declare non-array variables
+    if (!is_array){ # just copy line and convert , to ;
+
+      # variables to declare
       odds <- seq(1, length(parse_list)-1, 2)
-      k <- which( !(parse_list[odds+1] %in% c("constant", "algorithm", "nsteps", "maxterval", "cinterval", "minterval")) ) * 2 - 1
-      csl$init[i] <- str_replace(str_replace_all( paste( parse_list[k+1], collapse=" "), ",", ";"), ";$", "")
-      csl$delim[i] <- ";"
-      if (major_section %in% c("header")){
-        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+      k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) %in% "equals") * 2 - 1 # find variables
+
+      # declare variables
+      csl$static[i] <- ""
+      csl$type[i] <- "auto"
+      csl$decl[i] <- paste(parse_list[setdiff(odds+1, 2)], collapse=" ")
+      csl$dend[i] <- ";"
+
+      # deal with previous declaration of variables
+      bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
+      if (any(bad)){
+        message <- paste("constant on existing variable:", paste(parse_list[k+1][bad], collapse=" "))
+        cat("code line", csl$line_number[i], message, "\n")
+        # delete previous declarations
+        for (j in parse_list[k+1][bad]){
+          # remove j from previous declaration
+          temp <- str_trim(str_split(csl$decl[token_decl_line[j]], ",")[[1]]) # previous decl
+          temp <- max(str_c(temp[temp != j], collapse=" , "), "") # remove j
+          if (temp > ""){ # edit previous decl
+            csl$decl[token_decl_line[j]] <- temp # remove j from decl
+            csl$type[i] <- csl$type[token_decl_line[j]] # get type (for parameter)
+          } else { # delete previous decl
+            csl$static[token_decl_line[j]] <- ""
+            csl$type[i] <- csl$type[token_decl_line[j]] # get type (for parameter)
+            csl$type[token_decl_line[j]] <- ""
+            csl$decl[token_decl_line[j]] <- "" # delete decl
+            csl$dend[token_decl_line[j]] <- ""
+          }
+          cat("removed declaration of", j, "on code line", csl$line_number[token_decl_line[j]], "\n")
+        }
       }
+      token_decl_line[parse_list[k+1]] <- i
+      token_decl_type[parse_list[k+1]] <- csl$type[i]
+      token_decl_value[parse_list[k+1]] <- as.numeric(parse_list[k+5])
+      csl$set[i] <- paste(parse_list[k+1], collapse=",")
       csl$handled[i] <- TRUE
+
     } else if (!is_continuation){ # set array first line
+
       # FIXME assumes each line is an exact row of data
       # https://en.cppreference.com/w/cpp/container/array
       # // https://stackoverflow.com/questions/10694689/how-to-initialize-an-array-in-c-objects
@@ -509,7 +530,9 @@ for (i in 1:nrow(csl)){
         }
         csl$handled[i] <- TRUE
       }
+
     } else {
+
       # set array continuation FIXME assumes each line is an exact row of data
       ender <- if_else(will_continue, ",", "} }")
       k <- seq(2, length(parse_list), 2)
@@ -531,7 +554,34 @@ for (i in 1:nrow(csl)){
         this_array_row <- this_array_row + 1
       }
       csl$handled[i] <- TRUE
+
     }
+
+  }
+  #### handle line_type = algorithm, nsteps, maxterval, cinterval, minterval ####
+  if (csl$line_type[i] %in% c("algorithm", "nsteps", "maxterval", "cinterval", "minterval")){
+
+    # these are control variables that affect dynamic and derivative blocks in ACSL
+    # probably not used in C++, define them as regular variables
+    # declare variable if needed
+    odds <- seq(1, length(parse_list)-1, 2)
+    k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) %in% "equals" ) * 2 - 1
+    bad <- token_decl_line[parse_list[k+1]] == 0 # not declared
+    if (any(bad)){ # declare these ones
+      csl$static[i] <- ""
+      csl$type[i] <- "double"
+      csl$decl[i] <- paste(parse_list[k+1][bad], collapse=" , ")
+      csl$dend[i] <- ";"
+      token_decl_line[parse_list[k+1][bad]] <- i
+      token_decl_type[parse_list[k+1][bad]] <- csl$type[i]
+    }
+    csl$set[i] <- paste(parse_list[k+1], collapse=",")
+    # initialise variable
+    odds <- seq(1, length(parse_list)-1, 2)
+    k <- which( !(parse_list[odds+1] %in% c("algorithm", "nsteps", "maxterval", "cinterval", "minterval")) ) * 2 - 1
+    csl$init[i] <- str_replace(str_replace_all( paste( parse_list[k+1], collapse=" "), ",", ";"), ";$", "")
+    csl$delim[i] <- ";"
+    csl$handled[i] <- TRUE
 
   }
   #### handle line_type = integ ####

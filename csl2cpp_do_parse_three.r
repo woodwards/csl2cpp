@@ -3,7 +3,7 @@
 # some ACSL model might have several sections to be sorted
 # taking unnecessary lines out of calculate_rates to post_processing could speed it up a lot.
 # procedurals group lines together and make it harder to sort
-# procedurals may lie about what they do
+# procedurals may lie about what variables are set used
 # can't handle implicit systems
 # user should ensure variables are initialised and equations/procedurals are sortable
 # but if not, we still want a result
@@ -14,7 +14,7 @@ load(file=temp_file) # recover progress
 
 cat("sorting derivative section code", "\n")
 
-# add equation dependence
+# add equation dependence (which ones are needed for rate calculation)
 csl$dep <- ""
 
 # options
