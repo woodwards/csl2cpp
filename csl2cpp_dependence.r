@@ -38,30 +38,32 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
   token_set_line <- setNames(rep(NA, nrow(tokens)), tokens$name) # when does a var become available?
   token_set_status <- setNames(rep("uninit", nrow(tokens)), tokens$name) # how is it set?
 
-  # declarations of value (e.g. parameter)
-  rows <- which(csl$line_type %in% c("parameter"))
+  # declarations of value (e.g. parameter, constant)
+  # "algorithm", "nsteps", "maxterval", "cinterval", "minterval" currently also treated like parameter
+  rows <- which(csl$line_type %in% c("parameter", "constant",
+                                     "algorithm", "nsteps", "maxterval", "cinterval", "minterval"))
   set <- setdiff(unique(unlist(str_split(csl$set[rows], ",", simplify=FALSE))), "")
   token_set_status[set] <- "set"
   token_set_line[set] <- 1
 
-  # fake variable to avoid an empty set list on procedurals
+  # add fake variable to avoid an empty set list on procedurals
   token_set_status["procedural"] <- "set"
   token_set_line["procedural"] <- 1
 
-  # now work through code in this order
-  rows <- c(which(csl$section %in% c("header","initial")),
-            which(csl$section %in% c("discrete")), # can never be sure any of this section has been executed
-            which(csl$section %in% c("derivative")),
-            which(csl$section %in% c("dynamic")),
-            which(csl$section %in% c("terminal")))
+  # work through remaining code (sections have already been reorganised)
+  active <- (csl$set>"" | csl$used>"") &
+    !(csl$line_type %in% c("parameter", "constant", "procedural", "integ"))
+  rows <- which(active)
   did_continue <- FALSE
   for (i in rows){
     # set state variables?
     if (is.na(token_set_line["t"]) & !(csl$line_type[i] %in% c("header", "initial"))){
-      token_set_status["t"] <- "set"
-      token_set_line["t"] <- i
-      token_set_status[state] <- "set"
-      token_set_line[state] <- i
+      # integ statements set state (and t) at end of INITIAL section(s?)
+      # only set ones that are not already flagged, we want to know if any are previous assumed
+      set <- c("t", state)
+      bad <- token_set_status[set] == "uninit"
+      token_set_status[set[bad]] <- "set"
+      token_set_line[set[bad]] <- i
     }
     # handle continuations
     if (did_continue){ # accumulate variable lists
@@ -72,16 +74,16 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
       used <- comma_split(csl$used[i])
       line_type <- csl$line_type[i]
     }
-    # analyse line
     will_continue <- csl$cont[i] > ""
     if (will_continue){ # go to next line
       did_continue <- TRUE
-    } else if (csl$line_type[i]!="procedural") { # analyse all lines except procedural declarations
+    } else {
+      # analyse line
       set <- set[set>""]
       if (any(set %in% c("t"))){
         stop(paste("code line", csl$line_number[i], ": assignment to t in", csl$section[i], "\n"))
       }
-      if (any(set %in% c(state)) & csl$line_type[i]!="integ" & !silent){
+      if (any(set %in% c(state)) & !silent){
         cat(paste("code line", csl$line_number[i], ": assignment to state variable in", csl$section[i], "\n"))
       }
       if (any(set %in% c(rate)) & csl$section[i]!="derivative" & !silent){
@@ -100,7 +102,7 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
           token_set_status[set[bad]] <- "set"
           token_set_line[set[bad]] <- i
         }
-      } else if (!any(set>"")){ # used only (e.g. in ifthen)
+      } else if (!any(set>"")){ # used only (e.g. ifthen)
         bad <- token_set_status[used] == "uninit"
         token_set_status[used[bad]] <- "assumed"
         token_set_line[used[bad]] <- i
@@ -110,7 +112,7 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
         token_set_status[used[bad]] <- "assumed"
         token_set_line[used[bad]] <- i
         csl$assumed[i] <- paste_sort(used[bad])
-        if (csl$section[i] != "discrete"){ # assume discrete sections never set anything
+        if (csl$section[i] != "discrete"){ # assume discrete sections do not set anything
           if (any(token_set_status[used]!="set")){
             token_set_status[set] <- "from_assumed"
             token_set_line[set] <- i

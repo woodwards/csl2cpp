@@ -40,7 +40,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	# browser()
 
 	# create an empty vector of strings
-	cpp <- vector("character", nrow(csl) * 3 + 200) # estimate output length
+	cpp <- vector("character", nrow(csl) * 2 + 200) # estimate output length
 	attr(cpp, "row") <- 0 # create an attribute for the row counter
 
 	# header
@@ -93,8 +93,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	lines <- if_else(csl$decl[rows] > "",
 	                 smoosh(csl$static[rows], csl$type[rows], csl$decl[rows], csl$dend[rows], csl$tail[rows]),
 	                 csl$tail[rows])
-	indent <- if_else(str_detect(lines, "^\\{"), 2, 1) # indent array initialisation lines
-	cpp <- put_lines(cpp, indent, lines)
+	cpp <- put_lines(cpp, 1, lines)
 	cat("declaration lines :", sum(rows), "\n")
 
   # get state
@@ -149,19 +148,24 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
   	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables as per ACSLX"))
   	lines <- paste(assumed_all, "= 5.5555e33 ;")
   	cpp <- put_lines(cpp, 2, lines)
+  	cat("initialise uninitialised variables lines :", length(lines), "\n")
 	}
 	# model initialisation
-	rows <- (csl$section == "initial" | csl$init > "") & csl$line_type != "integ" # include init lines from other places
+	rows <- (csl$section == "initial" | csl$init > "") &
+	  !(csl$line_type %in% c("integ", "parameter", "constant",
+	                         "algorithm", "nsteps", "maxterval", "cinterval", "minterval"))
   if (any(rows)){
-  	cpp <- put_lines(cpp, 2, c("", "// initialise model"))
+  	cpp <- put_lines(cpp, 2, c("", "// initial calculations"))
   	lines <- if_else(csl$init[rows] > "",
   	                 smoosh(csl$init[rows], csl$delim[rows], csl$tail[rows]),
   	                 csl$tail[rows])
   	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
   	cpp <- put_lines(cpp, indent, lines)
+  	cat("initial calculations lines :", sum(rows), "\n")
   }
 	# state variable initial conditions
 	rows <- csl$line_type == "integ"
+	cpp <- put_lines(cpp, 2, c("", "// initialise state variables"))
 	lines <- if_else(csl$init[rows] > "",
 	                 smoosh(csl$init[rows], csl$delim[rows], csl$tail[rows]),
 	                 csl$tail[rows])
@@ -169,7 +173,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	cpp <- put_lines(cpp, indent, lines)
 	# close off
 	cpp <- put_lines(cpp, 1, c("", "} // end initialise_model", ""))
-	cat("initialisation lines :", sum(rows), "\n")
+	cat("initialise state variables lines :", sum(rows), "\n")
 
 	# pull variables from model (and constants?)
 	cpp <- put_lines(cpp, 1, "void pull_variables_from_model ( ) {")

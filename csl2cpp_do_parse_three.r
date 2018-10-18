@@ -14,9 +14,6 @@ load(file=temp_file) # recover progress
 
 cat("sorting derivative section code", "\n")
 
-# add equation dependence (which ones are needed for rate calculation)
-csl$dep <- ""
-
 # options
 override_proc_set <- TRUE # helps sort
 override_proc_used <- FALSE # would be nice but sort might fail
@@ -26,6 +23,25 @@ sorting_method <- "acslx"
 cat("override procedural set list :", override_proc_set, "\n")
 cat("override procedural used list :", override_proc_used, "\n")
 cat("sorting method :", sorting_method, "\n")
+
+# reorganise major sections into execution order
+# FIXME could cause errors if SORT keyword in DYNAMIC section?
+# FIXME can't handle multiple DYNAMIC sections
+cat("reorganise major sections\n")
+major_sections <- c("header", "initial", "dynamic", "derivative", "discrete", "terminal")
+if (!all(csl$section %in% major_sections)){
+  stop("unknown major section")
+}
+new_i <- c(
+  which(csl$section %in% c("header")),
+  which(csl$section %in% c("initial")),
+  which(csl$section %in% c("discrete")), # possibly executed before time step
+  which(csl$section %in% c("derivative")),
+  which(csl$section %in% c("dynamic")), # executed after time step
+  which(csl$section %in% c("terminal"))
+)
+csl <- csl[new_i,]
+csl$dep <- "" # add equation dependence to rate calculations
 
 # get model state and rate variables
 integ <- csl$integ[csl$integ > ""]
@@ -144,14 +160,14 @@ while (length(sortable)>0){
 
   #### determine variables available prior to sort section ####
   cat("analyse variable dependence", "\n")
-  tokens <- csl_dependence(csl, tokens)
+  tokens <- csl_dependence(csl, tokens, silent=FALSE)
   assumed_all <- tokens$name[tokens$set_status=="assumed"]
   assumed_here <- tokens$name[tokens$set_status=="assumed" & tokens$set_line<min(base_i)]
   available <- tokens$name[tokens$set_line<min(base_i)] # including assumed_here and from_assumed
   used_here <- setdiff(unique(unlist(str_split(index$used[index$sort], ","))), "")
   set_here <- setdiff(unique(unlist(str_split(index$set[index$sort], ","))), "")
   used_but_not_set <- setdiff(used_here, set_here)
-  stopifnot(length(setdiff(used_but_not_set, c(state, available)))==0)
+  # stopifnot(length(setdiff(used_but_not_set, c(state, available)))==0)
   set_but_not_used <- setdiff(set_here, c(used_here, rate))
 
   #### identify which equations are needed to calculate the rate ####
@@ -449,10 +465,11 @@ while (length(sortable)>0){
 } # end while
 
 #### finally reanalyse variable dependence ####
-tokens <- csl_dependence(csl, tokens)
+tokens <- csl_dependence(csl, tokens, silent=FALSE)
+assumed_all <- tokens$name[tokens$set_status=="assumed"]
 
 #### save progress ####
-rm(list=setdiff(ls(), c("csl", "tokens", "path_name", "silent", lsf.str())))
+rm(list=setdiff(ls(), c("csl", "tokens", "path_name", "model_name", "silent", lsf.str())))
 temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
 save.image(temp_file)
 

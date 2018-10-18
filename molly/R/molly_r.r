@@ -36,21 +36,19 @@ for ( i in 1:length(out_times) ){
 print(Sys.time() - start_timer)
 xx <- bind_rows(xx) # collect output
 # keep columns that don't change
-# colvals <- sapply(xx, function(x) length(unique(x)), simplify=TRUE)
-# cols <- which(colvals!=1)
-# xx <- xx[,cols]
+colvals <- sapply(xx, function(x) length(unique(x)), simplify=TRUE)
+cols <- which(colvals!=1)
+xx2 <- xx[,cols]
 
 # get zero state
 x0 <- as.numeric(xx[1,])
 names(x0) <- names(xx)
 x0[!is.finite(x0)]
-x0["RQEQ"]
 
 # get final state
 x1 <- as.numeric(xx[nrow(xx),])
 names(x1) <- names(xx)
-names(xx)[!is.finite(x1)]
-x1["dCd"]
+names(x1)[!is.finite(x1)]
 
 # p1 <- ggplot() +
 # 	geom_point(data=cpp, mapping=aes(x=x, y=xd), colour="blue") +
