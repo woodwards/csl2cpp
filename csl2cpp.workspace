@@ -2,5 +2,7 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Workspace">
 		<Project filename="spring/spring.cbp" />
+		<Project filename="../../Molly Translation/csl2cpp/molly/molly.cbp" />
+		<Project filename="molly/molly.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

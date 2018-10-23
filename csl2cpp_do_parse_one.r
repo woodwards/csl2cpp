@@ -34,8 +34,9 @@ csl <- csl %>%
 # don't try to handle indenting for has_label, goto, if_goto
 # for do loops, replace the continue with enddo
 # (these structures must be protected from sorting by being placed inside procedurals)
-declaration <- c("constant", "algorithm", "nsteps", "maxterval", "character",
-                 "parameter", "cinterval", "integer", "logical", "doubleprecision")
+declaration <- c("constant", "parameter",
+                 "algorithm", "nsteps", "maxterval", "minterval", "cinterval",
+                 "character", "integer", "logical", "doubleprecision", "real", "dimension")
 keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do") # +if_then, increase indent
 keyword2 <- c("end", "endif", "enddo") # decrease indent
 keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue", "sort") # + has_label + if_goto, no change to indent

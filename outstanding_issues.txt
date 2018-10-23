@@ -1,4 +1,6 @@
-Short list of known issues/to do
+Short list of known issues/to do for csl2cpp
+csl2cpp is a series of R scripts to translate ACSLX CSL models to C++
+Simon Woodward, DairyNZ 2018
 
 Issues
 
@@ -6,20 +8,34 @@ Issues
 - acslx.exe can't build models if C:\RTools\3.4\bin\sh.exe is in the path
 - this translation project only covers the subset of ACSL functionality that we needed
 - IMPLC, IMPVC implicit systems not handled
-- Assumes Runge-Kutta-4 integration method (easy to change)
+- currently assumes Runge-Kutta-4 integration method
 - power operator needs to be manually translated (^ and ** are converted to *pow(1,1)*)
 - C++ min and max functions can't mix int and double, need to fix manually
 - strings are not visible to user, string functions not handled
 - arrays are not visible to user
-- does not handle TERMINAL section
+- does not handle TERMINAL section (although this should be easy to implement)
 - SCHEDULE must be on its own line
-- logic identifying set and used variables may not be very robust
+- logic used to identify uninitialised variables may not be very robust
+- DERIVT function not implemented (require DERVIT to be on it's own line like INTEG)
+- control variables IALG, CINT, MAXT, MINT, NSTP are treated as parameters, but not used
+- comments (and statements) outside CSL sections are moved to a HEADER section
 
 To Do
 
-- Molly compilation testing
 - Molly runtime testing
-- DERIVT function
-- how to handle procedurals that change variables but don't declare it?
+- Link molly.cpp into the WFM
+- handle DERIVT function by adding a post-step observer
+- make arrays visible to user
+- handle M files
+- divide by zero errors
+- location of comments in translated code
+- run time testing
+- version control
+- should the model call do_events and calculate_rate as part of initialisation? ACSL does this but we might want to give more control to the user.
+
+Opportunities
+
+- detect instabilities in the model, sudden changes in variables
+- optimise step size and integration method
 
 

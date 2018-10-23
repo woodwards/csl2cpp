@@ -20,7 +20,7 @@ smoosh <- function(...){
     str_squish()
 }
 
-make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
+make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 
   cat("delay post processing :", delay_post, "\n")
 
@@ -43,7 +43,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	cpp <- vector("character", nrow(csl) * 2 + 200) # estimate output length
 	attr(cpp, "row") <- 0 # create an attribute for the row counter
 
-	# header
+	# module header
 	lines <- c("// *******************************************************",
 			   "// this module is automatically generated from an R script",
 			   "// *******************************************************",
@@ -60,13 +60,13 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 			   "")
 	cpp <- put_lines(cpp, 0, lines)
 
-	# header comments
+	#### model header comments ####
 	rows <- csl$section == "header"
 	lines <- csl$tail[rows]
 	cpp <- put_lines(cpp, 0, lines)
 	cat("header comments :", sum(rows), "\n")
 
-	# class
+	# class declaration
 	cpp <- put_lines(cpp, 0, c("", paste("class", model_name, "{"), "",
 	                           "private:", ""))
 
@@ -77,7 +77,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
               "// declare state_type and t",
 	           paste("typedef std::array< double , n_state_variables > state_type;"),
 	           "double t;", "",
-	           "// event list",
+	           "// declare event list",
 	           "std::multimap< double , std::string > event_list;", "",
 	           "// add event",
 	           "void schedule( double event_time, std::string event_name ){", "",
@@ -90,9 +90,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
   #### declare model variables ####
 	cpp <- put_lines(cpp, 1, "// declare model variables")
 	rows <- csl$decl > ""
-	lines <- if_else(csl$decl[rows] > "",
-	                 smoosh(csl$static[rows], csl$type[rows], csl$decl[rows], csl$dend[rows], csl$tail[rows]),
-	                 csl$tail[rows])
+	lines <- smoosh(csl$static[rows], csl$type[rows], csl$decl[rows], csl$dend[rows])
 	cpp <- put_lines(cpp, 1, lines)
 	cat("declaration lines :", sum(rows), "\n")
 
@@ -116,7 +114,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	lines <- c("// unordered_map gives user efficient access to variables by name",
 	           "std::unordered_map< std::string , double > variable;", "")
 	cpp <- put_lines(cpp, 1, lines)
-	lines <- c("// constructor head",
+	lines <- c("// constructor",
 	           paste(model_name, "( ) :"), "")
 	cpp <- put_lines(cpp, 1, lines)
 
@@ -125,9 +123,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	                           "// warning: these are executed in the order of the member declarations"))
 	rows <- csl$ccl > ""
 	csl$dend[max(which(rows))] <- "" # remove last comma
-	lines <- if_else(csl$ccl[rows] > "",
-	                 smoosh(csl$ccl[rows], csl$dend[rows], csl$tail[rows]),
-	                 csl$tail[rows])
+	lines <- smoosh(csl$ccl[rows], csl$dend[rows], csl$tail[rows])
 	indent <- if_else(str_detect(lines, "^\\{"), 3, 2) # indent array initialisation lines
 	cpp <- put_lines(cpp, indent, lines)
 	cat("array initialisation lines :", sum(rows), "\n")
@@ -151,9 +147,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
   	cat("initialise uninitialised variables lines :", length(lines), "\n")
 	}
 	# model initialisation
-	rows <- (csl$section == "initial" | csl$init > "") &
-	  !(csl$line_type %in% c("integ", "parameter", "constant",
-	                         "algorithm", "nsteps", "maxterval", "cinterval", "minterval"))
+	rows <- csl$section == "initial"
   if (any(rows)){
   	cpp <- put_lines(cpp, 2, c("", "// initial calculations"))
   	lines <- if_else(csl$init[rows] > "",
@@ -166,9 +160,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	# state variable initial conditions
 	rows <- csl$line_type == "integ"
 	cpp <- put_lines(cpp, 2, c("", "// initialise state variables"))
-	lines <- if_else(csl$init[rows] > "",
-	                 smoosh(csl$init[rows], csl$delim[rows], csl$tail[rows]),
-	                 csl$tail[rows])
+	lines <- smoosh(csl$init[rows], csl$delim[rows])
 	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
 	cpp <- put_lines(cpp, indent, lines)
 	# close off
@@ -195,7 +187,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 
 	####  do events ####
 	cpp <- put_lines(cpp, 1, c("void do_event ( string next_event ) {", ""))
-	rows <- csl$section %in% c("discrete")
+	rows <- csl$section == "discrete"
 	if (any(rows)){
 	  cpp <- put_lines(cpp, 2, c("// find event"))
 	  lines <- if_else(csl$disc[rows] > "",
@@ -215,22 +207,22 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 
 	#### calculate rate ####
 	cpp <- put_lines(cpp, 1, "void calculate_rate ( ) {")
+	# rate calculation from derivative section
 	cpp <- put_lines(cpp, 2, c("", "// derivative calculations"))
-	# using derivative section sorting index
-	rows <- which(csl$section %in% c("derivative") & (csl$dep == "for_rate" | delay_post==FALSE)) # which lines to include
+	rows <- which(csl$section == "derivative" & (csl$dep == "for_rate" | delay_post==FALSE))
 	lines <- if_else(csl$calc[rows] > "",
 	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
 	                 csl$tail[rows])
 	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
 	cpp <- put_lines(cpp, indent, lines)
-	cpp <- put_lines(cpp, 1, c("", "} // end calculate_rate", ""))
 	cat("calculate rate lines :", length(rows), "\n")
+	cpp <- put_lines(cpp, 1, c("", "} // end calculate_rate", ""))
 
 	#### post processing ####
 	cpp <- put_lines(cpp, 1, "void post_processing ( ) {")
+	# post processing from derivative section
 	cpp <- put_lines(cpp, 2, c("", "// post processing calculations from derivative"))
-	# using derivative section sorting index
-	rows <- which(csl$section %in% c("derivative") & (csl$dep == "" & delay_post==TRUE)) # which lines to include
+	rows <- which(csl$section == "derivative" & (csl$dep == "" & delay_post==TRUE))
 	lines <- if_else(csl$calc[rows] > "",
 	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
 	                 csl$tail[rows])
@@ -239,14 +231,14 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	cat("post processing 1 lines :", length(rows), "\n")
 	# and also dynamic section
 	cpp <- put_lines(cpp, 2, c("", "// post processing calculations from dynamic"))
-	rows <- which(csl$section %in% c("dynamic"))
+	rows <- which(csl$section == "dynamic")
 	lines <- if_else(csl$calc[rows] > "",
 	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
 	                 csl$tail[rows])
-	indent <- 2 + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
+	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
 	cpp <- put_lines(cpp, indent, lines)
-	cpp <- put_lines(cpp, 1, c("", "} // end post_processing", ""))
 	cat("post processing 2 lines :", length(rows), "\n")
+	cpp <- put_lines(cpp, 1, c("", "} // end post_processing", ""))
 
 	# rate operator
 	cpp <- put_lines(cpp, 1, c("// called by boost::odeint::integrate()",
@@ -260,11 +252,11 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end operator", ""))
 
-	# close class
+	# advance method
 	lines <- c("int advance_model ( double end_time , double time_step ) {", "")
 	cpp <- put_lines(cpp, 1, lines)
 	lines <- c(
-	  "double next_time;",
+	  "double next_time = end_time;",
 	  "static constexpr double eps = 0.00001;",
 	  "state_type a_state;",
 	  "double a_time;",
@@ -295,10 +287,10 @@ make_cpp <- function(csl, tokens, model_name, delay_post=TRUE){
 	  "\t// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class",
 	  "\tnsteps += boost::numeric::odeint::integrate_const( stepper , *this , a_state, a_time , next_time , time_step );",
 	  "\tset_state( a_state );",
-	  "\tt = next_time;", "",
-	  "}", "",
-	  "calculate_rate();",
-	  "post_processing();",
+	  "\tt = next_time;",
+	  "\tcalculate_rate();",
+	  "\tpost_processing();",
+	  "", "}", "",
 	  "return( nsteps );")
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end advance_model"))

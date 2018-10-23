@@ -40,7 +40,7 @@ new_i <- c(
   which(csl$section %in% c("dynamic")), # executed after time step
   which(csl$section %in% c("terminal"))
 )
-csl <- csl[new_i,]
+csl <- csl[new_i,] # sort in this order
 csl$dep <- "" # add equation dependence to rate calculations
 
 # get model state and rate variables
@@ -112,9 +112,11 @@ while (length(sortable)>0){
   )
 
   # these lines have no effect on sorting of code (at most they effect decl and init)
-  inactive <- c("integ", "comment", "blank", "derivative", "end",
-                "algorithm", "maxterval", "minterval", "cinterval", "nsteps", "termt", "sort",
-                "constant", "integer", "logical", "doubleprecision", "real", "character")
+  inactive <- c("integ", "comment", "blank", "derivative", "end", "termt", "sort",
+                "derivative_sorted", "sort_sorted",
+                "algorithm", "maxterval", "minterval", "cinterval", "nsteps",
+                "constant", "parameter",
+                "integer", "dimension", "logical", "doubleprecision", "real", "character")
   index$used[index$line_type %in% inactive] <- ""
   index$set[index$line_type %in% inactive] <- ""
   index$dep[index$line_type %in% inactive] <- "inactive"
@@ -273,16 +275,18 @@ while (length(sortable)>0){
   }
   cat("\n")
 
-  #### collapse non-active lines into line below ####
+  #### collapse non-active lines ####
   # has to be done after blocks
   cat("collapse non-active lines", "\n")
+  collapse_up <- c("blank", "end", "termt",
+                   "algorithm", "nsteps", "maxterval", "minterval", "cinterval")
   inactive <- index$dep=="inactive" & index$sort
   while (any(inactive)){
     i <- which(inactive)[[1]]
-    if (i<nrow(index)){
-      index$begin[i+1] <- index$begin[i]
-    } else { # last line needs special treatment
-      index$end[i-1] <- index$end[i]
+    if (i!=1 & (index$line_type[i] %in% collapse_up | i==nrow(index))){
+      index$end[i-1] <- index$end[i] # collapse upwards
+    } else {
+      index$begin[i+1] <- index$begin[i] # collapse downwards
     }
     index <- index[-i, ] # remove line
     inactive <- index$dep=="inactive" & index$sort

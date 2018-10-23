@@ -744,6 +744,10 @@ Parity=iParity
 if(iParity.GT.2) Parity=2
 if(iParity.LT.1) Parity=1
 
+TMilkLmYest=0.
+TMilkPmYest=0.
+TMilkTmYest=0.
+		
 !!!!!!!!!!!!!!! Initialize Gestation and Lactation !!!!!!!!! Gil Feb / 2010 !!!!!!!
 ! ConceiveNow, DryOffNow are hooks for external (m file / WFM) control over Molly. 
 ! If these constants are left as 0.0 (Standalone) Molly works the old way: 
@@ -3035,12 +3039,12 @@ CONSTANT CsFvAt=4.0,AaFvAt=0.9555
     !lipid as the source of long chain fatty acids(1.2 moles 
     !/mole Li) 
  
-CONSTANT CsMiG1=6.1555,AmMiG1=7.3555,HyMiG1=2.7555,CdMiG1=0.5555
+CONSTANT CsMiG1=6.1555,AmMiG1=7.3555,HyMiG1=2.7555,CdMiG1=0.5555, &
          FlMiG=0.2555
 
   !Growth with amino acids(G2) 
 
-CONSTANT CsMiG2=2.1555,AmMiG2=1.1555,AaMiG2=4.9555,HyMiG2=-0.4555
+CONSTANT CsMiG2=2.1555,AmMiG2=1.1555,AaMiG2=4.9555,HyMiG2=-0.4555, &
          CdMiG2=-0.05
 
   !Microbe composition (Kg/Kg) 
@@ -3050,7 +3054,7 @@ CONSTANT MiPiPi=0.5555,MiNnNn=0.09555,MiHaHa=0.2555,MiLiLi=0.1555
 
   !Lipid composition in mole/mole 
 
-CONSTANT MiLiFa=1.2,MiLiBu=0.5,MiLiPr=1.0,MiLiCh=0.8,MiLiGl=0.5
+CONSTANT MiLiFa=1.2,MiLiBu=0.5,MiLiPr=1.0,MiLiCh=0.8,MiLiGl=0.5, &
          MwtMiLi=0.6555
   
 !Effect of added dietary fat on microbial yield (MiG) 12/14/90 jk 

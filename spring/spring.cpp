@@ -11,7 +11,7 @@
 
 using namespace std; // expose cmath functions
 
-// program spring 
+// program spring
 // end of program // of program
 
 class spring {
@@ -21,18 +21,18 @@ private:
 	// specify number of variables
 	static constexpr int n_state_variables = 3 ;
 	static constexpr int n_visible_variables = 13 ;
-	
+
 	// declare state_type and t
 	typedef std::array< double , n_state_variables > state_type;
 	double t;
-	
+
 	// event queue
 	std::map< double , std::string > schedule;
-	
+
 	// declare boost::odeint stepper
 	typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;
 	stepper_type stepper;
-	
+
 	// declare model variables
 	double cint ;
 	double k ; // simon's comment
@@ -45,47 +45,47 @@ private:
 	double xd ; // xd = integ ( xdd , xdic )
 	double x ; // x = integ ( xd , xic )
 	double Tstp ;
-	
+
 	state_type get_state ( ) {
-		
+
 		state_type a_state;
-		
+
 		// return current state
 		a_state[0] = time;
 		a_state[1] = xd;
 		a_state[2] = x;
-		
+
 		return( a_state );
-	
+
 	} // end get_state
-	
+
 	void set_state ( state_type a_state ) {
-		
+
 		// set state
 		time = a_state[0];
 		xd = a_state[1];
 		x = a_state[2];
-	
+
 	} // end set_state
 
 public:
 
 	// unordered_map gives user efficient access to variables by name
 	std::unordered_map< std::string , double > variable;
-	
+
 	// constructor
 	spring ( ) {
-	
+
 		// reserve buckets to minimise storage and avoid rehashing
 		variable.reserve( n_visible_variables );
-	
+
 	} // end constructor
-	
+
 	void initialise_model ( double a_time ) {
-		
+
 		// initialise t
 		t = a_time;
-		
+
 		// initialise model
 		cint = 0.02 ;
 		k = 0.12 ; // simon's comment
@@ -97,14 +97,14 @@ public:
 		xd = xdic ; // xd = integ ( xdd , xdic )
 		x = xic ; // x = integ ( xd , xic )
 		Tstp = 3.99 ;
-		
+
 	} // end initialise_model
-	
+
 	void pull_variables_from_model ( ) {
-		
+
 		// pull system time
 		variable["t"] = t;
-		
+
 		// pull model variables
 		variable["cint"] = cint;
 		variable["k"] = k;
@@ -119,14 +119,14 @@ public:
 		variable["xd"] = xd;
 		variable["x"] = x;
 		variable["Tstp"] = Tstp;
-	
+
 	} // end pull_variables_from_model
-	
+
 	void push_variables_to_model ( ) {
-		
+
 		// push system time
 		t = variable["t"];
-		
+
 		// push model variables
 		cint = variable["cint"];
 		k = variable["k"];
@@ -141,72 +141,72 @@ public:
 		xd = variable["xd"];
 		x = variable["x"];
 		Tstp = variable["Tstp"];
-	
+
 	} // end push_variables_to_model
-	
+
 	void do_event ( ) {
-	
+
 	} // end do_event
-	
+
 	void calculate_rate ( ) {
-		
+
 		// calculations
-		// derivative 
+		// derivative
 		// -------spring damping problem. models releasing
 		//       mass from initial conditions of zero
 		//       velocity and displacement
-		
-		
+
+
 		// -------define model default constants
 		// simon's comment
-		
-		
-		
+
+
+
 		// -------another way of changing the independent
 		//       variable
-		// time = integ ( 1.0 , 0.0 ) 
+		// time = integ ( 1.0 , 0.0 )
 		// -------calculate acceleration
 		xdd = ( mass * g - k * xd - a * x ) / mass ;
 		// -------integrate accel for velocity and position
-		
-		// xd = integ ( xdd , xdic ) 
-		// x = integ ( xd , xic ) 
+
+		// xd = integ ( xdd , xdic )
+		// x = integ ( xd , xic )
 		// -------specify termination condition
-		
-		// termt ( t >= Tstp , 'Time Limit' ) 
-		
+
+		// termt ( t >= Tstp , 'Time Limit' )
+
 		// end of derivative // of derivative
-	
+
 	} // end calculate_rate
-	
+
 	// called by boost::odeint::integrate()
 	void operator()( const state_type &a_state , state_type &a_rate, double a_time ){
-		
+
 		// set state
 		t = a_time;
 		time = a_state[0];
 		xd = a_state[1];
 		x = a_state[2];
-		
+
 		// calculate rate
 		calculate_rate();
-		
+
 		// return rate
 		a_rate[0]= 1.0;
 		a_rate[1]= xdd;
 		a_rate[2]= xd;
-	
+
 	} // end operator
-	
+
 	int advance_model ( double end_time , double time_step ) {
-	
-		double next_time;
+
+		double next_time = end_time;
 		state_type a_state;
 		double a_time;
 		int nsteps = 0;
-		
+
 		while ( t < end_time ) {
-		
+
 			// do current events
 			do {
 				if ( schedule.begin() == schedule.end() ){
@@ -225,7 +225,7 @@ public:
 					next_time = schedule.begin()->first;
 				}
 			} while ( next_time <= t) ;
-		
+
 			// advance model to next event or end_time
 			a_state = get_state();
 			a_time = t;
@@ -235,11 +235,11 @@ public:
 			set_state( a_state );
 			t = next_time;
 			calculate_rate();
-		
+
 		}
-		
+
 		return( nsteps );
-	
+
 	} // end advance_model
 
 }; // end class

@@ -41,8 +41,9 @@ csl$tail <- str_trim(str_replace(csl$tail, "^! ?", "// "))
 # token_list is used to standardise case of user tokens
 # token_list is also used to translate some language keywords
 token_list <- setNames(tokens$name, tokens$lower) # indexed by lower case
-declaration <- c("constant", "algorithm", "nsteps", "maxterval", "character",
-                 "parameter", "cinterval", "integer", "logical", "doubleprecision")
+declaration <- c("constant", "parameter",
+                 "algorithm", "nsteps", "maxterval", "minterval", "cinterval",
+                 "character", "integer", "logical", "doubleprecision", "real", "dimension")
 keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do") # +if_then, increase indent
 keyword2 <- c("end", "endif", "enddo") # decrease indent
 keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue", "sort") # + has_label + if_goto, no change to indent
@@ -231,7 +232,7 @@ for (i in 1:nrow(csl)){
     csl$type[i] <- "auto"
     csl$decl[i] <- paste(parse_list[setdiff(odds+1, 2)], collapse=" ")
     csl$dend[i] <- ";"
-    # csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+    csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
 
     # deal with previous declaration of variables
     bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
@@ -276,13 +277,13 @@ for (i in 1:nrow(csl)){
     csl$type[i] <- "auto"
     csl$decl[i] <- paste(parse_list[setdiff(odds+1, 2)], collapse=" ")
     csl$dend[i] <- ";"
-    # csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+    csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
 
     # deal with previous declaration of variables
     bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
     if (any(bad)){
       stop()
-      message <- paste("parameter on existing variable:", paste(parse_list[k+1][bad], collapse=" "))
+      message <- paste("control using existing variable:", paste(parse_list[k+1][bad], collapse=" "))
       cat("code line", csl$line_number[i], message, "\n")
       # delete previous declarations
       for (j in parse_list[k+1][bad]){
@@ -364,6 +365,7 @@ for (i in 1:nrow(csl)){
       j2 <- if_else(will_continue, length(parse_list)-3, length(parse_list)-1) # skip final comma
       csl$decl[i] <- paste(parse_list[seq(j1+1, j2+1, 2)], collapse=" ")
       csl$dend[i] <- ";"
+      csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
 
       # deal with previous declaration of variables
       bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
@@ -472,8 +474,8 @@ for (i in 1:nrow(csl)){
     }
 
   }
-  #### handle line_type = integer, character, doubleprecision, logical, dimension (including arrays) ####
-  if (csl$line_type[i] %in% c("integer", "character", "doubleprecision", "logical", "dimension")){
+  #### handle line_type = integer, character, doubleprecision, logical, real, dimension (including arrays) ####
+  if (csl$line_type[i] %in% c("integer", "character", "doubleprecision", "logical", "real", "dimension")){
 
     # these are explicit type declarations
     # other variables are declared implictly by being assigned or initialised using "constant"
@@ -506,7 +508,7 @@ for (i in 1:nrow(csl)){
         csl$type[i] <- paste("std::array< double ,", parse_list[8], "> ")
         csl$decl[i] <- parse_list[4]
         csl$dend[i] <- ";"
-        # csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
         token_decl_line[parse_list[4]] <- i
         token_decl_type[parse_list[4]] <- csl$type[i]
         csl$handled[i] <- TRUE
@@ -527,7 +529,7 @@ for (i in 1:nrow(csl)){
         csl$type[i] <- paste("std::array< std::array< double ,", parse_list[8], "> ,", parse_list[12], "> ") # need to reverse indices
         csl$decl[i] <- parse_list[4]
         csl$dend[i] <- ";"
-        # csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
         token_decl_line[parse_list[4]] <- i
         token_decl_type[parse_list[4]] <- csl$type[i]
         csl$handled[i] <- TRUE
@@ -568,6 +570,7 @@ for (i in 1:nrow(csl)){
         csl$type[i] <- this_type
         csl$decl[i] <- paste(parse_list[k+1][!bad], collapse=" , ") # variable list
         csl$dend[i] <- ";"
+        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
         token_decl_line[parse_list[k+1][!bad]] <- i
         token_decl_type[parse_list[k+1][!bad]] <- csl$type[i]
       }
@@ -579,7 +582,7 @@ for (i in 1:nrow(csl)){
   if (csl$line_type[i] %in% c("integ")){
 
     # only handles integ statements of particular simple forms
-    # csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+    csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
 
     # a = integ( b , c ), no expressions allowed
     if (str_to_lower(paste(parse_list[c(4, 6, 8, 12, 16, 18)], collapse="")) == "=integ(,)na"){
