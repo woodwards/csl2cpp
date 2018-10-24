@@ -578,13 +578,13 @@ for (i in 1:nrow(csl)){
     } # end non-array declaration
 
   }
-  #### handle line_type = integ ####
-  if (csl$line_type[i] %in% c("integ")){
+  #### handle line_type = integ, derivt ####
+  if (csl$line_type[i] %in% c("integ", "derivt")){
 
-    # only handles integ statements of particular simple forms
+    # only handles integ and derivt statements of particular simple forms
     csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
 
-    # a = integ( b , c ), no expressions allowed
+    # check form
     if (str_to_lower(paste(parse_list[c(4, 6, 8, 12, 16, 18)], collapse="")) == "=integ(,)na"){
 
       jj <- parse_list[2]
@@ -612,6 +612,32 @@ for (i in 1:nrow(csl)){
       csl$integ[i] <- paste(parse_list[c(2, 4, 10)], collapse=" ")
       if (parse_list[9] == "token"){ # could be a number
         csl$used[i] <- paste(csl$used[i], parse_list[10], sep=",")
+      }
+      csl$handled[i] <- TRUE
+
+    } else if (str_to_lower(paste(parse_list[c(4, 6, 8, 12, 16, 18)], collapse="")) == "=derivt(,)na"){
+
+      jj <- parse_list[2]
+      # declare variable
+      if (token_decl_line[jj] == 0){
+        csl$static[i] <- ""
+        csl$type[i] <- "double"
+        csl$decl[i] <- jj
+        csl$dend[i] <- ";"
+        token_decl_line[jj] <- i
+        token_decl_type[jj] <- csl$type[i]
+      }
+      # initialise even if already initialised
+      csl$init[i] <- paste(parse_list[c(2, 4, 10)], collapse=" ")
+      csl$delim[i] <- ";"
+      csl$set[i] <- jj
+      if (parse_list[9] == "token"){ # because could be a numeric constant
+        csl$used[i] <- parse_list[10]
+      }
+      # derivative variable
+      csl$integ[i] <- paste(parse_list[c(2, 4, 14)], collapse=" ")
+      if (parse_list[13] == "token"){ # could be a number
+        csl$used[i] <- paste(csl$used[i], parse_list[14], sep=",")
       }
       csl$handled[i] <- TRUE
 
@@ -649,7 +675,7 @@ for (i in 1:nrow(csl)){
 
       # can't handle this type
       odds <- seq(1, length(parse_list)-1, 2)
-      message <- paste("unhandled form of integ:", paste(parse_list[odds+1], collapse=" "))
+      message <- paste("unhandled form of integ or derivt:", paste(parse_list[odds+1], collapse=" "))
       cat("code line", csl$line_number[i], message, "\n")
 
     }

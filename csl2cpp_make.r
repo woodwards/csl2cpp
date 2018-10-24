@@ -25,10 +25,14 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
   cat("delay post processing :", delay_post, "\n")
 
 	# count variables
-  integ <- csl$integ[csl$integ > ""]
+  integ <- csl$integ[csl$line_type == "integ"]
   state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
 	rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", "")) # rate expressions
 	n_state <- length(state)
+	derivt <- csl$integ[csl$line_type == "derivt"]
+	slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
+	slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
+	slopeof <- str_replace_all(slopeof, "= ", "")
 	variable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto") & is.na(tokens$decl_value)]
 	n_variable <- length(variable)
 	cat("n state :", n_state, "\n")
@@ -93,6 +97,13 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	lines <- smoosh(csl$static[rows], csl$type[rows], csl$decl[rows], csl$dend[rows])
 	cpp <- put_lines(cpp, 1, lines)
 	cat("declaration lines :", sum(rows), "\n")
+	# declare numerical derivatives
+	if (slopeof>""){
+	  lines <- smoosh("double", paste(slopeof, "_prev", sep=""), ";")
+	  cpp <- put_lines(cpp, 1, lines)
+	  lines <- smoosh("double", paste("t", "_prev", sep=""), ";")
+	  cpp <- put_lines(cpp, 1, lines)
+	}
 
   # get state
   cpp <- put_lines(cpp, 1, c("", "state_type get_state ( ) {"))
@@ -126,7 +137,6 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	lines <- smoosh(csl$ccl[rows], csl$dend[rows], csl$tail[rows])
 	indent <- if_else(str_detect(lines, "^\\{"), 3, 2) # indent array initialisation lines
 	cpp <- put_lines(cpp, indent, lines)
-	cat("array initialisation lines :", sum(rows), "\n")
 
 	# constructor body
 	lines <- c("", "// constructor body",
@@ -139,12 +149,11 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	#### initialise model ####
 	cpp <- put_lines(cpp, 1, c("void initialise_model ( double a_time ) {"))
 	cpp <- put_lines(cpp, 2, c("", "// initialise t", "t = a_time;", ""))
-	# unitialised variables
+	# uninitialised variables
 	if (assumed_all>""){
   	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables as per ACSLX"))
   	lines <- paste(assumed_all, "= 5.5555e33 ;")
   	cpp <- put_lines(cpp, 2, lines)
-  	cat("initialise uninitialised variables lines :", length(lines), "\n")
 	}
 	# model initialisation
 	rows <- csl$section == "initial"
@@ -163,9 +172,20 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	lines <- smoosh(csl$init[rows], csl$delim[rows])
 	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
 	cpp <- put_lines(cpp, indent, lines)
+	# numerical derivatives initial conditions
+	rows <- csl$line_type == "derivt"
+	if (any(rows)){
+  	cpp <- put_lines(cpp, 2, c("", "// initialise numerical derivatives"))
+  	lines <- smoosh(csl$init[rows], csl$delim[rows])
+  	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
+  	cpp <- put_lines(cpp, indent, lines)
+  	lines <- smoosh(paste(slopeof, "_prev", sep=""), "=", slopeof, ";")
+  	cpp <- put_lines(cpp, 2, lines)
+  	lines <- "t_prev = t ;"
+  	cpp <- put_lines(cpp, 2, lines)
+	}
 	# close off
 	cpp <- put_lines(cpp, 1, c("", "} // end initialise_model", ""))
-	cat("initialise state variables lines :", sum(rows), "\n")
 
 	# pull variables from model (and constants?)
 	cpp <- put_lines(cpp, 1, "void pull_variables_from_model ( ) {")
@@ -201,9 +221,9 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	cat("event lines :", sum(rows), "\n")
 
 	#### derivt function ####
-	cpp <- put_lines(cpp, 1, c("double derivt( double dx0, double x ) {", "",
-	                           "\treturn( 0.0 ) ;", "",
-	                           "}", ""))
+	# cpp <- put_lines(cpp, 1, c("double derivt( double dx0, double x ) {", "",
+	#                            "\treturn( 0.0 ) ;", "",
+	#                            "}", ""))
 
 	#### calculate rate ####
 	cpp <- put_lines(cpp, 1, "void calculate_rate ( ) {")
@@ -241,7 +261,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	cpp <- put_lines(cpp, 1, c("", "} // end post_processing", ""))
 
 	# rate operator
-	cpp <- put_lines(cpp, 1, c("// called by boost::odeint::integrate()",
+	cpp <- put_lines(cpp, 1, c("// rate operator called by boost::odeint::integrate()",
 	                           "void operator()( const state_type &a_state , state_type &a_rate, double a_time ){", ""))
 	cpp <- put_lines(cpp, 2, c("// calculate rate",
 	                           "t = a_time;",
@@ -250,7 +270,22 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	                           "// return rate"))
 	lines <- paste("a_rate[", 0:(n_state-1), "] ", rate, ";", sep="")
 	cpp <- put_lines(cpp, 2, lines)
-	cpp <- put_lines(cpp, 1, c("", "} // end operator", ""))
+	cpp <- put_lines(cpp, 1, c("", "} // end rate operator", ""))
+
+	# observer operator
+	cpp <- put_lines(cpp, 1, c("// observer operator called by boost::odeint::integrate()",
+	                           "void operator()( const state_type &a_state , double a_time ){", ""))
+	rows <- csl$line_type == "derivt"
+	if (any(rows)){
+  	cpp <- put_lines(cpp, 2, c("", "// calculate numerical derivatives"))
+  	lines <- smoosh(slope, "= (", slopeof, "-", paste(slopeof, "_prev", sep=""), ") / ( t - t_prev ) ;")
+  	cpp <- put_lines(cpp, 2, lines)
+  	lines <- smoosh(paste(slopeof, "_prev", sep=""), "=", slopeof, ";")
+  	cpp <- put_lines(cpp, 2, lines)
+  	lines <- "t_prev = t ;"
+  	cpp <- put_lines(cpp, 2, lines)
+	}
+	cpp <- put_lines(cpp, 1, c("", "} // end observer operator ", ""))
 
 	# advance method
 	lines <- c("int advance_model ( double end_time , double time_step ) {", "")
@@ -285,7 +320,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	  "\ta_time = t;",
 	  "\tnext_time = std::min( end_time, next_time );",
 	  "\t// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class",
-	  "\tnsteps += boost::numeric::odeint::integrate_const( stepper , *this , a_state, a_time , next_time , time_step );",
+	  "\tnsteps += boost::numeric::odeint::integrate_const( stepper , *this , a_state, a_time , next_time , time_step , *this );",
 	  "\tset_state( a_state );",
 	  "\tt = next_time;",
 	  "\tcalculate_rate();",

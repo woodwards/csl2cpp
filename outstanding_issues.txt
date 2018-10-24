@@ -13,22 +13,20 @@ Issues
 - C++ min and max functions can't mix int and double, need to fix manually
 - strings are not visible to user, string functions not handled
 - arrays are not visible to user
-- does not handle TERMINAL section (although this should be easy to implement)
-- SCHEDULE must be on its own line
+- handling of TERMINAL section not checked
 - logic used to identify uninitialised variables may not be very robust
-- DERIVT function not implemented (require DERVIT to be on it's own line like INTEG)
+- SCHEDULE must be on its own line
+- INTEG must be on it's own line
+- DERIVT must be on it's own line
 - control variables IALG, CINT, MAXT, MINT, NSTP are treated as parameters, but not used
 - comments (and statements) outside CSL sections are moved to a HEADER section
 
 To Do
 
-- Molly runtime testing
 - Link molly.cpp into the WFM
-- handle DERIVT function by adding a post-step observer
 - make arrays visible to user
 - handle M files
 - divide by zero errors
-- location of comments in translated code
 - run time testing
 - version control
 - should the model call do_events and calculate_rate as part of initialisation? ACSL does this but we might want to give more control to the user.

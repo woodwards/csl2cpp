@@ -112,7 +112,7 @@ while (length(sortable)>0){
   )
 
   # these lines have no effect on sorting of code (at most they effect decl and init)
-  inactive <- c("integ", "comment", "blank", "derivative", "end", "termt", "sort",
+  inactive <- c("integ", "comment", "blank", "derivative", "end", "termt", "sort", "derivt",
                 "derivative_sorted", "sort_sorted",
                 "algorithm", "maxterval", "minterval", "cinterval", "nsteps",
                 "constant", "parameter",

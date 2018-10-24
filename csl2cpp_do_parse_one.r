@@ -30,7 +30,7 @@ csl <- csl %>%
     parse_list = NA
   )
 
-# start of line keywords (e.g. not including INTEG)
+# start of line keywords (e.g. not including INTEG, DERIVT)
 # don't try to handle indenting for has_label, goto, if_goto
 # for do loops, replace the continue with enddo
 # (these structures must be protected from sorting by being placed inside procedurals)
@@ -52,6 +52,7 @@ do_labels <- c()
 
 # create regex strings for detection (these could be made faster by working on split code)
 integ_str <- "token.+equals.+integ.+openbracket.+closebracket"
+derivt_str <- "token.+equals.+derivt.+openbracket.+closebracket"
 if_then_str <- "token.+if.+openbracket.+closebracket.+token.+then"
 if_goto_str <- "token.+if.+openbracket.+closebracket.+token.+goto"
 else_if_then_str <- "token.+else.+token.+if.+openbracket.+closebracket.+token.+then"
@@ -159,6 +160,7 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
 
   # detect multi token keywords
   has_integ <- str_detect(str_to_lower(parse_str), integ_str)
+  has_derivt <- str_detect(str_to_lower(parse_str), derivt_str)
   else_if_then <- str_detect(str_to_lower(parse_str), else_if_then_str)
   if_then <- str_detect(str_to_lower(parse_str), if_then_str) && !else_if_then
   if_goto <- str_detect(str_to_lower(parse_str), if_goto_str)
@@ -177,6 +179,7 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
   csl$line_type[i] <- case_when(
     is_continuation ~ "continuation", # i.e. same as previous line
     has_integ ~ "integ", # special kind of assignment?
+    has_derivt ~ "derivt", # special kind of assignment?
     if_then ~ "ifthen",
     if_goto ~ "ifgoto",
     else_if_then ~ "elseifthen",

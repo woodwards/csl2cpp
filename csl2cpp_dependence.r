@@ -5,6 +5,7 @@
 #   INITIAL, set state, control variables, DERIVATIVE (sorted), DISCRETE, DYNAMIC, TERMINAL
 # constant statement can be anywhere in the code "they are not executable" (p3-2)
 # integ statement can be anywhere in the code, initial conditions applied after INITIAL (p3-1, 3-3)
+# derivt statement similarly
 # DYNAMIC block statements are actually after DERIVATIVE and DISCRETE
 # a handful of variables are "assumed", i.e. used without being set first
 # ACSLX initialises all variables to weird values but we want to avoid this
@@ -52,13 +53,14 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
 
   # work through remaining code (sections have already been reorganised)
   active <- (csl$set>"" | csl$used>"") &
-    !(csl$line_type %in% c("parameter", "constant", "procedural", "integ"))
+    !(csl$line_type %in% c("parameter", "constant", "procedural", "integ", "derivt"))
   rows <- which(active)
   did_continue <- FALSE
   for (i in rows){
     # set state variables?
     if (is.na(token_set_line["t"]) & !(csl$line_type[i] %in% c("header", "initial"))){
       # integ statements set state (and t) at end of INITIAL section(s?)
+      # derivt statements calculate derivative at end of each time step
       # only set ones that are not already flagged, we want to know if any are previous assumed
       set <- c("t", state)
       bad <- token_set_status[set] == "uninit"

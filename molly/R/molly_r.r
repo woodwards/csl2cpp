@@ -8,7 +8,8 @@ cpp <- read_tsv("molly_cpp_output.tsv",
 	gather(key, value, -t, -nsteps)
 
 cat("sourceCpp(main_r.cpp)\n")
-sourceCpp("main_r.cpp", rebuild=TRUE)
+sourceCpp("main_r.cpp")
+# sourceCpp("main_r.cpp", rebuild=TRUE)
 
 start_time <- 0.0
 time_step <- 1
@@ -55,7 +56,7 @@ xx <- bind_rows(xx) # collect output
 colvals <- sapply(xx, function(x) length(unique(x)), simplify=TRUE)
 cols <- which(colvals!=1)
 cols <- sample(cols, 6)
-cols <- which(names(colvals) %in% c("t", "dEating", "WtPUter", "LhorAdip"))
+cols <- which(names(colvals) %in% c("t", "dEating", "WtPUter", "LhorAdip", "dLowMfDecay", "dNonUterEBW"))
 xx2 <- xx[,cols] %>%
 	gather(key, value, -t)
 

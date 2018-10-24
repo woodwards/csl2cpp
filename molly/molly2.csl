@@ -3500,7 +3500,8 @@ kMamCellsQA = (kMamCellsQAPrePeak +                                             
  DailyMfDiff              = MAX(0., (2 - MilkingFrequency)* InMilk)                   ! DailyMfDiff would be 1 while on once a day; 0.5 while on 1.5 a day etc.
  CumulativeLowMfDays      = integ(DailyMfDiff, 0)                                   ! Keep track of the cummulative number of 1x eqivalent days on low liking freq, e.g 20 days on 1.5x or 10 days on 1x both grow cumulativeLowMfDiff by 10.
  LowMfDecay               = EXP(-kMamCellsUsMfDecay * CumulativeLowMfDays)          ! The longer on low MF the slower the senescence
- IncreasedUsDueToLowMf    = -1 * MamCells * MaxLossDueToLowMf * derivt(0, LowMfDecay)
+ dLowMfDecay = derivt(0, LowMfDecay)
+ IncreasedUsDueToLowMf    = -1 * MamCells * MaxLossDueToLowMf * dLowMfDecay
  !IncreasedUsDueToLowMfPublished = MamCells * MaxLossDueToLowMf * kMamCellsUsMfDecay * EXP(-kMamCellsUsMfDecay * CumulativeLowMfDays) ! This one is published because it is simple enough, and is identical to the IncreasedUsDueToLowMf BUT ONLY for a single period of non-2x-frequency. The above IncreasedUsDueToLowMf handles multiple periods of non-2x milking frequency elegantly but harder to describe in publication.
 
 ! ***** AdiposeNew = estimation for LHOR sensitivity only ***********************************************

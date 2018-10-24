@@ -196,9 +196,14 @@ public:
 
 	} // end operator
 
+	// observer
+	void operator()( const state_type &a_state , double a_time ){
+
+	}
+
 	int advance_model ( double end_time , double time_step ) {
 
-		double next_time;
+		double next_time = end_time;
 		state_type a_state;
 		double a_time;
 		int nsteps = 0;
@@ -229,7 +234,7 @@ public:
 			a_time = t;
 			next_time = std::min( end_time, next_time );
 			// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class
-			nsteps += boost::numeric::odeint::integrate_const( stepper , *this , a_state, a_time , next_time , time_step );
+			nsteps += boost::numeric::odeint::integrate_const( stepper , *this , a_state, a_time , next_time , time_step , *this );
 			set_state( a_state );
 			t = next_time;
 			calculate_rate();

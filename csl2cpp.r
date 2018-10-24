@@ -37,12 +37,12 @@ cat(file=stderr(), "parsing code", "\n")
 # separate code into tokens
 source("csl2cpp_do_parse_one.r")
 # plot code for fun!
-y <- 1:nrow(csl)
-plot1 <- ggplot() +
-  labs(title=csl_file, x="Width", y="Line Number") +
-  geom_segment(data=csl, mapping=aes(x=indent, xend=indent+length, y=y, yend=y, colour=file_name)) +
-  scale_y_reverse()
-print(plot1)
+# y <- 1:nrow(csl)
+# plot1 <- ggplot() +
+#   labs(title=csl_file, x="Width", y="Line Number") +
+#   geom_segment(data=csl, mapping=aes(x=indent, xend=indent+length, y=y, yend=y, colour=file_name)) +
+#   scale_y_reverse()
+# print(plot1)
 
 # translate to C++
 source("csl2cpp_do_parse_two.r")
@@ -56,7 +56,7 @@ temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
 load(temp_file)
 cat(file=stderr(), "making cpp code", "\n")
 source("csl2cpp_make.r") # load functions
-cpp <- make_cpp(csl, tokens, model_name, delay_post=FALSE)
+cpp <- make_cpp(csl, tokens, model_name, delay_post=TRUE)
 cpp_df <- as_data_frame(cpp)
 cat(file=stderr(), "writing cpp code", "\n")
 source("csl2cpp_write.r") # load functions
