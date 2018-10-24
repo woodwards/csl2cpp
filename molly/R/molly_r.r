@@ -8,7 +8,7 @@ cpp <- read_tsv("molly_cpp_output.tsv",
 	gather(key, value, -t, -nsteps)
 
 cat("sourceCpp(main_r.cpp)\n")
-sourceCpp("main_r.cpp")
+sourceCpp("main_r.cpp", rebuild=TRUE)
 
 start_time <- 0.0
 time_step <- 1
