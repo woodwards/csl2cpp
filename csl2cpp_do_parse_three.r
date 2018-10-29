@@ -119,7 +119,7 @@ while (length(sortable)>0){
   )
 
   # these lines have no effect on sorting of code (at most they effect decl and init)
-  inactive <- c("integ", "comment", "blank", "derivative", "end", "termt", "sort",
+  inactive <- c("integ", "comment", "blank", "derivative", "end", "termt", "sort", "derivt",
                 "derivative_sorted", "sort_sorted",
                 "algorithm", "maxterval", "minterval", "cinterval", "nsteps",
                 "constant", "parameter",
@@ -171,8 +171,7 @@ while (length(sortable)>0){
   cat("analyse variable dependence", "\n")
   tokens <- csl_dependence(csl, tokens, silent=FALSE)
   assumed_all <- tokens$name[tokens$set_status=="assumed"]
-  assumed_here <- tokens$name[tokens$set_status=="assumed" & tokens$set_line<min(base_i)]
-  available <- tokens$name[tokens$set_line<min(base_i)] # including assumed_here and from_assumed
+  available <- tokens$name[tokens$set_line<min(base_i) | tokens$set_status=="assumed"]
   used_here <- setdiff(unique(unlist(str_split(index$used[index$sort], ","))), "")
   set_here <- setdiff(unique(unlist(str_split(index$set[index$sort], ","))), "")
   used_but_not_set <- setdiff(used_here, set_here)
@@ -184,6 +183,7 @@ while (length(sortable)>0){
     cat("analyse equation dependency in derivative", "\n")
     var_dep <- c()
     var_dep[rate] <- "rate"
+    var_dep[slopeof] <- "rate" # we also require these for numerical derivative
     var_dep[state] <- "state"
     var_dep["t"] <- "t"
     i <- which(index$sort)
@@ -449,6 +449,7 @@ while (length(sortable)>0){
     failed <- sum(index$saved==0 & index$sort)
     if (failed>0){
       cat("failed to sort", failed, "of", length(sort_rows), "lines\n")
+      stop("failed")
     } else {
       cat("successfully sorted", length(sort_rows), "lines\n")
     }

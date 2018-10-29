@@ -646,8 +646,8 @@ for (i in 1:nrow(csl)){
         csl$used[i] <- parse_list[10]
       }
       # calculate numerical derivative
-      temp <- paste("if ( t > t_previous )", parse_list[2], "= (", parse_list[14], "-", paste(parse_list[14], "_previous", sep=""), ") / ( t - t_previous )", collapse=" ")
-      csl$calc[i] <- temp
+      # temp <- paste("if ( t > t_previous )", parse_list[2], "= (", parse_list[14], "-", paste(parse_list[14], "_previous", sep=""), ") / ( t - t_previous )", collapse=" ")
+      # csl$calc[i] <- temp # done in observer not in derivative
       # derivative variable
       csl$integ[i] <- paste(parse_list[c(2, 4, 14)], collapse=" ")
       if (parse_list[13] == "token"){ # could be a number
@@ -1096,7 +1096,7 @@ save.image(temp_file)
 # [26] "interval"        "logical"         "maxterval"       "nsteps"          "parameter"
 # [31] "procedural"      "program"         "schedule"        "termt"
 if (FALSE){
-  View(filter(csl, line_type=="procedural"))
+  View(filter(csl, line_type %in% c("integ", "derivt")))
   View(filter(csl, handled==FALSE))
   View(filter(csl, section=="initial"))
   View(filter(csl, used>""|set>""))

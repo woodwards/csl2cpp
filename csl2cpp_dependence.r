@@ -5,7 +5,7 @@
 #   INITIAL, set state, control variables, DERIVATIVE (sorted), DISCRETE, DYNAMIC, TERMINAL
 # constant statement can be anywhere in the code "they are not executable" (p3-2)
 # integ statement can be anywhere in the code, initial conditions applied after INITIAL (p3-1, 3-3)
-# derivt calculation can be dependent on other code
+# derivt statement can be anywhere in the code
 # DYNAMIC block statements are actually after DERIVATIVE and DISCRETE
 # a handful of variables are "assumed", i.e. used without being set first
 # ACSLX initialises all variables to weird values but we want to avoid this
@@ -34,6 +34,10 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
   for (ii in i){
     rate[ii] <- temp[[ii]][5]
   }
+  derivt <- csl$integ[csl$line_type == "derivt"]
+  slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
+  slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
+  slopeof <- str_replace_all(slopeof, "= ", "")
 
   # create running list
   token_set_line <- setNames(rep(NA, nrow(tokens)), tokens$name) # when does a var become available?
@@ -55,16 +59,22 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
 
   # work through remaining code (sections have already been reorganised)
   active <- (csl$set>"" | csl$used>"") &
-    !(csl$line_type %in% c("parameter", "constant", "procedural", "integ"))
+    !(csl$line_type %in% c("parameter", "constant", "procedural", "integ", "derivt"))
   rows <- which(active)
   did_continue <- FALSE
   for (i in rows){
-    # set state variables?
-    if (is.na(token_set_line["t"]) & !(csl$line_type[i] %in% c("header", "initial"))){
-      # integ statements set state (and t) at end of INITIAL section(s?)
-      # derivt statements calculate derivative
+    # set t at beginning of initial section
+    if (is.na(token_set_line["t"]) & csl$line_type[i] %in% c("initial")){
       # only set ones that are not already flagged, we want to know if any are previous assumed
-      set <- c("t", state)
+      set <- "t"
+      bad <- token_set_status[set] == "uninit"
+      token_set_status[set[bad]] <- "set"
+      token_set_line[set[bad]] <- i
+    }
+    # set state variables and numerical derivatives at end of initial section
+    if (any(is.na(token_set_line[c(state, slope)])) & !(csl$line_type[i] %in% c("header", "initial"))){
+      # only set ones that are not already flagged, we want to know if any are previous assumed
+      set <- c(state, slope)
       bad <- token_set_status[set] == "uninit"
       token_set_status[set[bad]] <- "set"
       token_set_line[set[bad]] <- i

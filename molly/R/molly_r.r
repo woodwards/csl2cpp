@@ -47,12 +47,12 @@ xx <- bind_rows(xx) # collect output
 # colvals <- sapply(xx, function(x) length(unique(x)), simplify=TRUE)
 # cols <- which(colvals!=1)
 # cols <- sample(cols, 6)
-getvars <- c("t", "dEating", "WtPUter", "LhorAdip", "ResidMamMilk") # to compare to external results
-# getvars <- c("t", "NonUterEBW", "dNonUterEBW", "iBW", "iFdRat", "WtGrvUter", "EBW1", "WtOth","WtAdip","WtVis","WaPool","WaPoolTarget")
+getvars <- c("t", "dEating", "WtPUter", "LhorAdip") # to compare to external results
+getvars <- c("t", "NonUterEBW", "dNonUterEBW", "iBW", "iFdRat", "WtGrvUter", "EBW1", "WtOth","WtAdip","WtVis","WaPool","WaPoolTarget")
 # getvars <- c("t", "LowMfDecay", "dLowMfDecay", "kMamCellsUsMfDecay", "CumulativeLowMfDays")
 cols <- which(names(xx) %in% getvars)
 xx1 <- xx[,cols]
-View(xx1)
+# View(xx1)
 xx2 <- xx1 %>% gather(key, value, -t)
 
 # check initial state

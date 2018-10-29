@@ -370,9 +370,13 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	             "t = odeint_time;",
 	             "calculate_rate( );",
 	             "",
-	             "// reset numerical derivatives (keep existing slopes)"
+	             "// recalculate numerical derivatives after step",
+	             "if ( t > t_previous ) {"
 	             )
 	  cpp <- put_lines(cpp, 2, lines)
+	  lines <- smoosh(slope, "= (", slopeof, "-", paste(slopeof, "_previous", sep=""), ") / ( t - t_previous ) ;")
+	  cpp <- put_lines(cpp, 3, lines)
+	  cpp <- put_lines(cpp, 2, "}")
   	lines <- smoosh(paste(slopeof, "_previous", sep=""), "=", slopeof, ";")
   	cpp <- put_lines(cpp, 2, lines)
   	lines <- c("t_previous = odeint_time;", "")
