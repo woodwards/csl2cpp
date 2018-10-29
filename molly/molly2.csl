@@ -3511,7 +3511,7 @@ kMamCellsQA = (kMamCellsQAPrePeak +                                             
 ! The lower the adipose is the less fat and more muscle will be lost / gained.
 ! The higher the adipose is the more fat and less muscle will be lost / gained.
 
-dNonUterEBW             = derivt(iNonUterEBW, NonUterEBW) 
+dNonUterEBW             = derivt(0, NonUterEBW) 
 dLwExclUterGutAndGrowth = dNonUterEBW - GrowthPerDay 
 dWtAdipNew              = dLwExclUterGutAndGrowth * (1 - EXP(-8 * WtAdipNew / (WtAdipNew + NonUterEbw))) ! The smaller the adipose the smaller the propertion of fat is from any weight gain / loss 
 WtAdipNew               = MAX(0., integ(dWtAdipNew,iWtAdip))

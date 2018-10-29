@@ -63,7 +63,9 @@ token_list[c("integer", "logical", "doubleprecision", "real", "character")] <- c
 # need to identify inputs and outputs from statements/blocks of statements
 token_decl_line <- setNames(rep(0L, length(token_list)), token_list) # avoid double decl
 token_decl_type <- setNames(rep("", length(token_list)), token_list) # record type
+token_decl_static <- setNames(rep(FALSE, length(token_list)), token_list) # record type
 token_decl_value <- setNames(rep(NA, length(token_list)), token_list) # record parameter values
+token_role <- setNames(rep("", length(token_list)), token_list) # record role
 
 # boolean and a few other conversions (WARNING: new values come first, old names come second!)
 bool_list <- setNames(c("true", "false", "||", "&&", "~", ">=", ">", "<=", "<", "==", "!="),
@@ -259,7 +261,9 @@ for (i in 1:nrow(csl)){
     }
     token_decl_line[parse_list[k+1]] <- i
     token_decl_type[parse_list[k+1]] <- csl$type[i]
+    token_decl_static[parse_list[k+1]] <- TRUE
     token_decl_value[parse_list[k+1]] <- if_else(is.na(as.numeric(parse_list[k+5])), 0, as.numeric(parse_list[k+5]))
+    token_role[parse_list[k+1]] <- "parameter"
     csl$set[i] <- paste(parse_list[k+1], collapse=",")
     csl$handled[i] <- TRUE
 
@@ -305,7 +309,9 @@ for (i in 1:nrow(csl)){
     }
     token_decl_line[parse_list[k+1]] <- i
     token_decl_type[parse_list[k+1]] <- csl$type[i]
+    token_decl_static[parse_list[k+1]] <- TRUE
     token_decl_value[parse_list[k+1]] <- if_else(is.na(as.numeric(parse_list[k+5])), 0, as.numeric(parse_list[k+5]))
+    token_role[parse_list[k+1]] <- "parameter"
     csl$set[i] <- paste(parse_list[k+1], collapse=",")
     csl$handled[i] <- TRUE
 
@@ -393,6 +399,7 @@ for (i in 1:nrow(csl)){
       token_decl_line[parse_list[k+1]] <- i
       token_decl_type[parse_list[k+1]] <- csl$type[i]
       token_decl_value[parse_list[k+1]] <- if_else(is.na(as.numeric(parse_list[k+5])), 0, as.numeric(parse_list[k+5]))
+      token_role[parse_list[k+1]] <- "constant"
       csl$set[i] <- paste(parse_list[k+1], collapse=",")
       csl$handled[i] <- TRUE
 
@@ -414,6 +421,7 @@ for (i in 1:nrow(csl)){
         if (this_array_dim2 > 1){
           stop("illegal array initialisation")
         }
+        token_role[this_array_name] <- "constant_array"
         csl$set[i] <- this_array_name
         csl$handled[i] <- TRUE
       } else {
@@ -600,6 +608,7 @@ for (i in 1:nrow(csl)){
         csl$dend[i] <- ";"
         token_decl_line[jj] <- i
         token_decl_type[jj] <- csl$type[i]
+        token_role[jj] <- "state"
       }
       # initialise even if already initialised
       csl$init[i] <- paste(parse_list[c(2, 4, 14)], collapse=" ")
@@ -611,6 +620,7 @@ for (i in 1:nrow(csl)){
       # integration rate of state variable
       csl$integ[i] <- paste(parse_list[c(2, 4, 10)], collapse=" ")
       if (parse_list[9] == "token"){ # could be a number
+        token_role[parse_list[10]] <- "rate"
         csl$used[i] <- paste(csl$used[i], parse_list[10], sep=",")
       }
       csl$handled[i] <- TRUE
@@ -626,6 +636,7 @@ for (i in 1:nrow(csl)){
         csl$dend[i] <- ";"
         token_decl_line[jj] <- i
         token_decl_type[jj] <- csl$type[i]
+        token_role[jj] <- "slope"
       }
       # initialise even if already initialised
       csl$init[i] <- paste(parse_list[c(2, 4, 10)], collapse=" ")
@@ -634,6 +645,9 @@ for (i in 1:nrow(csl)){
       if (parse_list[9] == "token"){ # because could be a numeric constant
         csl$used[i] <- parse_list[10]
       }
+      # calculate numerical derivative
+      temp <- paste("if ( t > t_previous )", parse_list[2], "= (", parse_list[14], "-", paste(parse_list[14], "_previous", sep=""), ") / ( t - t_previous )", collapse=" ")
+      csl$calc[i] <- temp
       # derivative variable
       csl$integ[i] <- paste(parse_list[c(2, 4, 14)], collapse=" ")
       if (parse_list[13] == "token"){ # could be a number
@@ -643,6 +657,7 @@ for (i in 1:nrow(csl)){
 
     } else if (str_to_lower(paste(parse_list[c(4, 6, 8, 12, 14, 16, 20, 24, 26, 28)], collapse="")) == "=max(,integ(,))na"){
 
+      # FIXME this is not necessary and would be tidier if removed
       jj <- parse_list[2]
       # declare state variable
       if (token_decl_line[jj] != 0){
@@ -656,6 +671,7 @@ for (i in 1:nrow(csl)){
         csl$dend[i] <- ";"
         token_decl_line[jj] <- i
         token_decl_type[jj] <- csl$type[i]
+        token_role[jj] <- "state"
       }
       # initialise even if already initialised
       csl$init[i] <- paste(parse_list[c(2, 4, 6, 8, 10, 12, 22, 24)], collapse=" ")
@@ -667,6 +683,7 @@ for (i in 1:nrow(csl)){
       # integration rate of state variable
       csl$integ[i] <- paste(parse_list[c(2, 4, 6, 8, 10, 12, 18, 24)], collapse=" ")
       if (parse_list[17] == "token"){ # could be a number
+        token_role[parse_list[18]] <- "rate"
         csl$used[i] <- paste(csl$used[i], parse_list[18], sep=",")
       }
       csl$handled[i] <- TRUE
@@ -719,7 +736,7 @@ for (i in 1:nrow(csl)){
     odds <- seq(1, length(parse_list)-1, 2)
     temp <- paste(new_label, paste(parse_list[odds+1], collapse=" "), sep="")
     if (major_section == "header"){
-      stop("can't assign in header")
+      stop("can't assign in header section")
     } else if (major_section == "initial"){
       csl$init[i] <- temp
       csl$delim[i] <- ifelse(will_continue, "", ";")
@@ -861,6 +878,7 @@ for (i in 1:nrow(csl)){
       csl$dend[i] <- ";"
       token_decl_line[parse_list[6]] <- i
       token_decl_type[parse_list[6]] <- csl$type[i]
+      token_role[parse_list[6]] <- "loop_counter"
     }
     # construct loop
     temp <- paste("for ( int", parse_list[6], "=", parse_list[10], ";", parse_list[6], "<=", parse_list[14], "; ++", parse_list[6], ") {", collapse=" ")
@@ -1046,13 +1064,19 @@ for (i in 1:nrow(csl)){
 
 # add collected info back into tokens
 token_decl_line["t"] <- 1
-token_decl_line["procedural"] <- 1
+token_role["t"] <- "t"
+if (!is.na(token_list["procedural"])){
+  token_decl_line["procedural"] <- 1
+  token_role["procedural"] <- "dummy"
+}
 tokens <- data_frame(
   name=token_list,
   lower=names(token_list),
   decl_line=token_decl_line,
   decl_type=token_decl_type,
-  decl_value=token_decl_value
+  decl_value=token_decl_value,
+  decl_static=token_decl_static,
+  role=token_role
   ) %>%
   filter(decl_line>0)
 

@@ -13,7 +13,7 @@ start_time <- 0.00
 time_step <- 0.02
 end_time <- 3.99
 
-initialise_model( start_time )
+initialise_model( start_time , TRUE )
 
 pull_variables_from_model()
 x <- get_spring_variables()
@@ -24,9 +24,12 @@ out_times <- seq( start_time , end_time , time_step )
 cat("start simulation loop\n")
 start_timer <- Sys.time()
 xx <- vector("list", length(out_times))
-initialise_model( start_time )
-i <- 1
-for ( i in 1:length(out_times) ){
+initialise_model( start_time , TRUE )
+pull_variables_from_model()
+x <- get_spring_variables()
+xx[[1]] <- as.list(x)
+i <- 2
+for ( i in 2:length(out_times) ){
   	advance_model( out_times[i] , time_step / 10.0 )
 	pull_variables_from_model()
 	x <- get_spring_variables()

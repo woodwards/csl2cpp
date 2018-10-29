@@ -17,23 +17,28 @@ put_lines <- function(cpp, indent, lines){
 smoosh <- function(...){
   # like paste but remove excess spaces
   str_c(..., sep=" ") %>%
-    str_squish()
+    str_squish( )
 }
 
 make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 
   cat("delay post processing :", delay_post, "\n")
+  class_name <- paste(model_name, "_class", sep="")
+  has_derivt <- any(csl$line_type == "derivt")
 
-	# count variables
+	# state variables
   integ <- csl$integ[csl$line_type == "integ"]
   state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
 	rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", "")) # rate expressions
 	n_state <- length(state)
+	# derivt variables
 	derivt <- csl$integ[csl$line_type == "derivt"]
 	slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
 	slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
 	slopeof <- str_replace_all(slopeof, "= ", "")
-	variable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto") & is.na(tokens$decl_value)]
+	# all variables
+	# variable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto") & is.na(tokens$decl_value)]
+	variable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto") & tokens$decl_static==FALSE]
 	n_variable <- length(variable)
 	cat("n state :", n_state, "\n")
 	cat("n visible :", n_variable, "\n")
@@ -41,7 +46,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	# uninitialised variables after sort
 	assumed_all <- tokens$name[tokens$set_status=="assumed"]
 
-	# browser()
+	# browser( )
 
 	# create an empty vector of strings
 	cpp <- vector("character", nrow(csl) * 2 + 200) # estimate output length
@@ -71,24 +76,40 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	cat("header comments :", sum(rows), "\n")
 
 	# class declaration
-	cpp <- put_lines(cpp, 0, c("", paste("class", model_name, "{"), "",
-	                           "private:", ""))
+	lines <- c("",
+             paste("class", class_name, "{"),
+             "",
+             "private:",
+             "")
+	cpp <- put_lines(cpp, 0, lines)
 
 	# class properties
-	lines <- c("// specify number of variables",
-              paste("static constexpr int n_state_variables =", n_state,";"),
-              paste("static constexpr int n_visible_variables =", n_variable,";"), "",
+	lines <- c("// switches",
+	           "bool print_debug_messages = false;",
+	           "",
+	           "// specify number of variables",
+             paste("static constexpr int n_state_variables =", n_state, ";"),
+             paste("static constexpr int n_visible_variables =", n_variable, ";"),
+	           "",
               "// declare state_type and t",
 	           paste("typedef std::array< double , n_state_variables > state_type;"),
-	           "double t;", "",
+	           "double t;",
+	           ifelse(has_derivt, "double t_previous;", ""),
+	           "",
 	           "// declare event list",
-	           "std::multimap< double , std::string > event_list;", "",
+	           "std::multimap< double , std::string > event_list;",
+	           "",
 	           "// add event",
-	           "void schedule( double event_time, std::string event_name ){", "",
-	           "\tevent_list.insert( std::make_pair( event_time , event_name ) );", "", "}", "",
+	           "void schedule( double event_time, std::string event_name ){",
+	           "",
+	           "\tevent_list.insert( std::make_pair( event_time , event_name ) );",
+	           "",
+	           "}",
+	           "",
 	           "// declare boost::odeint stepper",
              "typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;",
-             "stepper_type stepper;", "")
+             "stepper_type stepper;",
+	           "")
 	cpp <- put_lines(cpp, 1, lines)
 
   #### declare model variables ####
@@ -98,25 +119,23 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	cpp <- put_lines(cpp, 1, lines)
 	cat("declaration lines :", sum(rows), "\n")
 	# declare numerical derivatives
-	if (slopeof>""){
-	  lines <- smoosh("double", paste(slopeof, "_prev", sep=""), ";")
-	  cpp <- put_lines(cpp, 1, lines)
-	  lines <- smoosh("double", paste("t", "_prev", sep=""), ";")
+	if (has_derivt){
+	  lines <- smoosh("double", paste(slopeof, "_previous", sep=""), ";")
 	  cpp <- put_lines(cpp, 1, lines)
 	}
 
   # get state
   cpp <- put_lines(cpp, 1, c("", "state_type get_state ( ) {"))
-  cpp <- put_lines(cpp, 2, c("", "state_type a_state;", "", "// return current state"))
-  lines <- paste("a_state[", 0:(n_state-1), "] = ", state, ";", sep="")
+  cpp <- put_lines(cpp, 2, c("", "state_type current_state;", "", "// return current state"))
+  lines <- paste("current_state[", 0:(n_state-1), "] = ", state, ";", sep="")
   cpp <- put_lines(cpp, 2, lines)
-  cpp <- put_lines(cpp, 2, c("", "return( a_state );"))
+  cpp <- put_lines(cpp, 2, c("", "return( current_state );"))
   cpp <- put_lines(cpp, 1, c("", "} // end get_state", ""))
 
   # set state
-  cpp <- put_lines(cpp, 1, c("void set_state ( state_type a_state ) {"))
+  cpp <- put_lines(cpp, 1, c("void set_state ( state_type this_state ) {"))
   cpp <- put_lines(cpp, 2, c("", "// set state"))
-  lines <- paste(state, " = a_state[", 0:(n_state-1), "];", sep="")
+  lines <- paste(state, " = this_state[", 0:(n_state-1), "];", sep="")
   cpp <- put_lines(cpp, 2, lines)
   cpp <- put_lines(cpp, 1, c("", "} // end set_state"))
 
@@ -125,34 +144,50 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	lines <- c("// unordered_map gives user efficient access to variables by name",
 	           "std::unordered_map< std::string , double > variable;", "")
 	cpp <- put_lines(cpp, 1, lines)
-	lines <- c("// constructor",
-	           paste(model_name, "( ) :"), "")
-	cpp <- put_lines(cpp, 1, lines)
-
 	# array initialisation list (class constructor list)
-	cpp <- put_lines(cpp, 2, c("// array initialisation list",
-	                           "// warning: these are executed in the order of the member declarations"))
 	rows <- csl$ccl > ""
-	csl$dend[max(which(rows))] <- "" # remove last comma
-	lines <- smoosh(csl$ccl[rows], csl$dend[rows], csl$tail[rows])
-	indent <- if_else(str_detect(lines, "^\\{"), 3, 2) # indent array initialisation lines
-	cpp <- put_lines(cpp, indent, lines)
+	if (any(rows)){
+	  lines <- c("// constructor",
+	             paste(class_name, "( ) :"), "")
+	  cpp <- put_lines(cpp, 1, lines)
+	  cpp <- put_lines(cpp, 2, c("// array initialisation list",
+  	                           "// warning: these are executed in the order of the member declarations"))
+  	csl$dend[max(which(rows))] <- "" # remove last comma
+  	lines <- smoosh(csl$ccl[rows], csl$dend[rows], csl$tail[rows])
+  	indent <- if_else(str_detect(lines, "^\\{"), 3, 2) # indent array initialisation lines
+  	cpp <- put_lines(cpp, indent, lines)
+	} else {
+	  lines <- c("// constructor",
+	             paste(class_name, "( )"), "")
+	  cpp <- put_lines(cpp, 1, lines)
+	}
 
 	# constructor body
-	lines <- c("", "// constructor body",
-	           "{", "",
+	lines <- c("",
+	           "// constructor body",
+	           "{",
+	           "",
 	           "\t// reserve buckets to minimise storage and avoid rehashing",
-	           "\tvariable.reserve( n_visible_variables );", "",
-	           "} // end constructor", "")
+	           "\tvariable.reserve( n_visible_variables );",
+	           "",
+	           "} // end constructor",
+	           "")
 	cpp <- put_lines(cpp, 1, lines)
 
 	#### initialise model ####
-	cpp <- put_lines(cpp, 1, c("void initialise_model ( double a_time ) {"))
-	cpp <- put_lines(cpp, 2, c("", "// initialise t", "t = a_time;", ""))
+	cpp <- put_lines(cpp, 1, c("void initialise_model ( double start_time = 0.0 , bool set_debug_status = false ) {"))
+	cpp <- put_lines(cpp, 2, c("",
+	                           "// initialise t",
+	                           "t = start_time;",
+	                           ifelse(has_derivt, "t_previous = t;", ""),
+	                           "",
+	                           "// set debug status",
+	                           "print_debug_messages = set_debug_status;",
+	                           ""))
 	# uninitialised variables
-	if (assumed_all>""){
-  	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables as per ACSLX"))
-  	lines <- paste(assumed_all, "= 5.5555e33 ;")
+	if (length(assumed_all)>0){
+  	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables as per acslx"))
+  	lines <- paste(assumed_all, "= 5.5555e33;")
   	cpp <- put_lines(cpp, 2, lines)
 	}
 	# model initialisation
@@ -173,24 +208,29 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
 	cpp <- put_lines(cpp, indent, lines)
 	# numerical derivatives initial conditions
-	rows <- csl$line_type == "derivt"
-	if (any(rows)){
-  	cpp <- put_lines(cpp, 2, c("", "// initialise numerical derivatives"))
+	if (has_derivt){
+	  rows <- csl$line_type == "derivt"
+	  cpp <- put_lines(cpp, 2, c("", "// initialise numerical derivatives"))
   	lines <- smoosh(csl$init[rows], csl$delim[rows])
-  	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
-  	cpp <- put_lines(cpp, indent, lines)
-  	lines <- smoosh(paste(slopeof, "_prev", sep=""), "=", slopeof, ";")
   	cpp <- put_lines(cpp, 2, lines)
-  	lines <- "t_prev = t ;"
+  	lines <- smoosh(paste(slopeof, "_previous", sep=""), "=", slopeof, ";")
   	cpp <- put_lines(cpp, 2, lines)
 	}
+	# initial rate calculations
+	lines <- c("",
+	           "// initial calculation of rates, for use in events",
+	           "calculate_rate( );",
+	           "")
+	cpp <- put_lines(cpp, 2, lines)
 	# close off
-	cpp <- put_lines(cpp, 1, c("", "} // end initialise_model", ""))
+	cpp <- put_lines(cpp, 1, c("} // end initialise_model", ""))
 
 	# pull variables from model (and constants?)
 	cpp <- put_lines(cpp, 1, "void pull_variables_from_model ( ) {")
-	cpp <- put_lines(cpp, 2, c("", "// pull system time",
-	                           "variable[\"t\"] = t;", "",
+	cpp <- put_lines(cpp, 2, c("",
+	                           "// pull system time",
+	                           "variable[\"t\"] = t;",
+	                           "",
 	                           "// pull model variables"))
 	lines <- paste("variable[\"", variable, "\"] = ", variable, ";", sep="") # implicit type conversion
 	cpp <- put_lines(cpp, 2, lines)
@@ -198,14 +238,16 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 
 	# push variables to model
 	cpp <- put_lines(cpp, 1, "void push_variables_to_model ( ) {")
-	cpp <- put_lines(cpp, 2, c("", "// push system time",
-	                           "t = variable[\"t\"];", "",
+	cpp <- put_lines(cpp, 2, c("",
+	                           "// push system time",
+	                           "t = variable[\"t\"];",
+	                           "",
 	                           "// push model variables"))
 	lines <- paste(variable, " = variable[\"", variable, "\"];", sep="") # implicit type conversion
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end push_variables_to_model", ""))
 
-	####  do events ####
+	#### do next event ####
 	cpp <- put_lines(cpp, 1, c("void do_event ( string next_event ) {", ""))
 	rows <- csl$section == "discrete"
 	if (any(rows)){
@@ -215,20 +257,57 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
   	                 csl$tail[rows])
 	  indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
 	  cpp <- put_lines(cpp, indent, lines)
-	  cpp <- put_lines(cpp, 2, "")
 	}
-	cpp <- put_lines(cpp, 1, c("} // end do_event", ""))
 	cat("event lines :", sum(rows), "\n")
+	cpp <- put_lines(cpp, 1, c("", "} // end do_event", ""))
 
-	#### derivt function ####
-	# cpp <- put_lines(cpp, 1, c("double derivt( double dx0, double x ) {", "",
-	#                            "\treturn( 0.0 ) ;", "",
-	#                            "}", ""))
+	#### do all current events ####
+	cpp <- put_lines(cpp, 1, c("double do_current_events ( double max_next_time ) {", ""))
+	lines <- c("static constexpr double eps = 0.00001;",
+	           "double next_time = max_next_time;",
+	           "",
+	           "if (print_debug_messages) {",
+	           "\tstd::cout << \"event check at\" << \'\\t\' << t << std::endl;",
+	           "}",
+	           "",
+	           "do {",
+	           "\tif ( event_list.begin( ) == event_list.end( ) ){",
+	           "\t\t// no events",
+	           "\t\tnext_time = max_next_time + 1;",
+	           "\t} else if ( event_list.begin( )->first < t - eps ) {",
+	           "\t\t// missed event (handle bugs)",
+	           "\t\tevent_list.erase( event_list.begin( ) );",
+	           "\t\tnext_time = t - 1;",
+	           "\t} else if ( event_list.begin( )->first < t + eps ) {",
+	           "\t\tif (print_debug_messages) {",
+	           "\t\t\tstd::cout << \"event at\" << \'\\t\' << t << std::endl;",
+	           "\t\t}",
+	           "\t\tdo_event( event_list.begin( )->second );",
+	           "\t\tevent_list.erase( event_list.begin( ) );",
+	           "\t\tnext_time = t - 1;",
+	           "\t} else {",
+	           "\t\t// next event",
+	           "\t\tnext_time = event_list.begin( )->first;",
+	           "\t}",
+	           "} while ( next_time < t + eps );",
+	           "",
+	           "next_time = std::min( max_next_time, next_time );",
+	           "",
+	           "if (print_debug_messages) {",
+	           "\tstd::cout << \"next event at\" << \'\\t\' << next_time << std::endl;",
+	           "}",
+	           "",
+	           "return( next_time );",
+	           "")
+	cpp <- put_lines(cpp, 2, lines)
+	cpp <- put_lines(cpp, 1, c("} // end do_current_events", ""))
 
 	#### calculate rate ####
 	cpp <- put_lines(cpp, 1, "void calculate_rate ( ) {")
 	# rate calculation from derivative section
-	cpp <- put_lines(cpp, 2, c("", "// derivative calculations"))
+	cpp <- put_lines(cpp, 2, c("",
+	                           "// derivative calculations",
+	                           ""))
 	rows <- which(csl$section == "derivative" & (csl$dep == "for_rate" | delay_post==FALSE))
 	lines <- if_else(csl$calc[rows] > "",
 	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
@@ -260,76 +339,90 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	cat("post processing 2 lines :", length(rows), "\n")
 	cpp <- put_lines(cpp, 1, c("", "} // end post_processing", ""))
 
-	# rate operator
-	cpp <- put_lines(cpp, 1, c("// rate operator called by boost::odeint::integrate()",
-	                           "void operator()( const state_type &a_state , state_type &a_rate, double a_time ){", ""))
-	cpp <- put_lines(cpp, 2, c("// calculate rate",
-	                           "t = a_time;",
-	                           "set_state( a_state );",
-	                           "calculate_rate();", "",
+	#### rate operator ####
+	cpp <- put_lines(cpp, 1, c("// rate operator called by boost::odeint::integrate( )",
+	                           "void operator( )( const state_type &odeint_state , state_type &odeint_rate, double odeint_time ){",
+	                           ""))
+	cpp <- put_lines(cpp, 2, c("",
+	                           "// calculate rate",
+	                           "set_state( odeint_state );",
+	                           "t = odeint_time;",
+	                           "calculate_rate( );",
+	                           "",
 	                           "// return rate"))
-	lines <- paste("a_rate[", 0:(n_state-1), "] ", rate, ";", sep="")
+	lines <- paste("odeint_rate[", 0:(n_state-1), "] ", rate, ";", sep="")
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end rate operator", ""))
 
-	# observer operator
-	cpp <- put_lines(cpp, 1, c("// observer operator called by boost::odeint::integrate()",
-	                           "void operator()( const state_type &a_state , double a_time ){", ""))
-	rows <- csl$line_type == "derivt"
-	if (any(rows)){
-  	cpp <- put_lines(cpp, 2, c("", "// calculate numerical derivatives"))
-  	lines <- smoosh(slope, "= (", slopeof, "-", paste(slopeof, "_prev", sep=""), ") / ( t - t_prev ) ;")
+	#### observer operator ####
+	lines <- c("// observer operator called by boost::odeint::integrate( )",
+	           "// https://stackoverflow.com/questions/12150160/odeint-streaming-observer-and-related-questions",
+	           "void operator( )( const state_type &odeint_state , double odeint_time ){",
+	           "")
+	cpp <- put_lines(cpp, 1, lines)
+	if (has_derivt){
+	  lines <- c("if (print_debug_messages) {",
+	             "\tstd::cout << \"observer at\" << \'\\t\' << odeint_time << \'\\t\' << t_previous << std::endl;",
+	             "}",
+	             "",
+	             "// calculate rates",
+	             "set_state( odeint_state );",
+	             "t = odeint_time;",
+	             "calculate_rate( );",
+	             "",
+	             "// reset numerical derivatives (keep existing slopes)"
+	             )
+	  cpp <- put_lines(cpp, 2, lines)
+  	lines <- smoosh(paste(slopeof, "_previous", sep=""), "=", slopeof, ";")
   	cpp <- put_lines(cpp, 2, lines)
-  	lines <- smoosh(paste(slopeof, "_prev", sep=""), "=", slopeof, ";")
-  	cpp <- put_lines(cpp, 2, lines)
-  	lines <- "t_prev = t ;"
+  	lines <- c("t_previous = odeint_time;", "")
   	cpp <- put_lines(cpp, 2, lines)
 	}
-	cpp <- put_lines(cpp, 1, c("", "} // end observer operator ", ""))
+	cpp <- put_lines(cpp, 1, c("} // end observer operator ", ""))
 
-	# advance method
-	lines <- c("int advance_model ( double end_time , double time_step ) {", "")
+	#### take a step ####
+	cpp <- put_lines(cpp, 1, c("int step_to_next_time ( double next_time , double time_step ) {", ""))
+	cpp <- put_lines(cpp, 2, c("state_type odeint_state;",
+	                           "double odeint_time;",
+	                           "int nsteps;", ""))
+	lines <- c("if (print_debug_messages) {",
+	           "\tstd::cout << \"start integ at\" << \'\\t\' << t << std::endl;",
+	           "}",
+	           "",
+	           "odeint_state = get_state( );",
+	           "odeint_time = t;",
+	           "// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class",
+	           "nsteps = boost::numeric::odeint::integrate_const( stepper , std::ref(*this) , odeint_state, odeint_time , next_time , time_step , std::ref(*this) );",
+	           "set_state( odeint_state );",
+	           "t = next_time;", "",
+	           "return( nsteps );", "")
+	cpp <- put_lines(cpp, 2, lines)
+	cpp <- put_lines(cpp, 1, c("} // end step_to_next_time", ""))
+
+	#### advance model method ####
+	lines <- c("int advance_model ( double advance_time , double time_step ) {", "")
 	cpp <- put_lines(cpp, 1, lines)
 	lines <- c(
-	  "double next_time = end_time;",
-	  "static constexpr double eps = 0.00001;",
-	  "state_type a_state;",
-	  "double a_time;",
-	  "int nsteps = 0;", "",
-	  "while ( t < end_time ) {", "",
+	  "double next_time;",
+	  "int nsteps = 0;",
+	  "",
+	  "do {",
+	  "",
 	  "\t// do current events",
-	  "\tdo {",
-	  "\t\tif ( event_list.begin() == event_list.end() ){",
-	  "\t\t\t// no events",
-	  "\t\t\tnext_time = end_time + 1;",
-	  "\t\t} else if ( event_list.begin()->first < t - eps ) {",
-	  "\t\t\t// missed event",
-	  "\t\t\tevent_list.erase( event_list.begin() );",
-	  "\t\t\tnext_time = t - 1;",
-	  "\t\t} else if ( event_list.begin()->first < t + eps ) {",
-	  "\t\t\tdo_event( event_list.begin()->second );",
-	  "\t\t\tevent_list.erase( event_list.begin() );",
-	  "\t\t\tnext_time = t - 1;",
-	  "\t\t} else {",
-	  "\t\t\t// next event",
-	  "\t\t\tnext_time = event_list.begin()->first;",
-	  "\t\t}",
-	  "\t} while ( next_time < t + eps ) ;", "",
-	  "\t// advance model to next event or end_time",
-	  "\ta_state = get_state();",
-	  "\ta_time = t;",
-	  "\tnext_time = std::min( end_time, next_time );",
-	  "\t// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class",
-	  "\tnsteps += boost::numeric::odeint::integrate_const( stepper , *this , a_state, a_time , next_time , time_step , *this );",
-	  "\tset_state( a_state );",
-	  "\tt = next_time;",
-	  "\tcalculate_rate();",
-	  "\tpost_processing();",
-	  "", "}", "",
-	  "return( nsteps );")
+	  "\tnext_time = do_current_events( advance_time );",
+	  "",
+	  "\t// advance model to next event or advance_time",
+	  "\tnsteps += step_to_next_time( next_time , time_step );",
+	  "",
+	  "} while ( t < advance_time );",
+	  "",
+	  "post_processing( );",
+	  "",
+	  "return( nsteps );"
+	  )
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end advance_model"))
-	cpp <- put_lines(cpp, 0, c("", "}; // end class", ""))
+	cpp <- put_lines(cpp, 0, c("", paste("}; // end ", class_name, sep=""), ""))
 
 	cat("total lines :", length(cpp), "\n")
 

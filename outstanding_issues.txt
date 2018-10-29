@@ -16,6 +16,7 @@ Issues
 - handling of TERMINAL section not checked
 - logic used to identify uninitialised variables may not be very robust
 - SCHEDULE must be on its own line
+- INTERVAL must be on its own line
 - INTEG must be on it's own line
 - DERIVT must be on it's own line
 - control variables IALG, CINT, MAXT, MINT, NSTP are treated as parameters, but not used
@@ -23,17 +24,16 @@ Issues
 
 To Do
 
-- Link molly.cpp into the WFM
+- link molly.cpp into the WFM
 - make arrays visible to user
 - handle M files
 - divide by zero errors
 - run time testing
 - version control
-- should the model call do_events and calculate_rate as part of initialisation? ACSL does this but we might want to give more control to the user.
 
 Opportunities
 
 - detect instabilities in the model, sudden changes in variables
 - optimise step size and integration method
-
+- remove redundant code
 

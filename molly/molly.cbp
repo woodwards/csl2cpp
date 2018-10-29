@@ -31,6 +31,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option="-Wno-reorder" />
 			<Add directory="C:/boost/boost_1_66_0" />
 		</Compiler>
 		<Unit filename="main.cpp" />

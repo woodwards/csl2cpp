@@ -5,7 +5,7 @@
 #   INITIAL, set state, control variables, DERIVATIVE (sorted), DISCRETE, DYNAMIC, TERMINAL
 # constant statement can be anywhere in the code "they are not executable" (p3-2)
 # integ statement can be anywhere in the code, initial conditions applied after INITIAL (p3-1, 3-3)
-# derivt statement similarly
+# derivt calculation can be dependent on other code
 # DYNAMIC block statements are actually after DERIVATIVE and DISCRETE
 # a handful of variables are "assumed", i.e. used without being set first
 # ACSLX initialises all variables to weird values but we want to avoid this
@@ -25,7 +25,7 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
   csl$assumed <- ""
 
   # extract model state and rate variables
-  integ <- csl$integ[csl$integ > ""]
+  integ <- csl$integ[csl$line_type == "integ"]
   state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
   rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
   rate <- str_replace_all(rate, "= ", "")
@@ -48,19 +48,21 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
   token_set_line[set] <- 1
 
   # add fake variable to avoid an empty set list on procedurals
-  token_set_status["procedural"] <- "set"
-  token_set_line["procedural"] <- 1
+  if ("procedural" %in% tokens$name){
+    token_set_status["procedural"] <- "set"
+    token_set_line["procedural"] <- 1
+  }
 
   # work through remaining code (sections have already been reorganised)
   active <- (csl$set>"" | csl$used>"") &
-    !(csl$line_type %in% c("parameter", "constant", "procedural", "integ", "derivt"))
+    !(csl$line_type %in% c("parameter", "constant", "procedural", "integ"))
   rows <- which(active)
   did_continue <- FALSE
   for (i in rows){
     # set state variables?
     if (is.na(token_set_line["t"]) & !(csl$line_type[i] %in% c("header", "initial"))){
       # integ statements set state (and t) at end of INITIAL section(s?)
-      # derivt statements calculate derivative at end of each time step
+      # derivt statements calculate derivative
       # only set ones that are not already flagged, we want to know if any are previous assumed
       set <- c("t", state)
       bad <- token_set_status[set] == "uninit"

@@ -7,31 +7,30 @@
 
 #include "spring.cpp"
 
-spring my_spring;
-
+spring_class spring;
 
 // [[Rcpp::export]]
-void initialise_model( double t ){
-  	my_spring.initialise_model( t );
+void initialise_model( double t = 0 , bool debug = false ){
+  	spring.initialise_model( t , debug );
 }
 
 // [[Rcpp::export]]
 void pull_variables_from_model(){
-  	my_spring.pull_variables_from_model();
+  	spring.pull_variables_from_model();
 }
 
 // https://stackoverflow.com/questions/34181135/converting-an-stdmap-to-an-rcpplist
 // [[Rcpp::export]]
 Rcpp::NumericVector get_spring_variables(){
 	Rcpp::NumericVector my_vector;
-    my_vector = my_spring.variable; // coerces unordered_map to named vector
+    my_vector = spring.variable; // coerces unordered_map to named vector
     return my_vector;
 }
 
 // [[Rcpp::export]]
 int advance_model( double t , double dt ){
   	int nsteps;
-  	nsteps = my_spring.advance_model( t , dt );
+  	nsteps = spring.advance_model( t , dt );
   	return nsteps;
 }
 

@@ -43,8 +43,8 @@ new_i <- c(
 csl <- csl[new_i,] # sort in this order
 csl$dep <- "" # add equation dependence to rate calculations
 
-# get model state and rate variables
-integ <- csl$integ[csl$integ > ""]
+# get model state, rate and derivt variables
+integ <- csl$integ[csl$line_type == "integ"]
 state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
 rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
 rate <- str_replace_all(rate, "= ", "")
@@ -53,6 +53,10 @@ temp <- str_split(rate, " ") # returns list of vectors of strings
 for (ii in i){
   rate[ii] <- temp[[ii]][5]
 }
+derivt <- csl$integ[csl$line_type == "derivt"]
+slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
+slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
+slopeof <- str_replace_all(slopeof, "= ", "")
 
 # paste and unique and sort a vector of comma separated strings (not vectorised)
 # supplying a second argument also allows you to remove elements (using setdiff)
@@ -68,6 +72,9 @@ paste_sort <- function(x,y=""){
 comma_split <- function(s){
   if (is.na(s)) { "" } else { str_split(s, ",", simplify=TRUE)[1,] }
 }
+
+# load dependence function
+source("csl2cpp_dependence.r")
 
 # warn user
 if (sum(csl$line_type=="derivative")>1) {
@@ -112,7 +119,7 @@ while (length(sortable)>0){
   )
 
   # these lines have no effect on sorting of code (at most they effect decl and init)
-  inactive <- c("integ", "comment", "blank", "derivative", "end", "termt", "sort", "derivt",
+  inactive <- c("integ", "comment", "blank", "derivative", "end", "termt", "sort",
                 "derivative_sorted", "sort_sorted",
                 "algorithm", "maxterval", "minterval", "cinterval", "nsteps",
                 "constant", "parameter",
@@ -469,6 +476,7 @@ while (length(sortable)>0){
 } # end while
 
 #### finally reanalyse variable dependence ####
+cat("reanalyse variable dependence", "\n")
 tokens <- csl_dependence(csl, tokens, silent=FALSE)
 assumed_all <- tokens$name[tokens$set_status=="assumed"]
 

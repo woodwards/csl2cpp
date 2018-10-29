@@ -48,7 +48,6 @@ source("csl2cpp_do_parse_one.r")
 source("csl2cpp_do_parse_two.r")
 
 # sort lines and analyse variable dependence
-source("csl2cpp_dependence.r") # load functions
 source("csl2cpp_do_parse_three.r")
 
 # make C++ code
