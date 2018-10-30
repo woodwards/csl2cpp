@@ -40,6 +40,17 @@ as_numeric <- function(x, default=555){
   suppressWarnings(if_else(is.na(as.numeric(x)), default, as.numeric(x)))
 }
 
+# ensnakify
+ensnakeify <- function(x) {
+  x %>%
+    iconv(to="ASCII//TRANSLIT") %>% # remove accents
+    str_replace_na() %>% # convert NA to string
+    str_to_lower() %>% # convert to lower case
+    str_replace_all(pattern="[^[:alnum:]]", replacement=" ") %>% # convert non-alphanumeric to space
+    str_trim() %>% # trim leading and trailing spaces
+    str_replace_all(pattern="\\s+", replacement="_") # convert remaining spaces to underscore
+}
+
 # change all comments to C++ style
 csl$tail <- str_trim(str_replace(csl$tail, "^! ?", "// "))
 
@@ -1007,8 +1018,8 @@ for (i in 1:nrow(csl)){
     csl$handled[labeli] <- TRUE
 
   }
-  #### handle line_type = program, derivative, initial, discrete, dynamic, terminal, procedural ####
-  if (csl$line_type[i] %in% c("program", "initial", "derivative", "discrete", "dynamic", "terminal", "procedural")){
+  #### handle line_type = program, derivative, initial, discrete, dynamic, terminal, procedural, mfile ####
+  if (csl$line_type[i] %in% c("program", "initial", "derivative", "discrete", "dynamic", "terminal", "procedural", "mfile")){
 
     # these blocks are not needed in C++, remove indent
     if (!is_continuation && csl$line_type[i] %in% c("program", "initial", "derivative", "dynamic", "terminal", "procedural")){
@@ -1018,6 +1029,14 @@ for (i in 1:nrow(csl)){
     # program
     if (csl$line_type[i] %in% c("program")){
       token_role[parse_list[4]] <- "program_name"
+    }
+    # mfile
+    if (csl$line_type[i] %in% c("mfile")){
+      mfile_name <- ensnakeify(csl$file_name[i])
+      class_name <- paste(model_name, "_class", sep="")
+      temp <- paste("void", mfile_name, "(", class_name, paste("&", model_name, sep=""), ")")
+      csl$mfile[i] <- temp
+      csl$delim[i] <- ";"
     }
     # procedural input=output list is used for sorting
     if (csl$line_type[i] %in% c("procedural")){
@@ -1097,13 +1116,16 @@ for (i in 1:nrow(csl)){
       csl$tail[i] <- paste("// end of", csl$line_type[j], csl$tail[i])
       csl$handled[i] <- TRUE
 
-    } else { # closes an ifthen or discrete
+    } else { # closes an ifthen or discrete or mfile
 
       if (major_section == "initial"){
         csl$init[i] <- "}"
         csl$delim[i] <- ""
       } else if (major_section == "discrete"){
         csl$disc[i] <- "}"
+        csl$delim[i] <- ""
+      } else if (major_section == "mfile"){
+        csl$mfile[i] <- "}"
         csl$delim[i] <- ""
       } else {
         csl$calc[i] <- "}"

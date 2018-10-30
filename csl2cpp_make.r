@@ -429,13 +429,25 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	cpp <- put_lines(cpp, 0, c("", paste("}; // end ", class_name, sep=""), ""))
 
 	#### mfiles ####
-	lines <- c("",
-	           "// create an instance",
-	           paste(class_name, model_name, ";"),
-	           "")
-	cpp <- put_lines(cpp, 0, lines)
-
-
+	mfilesi <- which(csl$line_type=="mfile")
+	while (length(mfilesi)>0){
+	  # next mfile
+	  starti <- mfilesi[[1]]
+	  endi <- csl$stack[starti]
+	  lines <- c("",
+	             smoosh(csl$mfile[starti], csl$delim[starti]),
+	             "")
+	  cpp <- put_lines(cpp, 0, lines)
+	  rows <- seq(starti+1, endi-1)
+	  lines <- smoosh(csl$mfile[rows], csl$delim[rows])
+	  cpp <- put_lines(cpp, 1, lines)
+	  lines <- c("",
+	             smoosh(csl$mfile[endi], csl$delim[endi])
+	             )
+	  cpp <- put_lines(cpp, 0, lines)
+    # any more mfiles?
+	  mfilesi <- tail(mfilesi, -1)
+	}
 
 	cat("total lines :", length(cpp), "\n")
 
