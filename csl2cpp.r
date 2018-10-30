@@ -8,6 +8,7 @@ library(tidyverse)
 csl_file <- "spring/Spring.csl"
 csl_file <- "molly/Molly.csl"
 csl_file <- "molly/Molly2.csl"
+m_files <- c("Params 2014.m")
 
 # split file names
 file_name <- str_extract(csl_file,  "[:alpha:]+[[:alnum:]_]*\\.csl")
@@ -17,7 +18,7 @@ model_name <- path_name
 # get code
 cat(file=stderr(), "reading code", "\n")
 source("csl2cpp_read.r") # load functions
-csl <- read_csl(csl_file) # read lines
+csl <- read_csl(csl_file, m_files) # read lines
 
 # write aggregated raw csl
 if (csl_file == "molly/Molly.csl"){
@@ -55,7 +56,7 @@ temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
 load(temp_file)
 cat(file=stderr(), "making cpp code", "\n")
 source("csl2cpp_make.r") # load functions
-cpp <- make_cpp(csl, tokens, model_name, delay_post=TRUE)
+cpp <- make_cpp(csl, tokens, model_name, delay_post=FALSE)
 cpp_df <- as_data_frame(cpp)
 cat(file=stderr(), "writing cpp code", "\n")
 source("csl2cpp_write.r") # load functions

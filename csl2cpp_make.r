@@ -428,6 +428,15 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	cpp <- put_lines(cpp, 1, c("", "} // end advance_model"))
 	cpp <- put_lines(cpp, 0, c("", paste("}; // end ", class_name, sep=""), ""))
 
+	#### mfiles ####
+	lines <- c("",
+	           "// create an instance",
+	           paste(class_name, model_name, ";"),
+	           "")
+	cpp <- put_lines(cpp, 0, lines)
+
+
+
 	cat("total lines :", length(cpp), "\n")
 
 	return(cpp)

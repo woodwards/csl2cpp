@@ -28,7 +28,7 @@ cat("sorting method :", sorting_method, "\n")
 # FIXME could cause errors if SORT keyword in DYNAMIC section?
 # FIXME can't handle multiple DYNAMIC sections
 cat("reorganise major sections\n")
-major_sections <- c("header", "initial", "dynamic", "derivative", "discrete", "terminal")
+major_sections <- c("header", "initial", "dynamic", "derivative", "discrete", "terminal", "mfile")
 if (!all(csl$section %in% major_sections)){
   stop("unknown major section")
 }
@@ -38,7 +38,8 @@ new_i <- c(
   which(csl$section %in% c("discrete")), # possibly executed before time step
   which(csl$section %in% c("derivative")),
   which(csl$section %in% c("dynamic")), # executed after time step
-  which(csl$section %in% c("terminal"))
+  which(csl$section %in% c("terminal")),
+  which(csl$section %in% c("mfile"))
 )
 csl <- csl[new_i,] # sort in this order
 csl$dep <- "" # add equation dependence to rate calculations

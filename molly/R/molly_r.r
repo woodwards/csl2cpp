@@ -16,28 +16,31 @@ Sys.setenv("PKG_CXXFLAGS"="-Wno-reorder") # suppress array initialisation warnin
 sourceCpp("main_r.cpp")
 # sourceCpp("main_r.cpp", rebuild=TRUE)
 
-# initialise model
-# does not reset constants, only reruns initialise_model() and initialises state variables
-# FIXME maybe we should also run discrete and derivative etc at this point
+# model run
 start_time <- 0.0
 output_step <- 1
-time_step <- output_step / 10.0
+time_step <- 0.001
 end_time <- 300
+out_times <- seq( start_time , end_time , output_step )
+xx <- vector("list", length(out_times))
+# initialise model
 cat("initialise model\n")
-initialise_model( start_time , TRUE )
+debug = FALSE
+initialise_model( start_time , debug )
 x00 <- get_molly_variables()
-x00[!is.finite(x00)]
+# x00[!is.finite(x00)]
+# stopifnot(all(is.finite(x00))) # some variables are not initialised
+xx[[1]] <- as.list(x00)
 # loop through time
 cat("start simulation loop\n")
 start_timer <- Sys.time()
-out_times <- seq( start_time , end_time , output_step )
-xx <- vector("list", length(out_times))
-xx[[1]] <- as.list(x00)
 i <- 2
 nsteps <- 0
 for ( i in 2:length(out_times) ){
   	nsteps <- nsteps + advance_model( out_times[i] , time_step )
 	x <- get_molly_variables()
+	# x[!is.finite(x)]
+	stopifnot(all(is.finite(x)))
 	xx[[i]] <- as.list(x)
 }
 print(Sys.time() - start_timer)
@@ -48,7 +51,7 @@ xx <- bind_rows(xx) # collect output
 # cols <- which(colvals!=1)
 # cols <- sample(cols, 6)
 getvars <- c("t", "dEating", "WtPUter", "LhorAdip") # to compare to external results
-getvars <- c("t", "NonUterEBW", "dNonUterEBW", "iBW", "iFdRat", "WtGrvUter", "EBW1", "WtOth","WtAdip","WtVis","WaPool","WaPoolTarget")
+getvars <- c("t", "NonUterEBW", "dNonUterEBW", "WtGrvUter", "EBW1", "WtOth","WtAdip","WtVis","WaPool","WaPoolTarget")
 # getvars <- c("t", "LowMfDecay", "dLowMfDecay", "kMamCellsUsMfDecay", "CumulativeLowMfDays")
 cols <- which(names(xx) %in% getvars)
 xx1 <- xx[,cols]
@@ -66,7 +69,7 @@ names(x1) <- names(xx)
 names(x1)[!is.finite(x1)]
 
 # plot traces
-halfway <- 2
+halfway <- 50
 trans_atan <- trans_new(name="atan",
 						transform=function(x) atan(x/halfway),
 						inverse=function(y) halfway*tan(y))

@@ -1,6 +1,6 @@
 # read csl file and includes
 
-read_csl <- function(csl_file){
+read_csl <- function(csl_file, m_files=""){
 
   #
   drop_comments=FALSE
@@ -60,6 +60,31 @@ read_csl <- function(csl_file){
   if (drop_comments){ # drop comments and blank lines
     csl <- csl %>%
       filter(!str_detect(code, "^[:blank:]*\\!") & !str_detect(code, "^[:blank:]*$"))
+  }
+
+  # append m_files
+  for (file_name in m_files){
+
+    # read file
+    cat(file=stderr(), paste("reading", file_name), "\n")
+    file_path <- paste(path_name, "/", file_name, sep="")
+    include_mfile <- read_lines(file_path) %>%
+      iconv(to="ASCII//TRANSLIT") %>% # remove accents
+      as_tibble() %>%
+      rename(code=value)
+    include_mfile <- rbind(tibble(code=paste("MFILE !", file_name)),
+                           include_mfile,
+                           tibble(code=paste("END !", file_name)))
+    include_mfile$file_name <- file_name
+    include_mfile$line_number <- 1:nrow(include_mfile)
+    include_mfile$seq_number <- 1:nrow(include_mfile) + nrow(csl)
+
+    # modify comments from % to !
+    include_mfile$code <- str_replace(include_mfile$code, "%", "!")
+
+    # append to csl
+    csl <- rbind(csl, include_mfile)
+
   }
 
   return(csl)
