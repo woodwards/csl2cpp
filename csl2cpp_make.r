@@ -36,12 +36,14 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
 	slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
 	slopeof <- str_replace_all(slopeof, "= ", "")
-	# all variables
-	# variable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto") & is.na(tokens$decl_value)]
-	variable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto") & tokens$decl_static==FALSE]
-	n_variable <- length(variable)
-	cat("n state :", n_state, "\n")
-	cat("n visible :", n_variable, "\n")
+	# pullable and pushable variables
+	pullable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto")]
+	n_pullable <- length(pullable)
+	pushable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto") & tokens$decl_static==FALSE]
+  n_pushable <- length(pushable)
+  cat("n state :", n_state, "\n")
+  cat("n pullable :", n_pullable, "\n")
+  cat("n pushable :", n_pushable, "\n")
 
 	# uninitialised variables after sort
 	assumed_all <- tokens$name[tokens$set_status=="assumed"]
@@ -89,7 +91,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	           "",
 	           "// specify number of variables",
              paste("static constexpr int n_state_variables =", n_state, ";"),
-             paste("static constexpr int n_visible_variables =", n_variable, ";"),
+             paste("static constexpr int n_pullable_variables =", n_pullable, ";"),
 	           "",
               "// declare state_type and t",
 	           paste("typedef std::array< double , n_state_variables > state_type;"),
@@ -168,7 +170,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	           "{",
 	           "",
 	           "\t// reserve buckets to minimise storage and avoid rehashing",
-	           "\tvariable.reserve( n_visible_variables );",
+	           "\tvariable.reserve( n_pullable_variables );",
 	           "",
 	           "} // end constructor",
 	           "")
@@ -225,14 +227,15 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	# close off
 	cpp <- put_lines(cpp, 1, c("} // end initialise_model", ""))
 
-	# pull variables from model (and constants?)
+	# pull variables from model (and constants)
+	# FIXME would be faster if we pull variables variables separately from constants
 	cpp <- put_lines(cpp, 1, "void pull_variables_from_model ( ) {")
 	cpp <- put_lines(cpp, 2, c("",
 	                           "// pull system time",
 	                           "variable[\"t\"] = t;",
 	                           "",
 	                           "// pull model variables"))
-	lines <- paste("variable[\"", variable, "\"] = ", variable, ";", sep="") # implicit type conversion
+	lines <- paste("variable[\"", pullable, "\"] = ", pullable, ";", sep="") # implicit type conversion
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end pull_variables_from_model", ""))
 
@@ -243,7 +246,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	                           "t = variable[\"t\"];",
 	                           "",
 	                           "// push model variables"))
-	lines <- paste(variable, " = variable[\"", variable, "\"];", sep="") # implicit type conversion
+	lines <- paste(pushable, " = variable[\"", pushable, "\"];", sep="") # implicit type conversion
 	cpp <- put_lines(cpp, 2, lines)
 	cpp <- put_lines(cpp, 1, c("", "} // end push_variables_to_model", ""))
 
