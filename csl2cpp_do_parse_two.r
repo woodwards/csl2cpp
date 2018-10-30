@@ -1033,10 +1033,10 @@ for (i in 1:nrow(csl)){
     # mfile
     if (csl$line_type[i] %in% c("mfile")){
       mfile_name <- ensnakeify(csl$file_name[i])
-      class_name <- paste(model_name, "_class", sep="")
-      temp <- paste("void", mfile_name, "(", class_name, paste("&", model_name, sep=""), ")")
+      class_name <- paste(model_name, "_class&", sep="")
+      temp <- paste("static void", mfile_name, "(", class_name, model_name, ") {")
       csl$mfile[i] <- temp
-      csl$delim[i] <- ";"
+      csl$delim[i] <- ""
     }
     # procedural input=output list is used for sorting
     if (csl$line_type[i] %in% c("procedural")){

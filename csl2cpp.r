@@ -60,6 +60,6 @@ cpp <- make_cpp(csl, tokens, model_name, delay_post=FALSE)
 cpp_df <- as_data_frame(cpp)
 cat(file=stderr(), "writing cpp code", "\n")
 source("csl2cpp_write.r") # load functions
-write_cpp(cpp, path_name, model_name, "cpp")
+write_cpp(cpp, path_name, model_name, "h")
 
 

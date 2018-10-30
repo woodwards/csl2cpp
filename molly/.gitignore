@@ -25,3 +25,4 @@ checkpoint_after_parse_two.RData
 checkpoint_after_read.RData
 checkpoint_after_parse_three.RData
 molly.cpp
+molly.h

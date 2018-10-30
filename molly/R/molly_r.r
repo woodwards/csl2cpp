@@ -51,7 +51,7 @@ xx <- bind_rows(xx) # collect output
 # cols <- which(colvals!=1)
 # cols <- sample(cols, 6)
 getvars <- c("t", "dEating", "WtPUter", "LhorAdip") # to compare to external results
-getvars <- c("t", "NonUterEBW", "dNonUterEBW", "WtGrvUter", "EBW1", "WtOth","WtAdip","WtVis","WaPool","WaPoolTarget")
+# getvars <- c("t", "NonUterEBW", "dNonUterEBW", "WtGrvUter", "EBW1", "WtOth","WtAdip","WtVis","WaPool","WaPoolTarget")
 # getvars <- c("t", "LowMfDecay", "dLowMfDecay", "kMamCellsUsMfDecay", "CumulativeLowMfDays")
 cols <- which(names(xx) %in% getvars)
 xx1 <- xx[,cols]
@@ -69,7 +69,7 @@ names(x1) <- names(xx)
 names(x1)[!is.finite(x1)]
 
 # plot traces
-halfway <- 50
+halfway <- 5
 trans_atan <- trans_new(name="atan",
 						transform=function(x) atan(x/halfway),
 						inverse=function(y) halfway*tan(y))

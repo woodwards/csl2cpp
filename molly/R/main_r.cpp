@@ -5,13 +5,18 @@
 // Boost headers
 // [[Rcpp::depends(BH)]]
 
-#include "molly.cpp"
+#include "molly.h"
 
 molly_class molly;
 
 // [[Rcpp::export]]
 void initialise_model( double start_time = 0.0 , bool set_debug_status = false ){
   	molly.initialise_model( start_time , set_debug_status );
+}
+
+// [[Rcpp::export]]
+void call_params_2014_m( ){
+	params_2014_m( molly );
 }
 
 // https://stackoverflow.com/questions/34181135/converting-an-stdmap-to-an-rcpplist
