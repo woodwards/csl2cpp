@@ -2,19 +2,16 @@ Short list of known issues/to do for csl2cpp
 csl2cpp is a series of R scripts to translate ACSLX CSL models to C++
 Simon Woodward, DairyNZ 2018
 
-Issues
+Notes
 
 - acslx.exe can't build models if C:\Program Files\Git\bin\sh.exe is in the path
 - acslx.exe can't build models if C:\RTools\3.4\bin\sh.exe is in the path
 - this translation project only covers the subset of ACSL functionality that we needed
 - IMPLC, IMPVC implicit systems not handled
 - currently assumes Runge-Kutta-4 integration method
-- power operator needs to be manually translated (^ and ** are converted to *pow(1,1)*)
-- C++ min and max functions can't mix int and double, need to fix manually
+- converts first level integer literals to double in min and max functions since C++ can't mixed arguments
 - strings are not visible to user, string functions not handled
-- arrays are not visible to user
 - handling of TERMINAL section not checked
-- logic used to identify uninitialised variables may not be very robust
 - SCHEDULE must be on its own line
 - INTERVAL must be on its own line
 - INTEG must be on it's own line

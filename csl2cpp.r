@@ -1,13 +1,16 @@
 # csl2cpp translator script
 # Simon Woodward, DairyNZ Ltd, 2018
+# please read the documentation
+# note: the CSL file might require minor changes
+# note: the resulting CPP file also might require minor changes
 
 # libraries
 library(tidyverse)
 
-# source
+# point to csl and mfile source
 csl_file <- "spring/Spring.csl"
 csl_file <- "molly/Molly.csl"
-csl_file <- "molly/Molly2.csl"
+# csl_file <- "molly/Molly2.csl"
 m_files <- c("Params 2014.m")
 
 # split file names
@@ -51,7 +54,7 @@ source("csl2cpp_do_parse_two.r")
 # sort lines and analyse variable dependence
 source("csl2cpp_do_parse_three.r")
 
-# make C++ code
+# make C++ file
 temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
 load(temp_file)
 cat(file=stderr(), "making cpp code", "\n")

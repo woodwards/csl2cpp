@@ -35,7 +35,7 @@
 			<Add directory="C:/boost/boost_1_66_0" />
 		</Compiler>
 		<Unit filename="main.cpp" />
-		<Unit filename="molly.cpp" />
+		<Unit filename="molly.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

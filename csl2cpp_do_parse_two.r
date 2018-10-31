@@ -51,6 +51,96 @@ ensnakeify <- function(x) {
     str_replace_all(pattern="\\s+", replacement="_") # convert remaining spaces to underscore
 }
 
+# handle min max functions
+handle_minmax <- function(parse_list, file_name, line_number){
+  odds <- seq(1, length(parse_list)-1, 2)
+  kk <- which( parse_list[odds] %in% "token" & parse_list[odds+1] %in% c("min", "max")) * 2 - 1
+  for (k in kk){
+    # search right
+    nest <- 0
+    j <- k
+    repeat {
+      j <- j + 2
+      if (is.na(parse_list[j])){
+        break # just do as much as we can
+        # cat("min or max function across multiple lines not handled\n")
+      } else if (parse_list[j] == "openbracket"){
+        nest <- nest + 1
+      } else if (parse_list[j] == "closebracket"){
+        nest <- nest - 1
+      } else if (nest == 1 & parse_list[j] == "int"){ # convert nest 1 integers to double
+        original <- parse_list[j+1]
+        dotted <- paste(original, ".", sep="")
+        parse_list[j] <- "double"
+        parse_list[j+1] <- dotted
+        cat(file_name, line_number, "converted", original, "to", dotted, "in min() or max()\n")
+      }
+      if (nest==0){
+        break
+      }
+    }
+  }
+  return(parse_list)
+}
+
+# handle power operators
+handle_pow <- function(parse_list){
+  odds <- seq(1, length(parse_list)-1, 2)
+  k <- which( parse_list[odds] == "power" ) * 2 - 1
+  while (length(k)>0){
+    k <- k[[1]]
+    # convert operator to comma
+    parse_list[k] <- "comma"
+    parse_list[k+1] <- ","
+    # search right
+    nest <- 0
+    j <- k
+    repeat {
+      j <- j + 2
+      if (is.na(parse_list[j])){
+        stop("power operator across multiple lines not handled")
+      } else if (parse_list[j] == "openbracket"){
+        nest <- nest + 1
+      } else if (parse_list[j] == "closebracket"){
+        nest <- nest - 1
+      }
+      if (nest==0){
+        break
+      }
+    }
+    parse_list <- append(parse_list, c("closebracket", ")"), j+1)
+    # search left
+    nest <- 0
+    j <- k
+    repeat {
+      j <- j - 2
+      if (is.na(parse_list[j])){
+        stop("power operator across multiple lines not handled")
+      } else if (parse_list[j] == "closebracket"){
+        nest <- nest + 1
+      } else if (parse_list[j] == "openbracket"){
+        nest <- nest - 1
+      }
+      if (nest==0){
+        break
+      }
+    }
+    parse_list <- append(parse_list, c("openbracket", "pow ("), j-1)
+    # any more power operators?
+    odds <- seq(1, length(parse_list)-1, 2)
+    k <- which( parse_list[odds] == "power" ) * 2 - 1
+  }
+  return(parse_list)
+}
+
+# handle mfile tokens
+handle_mfile<- function(parse_list){
+  odds <- seq(1, length(parse_list)-1, 2)
+  k <- which( parse_list[odds] == "token" & parse_list[odds+1] %in% pullable ) * 2 - 1
+  parse_list[k+1] <- paste(model_name, ".variable[\"", parse_list[k+1], "\"]", sep="")
+  return(parse_list)
+}
+
 # change all comments to C++ style
 csl$tail <- str_trim(str_replace(csl$tail, "^! ?", "// "))
 
@@ -113,12 +203,17 @@ for (i in 1:nrow(csl)){
     # new major section
     major_section_stack <- c(csl$line_type[i], major_section_stack)
     major_section <- major_section_stack[1]
-    cat("code line", csl$line_number[i], "major section starts:", major_section, "\n")
+    cat(csl$file_name[i], csl$line_number[i], "major section starts:", major_section, "\n")
+    if (major_section == "mfile"){
+      # find pullable and pushable variables
+      pullable <- tokens$name[token_decl_type %in% c("double", "int", "bool", "auto")]
+      pushable <- tokens$name[token_decl_type %in% c("double", "int", "bool", "auto") & token_decl_static==FALSE]
+    }
   } else if (csl$line_type[i] == "end" ){
     # check for end of major section
     if (csl$line_type[csl$stack[i]] %in% major_sections){
       major_section <- major_section_stack[1]
-      cat("code line", csl$line_number[i], "major section ends:", major_section, "\n")
+      cat(csl$file_name[i], csl$line_number[i], "major section ends:", major_section, "\n")
       major_section_stack <- tail(major_section_stack, -1)
     } else {
       major_section <- major_section_stack[1]
@@ -151,11 +246,6 @@ for (i in 1:nrow(csl)){
   # make concatenated version of original line for use in messages
   odds <- seq(1, length(parse_list)-1, 2)
   parse_str <- paste(parse_list[odds+1], collapse=" ")
-
-  # mark power as *pow(1,1)* (user will need to change this later) since C++ uses ^ for pointer
-  odds <- seq(1, length(parse_list)-1, 2)
-  k <- which( parse_list[odds] == "power" ) * 2 - 1
-  parse_list[k+1] <- "*pow(1,1)*"
 
   # change array brackets from (,) to [][], reverse indices, and subtract 1
   # warning CSL has 1-indexing and C++ has 0-indexing
@@ -236,6 +326,32 @@ for (i in 1:nrow(csl)){
     }
   }
 
+  #### mark power operator ####
+  odds <- seq(1, length(parse_list)-1, 2)
+  k <- which( parse_list[odds] == "power" ) * 2 - 1
+  has_power <- length(k)>0
+  if (length(k)>0 & !(csl$line_type[i] %in% c("assign", "arrayassign"))){
+    message <- paste(csl$file_name[i], csl$line_number[i], ": power operators ** ^ not handled except in assignment lines")
+    stop(message)
+  }
+
+  #### mark min and max functions ####
+  odds <- seq(1, length(parse_list)-1, 2)
+  k <- which( parse_list[odds] == "token" & parse_list[odds+1] %in% c("min", "max") ) * 2 - 1
+  has_minmax <- length(k)>0
+  if (length(k)>0 & !(csl$line_type[i] %in% c("assign", "arrayassign", "integ"))){
+    message <- paste(csl$file_name[i], csl$line_number[i], ": min() max() not corrected except in assignment and integ lines")
+  }
+
+  #### these tokens must be on their own lines ###
+  odds <- seq(1, length(parse_list)-1, 2)
+  k <- which( parse_list[odds] == "token" &  parse_list[odds+1] %in% c("integ", "derivt", "schedule", "interval")) * 2 - 1
+  if (length(k)>0 & any(parse_list[k+1] != csl$line_type[i])){
+    message <- paste(csl$file_name[i], csl$line_number[i], ": these operators must be on their own line : integ derivt schedule interval")
+    stop(message)
+  }
+
+
   #### pause at specific line ####
   # stopifnot(i<4447)
 
@@ -263,7 +379,7 @@ for (i in 1:nrow(csl)){
     bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
     if (any(bad)){
       message <- paste("parameter on existing variable:", paste(parse_list[k+1][bad], collapse=" "))
-      cat("code line", csl$line_number[i], message, "\n")
+      cat(csl$file_name[i], csl$line_number[i], message, "\n")
       # delete previous declarations
       for (j in parse_list[k+1][bad]){
         # remove j from previous declaration
@@ -311,7 +427,7 @@ for (i in 1:nrow(csl)){
     if (any(bad)){
       stop()
       message <- paste("control using existing variable:", paste(parse_list[k+1][bad], collapse=" "))
-      cat("code line", csl$line_number[i], message, "\n")
+      cat(csl$file_name[i], csl$line_number[i], message, "\n")
       # delete previous declarations
       for (j in parse_list[k+1][bad]){
         # remove j from previous declaration
@@ -400,7 +516,7 @@ for (i in 1:nrow(csl)){
       bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
       if (any(bad)){
         message <- paste("constant on existing variable:", paste(parse_list[k+1][bad], collapse=" "))
-        cat("code line", csl$line_number[i], message, "\n")
+        cat(csl$file_name[i], csl$line_number[i], message, "\n")
         # delete previous declarations
         for (j in parse_list[k+1][bad]){
           # remove j from previous declaration
@@ -535,7 +651,7 @@ for (i in 1:nrow(csl)){
         # single dimension fixed size array
         message <- paste("detected 1d array:", parse_str)
         arrays <- c(arrays, parse_str)
-        cat("code line", csl$line_number[i], message, "\n")
+        cat(csl$file_name[i], csl$line_number[i], message, "\n")
         csl$static[i] <- ""
         csl$type[i] <- paste("std::array< double ,", parse_list[8], "> ")
         csl$decl[i] <- parse_list[4]
@@ -556,7 +672,7 @@ for (i in 1:nrow(csl)){
         # https://stackoverflow.com/questions/11610338/how-to-initialise-a-member-array-of-class-in-the-constructor
         message <- paste("detected 2d array:", parse_str)
         arrays <- c(arrays, parse_str)
-        cat("code line", csl$line_number[i], message, "\n")
+        cat(csl$file_name[i], csl$line_number[i], message, "\n")
         csl$static[i] <- ""
         csl$type[i] <- paste("std::array< std::array< double ,", parse_list[8], "> ,", parse_list[12], "> ") # need to reverse indices
         csl$decl[i] <- parse_list[4]
@@ -589,7 +705,7 @@ for (i in 1:nrow(csl)){
       bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
       if (any(bad)){
         message <- paste("redeclaration:", paste(parse_list[k+1][bad], collapse=" "))
-        cat("code line", csl$line_number[i], message, "\n")
+        cat(csl$file_name[i], csl$line_number[i], message, "\n")
         # update previous declaration
         for (j in parse_list[k+1][bad]){
           csl$type[token_decl_line[j]] <- this_type
@@ -623,7 +739,7 @@ for (i in 1:nrow(csl)){
       # declare state variable
       if (token_decl_line[jj] != 0){
         message <- paste("previously declared integ:", jj)
-        cat("code line", csl$line_number[i], message, "\n")
+        cat(csl$file_name[i], csl$line_number[i], message, "\n")
         # don't declare again
       } else {
         csl$static[i] <- ""
@@ -686,7 +802,7 @@ for (i in 1:nrow(csl)){
       # declare state variable
       if (token_decl_line[jj] != 0){
         message <- paste("previously declared integ:", jj)
-        cat("code line", csl$line_number[i], message, "\n")
+        cat(csl$file_name[i], csl$line_number[i], message, "\n")
         # don't declare again
       } else {
         csl$static[i] <- ""
@@ -696,6 +812,10 @@ for (i in 1:nrow(csl)){
         token_decl_line[jj] <- i
         token_decl_type[jj] <- csl$type[i]
         token_role[jj] <- "state"
+      }
+      # handle_minmax - does not change length of parse_list
+      if (has_minmax){
+        parse_list <- handle_minmax(parse_list, csl$file_name[i], csl$line_number[i])
       }
       # initialise even if already initialised
       csl$init[i] <- paste(parse_list[c(2, 4, 6, 8, 10, 12, 22, 24)], collapse=" ")
@@ -717,7 +837,7 @@ for (i in 1:nrow(csl)){
       # can't handle this type
       odds <- seq(1, length(parse_list)-1, 2)
       message <- paste("unhandled form of integ or derivt:", paste(parse_list[odds+1], collapse=" "))
-      cat("code line", csl$line_number[i], message, "\n")
+      cat(csl$file_name[i], csl$line_number[i], message, "\n")
 
     }
 
@@ -735,7 +855,7 @@ for (i in 1:nrow(csl)){
         }
         csl$set[i] <- parse_list[k+1]
         if (token_role[parse_list[k+1]] %in% unassignable){
-          message <- paste("code line", csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1]])
+          message <- paste(csl$file_name[i], csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1]])
           stop(message)
         } else if (token_role[parse_list[k+1]] == ""){
           token_role[parse_list[k+1]] <- "assigned"
@@ -755,7 +875,7 @@ for (i in 1:nrow(csl)){
         k <- 1
         csl$set[i] <- parse_list[k+1]
         if (token_role[parse_list[k+1]] %in% unassignable){
-          message <- paste("code line", csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1]])
+          message <- paste(csl$file_name[i], csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1]])
           stop(message)
         } else if (token_role[parse_list[k+1]] == ""){
           token_role[parse_list[k+1]] <- "assigned_array"
@@ -769,6 +889,12 @@ for (i in 1:nrow(csl)){
       new_label=""
     }
     # assignment
+    if (has_power){
+      parse_list <- handle_pow(parse_list)
+    }
+    if (has_minmax){
+      parse_list <- handle_minmax(parse_list, csl$file_name[i], csl$line_number[i])
+    }
     odds <- seq(1, length(parse_list)-1, 2)
     temp <- paste(new_label, paste(parse_list[odds+1], collapse=" "), sep="")
     if (major_section == "header"){
@@ -811,9 +937,15 @@ for (i in 1:nrow(csl)){
       k <- 1
     }
     # assignment to class property
-    temp_list <- parse_list
-    temp_list[k+1] <- paste(model_name, ".variable[\"", temp_list[k+1], "\"]", sep="")
-    temp <- paste(new_label, paste(temp_list[odds+1], collapse=" "), sep="")
+    if (has_power){
+      parse_list <- handle_pow(parse_list)
+    }
+    if (has_minmax){
+      parse_list <- handle_minmax(parse_list, csl$file_name[i], csl$line_number[i])
+    }
+    parse_list <- handle_mfile(parse_list)
+    odds <- seq(1, length(parse_list)-1, 2)
+    temp <- paste(new_label, paste(parse_list[odds+1], collapse=" "), sep="")
     csl$mfile[i] <- temp
     csl$delim[i] <- ";"
 
@@ -837,7 +969,7 @@ for (i in 1:nrow(csl)){
     if (length(k)>0){
       csl$set[i] <- paste(parse_list[k+1], collapse=",")
       if (token_role[parse_list[k+1]] %in% unassignable){
-        message <- paste("code line", csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1]])
+        message <- paste(csl$file_name[i], csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1]])
         stop(message)
       } else if (token_role[parse_list[k+1]] == ""){
         token_role[parse_list[k+1]] <- "assigned"
@@ -848,7 +980,7 @@ for (i in 1:nrow(csl)){
     } else if (this_array_name>"") { # array assignment
       csl$set[i] <- this_array_name
       if (token_role[this_array_name] %in% unassignable){
-        message <- paste("code line", csl$line_number[i], ": illegal assignment to", token_role[this_array_name])
+        message <- paste(csl$file_name[i], csl$line_number[i], ": illegal assignment to", token_role[this_array_name])
         stop(message)
       } else if (token_role[this_array_name] == ""){
         token_role[this_array_name] <- "assigned_array"

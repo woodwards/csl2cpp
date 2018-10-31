@@ -8,6 +8,12 @@ library(scales)
 cpp <- read_tsv("molly_cpp_output.tsv",
 				col_names=c("nsteps", "t", "dEating", "WtPUter", "LhorAdip")) %>%
 	gather(key, value, -t, -nsteps)
+# change to UTF-8 encoding
+csl <- read_tsv("molly_csl_output.tsv",
+				skip=1,
+				col_names=c("t", "dEating", "t2", "WtPUter", "t3", "LhorAdip")) %>%
+	select(-t2, -t3) %>%
+	gather(key, value, -t)
 
 # compile model
 cat("sourceCpp(main_r.cpp)\n")
@@ -69,13 +75,13 @@ names(x1) <- names(xx)
 names(x1)[!is.finite(x1)]
 
 # plot traces
-halfway <- 5
+halfway <- 1
 trans_atan <- trans_new(name="atan",
 						transform=function(x) atan(x/halfway),
 						inverse=function(y) halfway*tan(y))
 p1 <- ggplot() +
-	labs(title="Some outputs from Molly.cpp!", y="Combined scale") +
-	geom_point(data=cpp, mapping=aes(x=t, y=value, colour=key), pch=1, size=2, alpha=0.3) +
+	labs(title="Circles = Molly.csl, Lines = Molly.cpp", y="Combined scale") +
+	geom_point(data=csl, mapping=aes(x=t, y=value, colour=key), pch=1, size=2, alpha=0.3) +
 	geom_path(data=xx2, mapping=aes(x=t, y=value, colour=key), size=1) +
 	# coord_cartesian(ylim=c(0.0, 50)) +
 	coord_trans(y=trans_atan) +

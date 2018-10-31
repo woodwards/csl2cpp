@@ -326,21 +326,25 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	# post processing from derivative section
 	cpp <- put_lines(cpp, 2, c("", "// post processing calculations from derivative"))
 	rows <- which(csl$section == "derivative" & (csl$dep == "" & delay_post==TRUE))
-	lines <- if_else(csl$calc[rows] > "",
-	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
-	                 csl$tail[rows])
-	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
-	cpp <- put_lines(cpp, indent, lines)
-	cat("post processing 1 lines :", length(rows), "\n")
+	if (length(rows)>0){
+  	lines <- if_else(csl$calc[rows] > "",
+  	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
+  	                 csl$tail[rows])
+  	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
+  	cpp <- put_lines(cpp, indent, lines)
+  	cat("post processing 1 lines :", length(rows), "\n")
+	}
 	# and also dynamic section
 	cpp <- put_lines(cpp, 2, c("", "// post processing calculations from dynamic"))
 	rows <- which(csl$section == "dynamic")
-	lines <- if_else(csl$calc[rows] > "",
-	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
-	                 csl$tail[rows])
-	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
-	cpp <- put_lines(cpp, indent, lines)
-	cat("post processing 2 lines :", length(rows), "\n")
+	if (length(rows)>0){
+  	lines <- if_else(csl$calc[rows] > "",
+  	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
+  	                 csl$tail[rows])
+  	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
+  	cpp <- put_lines(cpp, indent, lines)
+  	cat("post processing 2 lines :", length(rows), "\n")
+	}
 	cpp <- put_lines(cpp, 1, c("", "} // end post_processing", ""))
 
 	#### rate operator ####
