@@ -29,11 +29,6 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
   state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
   rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
   rate <- str_replace_all(rate, "= ", "")
-  i <- which(str_detect(rate, "^max \\( ")) # handle = max ( , ) form
-  temp <- str_split(rate, " ") # returns list of vectors of strings
-  for (ii in i){
-    rate[ii] <- temp[[ii]][5]
-  }
   derivt <- csl$integ[csl$line_type == "derivt"]
   slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
   slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
@@ -95,20 +90,20 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
       # analyse line
       set <- set[set>""]
       if (any(set %in% c("t"))){
-        stop(paste("code line", csl$line_number[i], ": assignment to t in", csl$section[i], "\n"))
+        stop(paste(csl$file_name[i], csl$line_number[i], ": assignment to t in", csl$section[i], "\n"))
       }
       if (any(set %in% c(state)) & !silent){
-        cat(paste("code line", csl$line_number[i], ": assignment to state variable in", csl$section[i], "\n"))
+        cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to state variable in", csl$section[i], "\n"))
       }
       if (any(set %in% c(rate)) & csl$section[i]!="derivative" & !silent){
-        cat(paste("code line", csl$line_number[i], ": assignment to rate variable in", csl$section[i], "\n"))
+        cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to rate variable in", csl$section[i], "\n"))
       }
       used <- used[used>""]
       if (any(used %in% c("t")) & !(csl$section[i] %in% c("dynamic", "discrete", "derivative"))){
-        stop(paste("code line", csl$line_number[i], ": use of t in", csl$section[i], "\n"))
+        stop(paste(csl$file_name[i], csl$line_number[i], ": use of t in", csl$section[i], "\n"))
       }
       if (any(used %in% c(state)) & !(csl$section[i] %in% c("dynamic", "discrete", "derivative")) & !silent){
-        cat(paste("code line", csl$line_number[i], ": use of state variable in", csl$section[i], "\n"))
+        cat(paste(csl$file_name[i], csl$line_number[i], ": use of state variable in", csl$section[i], "\n"))
       }
       if (!any(used>"")){ # set only (e.g. initialisation with constant)
         if (csl$section[i] != "discrete"){ # assume discrete sections do not set anything

@@ -49,11 +49,6 @@ integ <- csl$integ[csl$line_type == "integ"]
 state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
 rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
 rate <- str_replace_all(rate, "= ", "")
-i <- which(str_detect(rate, "^max \\( ")) # handle = max ( , ) form
-temp <- str_split(rate, " ") # returns list of vectors of strings
-for (ii in i){
-  rate[ii] <- temp[[ii]][5]
-}
 derivt <- csl$integ[csl$line_type == "derivt"]
 slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
 slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))

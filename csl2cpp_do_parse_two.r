@@ -141,6 +141,38 @@ handle_mfile<- function(parse_list){
   return(parse_list)
 }
 
+# get array dimensions
+get_array_size <- function(array_name, arrays, token_decl_value){
+  this_array <- arrays[str_detect(arrays, paste("^double", array_name, "\\(", sep="[:blank:]+"))]
+  temp <- str_split(this_array, "\\s")[[1]]
+  this_array_name <- temp[2]
+  this_array_dims <- 1
+  this_array_row <- 1
+  columns <- temp[4]
+  if (str_detect(temp[4], "^[0-9]+$")){
+    this_array_dim1 <- as.integer(temp[4])
+  } else {
+    this_array_dim1 <- token_decl_value[temp[4]]
+  }
+  this_array_dim2 <- 1
+  rows <- ""
+  if (temp[5] == ","){
+    this_array_dims <- 2
+    rows <- temp[6]
+    if (str_detect(temp[6], "^[0-9]+$")){
+      this_array_dim2 <- as.integer(temp[6])
+    } else {
+      this_array_dim2 <- token_decl_value[temp[6]]
+    }
+  }
+  return(list(name=this_array_name,
+              dims=this_array_dims,
+              columns=columns,
+              dim1=this_array_dim1,
+              rows=rows,
+              dim2=this_array_dim2))
+}
+
 # change all comments to C++ style
 csl$tail <- str_trim(str_replace(csl$tail, "^! ?", "// "))
 
@@ -170,6 +202,8 @@ token_list[c("integer", "logical", "doubleprecision", "real", "character")] <- c
 # need to identify inputs and outputs from statements/blocks of statements
 token_decl_line <- setNames(rep(0L, length(token_list)), token_list) # avoid double decl
 token_decl_type <- setNames(rep("", length(token_list)), token_list) # record type
+token_decl_rows <- setNames(rep("", length(token_list)), token_list) # record array rows
+token_decl_columns <- setNames(rep("", length(token_list)), token_list) # record array columns
 token_decl_static <- setNames(rep(FALSE, length(token_list)), token_list) # record type
 token_decl_value <- setNames(rep(NA, length(token_list)), token_list) # record parameter values
 
@@ -186,6 +220,9 @@ bool_list <- setNames(c("true", "false", "||", "&&", "!", ">=", ">", "<=", "<", 
 
 # collect arrays
 arrays <- ""
+
+# array bound checking (use .at() instead of [])
+check_bounds <- TRUE
 
 # loop through rows again
 major_sections <- c("initial", "dynamic", "derivative", "discrete", "terminal", "mfile")
@@ -247,7 +284,7 @@ for (i in 1:nrow(csl)){
   odds <- seq(1, length(parse_list)-1, 2)
   parse_str <- paste(parse_list[odds+1], collapse=" ")
 
-  # change array brackets from (,) to [][], reverse indices, and subtract 1
+  #### change array brackets from (,) to [][], reverse indices, and subtract 1 ####
   # warning CSL has 1-indexing and C++ has 0-indexing
   # also index order is reversed
   # CSL
@@ -261,6 +298,11 @@ for (i in 1:nrow(csl)){
   #              { 2.0 , 625 , 3.5 , 5 , 4 } } }
   # FirstEvent = InitCond [ Animal - 1 ][ 4 - 1 ] ;
   # FIXME only works if array access all on one line, no brackets or commas inside access
+  # C++
+  #	std::vector< std::vector< double > > InitCond ; // declare
+  #	: InitCond( MaxAnimals , std::vector< double > ( MaxInitValues , 0.0 ) ) , // size
+  #	InitCond = { { 1.0 , 550 , 3.5 , 1 , 4 } ,
+  #              { 2.0 , 625 , 3.5 , 5 , 4 } } ; // initialise (resizes)
   # note: using %in% works even when lead() or lag() returns NA
   odds <- seq(1, length(parse_list)-1, 2)
   k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) %in% "openbracket" ) * 2 - 1
@@ -272,21 +314,21 @@ for (i in 1:nrow(csl)){
       this_array_dims <- if_else(temp[5] == ",", 2, 1)
       jj <- j + 2
       parse_list[jj] <- "openarray"
-      parse_list[jj+1] <- "["
+      parse_list[jj+1] <- if_else(check_bounds, ".at(", "[")
       if (this_array_dims == 1){
         odds <- seq(jj+2, length(parse_list)-1, 2)
         jj1 <- odds[which( parse_list[odds] == "closebracket" )[1]]
         parse_list[jj1] <- "closearray"
-        parse_list[jj1+1] <- "- 1 ]"
+        parse_list[jj1+1] <- if_else(check_bounds, "- 1 )", "- 1 ]")
       } else if (this_array_dims == 2){
         odds <- seq(jj+2, length(parse_list)-1, 2)
         jj1 <- odds[which( parse_list[odds] == "comma" )[1]]
         parse_list[jj1] <- "arraycomma"
-        parse_list[jj1+1] <- "- 1 ]["
+        parse_list[jj1+1] <- if_else(check_bounds, "- 1 ).at(", "- 1 ][")
         odds <- seq(jj1+2, length(parse_list)-1, 2)
         jj2 <- odds[which( parse_list[odds] == "closebracket" )[1]]
         parse_list[jj2] <- "closearray"
-        parse_list[jj2+1] <- "- 1 ]"
+        parse_list[jj2+1] <- if_else(check_bounds, "- 1 )", "- 1 ]")
         # check for unhandled cases
         odds <- seq(jj+2, jj2-2, 2)
         k <- which( parse_list[odds] == "openbracket" )
@@ -455,42 +497,141 @@ for (i in 1:nrow(csl)){
     csl$handled[i] <- TRUE
 
   }
+  #### handle line_type = integer, character, doubleprecision, logical, real, dimension (including arrays) ####
+  if (csl$line_type[i] %in% c("integer", "character", "doubleprecision", "logical", "real", "dimension")){
+
+    # these are explicit type declarations
+    # other variables are declared implictly by being assigned or initialised using "constant"
+
+    # check for array declaration? FIXME rather simplistic logic
+    odds <- seq(1, length(parse_list)-1, 2)
+    j <- which( parse_list[odds] == "token" & lead(parse_list[odds],1) %in% "openbracket" ) * 2 - 1
+    is_array <- length(j) > 0
+
+    #### (a) array declaration ####
+    if (is_array){ # array declaration only
+
+      # commas indicate number of dimensions (FIXME only handles simple cases)
+      odds <- seq(1, length(parse_list)-1, 2)
+      j <- which( parse_list[odds] == "comma" ) * 2 - 1
+      if (length(j) == 0){
+
+        # https://www.learncpp.com/cpp-tutorial/6-15-an-introduction-to-stdarray/
+        # std::arrays can only be initialized in the C++11 class constructor list
+        # // https://stackoverflow.com/questions/10694689/how-to-initialize-an-array-in-c-objects
+        # // https://stackoverflow.com/questions/33714866/initialize-stdarray-of-classes-in-a-class-constructor
+        # std::array<int,2> a ; // 2 elements
+        # std::array<int,2> a = {{ 13, 18 }} ; // note std::array requires one pair of extra outer braces
+        # a[0] // base zero
+        # single dimension fixed size array
+        message <- paste("detected 1d array:", parse_str)
+        arrays <- c(arrays, parse_str)
+        cat(csl$file_name[i], csl$line_number[i], message, "\n")
+        csl$static[i] <- ""
+        # csl$type[i] <- paste("std::array< double ,", parse_list[8], "> ")
+        csl$type[i] <- "std::vector< double >" # new version uses std::vector
+        csl$decl[i] <- parse_list[4]
+        csl$dend[i] <- ";"
+        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+        token_decl_line[parse_list[4]] <- i
+        token_decl_type[parse_list[4]] <- csl$type[i]
+        token_decl_columns[parse_list[4]] <- parse_list[8]
+        token_decl_rows[parse_list[4]] <- ""
+        csl$handled[i] <- TRUE
+
+      } else if (length(j) == 1){
+
+        # https://stackoverflow.com/questions/17759757/multidimensional-stdarray
+        # https://en.cppreference.com/w/cpp/container/array/operator_at
+        # std::array<std::array<int,3>,2> a ; // 2 rows, 3 columns
+        # std::array<std::array<int,3>,2> a = {{{1,2,3}, {4,5,6}}} ; // note std::array requires one pair of extra outer braces
+        # a[2-1][3-1] // note axis order
+        # two dimensional fixed size array
+        # https://stackoverflow.com/questions/11610338/how-to-initialise-a-member-array-of-class-in-the-constructor
+        message <- paste("detected 2d array:", parse_str)
+        arrays <- c(arrays, parse_str)
+        cat(csl$file_name[i], csl$line_number[i], message, "\n")
+        csl$static[i] <- ""
+        # csl$type[i] <- paste("std::array< std::array< double ,", parse_list[8], "> ,", parse_list[12], "> ") # need to reverse indices
+        csl$type[i] <- "std::vector< std::vector< double > >" # new version uses std::vector
+        csl$decl[i] <- parse_list[4]
+        csl$dend[i] <- ";"
+        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+        token_decl_line[parse_list[4]] <- i
+        token_decl_type[parse_list[4]] <- csl$type[i]
+        token_decl_columns[parse_list[4]] <- parse_list[8]
+        token_decl_rows[parse_list[4]] <- parse_list[12]
+        csl$handled[i] <- TRUE
+
+      } else {
+
+        # unhandled
+        stop("only handles 1,2 dimensional arrays")
+
+      }
+
+    } # end array declaration
+
+    #### (b) non-array declaration ####
+    if (!is_array){
+
+      #
+      stopifnot(!is_continuation) # FIXME does not work for is_continuation
+      this_type <- parse_list[2] # C++ type
+      parse_list[1:2] <- c("comma" , ",") # put fake comma at start of list to make it easier to parse
+
+      # update previous declarations
+      odds <- seq(1, length(parse_list)-1, 2)
+      k <- which( parse_list[odds] == "token" & lag(parse_list[odds], 1) %in% "comma") * 2 - 1 # find variables
+      bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
+      if (any(bad)){
+        message <- paste("redeclaration:", paste(parse_list[k+1][bad], collapse=" "))
+        cat(csl$file_name[i], csl$line_number[i], message, "\n")
+        # update previous declaration
+        for (j in parse_list[k+1][bad]){
+          csl$type[token_decl_line[j]] <- this_type
+          cat("updated type of", j, "on code line", csl$line_number[token_decl_line[j]], "\n")
+        }
+      }
+      # declare variables
+      if (any(!bad)){
+        csl$static[i] <- ""
+        csl$type[i] <- this_type
+        csl$decl[i] <- paste(parse_list[k+1][!bad], collapse=" , ") # variable list
+        csl$dend[i] <- ";"
+        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
+        token_decl_line[parse_list[k+1][!bad]] <- i
+        token_decl_type[parse_list[k+1][!bad]] <- csl$type[i]
+      }
+
+    } # end non-array declaration
+
+  }
   #### handle line_type = constant ####
   if (csl$line_type[i] %in% c("constant")){
 
-    # note: a CSL CONSTANT is just an initialiser, values can be changed later!!!
+    # note: a CSL CONSTANT is just an initialiser, values can be changed later (although this will raise a warning)
     # the value is set before the INITIAL section
     # CONSTANT is used to
     # (a) declare and initialise a list of variables (lots of = signs)
-    # (b) initialise a declared array (single = on first line)
+    # (b) initialise a declared array (single = on first line) like a C++ list initialiser
     # both of these can have continuation
-    # FIXME can't handle simple initialisations that break across lines?
+    # FIXME can't handle simple initialisations that break across lines
 
     # get array size (array will/must be already declared)
     if (!is_continuation){
       odds <- seq(1, length(parse_list)-1, 2)
       k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) %in% "equals" ) * 2 - 1
       is_array <- length(k) == 1 && any(str_detect(arrays, paste("^double", parse_list[k+1], "\\(", sep="[:blank:]+")))
-      if (is_array){ # set array details
-        this_array <- arrays[str_detect(arrays, paste("^double", parse_list[k+1], "\\(", sep="[:blank:]+"))]
-        temp <- str_split(this_array, "\\s")[[1]]
-        this_array_name <- temp[2]
-        this_array_dims <- 1
+      if (is_array){ # set array details (carry over to continuation)
+        temp <- get_array_size(parse_list[k+1], arrays, token_decl_value)
+        this_array_name <- temp$name
+        this_array_dims <- temp$dims
+        this_array_dim1 <- temp$dim1 # columns!
+        token_decl_columns[this_array_name] <- temp$columns
+        this_array_dim2 <- temp$dim2 # rows!
+        token_decl_rows[this_array_name] <- temp$rows
         this_array_row <- 1
-        if (str_detect(temp[4], "^[0-9]+$")){
-          this_array_dim1 <- as.integer(temp[4])
-        } else {
-          this_array_dim1 <- token_decl_value[temp[4]]
-        }
-        this_array_dim2 <- 1
-        if (temp[5] == ","){
-          this_array_dims <- 2
-          if (str_detect(temp[6], "^[0-9]+$")){
-            this_array_dim2 <- as.integer(temp[6])
-          } else {
-            this_array_dim2 <- token_decl_value[temp[6]]
-          }
-        }
       } else {
         this_array <- ""
       }
@@ -545,7 +686,6 @@ for (i in 1:nrow(csl)){
     } else if (!is_continuation){ # set array first line
 
       # FIXME assumes each line is an exact row of data
-      # https://en.cppreference.com/w/cpp/container/array
       # // https://stackoverflow.com/questions/10694689/how-to-initialize-an-array-in-c-objects
       # // https://stackoverflow.com/questions/33714866/initialize-stdarray-of-classes-in-a-class-constructor
       # a = {{1,2,3}} ; // note std::array requires one pair of extra outer braces
@@ -553,10 +693,11 @@ for (i in 1:nrow(csl)){
       if (max(parse_list[10], "", na.rm=TRUE) == "*"){
         # replicator format for 1d array e.g. MamCellsF = MaxHerds * 0.0
         temp <- paste(rep(parse_list[12], this_array_dim1), collapse=" , ")
-        temp <- paste(parse_list[4], " { { ", temp, " } } ", sep="")
+        # temp <- paste(parse_list[4], " { { ", temp, " } } ", sep="")
+        temp <- paste(parse_list[4], " = { ", temp, " } ", sep="") # new version assigns to std::vector
         # print(temp) # print array parsing
         csl$ccl[i] <- temp
-        csl$dend[i] <- ","
+        csl$dend[i] <- ";"
         if (this_array_dim2 > 1){
           stop("illegal array initialisation")
         }
@@ -566,11 +707,14 @@ for (i in 1:nrow(csl)){
       } else {
         # explicit array initialisation
         if (length(parse_list) == 6 & will_continue){ # handle empty first lines e.g. CONSTANT Event = &
-          temp <- paste(parse_list[4], " { { ", sep="")
+          # temp <- paste(parse_list[4], " { { ", sep="")
+          temp <- paste(parse_list[4], " = { ", sep="") # new version assigns to std::vector
           this_array_row <- this_array_row - 1 # this line doesn't count
         } else { # first line contains a whole row
-          outer <- if_else(this_array_dims == 2, "{ {", "{")
-          ender <- if_else(will_continue, ",", if_else(this_array_dims == 2, "} }", "}"))
+          # outer <- if_else(this_array_dims == 2, "{ {", "{")
+          # ender <- if_else(will_continue, ",", if_else(this_array_dims == 2, "} }", "}"))
+          outer <- if_else(this_array_dims == 2, "= {", "=") # new version assigns to std::vector
+          ender <- if_else(will_continue, ",", if_else(this_array_dims == 2, "}", "")) # new version assigns to std::vector
           k <- seq(8, length(parse_list), 2)
           if (parse_list[tail(k,1)] == ","){
             k <- seq(8, length(parse_list)-2, 2)
@@ -583,7 +727,7 @@ for (i in 1:nrow(csl)){
         }
         # print(temp) # print array parsing
         csl$ccl[i] <- temp
-        csl$dend[i] <- ifelse(will_continue, "", ",")
+        csl$dend[i] <- ifelse(will_continue, "", ";")
         csl$set[i] <- ifelse(will_continue, "", this_array_name)
         token_role[this_array_name] <- "constant_array"
         if (this_array_row == this_array_dim2 & will_continue){
@@ -597,7 +741,7 @@ for (i in 1:nrow(csl)){
     } else {
 
       # set array continuation FIXME assumes each line is an exact row of data
-      ender <- if_else(will_continue, ",", "} }")
+      ender <- if_else(will_continue, ",", "}")
       k <- seq(2, length(parse_list), 2)
       if (parse_list[tail(k,1)] == ","){
         # remove trailing comma
@@ -610,7 +754,7 @@ for (i in 1:nrow(csl)){
       temp <- paste(" { ", temp, " } ", ender, sep="")
       # print(temp) # print array parsing
       csl$ccl[i] <- temp
-      csl$dend[i] <- ifelse(will_continue, "", ",")
+      csl$dend[i] <- ifelse(will_continue, "", ";")
       csl$set[i] <- ifelse(will_continue, "", this_array_name)
       if (this_array_row == this_array_dim2 & will_continue){
         stop("too many rows")
@@ -620,110 +764,6 @@ for (i in 1:nrow(csl)){
       csl$handled[i] <- TRUE
 
     }
-
-  }
-  #### handle line_type = integer, character, doubleprecision, logical, real, dimension (including arrays) ####
-  if (csl$line_type[i] %in% c("integer", "character", "doubleprecision", "logical", "real", "dimension")){
-
-    # these are explicit type declarations
-    # other variables are declared implictly by being assigned or initialised using "constant"
-
-    # check for array declaration? FIXME rather simplistic logic
-    odds <- seq(1, length(parse_list)-1, 2)
-    j <- which( parse_list[odds] == "token" & lead(parse_list[odds],1) %in% "openbracket" ) * 2 - 1
-    is_array <- length(j) > 0
-
-    #### (a) array declaration ####
-    if (is_array){ # array declaration only
-
-      # commas indicate number of dimensions (FIXME only handles simple cases)
-      odds <- seq(1, length(parse_list)-1, 2)
-      j <- which( parse_list[odds] == "comma" ) * 2 - 1
-      if (length(j) == 0){
-
-        # https://www.learncpp.com/cpp-tutorial/6-15-an-introduction-to-stdarray/
-        # std::arrays can only be initialized in the C++11 class constructor list
-        # // https://stackoverflow.com/questions/10694689/how-to-initialize-an-array-in-c-objects
-        # // https://stackoverflow.com/questions/33714866/initialize-stdarray-of-classes-in-a-class-constructor
-        # std::array<int,2> a ; // 2 elements
-        # std::array<int,2> a = {{ 13, 18 }} ; // note std::array requires one pair of extra outer braces
-        # a[0] // base zero
-        # single dimension fixed size array
-        message <- paste("detected 1d array:", parse_str)
-        arrays <- c(arrays, parse_str)
-        cat(csl$file_name[i], csl$line_number[i], message, "\n")
-        csl$static[i] <- ""
-        csl$type[i] <- paste("std::array< double ,", parse_list[8], "> ")
-        csl$decl[i] <- parse_list[4]
-        csl$dend[i] <- ";"
-        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
-        token_decl_line[parse_list[4]] <- i
-        token_decl_type[parse_list[4]] <- csl$type[i]
-        csl$handled[i] <- TRUE
-
-      } else if (length(j) == 1){
-
-        # https://stackoverflow.com/questions/17759757/multidimensional-stdarray
-        # https://en.cppreference.com/w/cpp/container/array/operator_at
-        # std::array<std::array<int,3>,2> a ; // 2 rows, 3 columns
-        # std::array<std::array<int,3>,2> a = {{{1,2,3}, {4,5,6}}} ; // note std::array requires one pair of extra outer braces
-        # a[2-1][3-1] // note axis order
-        # two dimensional fixed size array
-        # https://stackoverflow.com/questions/11610338/how-to-initialise-a-member-array-of-class-in-the-constructor
-        message <- paste("detected 2d array:", parse_str)
-        arrays <- c(arrays, parse_str)
-        cat(csl$file_name[i], csl$line_number[i], message, "\n")
-        csl$static[i] <- ""
-        csl$type[i] <- paste("std::array< std::array< double ,", parse_list[8], "> ,", parse_list[12], "> ") # need to reverse indices
-        csl$decl[i] <- parse_list[4]
-        csl$dend[i] <- ";"
-        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
-        token_decl_line[parse_list[4]] <- i
-        token_decl_type[parse_list[4]] <- csl$type[i]
-        csl$handled[i] <- TRUE
-
-      } else {
-
-        # unhandled
-        stop("only handles 1,2 dimensional arrays")
-
-      }
-
-    } # end array declaration
-
-    #### (b) non-array declaration ####
-    if (!is_array){
-
-      #
-      stopifnot(!is_continuation) # FIXME does not work for is_continuation
-      this_type <- parse_list[2] # C++ type
-      parse_list[1:2] <- c("comma" , ",") # put fake comma at start of list to make it easier to parse
-
-      # update previous declarations
-      odds <- seq(1, length(parse_list)-1, 2)
-      k <- which( parse_list[odds] == "token" & lag(parse_list[odds], 1) %in% "comma") * 2 - 1 # find variables
-      bad <- token_decl_line[parse_list[k+1]] != 0 # find already declared
-      if (any(bad)){
-        message <- paste("redeclaration:", paste(parse_list[k+1][bad], collapse=" "))
-        cat(csl$file_name[i], csl$line_number[i], message, "\n")
-        # update previous declaration
-        for (j in parse_list[k+1][bad]){
-          csl$type[token_decl_line[j]] <- this_type
-          cat("updated type of", j, "on code line", csl$line_number[token_decl_line[j]], "\n")
-        }
-      }
-      # declare variables
-      if (any(!bad)){
-        csl$static[i] <- ""
-        csl$type[i] <- this_type
-        csl$decl[i] <- paste(parse_list[k+1][!bad], collapse=" , ") # variable list
-        csl$dend[i] <- ";"
-        csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
-        token_decl_line[parse_list[k+1][!bad]] <- i
-        token_decl_type[parse_list[k+1][!bad]] <- csl$type[i]
-      }
-
-    } # end non-array declaration
 
   }
   #### handle line_type = integ, derivt ####
@@ -792,43 +832,6 @@ for (i in 1:nrow(csl)){
       csl$integ[i] <- paste(parse_list[c(2, 4, 14)], collapse=" ")
       if (parse_list[13] == "token"){ # could be a number
         csl$used[i] <- paste(csl$used[i], parse_list[14], sep=",")
-      }
-      csl$handled[i] <- TRUE
-
-    } else if (str_to_lower(paste(parse_list[c(4, 6, 8, 12, 14, 16, 20, 24, 26, 28)], collapse="")) == "=max(,integ(,))na"){
-
-      # FIXME this is not necessary and would be tidier if removed
-      jj <- parse_list[2]
-      # declare state variable
-      if (token_decl_line[jj] != 0){
-        message <- paste("previously declared integ:", jj)
-        cat(csl$file_name[i], csl$line_number[i], message, "\n")
-        # don't declare again
-      } else {
-        csl$static[i] <- ""
-        csl$type[i] <- "double" # state vars are double
-        csl$decl[i] <- jj
-        csl$dend[i] <- ";"
-        token_decl_line[jj] <- i
-        token_decl_type[jj] <- csl$type[i]
-        token_role[jj] <- "state"
-      }
-      # handle_minmax - does not change length of parse_list
-      if (has_minmax){
-        parse_list <- handle_minmax(parse_list, csl$file_name[i], csl$line_number[i])
-      }
-      # initialise even if already initialised
-      csl$init[i] <- paste(parse_list[c(2, 4, 6, 8, 10, 12, 22, 24)], collapse=" ")
-      csl$delim[i] = ";"
-      csl$set[i] <- jj
-      if (parse_list[21] == "token"){ # because could be a numeric constant
-        csl$used[i] <- parse_list[22]
-      }
-      # integration rate of state variable
-      csl$integ[i] <- paste(parse_list[c(2, 4, 6, 8, 10, 12, 18, 24)], collapse=" ")
-      if (parse_list[17] == "token"){ # could be a number
-        token_role[parse_list[18]] <- "rate"
-        csl$used[i] <- paste(csl$used[i], parse_list[18], sep=",")
       }
       csl$handled[i] <- TRUE
 
@@ -1214,9 +1217,12 @@ for (i in 1:nrow(csl)){
       temp <- paste(parse_list[k+1], collapse=" " )
       temp <- paste("schedule ( t + ", temp, " , \"", discrete_block, "\" )", sep="")
     } else {
+      if (parse_list[5] != "at"){
+        stop(paste("SCHEDULE", parse_list[6], "is not implemented"))
+      }
       k <- seq(7, length(parse_list)-1, 2)
       temp <- paste(parse_list[k+1], collapse=" " )
-      temp <- paste("schedule ( t + ", temp, " , \"", parse_list[4],  "\" )", sep="")
+      temp <- paste("schedule ( ", temp, " , \"", parse_list[4],  "\" )", sep="")
     }
     if (major_section == "initial"){
       csl$init[i] <- temp
@@ -1296,6 +1302,8 @@ tokens <- data_frame(
   lower=names(token_list),
   decl_line=token_decl_line,
   decl_type=token_decl_type,
+  decl_columns=token_decl_columns,
+  decl_rows=token_decl_rows,
   decl_value=token_decl_value,
   decl_static=token_decl_static,
   role=token_role

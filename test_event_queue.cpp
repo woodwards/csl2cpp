@@ -1,9 +1,3 @@
-
-# sample code embedded in an R script
-library(Rcpp)
-
-sourceCpp(code='
-
 #include <unordered_map>
 #include <map>
 #include <cmath>
@@ -19,9 +13,9 @@ sourceCpp(code='
 void hello()
 {
 
-  std::array< double , 2 > a = {{1e4,2}};
-  std::array< std::array< double , 3 > , 2 > b = {{{1,2,3},
-      {4,5,6}}};
+  // std::array< double , 2 > a = {{1e4,2}};
+  // std::array< std::array< double , 3 > , 2 > b = {{{1,2,3},
+  //     {4,5,6}}};
 
   using namespace std;
 
@@ -54,6 +48,7 @@ void hello()
 
 }
 
-') # end of sourceCpp(code
-
+/*** R
+# This is R code
 hello()
+*/

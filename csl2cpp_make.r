@@ -67,6 +67,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 			   "#include <boost/numeric/odeint.hpp>",
 			   # "#include <boost/array.hpp>", # try std::array instead as recommended by boost
 			   "#include <array>",
+			   "#include <vector>",
 			   "",
 			   "using namespace std; // needed for math functions",
 			   "")
@@ -78,7 +79,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	cpp <- put_lines(cpp, 0, lines)
 	cat("header comments :", sum(rows), "\n")
 
-	# class declaration
+	#### class declaration ####
 	lines <- c("",
              paste("class", class_name, "{"),
              "",
@@ -86,7 +87,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
              "")
 	cpp <- put_lines(cpp, 0, lines)
 
-	# class properties
+	##### private : class properties ####
 	lines <- c("// switches",
 	           "bool print_debug_messages = false;",
 	           "",
@@ -127,7 +128,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	  cpp <- put_lines(cpp, 1, lines)
 	}
 
-  # get state
+  #### get state ####
   cpp <- put_lines(cpp, 1, c("", "state_type get_state ( ) {"))
   cpp <- put_lines(cpp, 2, c("", "state_type current_state;", "", "// return current state"))
   lines <- paste("current_state[", 0:(n_state-1), "] = ", state, ";", sep="")
@@ -135,47 +136,79 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
   cpp <- put_lines(cpp, 2, c("", "return( current_state );"))
   cpp <- put_lines(cpp, 1, c("", "} // end get_state", ""))
 
-  # set state
+  #### set state ####
   cpp <- put_lines(cpp, 1, c("void set_state ( state_type this_state ) {"))
   cpp <- put_lines(cpp, 2, c("", "// set state"))
   lines <- paste(state, " = this_state[", 0:(n_state-1), "];", sep="")
   cpp <- put_lines(cpp, 2, lines)
   cpp <- put_lines(cpp, 1, c("", "} // end set_state"))
 
-	# constructor head
+	#### public: create variable maps ####
 	cpp <- put_lines(cpp, 0, c("", "public:", ""))
 	lines <- c("// unordered_map gives user efficient access to variables by name",
-	           "std::unordered_map< std::string , double > variable;", "")
+	           "std::unordered_map< std::string , double > variable;",
+	           "std::unordered_map< std::string , std::vector< double > > vector;",
+	           "std::unordered_map< std::string , std::vector< std::vector< double > > > array;",
+	           "")
 	cpp <- put_lines(cpp, 1, lines)
-	# array initialisation list (class constructor list)
+
+	#### constructor (arrays are initialised here) ####
+	# class constructor list
 	rows <- csl$ccl > ""
-	if (any(rows)){
+	if (!any(rows)){
 	  lines <- c("// constructor",
-	             paste(class_name, "( ) :"), "")
+	             paste(class_name, "( ) {"),
+	             "",
+	             "\t// reserve buckets to minimise storage and avoid rehashing",
+	             "\tvariable.reserve( n_pullable_variables );",
+	             "",
+	             "} // end constructor",
+	             "")
 	  cpp <- put_lines(cpp, 1, lines)
-	  cpp <- put_lines(cpp, 2, c("// array initialisation list",
-  	                           "// warning: these are executed in the order of the member declarations"))
-  	csl$dend[max(which(rows))] <- "" # remove last comma
+	} else {
+	  lines <- c("// constructor head",
+	             paste(class_name, "( ) :"),
+	             "")
+	  cpp <- put_lines(cpp, 1, lines)
+	  lines <- c("// array dimensions",
+	             "// warning : these are executed in the order of the member declarations")
+	  cpp <- put_lines(cpp, 2, lines)
+	  # array dimensions
+	  i <- which(tokens$decl_columns>"")
+	  lines <- paste(tokens$name[i],
+	                 if_else(tokens$decl_rows[i]=="",
+	                         paste("(", tokens$decl_columns[i], ", 0.0 )"),
+	                         paste("(", tokens$decl_rows[i], ", std::vector< double > (", tokens$decl_columns[i], ", 0.0 ) )")),
+	                 if_else(i==tail(i, 1), "", ","))
+	  cpp <- put_lines(cpp, 2, lines)
+	  # array initialisation
+	  lines <- c("",
+	             "// constructor body",
+	             "{",
+	             "",
+	             "\t// array initialisation (warning : overrides dimensions)")
+	  cpp <- put_lines(cpp, 1, lines)
   	lines <- smoosh(csl$ccl[rows], csl$dend[rows], csl$tail[rows])
   	indent <- if_else(str_detect(lines, "^\\{"), 3, 2) # indent array initialisation lines
   	cpp <- put_lines(cpp, indent, lines)
-	} else {
-	  lines <- c("// constructor",
-	             paste(class_name, "( )"), "")
-	  cpp <- put_lines(cpp, 1, lines)
+  	# pull arrays
+  	lines <- c("",
+  	           "// set array pointers")
+  	cpp <- put_lines(cpp, 2, lines)
+  	i <- which(tokens$decl_columns>"")
+  	lines <- if_else(tokens$decl_rows[i]=="",
+  	                 paste("vector[\"", tokens$name[i], "\"] = ", tokens$name[i], " ;", sep=""),
+  	                 paste("array[\"", tokens$name[i], "\"] = ", tokens$name[i], " ;", sep=""))
+  	cpp <- put_lines(cpp, 2, lines)
+  	# end constructor
+  	lines <- c("",
+  	           "\t// reserve buckets to minimise storage and avoid rehashing",
+  	           "\tvariable.reserve( n_pullable_variables );",
+  	           "",
+  	           "} // end constructor",
+  	           "")
+  	cpp <- put_lines(cpp, 1, lines)
 	}
-
-	# constructor body
-	lines <- c("",
-	           "// constructor body",
-	           "{",
-	           "",
-	           "\t// reserve buckets to minimise storage and avoid rehashing",
-	           "\tvariable.reserve( n_pullable_variables );",
-	           "",
-	           "} // end constructor",
-	           "")
-	cpp <- put_lines(cpp, 1, lines)
 
 	#### initialise model ####
 	cpp <- put_lines(cpp, 1, c("void initialise_model ( double start_time = 0.0 , bool set_debug_status = false ) {"))
@@ -189,12 +222,12 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	                           ""))
 	# uninitialised variables
 	if (length(assumed_all)>0){
-  	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables as per acslx"))
-  	lines <- paste(assumed_all, "= 5.5555e33;")
+  	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables"))
+  	lines <- paste(assumed_all, "= 0.0;")
   	cpp <- put_lines(cpp, 2, lines)
 	}
 	# model initialisation
-	rows <- csl$section == "initial"
+	rows <- csl$section == "initial" | csl$line_type == "interval"
   if (any(rows)){
   	cpp <- put_lines(cpp, 2, c("", "// initial calculations"))
   	lines <- if_else(csl$init[rows] > "",
@@ -221,7 +254,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	}
 	# initial rate calculations
 	lines <- c("",
-	           "// initial calculation of rates, for use in events",
+	           "// initial calculation of rates, for use by events",
 	           "calculate_rate( );",
 	           "")
 	cpp <- put_lines(cpp, 2, lines)
@@ -324,26 +357,37 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	#### post processing ####
 	cpp <- put_lines(cpp, 1, "void post_processing ( ) {")
 	# post processing from derivative section
-	cpp <- put_lines(cpp, 2, c("", "// post processing calculations from derivative"))
 	rows <- which(csl$section == "derivative" & (csl$dep == "" & delay_post==TRUE))
 	if (length(rows)>0){
-  	lines <- if_else(csl$calc[rows] > "",
+	  cpp <- put_lines(cpp, 2, c("", "// post processing calculations from derivative"))
+	  lines <- if_else(csl$calc[rows] > "",
   	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
   	                 csl$tail[rows])
   	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
   	cpp <- put_lines(cpp, indent, lines)
-  	cat("post processing 1 lines :", length(rows), "\n")
+  	cat("post processing derivative lines :", length(rows), "\n")
 	}
 	# and also dynamic section
-	cpp <- put_lines(cpp, 2, c("", "// post processing calculations from dynamic"))
 	rows <- which(csl$section == "dynamic")
 	if (length(rows)>0){
-  	lines <- if_else(csl$calc[rows] > "",
-  	                 smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
-  	                 csl$tail[rows])
-  	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
-  	cpp <- put_lines(cpp, indent, lines)
-  	cat("post processing 2 lines :", length(rows), "\n")
+	  cpp <- put_lines(cpp, 2, c("", "// post processing calculations from dynamic"))
+	  lines <- if_else(csl$calc[rows] > "",
+	                   smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
+	                   csl$tail[rows])
+	  indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
+	  cpp <- put_lines(cpp, indent, lines)
+	  cat("post processing dynamic lines :", length(rows), "\n")
+	}
+	# and also terminal section
+	rows <- which(csl$section == "terminal")
+	if (length(rows)>0){
+	  cpp <- put_lines(cpp, 2, c("", "// post processing calculations from terminal"))
+	  lines <- if_else(csl$calc[rows] > "",
+	                   smoosh(csl$calc[rows], csl$delim[rows], csl$tail[rows]),
+	                   csl$tail[rows])
+	  indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
+	  cpp <- put_lines(cpp, indent, lines)
+	  cat("post processing terminal lines :", length(rows), "\n")
 	}
 	cpp <- put_lines(cpp, 1, c("", "} // end post_processing", ""))
 

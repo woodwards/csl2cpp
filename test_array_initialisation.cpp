@@ -1,9 +1,3 @@
-
-# sample code embedded in an R script
-library(Rcpp)
-
-sourceCpp(code='
-
 #include <unordered_map>
 #include <map>
 #include <cmath>
@@ -43,7 +37,7 @@ public:
   }
 
   double getone(){
-    return InitCond[0][1]+MamCellsF[0];
+    return InitCond[0][1] + MamCellsF[0];
   }
 
 };
@@ -55,6 +49,9 @@ void hello()
   model amodel;
   std::cout << std::to_string(amodel.getone()) << std::endl;
 
-}') # end of sourceCpp(code
+}
 
+/*** R
+# This is R code
 hello()
+*/

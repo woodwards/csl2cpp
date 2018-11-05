@@ -10,7 +10,7 @@ library(tidyverse)
 # point to csl and mfile source
 csl_file <- "spring/Spring.csl"
 csl_file <- "molly/Molly.csl"
-# csl_file <- "molly/Molly2.csl"
+# csl_file <- "molly/Molly3.csl"
 m_files <- c("Params 2014.m")
 
 # split file names
@@ -23,12 +23,13 @@ cat(file=stderr(), "reading code", "\n")
 source("csl2cpp_read.r") # load functions
 csl <- read_csl(csl_file, m_files) # read lines
 
-# write aggregated raw csl
+# write aggregated raw csls
 if (csl_file == "molly/Molly.csl"){
-  csl2 <- paste(csl$code, "\n", sep="")
-  csl2 <- str_replace_all(csl2, "(?<=([0-9]\\.0{0,5}[1-9]))[0-9]+", "555") # jitter
   source("csl2cpp_write.r") # load functions
+  csl2 <- paste(csl$code, "\n", sep="")
   write_cpp(csl2, path_name, paste(model_name, "2", sep=""), "csl") # write aggregated raw csl
+  csl3 <- str_replace_all(csl2, "(?<=([0-9]\\.0{0,5}[1-9]))[0-9]+", "555") # jitter
+  write_cpp(csl3, path_name, paste(model_name, "3", sep=""), "csl") # write jittered aggregated raw csl
 }
 
 # checkpoint
