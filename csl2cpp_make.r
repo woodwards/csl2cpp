@@ -221,10 +221,12 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	                           "print_debug_messages = set_debug_status;",
 	                           ""))
 	# uninitialised variables
-	if (length(assumed_all)>0){
+	if (length(assumed_all)>0 & FALSE){
   	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables"))
   	lines <- paste(assumed_all, "= 0.0;")
   	cpp <- put_lines(cpp, 2, lines)
+	} else {
+	  cat("uninitialised variables not initialised\n")
 	}
 	# model initialisation
 	rows <- csl$section == "initial" | csl$line_type == "interval"
@@ -488,12 +490,16 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	  endi <- csl$stack[starti]
 	  lines <- c("",
 	             smoosh(csl$mfile[starti], csl$delim[starti]),
+	             "",
+	             paste("\t", model_name, ".pull_variables_from_model() ;", sep=""),
 	             "")
 	  cpp <- put_lines(cpp, 0, lines)
 	  rows <- seq(starti+1, endi-1)
 	  lines <- smoosh(csl$mfile[rows], csl$delim[rows], csl$tail[rows])
 	  cpp <- put_lines(cpp, 1, lines)
 	  lines <- c("",
+	             paste("\t", model_name, ".push_variables_to_model() ;", sep=""),
+	             "",
 	             smoosh(csl$mfile[endi], csl$delim[endi])
 	             )
 	  cpp <- put_lines(cpp, 0, lines)

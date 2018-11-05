@@ -4,19 +4,17 @@ library(Rcpp)
 library(tidyverse)
 library(scales)
 
-# get old results for comparison
-cpp <- read_tsv("molly_cpp_output.tsv",
-				col_names=c("nsteps", "t", "dEating", "WtPUter", "LhorAdip")) %>%
-	gather(key, value, -t, -nsteps)
 # change to UTF-8 encoding!!!
-csl <- read_tsv("molly_csl_output.tsv",
+csl0 <- read_tsv("molly_csl_output.tsv",
 				skip=1,
-				col_names=c("t", "dEating",
-							"t2", "WtPUter",
-							"t3", "LhorAdip",
-							"t4", "WtAdipNew",
-							"t5", "WtAdipTarget")) %>%
-	select(-t2, -t3, -t4, -t5) %>%
+				col_names=c("t", "BCS",
+							"t2", "BW",
+							"t3", "dMilkProd",
+							"t4", "IntakeDay",
+							"t5", "WtAdip",
+							"t6", "WtGrvUter")) %>%
+	select(-t2, -t3, -t4, -t5, -t6)
+csl <- csl0 %>%
 	gather(key, value, -t)
 
 # compile model
@@ -28,7 +26,6 @@ sourceCpp("main_r.cpp")
 
 # initialise model
 cat("initialise model\n")
-# model run
 start_time <- 0.0
 output_step <- 1
 time_step <- 0.005
@@ -37,10 +34,8 @@ out_times <- seq( start_time , end_time , output_step )
 xx <- vector("list", length(out_times))
 debug = FALSE
 initialise_model( start_time , debug )
-call_params_2014_m()
 x00 <- get_molly_variables()
 # x00[!is.finite(x00)]
-# stopifnot(all(is.finite(x00))) # some variables are not initialised
 cat("start simulation loop\n")
 start_timer <- Sys.time()
 i <- 1
@@ -56,36 +51,21 @@ print(Sys.time() - start_timer)
 xx <- bind_rows(xx) # collect output
 
 # keep some columns
-# colvals <- sapply(xx, function(x) length(unique(x)), simplify=TRUE)
-# cols <- which(colvals!=1)
-# cols <- sample(cols, 6)
-getvars <- c("t", "dEating", "WtPUter", "LhorAdip", "WtAdipNew", "WtAdipTarget") # to compare to external results
-# getvars <- c("t", "NonUterEBW", "dNonUterEBW", "WtGrvUter", "EBW1", "WtOth","WtAdip","WtVis","WaPool","WaPoolTarget")
-# getvars <- c("t", "LowMfDecay", "dLowMfDecay", "kMamCellsUsMfDecay", "CumulativeLowMfDays")
+getvars <- c("t", "BCS", "BW", "dMilkProd", "IntakeDay", "WtAdip", "WtGrvUter")
 cols <- which(names(xx) %in% getvars)
 xx1 <- xx[,cols]
 # View(xx1)
 xx2 <- xx1 %>% gather(key, value, -t) %>%
 	arrange(key)
 
-# check initial state
-x0 <- as.numeric(xx[1,])
-names(x0) <- names(xx)
-x0[!is.finite(x0)]
-
-# check final state
-x1 <- as.numeric(xx[nrow(xx),])
-names(x1) <- names(xx)
-names(x1)[!is.finite(x1)]
-
 # plot traces
-halfway <- 100
+halfway <- 20
 trans_atan <- trans_new(name="atan",
 						transform=function(x) atan(x/halfway),
 						inverse=function(y) halfway*tan(y))
 p1 <- ggplot() +
 	labs(title="Circles = Molly.csl, Lines = Molly.cpp", y="Combined scale") +
-	geom_point(data=csl, mapping=aes(x=t, y=value, colour=key), pch=1, size=2, alpha=0.3) +
+	geom_point(data=csl, mapping=aes(x=t, y=value, colour=key), pch=1, size=2, alpha=0.1) +
 	geom_path(data=xx2, mapping=aes(x=t, y=value, colour=key), size=1) +
 	# coord_cartesian(ylim=c(0.0, 50)) +
 	coord_trans(y=trans_atan) +

@@ -11,19 +11,19 @@ Notes
 - currently uses Runge-Kutta-4 integration method
 - converts int to double in min and max functions since C++ can't mix argument types
 - strings are not visible to user, string functions not handled
-- TERMINAL section is calculated with DYNAMIC section
+- TERMINAL section is calculated with DYNAMIC section, not tested
 - SCHEDULE must be on its own line
 - INTERVAL must be on its own line
 - INTEG must be on it's own line and of the form x = integ( dx, x0 )
 - DERIVT must be on it's own line and of the form dx = derivt( dx0, x )
 - control variables IALG, CINT, MAXT, MINT, NSTP are treated as parameters, but not used
 - comments (and statements) outside CSL sections are moved to a HEADER section
-- Warning! arrays are represented using std::vector, which means list assignment resets dimensions
+- arrays are represented using std::vector, which means list assignment resets dimensions
+- array access in mfiles available but not tested
 
 To Do
 
 - link molly.cpp into the WFM
-- make arrays visible to user
 - version control
 
 Opportunities

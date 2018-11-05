@@ -134,10 +134,18 @@ handle_pow <- function(parse_list){
 }
 
 # handle mfile tokens
-handle_mfile<- function(parse_list){
+handle_mfile<- function(parse_list, token_decl_columns, token_decl_rows){
   odds <- seq(1, length(parse_list)-1, 2)
-  k <- which( parse_list[odds] == "token" & parse_list[odds+1] %in% pullable ) * 2 - 1
-  parse_list[k+1] <- paste(model_name, ".variable[\"", parse_list[k+1], "\"]", sep="")
+  kk <- which( parse_list[odds] == "token" & parse_list[odds+1] %in% pullable ) * 2 - 1
+  for (k in kk){
+    if (token_decl_columns[parse_list[k+1]]==""){
+      parse_list[k+1] <- paste(model_name, ".variable[\"", parse_list[k+1], "\"]", sep="")
+    } else if (token_decl_rows[parse_list[k+1]]==""){
+      parse_list[k+1] <- paste("(*", model_name, ".vector[\"", parse_list[k+1], "\"])", sep="")
+    } else {
+      parse_list[k+1] <- paste("(*", model_name, ".array[\"", parse_list[k+1], "\"])", sep="")
+    }
+  }
   return(parse_list)
 }
 
@@ -947,7 +955,7 @@ for (i in 1:nrow(csl)){
     if (has_minmax){
       parse_list <- handle_minmax(parse_list, csl$file_name[i], csl$line_number[i])
     }
-    parse_list <- handle_mfile(parse_list)
+    parse_list <- handle_mfile(parse_list, token_decl_columns, token_decl_rows)
     odds <- seq(1, length(parse_list)-1, 2)
     temp <- paste(new_label, paste(parse_list[odds+1], collapse=" "), sep="")
     csl$mfile[i] <- temp
