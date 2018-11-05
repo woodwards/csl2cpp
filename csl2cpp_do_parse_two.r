@@ -223,6 +223,7 @@ arrays <- ""
 
 # array bound checking (use .at() instead of [])
 check_bounds <- TRUE
+cat("array bound checking :", check_bounds, "\n")
 
 # loop through rows again
 major_sections <- c("initial", "dynamic", "derivative", "discrete", "terminal", "mfile")
@@ -324,7 +325,7 @@ for (i in 1:nrow(csl)){
         odds <- seq(jj+2, length(parse_list)-1, 2)
         jj1 <- odds[which( parse_list[odds] == "comma" )[1]]
         parse_list[jj1] <- "arraycomma"
-        parse_list[jj1+1] <- if_else(check_bounds, "- 1 ).at(", "- 1 ][")
+        parse_list[jj1+1] <- if_else(check_bounds, "- 1 ) .at(", "- 1 ][")
         odds <- seq(jj1+2, length(parse_list)-1, 2)
         jj2 <- odds[which( parse_list[odds] == "closebracket" )[1]]
         parse_list[jj2] <- "closearray"

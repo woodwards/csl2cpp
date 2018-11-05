@@ -147,8 +147,8 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	cpp <- put_lines(cpp, 0, c("", "public:", ""))
 	lines <- c("// unordered_map gives user efficient access to variables by name",
 	           "std::unordered_map< std::string , double > variable;",
-	           "std::unordered_map< std::string , std::vector< double > > vector;",
-	           "std::unordered_map< std::string , std::vector< std::vector< double > > > array;",
+	           "std::unordered_map< std::string , std::vector< double >* > vector; // pointers to vectors",
+	           "std::unordered_map< std::string , std::vector< std::vector< double > >* > array; // pointers to arrays",
 	           "")
 	cpp <- put_lines(cpp, 1, lines)
 
@@ -171,7 +171,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	             "")
 	  cpp <- put_lines(cpp, 1, lines)
 	  lines <- c("// array dimensions",
-	             "// warning : these are executed in the order of the member declarations")
+	             "// warning : executed in order of declarations")
 	  cpp <- put_lines(cpp, 2, lines)
 	  # array dimensions
 	  i <- which(tokens$decl_columns>"")
@@ -193,12 +193,12 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
   	cpp <- put_lines(cpp, indent, lines)
   	# pull arrays
   	lines <- c("",
-  	           "// set array pointers")
+  	           "// set vector and array pointers")
   	cpp <- put_lines(cpp, 2, lines)
   	i <- which(tokens$decl_columns>"")
   	lines <- if_else(tokens$decl_rows[i]=="",
-  	                 paste("vector[\"", tokens$name[i], "\"] = ", tokens$name[i], " ;", sep=""),
-  	                 paste("array[\"", tokens$name[i], "\"] = ", tokens$name[i], " ;", sep=""))
+  	                 paste("vector[\"", tokens$name[i], "\"] = &", tokens$name[i], " ;", sep=""),
+  	                 paste("array[\"", tokens$name[i], "\"] = &", tokens$name[i], " ;", sep=""))
   	cpp <- put_lines(cpp, 2, lines)
   	# end constructor
   	lines <- c("",

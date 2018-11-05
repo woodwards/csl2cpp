@@ -34,30 +34,31 @@ private:
 public:
 
 	std::unordered_map< std::string , double > variable;
-  std::unordered_map< std::string , std::vector< double > > vector;
-  std::unordered_map< std::string , std::vector< std::vector< double > > > array;
+  std::unordered_map< std::string , std::vector< double >* > vector;
+  std::unordered_map< std::string , std::vector< std::vector< double > >* > array;
 
   model_class ( ) :
   // constructor initialisation list (C++11)
-     InitCond { { 1.0 , 550 , 3.5 , 1 , 4 } ,
-           { 2.0 , 625 , 3.5 , 5 , 4 } } ,
-     MamCellsF { 0.001 } // additional brackets make it 2d
-    // MamCellsF( MaxHerds , 0.07 ) ,
-    // InitCond( MaxAnimals , std::vector< double > ( MaxInitValues , 0.7 ) )
+     // InitCond { { 1.0 , 550 , 3.5 , 1 , 4 } ,
+     //       { 2.0 , 625 , 3.5 , 5 , 4 } } ,
+     // MamCellsF { 0.001 } // additional brackets make it 2d
+    MamCellsF( MaxHerds , 0.07 ) ,
+    InitCond( MaxAnimals , std::vector< double > ( MaxInitValues , 0.7 ) )
     // InitCond( { { 1.0 , 550 , 3.5 , 1 , 4 } ,
     // { 2.0 , 625 , 3.5 , 5 , 4 } } )
     // constructor body
   {
-     // initialise here?
-     // MamCellsF = { 0.001 , 0.002 }  ; // warning: automatic resizing
-     // InitCond = { { 1.0 , 550 , 3.5 , 1 , 4 } ,
-     //                { 2.0 , 625 , 3.5 , 5 , 4 } } ;
-
      // pull variables from model
      variable["iTotMeals"] = iTotMeals;
      variable["TNdfIn"] = TNdfIn;
-     vector["MamCellsF"] = MamCellsF;
-     array["InitCond"] = InitCond;
+     vector["MamCellsF"] = &MamCellsF;
+     array["InitCond"] = &InitCond;
+
+     // initialise
+     MamCellsF = { 0.001 , 0.002 }  ; // warning: automatic resizing
+     InitCond = { { 1.0 , 550 , 3.5 , 1 , 4 } ,
+     { 2.0 , 625 , 3.5 , 5 , 4 } } ;
+
   }
 
   void print_values(){
@@ -65,8 +66,8 @@ public:
     std::cout << variable["iTotMeals"] << std::endl;
     std::cout << variable["TNdfIn"] << std::endl;
 
-    double a = array["InitCond"][0][1];
-    double b = vector["MamCellsF"][1];
+    double a = (*array["InitCond"])[0][1];
+    double b = (*vector["MamCellsF"])[1];
     std::cout << a << std::endl;
     std::cout << b << std::endl;
 
