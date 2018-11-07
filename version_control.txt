@@ -1,0 +1,29 @@
+Version control notes for Molly.csl
+Simon Woodward, DairyNZ 2018
+
+Situation:
+
+We have 3+ versions of Molly (DNZ, HDM, Mindy, 83). Differences occur in INCLUDE files and MFILES. Different people are working on the different versions. There's a balance between working on the different versions and merging the changes. Do we give them the source code? Or only allow them to inherit the base class and add their own details? What are the parts of the model that might differ?
+- state variables
+- initialisation
+- events
+- rate calculation
+- post step calculations
+- output calculations
+
+Thoughts:
+
+https://stackoverflow.com/questions/3615789/what-to-do-about-a-11000-lines-c-source-file
+
+Let me guess: Ten clients with divergent feature sets and a sales manager that promotes "customization"? I've worked on products like that before. We had essentially the same problem.
+
+You recognize that having an enormous file is trouble, but even more trouble is ten versions that you have to keep "current". That's multiple maintenance. SCC can make that easier, but it can't make it right.
+
+Before you try to break the file into parts, you need to bring the ten branches back in sync with each other so that you can see and shape all the code at once. You can do this one branch at a time, testing both branches against the same main code file. To enforce the custom behavior, you can use #ifdef and friends, but it's better as much as possible to use ordinary if/else against defined constants. This way, your compiler will verify all types and most probably eliminate "dead" object code anyway. (You may want to turn off the warning about dead code, though.)
+
+Once there's only one version of that file shared implicitly by all branches, then it's rather easier to begin traditional refactoring methods.
+
+The #ifdefs are primarily better for sections where the affected code only makes sense in the context of other per-branch customizations. One may argue that these also present an opportunity for the same branch-merging scheme, but don't go hog-wild. One colossal project at a time, please.
+
+In the short run, the file will appear to grow. This is OK. What you're doing is bringing things together that need to be together. Afterwards, you'll begin to see areas that are clearly the same regardless of version; these can be left alone or refactored at will. Other areas will clearly differ depending on the version. You have a number of options in this case. One method is to delegate the differences to per-version strategy objects. Another is to derive client versions from a common abstract class. But none of these transformations are possible as long as you have ten "tips" of development in different branches.
+

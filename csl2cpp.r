@@ -10,8 +10,10 @@ library(tidyverse)
 # point to csl and mfile source
 csl_file <- "spring/Spring.csl"
 csl_file <- "molly/Molly.csl"
+# csl_file <- "mindy/Molly.csl"
 # csl_file <- "molly/Molly3.csl"
-m_files <- c("Params 2014.m")
+m_files <- c()
+# m_files <- c("Params 2014.m")
 
 # split file names
 file_name <- str_extract(csl_file,  "[:alpha:]+[[:alnum:]_]*\\.csl")
@@ -24,7 +26,7 @@ source("csl2cpp_read.r") # load functions
 csl <- read_csl(csl_file, m_files) # read lines
 
 # write aggregated raw csls
-if (csl_file == "molly/Molly.csl"){
+if (file_name == "Molly.csl"){
   source("csl2cpp_write.r") # load functions
   csl2 <- paste(csl$code, "\n", sep="")
   write_cpp(csl2, path_name, paste(model_name, "2", sep=""), "csl") # write aggregated raw csl

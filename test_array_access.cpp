@@ -52,7 +52,7 @@ public:
      // pull variables from model
      // variable["iTotMeals"] = iTotMeals;
      // variable["TNdfIn"] = TNdfIn;
-     vector.insert({"MamCellsF", std::ref(MamCellsF)});
+     vector.insert( std::make_pair( "MamCellsF" , std::ref(MamCellsF) ) );
      array["InitCond"] = &InitCond;
 
      // initialise

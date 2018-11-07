@@ -191,7 +191,7 @@ token_list <- setNames(tokens$name, tokens$lower) # indexed by lower case
 declaration <- c("constant", "parameter",
                  "algorithm", "nsteps", "maxterval", "minterval", "cinterval",
                  "character", "integer", "logical", "doubleprecision", "real", "dimension")
-keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do") # +if_then, increase indent
+keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do", "include") # +if_then, increase indent
 keyword2 <- c("end", "endif", "enddo") # decrease indent
 keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue", "sort") # + has_label + if_goto, no change to indent
 keyword4 <- c("else") # +else_if_then, decrease and increase indent
@@ -1162,11 +1162,11 @@ for (i in 1:nrow(csl)){
     csl$handled[labeli] <- TRUE
 
   }
-  #### handle line_type = program, derivative, initial, discrete, dynamic, terminal, procedural, mfile ####
-  if (csl$line_type[i] %in% c("program", "initial", "derivative", "discrete", "dynamic", "terminal", "procedural", "mfile")){
+  #### handle line_type = program, derivative, initial, discrete, dynamic, terminal, procedural, include, mfile ####
+  if (csl$line_type[i] %in% c("program", "initial", "derivative", "discrete", "dynamic", "terminal", "procedural", "include", "mfile")){
 
     # these blocks are not needed in C++, remove indent
-    if (!is_continuation && csl$line_type[i] %in% c("program", "initial", "derivative", "dynamic", "terminal", "procedural")){
+    if (!is_continuation && csl$line_type[i] %in% c("program", "initial", "derivative", "dynamic", "terminal", "procedural", "include")){
       endi <- csl$stack[i]
       csl$indent[(i+1):(endi-1)] <- csl$indent[(i+1):(endi-1)] - 1 # remove indent
     }
@@ -1257,7 +1257,7 @@ for (i in 1:nrow(csl)){
 
     # see what it matches
     j <- csl$stack[i]
-    if (csl$line_type[j] %in% c("program", "initial", "derivative", "dynamic", "terminal", "procedural")){
+    if (csl$line_type[j] %in% c("program", "initial", "derivative", "dynamic", "terminal", "procedural", "include")){
 
       # } not needed
       csl$tail[i] <- paste("// end of", csl$line_type[j], csl$tail[i])

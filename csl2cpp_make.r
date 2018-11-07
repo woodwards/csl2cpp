@@ -93,7 +93,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	           "",
 	           "// specify number of variables",
              paste("static constexpr int n_state_variables =", n_state, ";"),
-             paste("static constexpr int n_pullable_variables =", n_pullable, ";"),
+             paste("static constexpr int n_pullable_variables =", n_pullable, "; // doesn't need to be exact"),
 	           "",
               "// declare state_type and t",
 	           paste("typedef std::array< double , n_state_variables > state_type;"),

@@ -1,5 +1,5 @@
-# read csl file and includes
 
+# read csl file and includes
 read_csl <- function(csl_file, m_files=""){
 
   #
@@ -26,7 +26,7 @@ read_csl <- function(csl_file, m_files=""){
 
   while(length(incli) > 0){
 
-    # read file
+    # read include file
     thisi <- incli[1]
     cat(paste(thisi, csl$code[thisi], "\n"))
     file_name <- str_extract(csl$code[thisi], "[:alpha:]+[[:alnum:]_]*\\.csl")
@@ -38,19 +38,33 @@ read_csl <- function(csl_file, m_files=""){
       iconv(to="ASCII//TRANSLIT") %>% # remove accents
       as_tibble() %>%
       rename(code=value) %>%
-      mutate(seq_number=first + as.double(seq(n())) / (n() + 2) * (last - first),
+      mutate(seq_number=first + as.double(seq(n()) + 1) / (n() + 3) * (last - first),
              line_number=as.double(seq(n())),
              file_name=file_name)
+
+    # create opening and closing lines
+    opening <- csl[thisi, ] %>%
+      mutate(seq_number=first + 1 / (nrow(include_csl) + 3) * (last - first),
+             line_number=0,
+             code=paste("INCLUDE ! ", code),
+             file_name=include_csl$file_name[1])
     closing <- csl[thisi, ] %>%
-      mutate(seq_number=first + (nrow(include_csl) + 1) / (nrow(include_csl) + 2) * (last - first),
-             code=paste("! END ", code))
-    csl$code[thisi] <- paste("! BEGIN ", csl$code[thisi]) # comment out include statement
+      mutate(seq_number=first + (nrow(include_csl) + 2) / (nrow(include_csl) + 3) * (last - first),
+             line_number=nrow(include_csl) + 1,
+             code=paste("END ! ", code),
+             file_name=include_csl$file_name[1])
+    csl$code[thisi] <- paste("! ", csl$code[thisi]) # comment out original include statement
 
-    # append
-    csl <- rbind(csl, include_csl, closing)
+    # update includes
+    incli <- setdiff(incli, thisi)
+    incli_new <- which(str_detect(str_to_lower(include_csl$code), "^[:blank:]*include[:blank:]+"))
+    if (length(incli_new)>0){
+      incli_new <- incli_new + nrow(csl) + nrow(opening)
+      incli <- c(incli, incli_new)
+    }
 
-    # find includes
-    incli <- which(str_detect(str_to_lower(csl$code), "^[:blank:]*include[:blank:]+")) # find include statements
+    # bind
+    csl <- rbind(csl, opening, include_csl, closing)
 
   }
 

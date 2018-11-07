@@ -19,10 +19,12 @@ Notes
 - control variables IALG, CINT, MAXT, MINT, NSTP are treated as parameters, but not used
 - comments (and statements) outside CSL sections are moved to a HEADER section
 - arrays are represented using std::vector, which means list assignment resets dimensions
+- arrays can be accessed using [] or .at(); the latter provides useful runtime range checking
 - array access in mfiles available but not tested
 
 To Do
 
+- include file paths currently ignored
 - link molly.cpp into the WFM
 - version control
 

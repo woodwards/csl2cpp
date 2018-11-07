@@ -15,11 +15,13 @@ load(file=temp_file) # recover progress
 cat("sorting derivative section code", "\n")
 
 # options
+collapse_include <- FALSE # might prevent sorting (experimental)
 override_proc_set <- TRUE # helps sort
 override_proc_used <- FALSE # would be nice but sort might fail
 # sorting_method <- "simon" # only works for DERIVATIVE, when we know the outputs of the section
 sorting_method <- "acslx"
 # sorting_method <- "none"
+cat("unsortable include blocks :", collapse_include, "\n")
 cat("override procedural set list :", override_proc_set, "\n")
 cat("override procedural used list :", override_proc_used, "\n")
 cat("sorting method :", sorting_method, "\n")
@@ -92,10 +94,15 @@ while (length(sortable)>0){
   cat("sorting", csl$line_type[i], "block", base_block, ",", length(base_i), "lines\n")
   csl$line_type[i] <- paste(csl$line_type[i], "_sorted", sep="")  # prevent resorting
 
+  # files involved
+  sorted_file_names <- unique(csl$file_name[base_i])
+  cat(paste("\t", sorted_file_names, "\n"))
+
   # provide index to allow easier sorting
   i <- base_i
   index <- data_frame(line = i,
                       block = csl$block[i],
+                      file_name = csl$file_name[i],
                       begin = i,
                       end = i,
                       code = csl$calc[i],
@@ -115,7 +122,7 @@ while (length(sortable)>0){
   )
 
   # these lines have no effect on sorting of code (at most they effect decl and init)
-  inactive <- c("integ", "comment", "blank", "derivative", "end", "termt", "sort", "derivt",
+  inactive <- c("integ", "comment", "blank", "derivative", "termt", "sort", "derivt",
                 "derivative_sorted", "sort_sorted",
                 "algorithm", "maxterval", "minterval", "cinterval", "nsteps",
                 "constant", "parameter",
@@ -277,6 +284,60 @@ while (length(sortable)>0){
     }
   }
   cat("\n")
+
+  #### collapse non-active lines ####
+  # has to be done after blocks
+  cat("collapse non-active lines", "\n")
+  collapse_up <- c("blank", "termt",
+                   "algorithm", "nsteps", "maxterval", "minterval", "cinterval")
+  inactive <- index$dep=="inactive" & index$sort
+  while (any(inactive)){
+    i <- which(inactive)[[1]]
+    if (i!=1 & (index$line_type[i] %in% collapse_up | i==nrow(index))){
+      index$end[i-1] <- index$end[i] # collapse upwards
+    } else {
+      index$begin[i+1] <- index$begin[i] # collapse downwards
+    }
+    index <- index[-i, ] # remove line
+    inactive <- index$dep=="inactive" & index$sort
+  }
+
+  #### collapse include ####
+  # View(filter(index, line_type %in% c("include", "end")))
+  # this feature is experimental and not fully operational
+  if (collapse_include){
+    cat("collapse include", "\n")
+    hyphens_base <- str_count(base_block, "-")
+    hyphens <- str_count(index$block, "-")
+    collapsible1 <- index$block == lag(index$block, 1) & lag(index$line_type, 1) %in% c("include")
+    collapsible2 <- index$block > lag(index$block, 1) & lag(index$line_type, 1) %in% c("include") &
+      index$block > lead(index$block, 1)
+    collapsible2 <- FALSE
+    collapsible3 <- (index$set == "" & index$set_hid == "" & index$used == "" & index$used_hid == "") |
+      (lag(index$set, 1) == "" & lag(index$set_hid, 1) == "" & lag(index$used, 1) == "" & lag(index$used_hid, 1) == "")
+    collapsible <- (collapsible1 | collapsible2) & collapsible3 & index$sort
+    collapsible[is.na(collapsible)] <- FALSE
+    stop()
+    while (any(collapsible)){
+      i <- max(which(collapsible)) # choose a line
+      index$end[i-1] <- index$end[i]
+      index$code[i-1] <- paste("*** collapsed", index$line_type[i-1], index$file_name[i], "***")
+      index$set[i-1] <- paste_sort(c(index$set[i-1], index$set[i]))
+      index$set_hid[i-1] <- paste_sort(c(index$set_hid[i-1], index$set_hid[i]))
+      index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]))
+      index$used_hid[i-1] <- paste_sort(c(index$used_hid[i-1], index$used_hid[i]))
+      index <- index[-i, ] # remove line
+      hyphens <- str_count(index$block, "-")
+      collapsible1 <- index$block == lag(index$block, 1) & lag(index$line_type, 1) %in% c("include")
+      collapsible2 <- index$block > lag(index$block, 1) & lag(index$line_type, 1) %in% c("include") &
+        index$block > lead(index$block, 1)
+      collapsible2 <- FALSE
+      collapsible3 <- (index$set == "" & index$set_hid == "" & index$used == "" & index$used_hid == "") |
+        (lag(index$set, 1) == "" & lag(index$set_hid, 1) == "" & lag(index$used, 1) == "" & lag(index$used_hid, 1) == "")
+      collapsible <- (collapsible1 | collapsible2) & collapsible3 & index$sort
+      collapsible[is.na(collapsible)] <- FALSE
+    }
+  }
 
   #### collapse non-active lines ####
   # has to be done after blocks
@@ -445,13 +506,37 @@ while (length(sortable)>0){
     failed <- sum(index$saved==0 & index$sort)
     if (failed>0){
       cat("failed to sort", failed, "of", length(sort_rows), "lines\n")
-      stop("failed")
+      stop("failed to sort")
     } else {
       cat("successfully sorted", length(sort_rows), "lines\n")
     }
     index <- arrange(index, saved) # sort lines
 
   } # end of ACSLX method
+
+  #### post-sort collapse ####
+  cat("post-sort collapse\n")
+  hyphens_base <- str_count(base_block, "-")
+  hyphens <- str_count(index$block, "-")
+  collapsible1 <- index$file_name == lag(index$file_name, 1) & index$begin == lag(index$end + 1, 1)
+  collapsible <- collapsible1 & index$sort
+  collapsible[is.na(collapsible)] <- FALSE
+  stop()
+  while (any(collapsible)){
+    i <- max(which(collapsible)) # choose a line
+    index$end[i-1] <- index$end[i]
+    index$code[i-1] <- if_else(index$code[i-1]=="" | index$code[i]=="", max(index$code[i-1], index$code[i]), " *** collapsed ***")
+    index$line_type[i-1] <- "collapsed"
+    index$set[i-1] <- paste_sort(c(index$set[i-1], index$set[i]))
+    index$set_hid[i-1] <- paste_sort(c(index$set_hid[i-1], index$set_hid[i]))
+    index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]))
+    index$used_hid[i-1] <- paste_sort(c(index$used_hid[i-1], index$used_hid[i]))
+    index <- index[-i, ] # remove line
+    hyphens <- str_count(index$block, "-")
+    collapsible1 <- index$file_name == lag(index$file_name, 1) & index$begin == lag(index$end + 1, 1)
+    collapsible <- collapsible1 & index$sort
+    collapsible[is.na(collapsible)] <- FALSE
+  }
 
   #### use index to sort csl ####
   prev_i <- seq(nrow(csl)) # where each new line will come from
@@ -478,6 +563,7 @@ tokens <- csl_dependence(csl, tokens, silent=FALSE)
 assumed_all <- tokens$name[tokens$set_status=="assumed"]
 
 #### save progress ####
+stop()
 rm(list=setdiff(ls(), c("csl", "tokens", "path_name", "model_name", "silent", lsf.str())))
 temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
 save.image(temp_file)
