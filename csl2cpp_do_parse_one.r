@@ -5,7 +5,7 @@
 # parse each line into a list of recognised parts (drop whitespace and tidy up a bit)
 # calculate indent and connect begin and end markers (using stack)
 
-temp_file <- paste(path_name, "checkpoint_after_read.RData", sep="/")
+temp_file <- paste(output_dir, "checkpoint_after_read.RData", sep="/")
 load(file=temp_file) # recover progress
 
 cat(file=stderr(), "parsing code for tokens, line type, indent", "\n")
@@ -271,6 +271,6 @@ tokens <- data.frame(name = token, line = token_line, stringsAsFactors = FALSE) 
   )
 
 # save progress
-rm(list=setdiff(ls(), c("csl", "tokens", "path_name", "model_name", "silent", lsf.str())))
-temp_file <- paste(path_name, "checkpoint_after_parse_one.RData", sep="/")
+rm(list=setdiff(ls(), c("csl", "tokens", "output_dir", "model_name", "silent", lsf.str())))
+temp_file <- paste(output_dir, "checkpoint_after_parse_one.RData", sep="/")
 save.image(temp_file)

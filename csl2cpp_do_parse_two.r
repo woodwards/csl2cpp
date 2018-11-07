@@ -10,7 +10,7 @@
 # are we going to completely automate translation, or only mostly?
 # some things are hard to automate but fairly easy to translate manually (goto, pow)
 
-temp_file <- paste(path_name, "checkpoint_after_parse_one.RData", sep="/")
+temp_file <- paste(output_dir, "checkpoint_after_parse_one.RData", sep="/")
 load(file=temp_file) # recover progress
 
 cat(file=stderr(), "translating declarations, initialisation, calculation", "\n")
@@ -1319,8 +1319,8 @@ tokens <- data_frame(
   )
 
 # save progress
-rm(list=setdiff(ls(), c("csl", "tokens", "path_name", "model_name", "silent", lsf.str())))
-temp_file <- paste(path_name, "checkpoint_after_parse_two.RData", sep="/")
+rm(list=setdiff(ls(), c("csl", "tokens", "output_dir", "model_name", "silent", lsf.str())))
+temp_file <- paste(output_dir, "checkpoint_after_parse_two.RData", sep="/")
 save.image(temp_file)
 
 #### list of line types ####

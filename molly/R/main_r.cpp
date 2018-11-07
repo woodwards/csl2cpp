@@ -17,7 +17,7 @@ void initialise_model( double start_time = 0.0 , bool set_debug_status = false )
 // [[Rcpp::export]]
 void call_params_2014_m( ){
 	molly.pull_variables_from_model();
-	params_2014_m( molly );
+	// params_2014_m( molly );
 	molly.push_variables_to_model();
 }
 

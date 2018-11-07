@@ -9,7 +9,7 @@
 # but if not, we still want a result
 # how to handle unsortable lines?
 
-temp_file <- paste(path_name, "checkpoint_after_parse_two.RData", sep="/")
+temp_file <- paste(output_dir, "checkpoint_after_parse_two.RData", sep="/")
 load(file=temp_file) # recover progress
 
 cat("sorting derivative section code", "\n")
@@ -521,7 +521,6 @@ while (length(sortable)>0){
   collapsible1 <- index$file_name == lag(index$file_name, 1) & index$begin == lag(index$end + 1, 1)
   collapsible <- collapsible1 & index$sort
   collapsible[is.na(collapsible)] <- FALSE
-  stop()
   while (any(collapsible)){
     i <- max(which(collapsible)) # choose a line
     index$end[i-1] <- index$end[i]
@@ -561,11 +560,12 @@ while (length(sortable)>0){
 cat("reanalyse variable dependence", "\n")
 tokens <- csl_dependence(csl, tokens, silent=FALSE)
 assumed_all <- tokens$name[tokens$set_status=="assumed"]
+message <- paste("unitialised variables :", paste(assumed_all, collapse=" "))
+cat(message, "\n")
 
 #### save progress ####
-stop()
-rm(list=setdiff(ls(), c("csl", "tokens", "path_name", "model_name", "silent", lsf.str())))
-temp_file <- paste(path_name, "checkpoint_after_parse_three.RData", sep="/")
+rm(list=setdiff(ls(), c("csl", "tokens", "output_dir", "model_name", "silent", lsf.str())))
+temp_file <- paste(output_dir, "checkpoint_after_parse_three.RData", sep="/")
 save.image(temp_file)
 
 

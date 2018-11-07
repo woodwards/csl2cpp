@@ -1,19 +1,27 @@
 
 # read csl file and includes
-read_csl <- function(csl_file, m_files=""){
+read_csl <- function(base_dir, csl_file, m_files=""){
 
-  #
-  drop_comments=FALSE
-  cat(file=stderr(), paste("reading", csl_file), "\n")
+  # options
+  drop_comments <- FALSE
+  ignore_path <- FALSE
+  cat(file=stderr(), paste("base directory", base_dir), "\n")
+  cat(file=stderr(), paste("reading csl file", csl_file), "\n")
   cat(file=stderr(), paste("drop_comments", drop_comments), "\n")
-  cat(file=stderr(), paste("ignore_path", TRUE), "\n")
-  # cat(file=stderr(), "WARNING: All INCLUDE files must be in the same directory *** paths ignored ***\n")
+  cat(file=stderr(), paste("ignore_path", ignore_path), "\n")
 
-  # read file
+  # set working directory
+  original_dir <- getwd()
+  if (!is.null(base_dir)){
+    setwd(base_dir)
+  }
+
+  # read base file
   file_name <- str_extract(csl_file,  "[:alpha:]+[[:alnum:]_]*\\.csl")
-  path_name <- str_extract(csl_file, "^[:alpha:]+[[:alnum:]_]*") # fails if path has punctuation
-  file_path <- paste(path_name, "/", file_name, sep="")
-  csl <- read_lines(file_path) %>%
+  # path_name <- str_extract(csl_file, "^[:alpha:]+[[:alnum:]_]*") # fails if path has punctuation
+  # file_path <- paste(path_name, "/", file_name, sep="")
+  # csl <- read_lines(file_path) %>%
+  csl <- read_lines(csl_file) %>%
     iconv(to="ASCII//TRANSLIT") %>% # remove accents
     as_tibble() %>%
     rename(code=value) %>%
@@ -29,8 +37,9 @@ read_csl <- function(csl_file, m_files=""){
     # read include file
     thisi <- incli[1]
     cat(paste(thisi, csl$code[thisi], "\n"))
-    file_name <- str_extract(csl$code[thisi], "[:alpha:]+[[:alnum:]_]*\\.csl")
-    file_path <- paste(path_name, "/", file_name, sep="")
+    file_name <- str_extract(csl$code[thisi], "[:alpha:]+[[:alnum:]_[:space:]]*\\.csl")
+    # file_path <- paste(path_name, "/", file_name, sep="")
+    file_path <- str_extract(csl$code[thisi], "(?<=\').+(?=\')")
     first <- csl$seq_number[thisi]
     last <- csl$seq_number[thisi+1]
     # cat(file=stderr(), file_name, "\n")
@@ -81,8 +90,9 @@ read_csl <- function(csl_file, m_files=""){
 
     # read file
     cat(file=stderr(), paste("reading", file_name), "\n")
-    file_path <- paste(path_name, "/", file_name, sep="")
-    include_mfile <- read_lines(file_path) %>%
+    # file_path <- paste(path_name, "/", file_name, sep="")
+    # include_mfile <- read_lines(file_path) %>%
+    include_mfile <- read_lines(file_name) %>%
       iconv(to="ASCII//TRANSLIT") %>% # remove accents
       as_tibble() %>%
       rename(code=value)
@@ -99,6 +109,11 @@ read_csl <- function(csl_file, m_files=""){
     # append to csl
     csl <- rbind(csl, include_mfile)
 
+  }
+
+  # restore original working directory
+  if (!is.null(original_dir)){
+    setwd(original_dir)
   }
 
   return(csl)
