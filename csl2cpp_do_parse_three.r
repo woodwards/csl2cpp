@@ -47,11 +47,11 @@ csl <- csl[new_i,] # sort in this order
 csl$dep <- "" # add equation dependence to rate calculations
 
 # get model state, rate and derivt variables
-integ <- csl$integ[csl$line_type == "integ"]
+integ <- csl$integ[csl$line_type %in% c("integ", "intvc")]
 state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
 rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
 rate <- str_replace_all(rate, "= ", "")
-derivt <- csl$integ[csl$line_type == "derivt"]
+derivt <- csl$integ[csl$line_type %in% c("derivt")]
 slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
 slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
 slopeof <- str_replace_all(slopeof, "= ", "")
@@ -83,6 +83,8 @@ if (sum(csl$line_type=="derivative")>1) {
 
 #### choose block to sort ####
 sortable <- which(csl$line_type %in% c("derivative", "sort"))
+
+# sort next block
 while (length(sortable)>0){
 
   # set up
@@ -94,18 +96,19 @@ while (length(sortable)>0){
   cat("sorting", csl$line_type[i], "block", base_block, ",", length(base_i), "lines\n")
   csl$line_type[i] <- paste(csl$line_type[i], "_sorted", sep="")  # prevent resorting
 
-  # files involved
+  # report files involved
   sorted_file_names <- unique(csl$file_name[base_i])
   cat(paste("\t", sorted_file_names, "\n"))
 
   # provide index to allow easier sorting
   i <- base_i
   index <- data_frame(line = i,
-                      block = csl$block[i],
                       file_name = csl$file_name[i],
+                      line_number = csl$line_number[i],
+                      block = csl$block[i],
                       begin = i,
                       end = i,
-                      code = csl$calc[i],
+                      code = csl$calc[i], # only works on derivative code!
                       line_type = csl$line_type[i],
                       sort = TRUE,
                       set = csl$set[i], # outputs
@@ -122,24 +125,27 @@ while (length(sortable)>0){
   )
 
   # these lines have no effect on sorting of code (at most they effect decl and init)
-  inactive <- c("integ", "comment", "blank", "derivative", "termt", "sort", "derivt",
-                "derivative_sorted", "sort_sorted",
+  inactive <- c("integ", "intvc", "comment", "blank", "derivative", "termt", "sort", "derivt",
+                "derivative_sorted", "sort_sorted", "include", "end",
                 "algorithm", "maxterval", "minterval", "cinterval", "nsteps",
                 "constant", "parameter",
                 "integer", "dimension", "logical", "doubleprecision", "real", "character")
-  index$used[index$line_type %in% inactive] <- ""
-  index$set[index$line_type %in% inactive] <- ""
+  # View(filter(index, index$line_type %in% inactive))
+  index$set[index$line_type %in% inactive] <- "" # these are set elsewhere
+  index$used[index$line_type %in% inactive] <- "" # these are used elsewhere
   index$dep[index$line_type %in% inactive] <- "inactive"
 
   #### collapse continuations ####
   cat("collapse continuations", "\n")
   cont_lines <- which(index$cont>"" & index$sort)
+  # View(index[cont_lines,])
   while (length(cont_lines)>0){
     i <- max(cont_lines) + 1 # continuation character is on previous line
     index$end[i-1] <- index$end[i]
     index$code[i-1] <- "*** collapsed continuation ***"
     index$set[i-1] <- paste_sort(c(index$set[i-1], index$set[i]))
     index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]))
+    stopifnot(index$dep[i] %in% c(index$dep[i-1], "inactive"))
     index$cont[i-1] <- ""
     index <- index[-i, ] # remove line
     cont_lines <- which(index$cont>"")
@@ -161,6 +167,7 @@ while (length(sortable)>0){
     index$code[i-1] <- paste("*** collapsed", index$line_type[i-1], "***")
     index$set[i-1] <- paste_sort(c(index$set[i-1], index$set[i]))
     index$used[i-1] <- paste_sort(c(index$used[i-1], index$used[i]))
+    stopifnot(index$dep[i] %in% c(index$dep[i-1], "inactive"))
     index <- index[-i, ] # remove line
     hyphens <- str_count(index$block, "-")
     collapsible1 <- index$block == lag(index$block, 1) & lag(index$line_type, 1) %in% c("ifthen", "do")
@@ -170,18 +177,16 @@ while (length(sortable)>0){
     collapsible[is.na(collapsible)] <- FALSE
   }
 
-  #### determine variables available prior to sort section ####
+  #### analyse variable dependence ####
   cat("analyse variable dependence", "\n")
   tokens <- csl_dependence(csl, tokens, silent=FALSE)
   assumed_all <- tokens$name[tokens$set_status=="assumed"]
-  available <- tokens$name[tokens$set_line<min(base_i) | tokens$set_status=="assumed"]
+  available_here <- tokens$name[tokens$set_line<min(base_i)]
   used_here <- setdiff(unique(unlist(str_split(index$used[index$sort], ","))), "")
   set_here <- setdiff(unique(unlist(str_split(index$set[index$sort], ","))), "")
-  used_but_not_set <- setdiff(used_here, set_here)
-  # stopifnot(length(setdiff(used_but_not_set, c(state, available)))==0)
-  set_but_not_used <- setdiff(set_here, c(used_here, rate))
+  assumed_here <- setdiff(used_here, c(available_here, set_here, "t"))
 
-  #### identify which equations are needed to calculate the rate ####
+  #### analyse equation dependency in derivative ####
   if (base_type=="derivative"){   # only applied to derivative section
     cat("analyse equation dependency in derivative", "\n")
     var_dep <- c()
@@ -201,15 +206,13 @@ while (length(sortable)>0){
         if (index$line_type[i] %in% inactive) {
           index$dep[i] <- "inactive"
         } else { # is a known variable getting set?
-          set <- paste_sort(c(index$set[i], index$set_hid[i]))
-          set <- comma_split(set)
+          set <- comma_split(paste_sort(c(index$set[i], index$set_hid[i])))
           set_types <- var_dep[set]
           if (any(set_types %in% c("state", "t"))){
-            stop(paste("index line", i, ": illegally set state variable or t"))
+            stop(paste(index$file_name[i], index$line_number[i], "ff : illegally set state variable or t\n"))
           } else if (any(set_types %in% c("rate", "for_rate"))){
             index$dep[i] <- "for_rate"
-            used <- paste_sort(c(index$used[i], index$used_hid[i]))
-            used <- comma_split(used)
+            used <- comma_split(paste_sort(c(index$used[i], index$used_hid[i])))
             used_types <- var_dep[used]
             if (any(is.na(used_types))){
               var_dep[used[is.na(used_types)]] <- "for_rate" # new var
@@ -285,28 +288,33 @@ while (length(sortable)>0){
   }
   cat("\n")
 
-  #### collapse non-active lines ####
+  #### collapse inactive lines except include ####
   # has to be done after blocks
-  cat("collapse non-active lines", "\n")
-  collapse_up <- c("blank", "termt",
+  cat("collapse inactive lines except include \n")
+  collapse_down <- c("comment", "derivative", "sort", "derivative_sorted", "sort_sorted",
+                      "constant", "parameter",
+                      "integer", "dimension", "logical", "doubleprecision", "real", "character")
+  collapse_up <- c("blank", "termt", "integ", "intvc", "derivt",
                    "algorithm", "nsteps", "maxterval", "minterval", "cinterval")
-  inactive <- index$dep=="inactive" & index$sort
+  dont_collapse <- setdiff(inactive, c(collapse_down, collapse_up))
+  inactive <- index$line_type %in% c(collapse_down, collapse_up) & index$sort
   while (any(inactive)){
     i <- which(inactive)[[1]]
-    if (i!=1 & (index$line_type[i] %in% collapse_up | i==nrow(index))){
+    if (i!=1 && (index$line_type[i] %in% collapse_up || i==nrow(index))){
       index$end[i-1] <- index$end[i] # collapse upwards
     } else {
       index$begin[i+1] <- index$begin[i] # collapse downwards
     }
     index <- index[-i, ] # remove line
-    inactive <- index$dep=="inactive" & index$sort
+    inactive <- index$line_type %in% c(collapse_down, collapse_up) & index$sort
   }
 
-  #### collapse include ####
+  #### collapse include blocks ####
   # View(filter(index, line_type %in% c("include", "end")))
   # this feature is experimental and not fully operational
+  # the intention is to see which include blocks do not get shuffled
   if (collapse_include){
-    cat("collapse include", "\n")
+    cat("collapse include blocks\n")
     hyphens_base <- str_count(base_block, "-")
     hyphens <- str_count(index$block, "-")
     collapsible1 <- index$block == lag(index$block, 1) & lag(index$line_type, 1) %in% c("include")
@@ -339,103 +347,102 @@ while (length(sortable)>0){
     }
   }
 
-  #### collapse non-active lines ####
-  # has to be done after blocks
-  cat("collapse non-active lines", "\n")
-  collapse_up <- c("blank", "end", "termt",
-                   "algorithm", "nsteps", "maxterval", "minterval", "cinterval")
-  inactive <- index$dep=="inactive" & index$sort
+  #### collapse include and end lines ####
+  cat("collapse include and end lines\n")
+  collapse_down <- c("include")
+  collapse_up <- c("end")
+  inactive <- index$line_type %in% c(collapse_down, collapse_up) & index$sort
   while (any(inactive)){
     i <- which(inactive)[[1]]
-    if (i!=1 & (index$line_type[i] %in% collapse_up | i==nrow(index))){
+    if (i!=1 && (index$line_type[i] %in% collapse_up || i==nrow(index))){
       index$end[i-1] <- index$end[i] # collapse upwards
     } else {
       index$begin[i+1] <- index$begin[i] # collapse downwards
     }
     index <- index[-i, ] # remove line
-    inactive <- index$dep=="inactive" & index$sort
+    inactive <- index$line_type %in% c(collapse_down, collapse_up) & index$sort
   }
 
   #### simon's sorting algorithm ####
-  if (sorting_method=="simon"){
-
-    # loop until no jumps left
-    cat("sort using simon's method\n")
-    jump_to <- "1"
-    pass <- 0
-    while(any(jump_to>"")){
-
-      if (TRUE){
-
-        # count passes
-        pass <- pass + 1
-        for_rate <- which(index$dep == "for_rate" & index$sort)
-        index$unset <- ""
-        index$unsetline <- ""
-
-        # locate lines where variables are set
-        var_set_all <- c() # set so far (excluding those which are not used in derivative)
-        for (i in for_rate){
-          # record any set that will be used
-          if (index$set[i]>""){
-            set <- index$set[i]
-            set <- comma_split(set)
-            set <- setdiff(set, set_but_not_used)
-            var_set_all[set] <- index$line[i]
-          }
-        }
-        # find unset variables
-        var_set <- c()
-        for (i in for_rate){
-          # record any set that will be used
-          if (index$set[i]>""){
-            set <- index$set[i]
-            set <- comma_split(set)
-            set <- setdiff(set, set_but_not_used)
-            var_set[set] <- index$line[i]
-          }
-          # record any used but not yet set
-          if (index$used[i]>""){
-            used <- index$used[i]
-            used <- comma_split(used)
-            used <- setdiff(used, used_but_not_set)
-            used <- setdiff(used, names(var_set)) # set so far
-            if (length(used)>0){ # record any used but currently unset
-              index$unset[i] <- paste_sort(used)
-              index$unsetline[i] <- paste(var_set_all[used], collapse=",") # line number where last set
-            }
-          }
-        }
-
-        # sort
-        index$newline <- 1:nrow(index)
-        jump_list <- str_split(index$unsetline, ",") # returns matrix of strings
-        jump_to <- unlist(lapply(jump_list, function(x) max(unlist(x)))) # jump for each line
-        jump_line <- jump_to > ""
-        jump_i <- match( as.integer(jump_to) , index$line ) + runif(nrow(index)) # avoid identical
-        cat("sorting pass", pass, ":" , sum(jump_line), "jumps remaining\n")
-
-      }
-
-      if (any(jump_line)){
-
-        j <- which(jump_line) # all lines
-        # j <- head(which(jump_line), 1) # choose jumps
-        index$newline[j] <- jump_i[j]
-        index <- arrange(index, newline)
-
-      }
-
-    }
-
-  } # end of simon's method
+  # if (sorting_method=="simon"){
+  #
+  #   # loop until no jumps left
+  #   cat("sort using simon's method\n")
+  #   jump_to <- "1"
+  #   pass <- 0
+  #   while(any(jump_to>"")){
+  #
+  #     if (TRUE){
+  #
+  #       # count passes
+  #       pass <- pass + 1
+  #       for_rate <- which(index$dep == "for_rate" & index$sort)
+  #       index$unset <- ""
+  #       index$unsetline <- ""
+  #
+  #       # locate lines where variables are set
+  #       var_set_all <- c() # set so far (excluding those which are not used in derivative)
+  #       for (i in for_rate){
+  #         # record any set that will be used
+  #         if (index$set[i]>""){
+  #           set <- index$set[i]
+  #           set <- comma_split(set)
+  #           set <- setdiff(set, set_but_not_used)
+  #           var_set_all[set] <- index$line[i]
+  #         }
+  #       }
+  #       # find unset variables
+  #       var_set <- c()
+  #       for (i in for_rate){
+  #         # record any set that will be used
+  #         if (index$set[i]>""){
+  #           set <- index$set[i]
+  #           set <- comma_split(set)
+  #           set <- setdiff(set, set_but_not_used)
+  #           var_set[set] <- index$line[i]
+  #         }
+  #         # record any used but not yet set
+  #         if (index$used[i]>""){
+  #           used <- index$used[i]
+  #           used <- comma_split(used)
+  #           used <- setdiff(used, used_but_not_set)
+  #           used <- setdiff(used, names(var_set)) # set so far
+  #           if (length(used)>0){ # record any used but currently unset
+  #             index$unset[i] <- paste_sort(used)
+  #             index$unsetline[i] <- paste(var_set_all[used], collapse=",") # line number where last set
+  #           }
+  #         }
+  #       }
+  #
+  #       # sort
+  #       index$newline <- 1:nrow(index)
+  #       jump_list <- str_split(index$unsetline, ",") # returns matrix of strings
+  #       jump_to <- unlist(lapply(jump_list, function(x) max(unlist(x)))) # jump for each line
+  #       jump_line <- jump_to > ""
+  #       jump_i <- match( as.integer(jump_to) , index$line ) + runif(nrow(index)) # avoid identical
+  #       cat("sorting pass", pass, ":" , sum(jump_line), "jumps remaining\n")
+  #
+  #     }
+  #
+  #     if (any(jump_line)){
+  #
+  #       j <- which(jump_line) # all lines
+  #       # j <- head(which(jump_line), 1) # choose jumps
+  #       index$newline[j] <- jump_i[j]
+  #       index <- arrange(index, newline)
+  #
+  #     }
+  #
+  #   }
+  #
+  # } # end of simon's method
 
   #### acslx sorting method ####
   if (sorting_method=="acslx"){
 
     cat("sort using acslx method\n")
     sort_rows <- which(index$sort)
-    index$saved <- seq(nrow(index))
+    index$saved <- seq(nrow(index)) # used if index is whole csl
     index$saved[sort_rows] <- 0
     next_save_at <- min(sort_rows)
 
@@ -444,13 +451,13 @@ while (length(sortable)>0){
     for (i in sort_rows){
       if (index$set[i]>""){
         set <- comma_split(index$set[i])
-        set <- setdiff(set, set_but_not_used)
         var_set_all[set] <- i
       }
     }
     # variables available at beginning of sort section
     var_set <- c()
-    var_set[available] <- 0
+    var_set[available_here] <- 0 # includes all previously assumed variables
+    var_set[assumed_here] <- 0
     var_set[state] <- 0
     var_set["t"] <- 0
     # track variables in this section
@@ -473,26 +480,18 @@ while (length(sortable)>0){
         # used but not available
         if (index$used[i]>""){
           used <- comma_split(index$used[i])
-          used <- setdiff(used, names(var_set)) # ignore already set
+          used <- setdiff(used, names(var_set)) # ignore already set or assumed
           index$unset[i] <- paste_sort(used)
-          index$unsetline[i] <- paste(var_set_all[used], collapse=",") # line number where set
         } else {
           used <- c()
           index$unset[i] <- ""
-          index$unsetline[i] <- ""
         }
 
-        # save line if no dependence or if all used variables are now available
-        if (index$dep[i]==""){
+        # save line if all used variables are now available
+        if (length(used)==0){
           index$saved[i] <- next_save_at # save line
-          # cat("saved", next_save_at, "\n")
           cat(next_save_at, " ")
-          next_save_at <- next_save_at + 1
-        } else if (length(used)==0){
-          index$saved[i] <- next_save_at # save line
-          # cat("saved", next_save_at, "\n")
-          cat(next_save_at, " ")
-          var_set[set] <- next_save_at # expand list of set vars with current line
+          var_set[set[set>""]] <- next_save_at # expand list of set vars with current line
           next_save_at <- next_save_at + 1
           i <- min(sort_rows) # go back to start and recheck unsaved
         } else {
@@ -506,6 +505,9 @@ while (length(sortable)>0){
     failed <- sum(index$saved==0 & index$sort)
     if (failed>0){
       cat("failed to sort", failed, "of", length(sort_rows), "lines\n")
+      unset <- comma_split(paste_sort(index$unset))
+      message <- paste("unset variables :", paste(unset, collapse=" "))
+      cat(message, "\n")
       stop("failed to sort")
     } else {
       cat("successfully sorted", length(sort_rows), "lines\n")
@@ -524,7 +526,7 @@ while (length(sortable)>0){
   while (any(collapsible)){
     i <- max(which(collapsible)) # choose a line
     index$end[i-1] <- index$end[i]
-    index$code[i-1] <- if_else(index$code[i-1]=="" | index$code[i]=="", max(index$code[i-1], index$code[i]), " *** collapsed ***")
+    index$code[i-1] <- if_else(index$code[i-1]=="" || index$code[i]=="", max(index$code[i-1], index$code[i]), " *** collapsed ***")
     index$line_type[i-1] <- "collapsed"
     index$set[i-1] <- paste_sort(c(index$set[i-1], index$set[i]))
     index$set_hid[i-1] <- paste_sort(c(index$set_hid[i-1], index$set_hid[i]))

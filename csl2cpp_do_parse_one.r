@@ -8,7 +8,7 @@
 temp_file <- paste(output_dir, "checkpoint_after_read.RData", sep="/")
 load(file=temp_file) # recover progress
 
-cat(file=stderr(), "parsing code for tokens, line type, indent", "\n")
+cat("parsing code for tokens, line type, indent", "\n")
 
 source("csl2cpp_parse.r") # load functions
 
@@ -30,7 +30,7 @@ csl <- csl %>%
     parse_list = NA
   )
 
-# start of line keywords (e.g. not including INTEG, DERIVT)
+# start of line keywords (e.g. not including INTEG, INTVC, DERIVT)
 # don't try to handle indenting for has_label, goto, if_goto
 # for do loops, replace the continue with enddo
 # (these structures must be protected from sorting by being placed inside procedurals)
@@ -51,26 +51,30 @@ block <- rep(0, max_indent) # ids for blocks at different indent levels
 do_labels <- c()
 
 # create regex strings for detection (these could be made faster by working on split code)
-integ_str <- "token.+equals.+integ.+openbracket.+closebracket"
-derivt_str <- "token.+equals.+derivt.+openbracket.+closebracket"
-if_then_str <- "token.+if.+openbracket.+closebracket.+token.+then"
-if_goto_str <- "token.+if.+openbracket.+closebracket.+token.+goto"
-else_if_then_str <- "token.+else.+token.+if.+openbracket.+closebracket.+token.+then"
 label_str <- "^[:blank:]*[0-9]+[:blank:]*\\:|^[:blank:]*[:alpha:]+[[:alnum:]_]*[:blank:]*\\:"
 keyword_str <- paste("^[:blank:]*", keyword, "(?![[:alnum:]_])", sep="", collapse="|")
 array_assign_str <- "token.+openbracket.+closebracket.+equals"
+integ_str <- "token.+equals.+integ.+openbracket.+closebracket"
+intvc_str <- "token.+equals.+intvc.+openbracket.+closebracket"
+derivt_str <- "token.+equals.+derivt.+openbracket.+closebracket"
+if_then_str <- "openbracket.+closebracket.+token.+then"
+if_goto_str <- "openbracket.+closebracket.+token.+goto"
+has_then_str <- "token.+then"
+has_goto_str <- "token.+goto"
+else_if_then_str <- "token.+else.+token.+if.+openbracket.+closebracket.+then"
 
 # prepare loop
-token      <- vector("character", 10000)
-token_line <- vector("integer", 10000)
+token      <- vector("character", 12000)
+token_line <- vector("integer", 12000)
 tokeni <- 1
 is_continuation <- FALSE
 i <- 1
+pre_cont_i <- i # line number of top of continuation block
 while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into csl)
 
   # report progress
   if ((i %% 200 == 1 || i == nrow(csl)) && !silent){
-    cat(file=stderr(), "line", i, "of", nrow(csl), "\n")
+    cat("line", i, "of", nrow(csl), "\n")
   }
 
   # get line
@@ -158,15 +162,7 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
   csl$parse_list[i] <- parse_str
   csl$length[i] <- length(parse_list) / 2
 
-  # detect multi token keywords
-  has_integ <- str_detect(str_to_lower(parse_str), integ_str)
-  has_derivt <- str_detect(str_to_lower(parse_str), derivt_str)
-  else_if_then <- str_detect(str_to_lower(parse_str), else_if_then_str)
-  if_then <- str_detect(str_to_lower(parse_str), if_then_str) && !else_if_then
-  if_goto <- str_detect(str_to_lower(parse_str), if_goto_str)
-  array_assign <- str_detect(str_to_lower(parse_str), array_assign_str)
-
-  # identify line type from first 1-2 items
+  # get first 1-2 items
   type1 <- parse_list[[1]] # get first item
   value1 <- str_to_lower(parse_list[[2]])
   if (length(parse_list) > 2){
@@ -176,20 +172,61 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
     type2 <- ""
     value2 <- ""
   }
+  # identify preliminary line type from first 1-2 items
   csl$line_type[i] <- case_when(
     is_continuation ~ "continuation", # i.e. same as previous line
-    has_integ ~ "integ", # special kind of assignment?
-    has_derivt ~ "derivt", # special kind of assignment?
-    if_then ~ "ifthen",
-    if_goto ~ "ifgoto",
-    else_if_then ~ "elseifthen",
     type1 == "token" && value1 %in% keyword ~ value1, # line_type <- keyword
     type1 == "blank" & has_tail ~ "comment", # comment only
     type1 == "blank" ~ "blank", # blank line
     type1 == "token" && type2 == "equals" ~  "assign",
-    array_assign ~ "arrayassign",
+    str_detect(str_to_lower(parse_str), array_assign_str) ~ "arrayassign",
     TRUE ~ "unknown" # other
   )
+  # assign -> integ, intvc, derivt
+  if (csl$line_type[i]=="assign"){
+    if (str_detect(str_to_lower(parse_str), integ_str)) {
+      csl$line_type[i] <- "integ"
+    } else if (str_detect(str_to_lower(parse_str), intvc_str)) {
+      csl$line_type[i] <- "intvc"
+    } else if (str_detect(str_to_lower(parse_str), derivt_str)) {
+      csl$line_type[i] <- "derivt"
+    }
+  }
+  # if -> ifthen, ifgoto
+  if_then <- FALSE
+  if (csl$line_type[i]=="if"){
+    if (str_detect(str_to_lower(parse_str), if_then_str)) {
+      csl$line_type[i] <- "ifthen"
+      if_then <- TRUE
+    } else if (str_detect(str_to_lower(parse_str), if_goto_str)) {
+      csl$line_type[i] <- "ifgoto"
+    }
+  }
+  # else -> elseifthen
+  else_if_then <- FALSE
+  if (csl$line_type[i]=="else"){
+    if (str_detect(str_to_lower(parse_str), else_if_then_str)) {
+      csl$line_type[i] <- "elseifthen"
+      else_if_then <- TRUE
+    }
+  }
+  # continuation modifies if
+  if (is_continuation & csl$line_type[pre_cont_i]=="if"){
+    if (str_detect(str_to_lower(parse_str), has_then_str)){
+      csl$line_type[pre_cont_i] <- "ifthen"
+      if_then <- TRUE
+    } else if (str_detect(str_to_lower(parse_str), has_goto_str)){
+      csl$line_type[pre_cont_i] <- "ifgoto"
+    }
+  }
+  # continuation modifies else
+  if (is_continuation & csl$line_type[pre_cont_i]=="else"){
+    if (str_detect(str_to_lower(parse_str), has_then_str)){
+      csl$line_type[pre_cont_i] <- "elseifthen"
+      else_if_then <- TRUE
+    }
+  }
+  # collect do labels
   if (csl$line_type[i]=="do"){
     do_labels <- c(do_labels, value2)
   }
@@ -202,6 +239,10 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
     block[indent] <- block[indent] + 1
     block[(indent+1):max_indent] <- 0
     csl$block[i] <- paste(block[1:indent], collapse="-")
+    if (is_continuation & if_then){ # carry indent and block back to pre_cont_i
+      csl$indent[(pre_cont_i+1):(i-1)] <- csl$indent[i] + 2
+      csl$block[pre_cont_i:(i-1)] <- csl$block[i]
+    }
   } else if ((type1 == "token" && value1 %in% keyword4) || else_if_then){ # decrease and increase indent
     indent <- indent - 1
     csl$indent[i] <- indent
@@ -211,7 +252,7 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
     csl$block[i] <- paste(block[1:indent], collapse="-")
     indent <- indent - 1
     if (indent<0){
-      print("FIXME: indent < 0")
+      print("FIXME : indent < 0")
       indent <- indent + 1
     }
     csl$indent[i] <- indent
@@ -247,15 +288,21 @@ while (i <= nrow(csl)){ # loop through lines (this allows inserting rows into cs
       token[tokeni] <- value1
       token_line[tokeni] <- i
       tokeni <- tokeni + 1
-      stopifnot(tokeni <= length(token)) # need more storage?
+      if (tokeni > length(token)){
+        print("token arrays not big enough")
+      }
     }
   }
 
-  # continuation?
-  is_continuation <- this_line_cont != ""
-
   # next line
-  i <- i + 1
+  is_continuation <- this_line_cont != ""
+  if (is_continuation){
+    i <- i + 1
+    # pre_cont_i <- pre_cont_i
+  } else {
+    i <- i + 1
+    pre_cont_i <- i
+  }
 
 } # end while
 

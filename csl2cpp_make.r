@@ -26,22 +26,34 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
   class_name <- paste(model_name, "_class", sep="")
   has_derivt <- any(csl$line_type == "derivt")
 
-	# state variables
-  integ <- csl$integ[csl$line_type == "integ"]
+  # get model state, rate and derivt variables
+  integ <- csl$integ[csl$line_type %in% c("integ", "intvc")]
   state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
-	rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", "")) # rate expressions
-	n_state <- length(state)
-	# derivt variables
-	derivt <- csl$integ[csl$line_type == "derivt"]
-	slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
-	slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
-	slopeof <- str_replace_all(slopeof, "= ", "")
+  rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
+  rate <- str_replace_all(rate, "= ", "")
+  derivt <- csl$integ[csl$line_type %in% c("derivt")]
+  slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
+  slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
+  slopeof <- str_replace_all(slopeof, "= ", "")
+
+  # count state variables
+  # View(filter(tokens, role %in% c("state", "state_array")))
+  n_state <- 0
+  for (j in state){
+    i <- which(tokens$name == j)
+    if (tokens$decl_type[i] == "double"){
+      n_state <- n_state + 1
+    } else { # state_array
+      n_state <- n_state + tokens$decl_ncolumns[i] * tokens$decl_nrows[i]
+    }
+  }
+	cat("n state :", n_state, "\n")
+
 	# pullable and pushable variables
 	pullable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto")]
 	n_pullable <- length(pullable)
 	pushable <- tokens$name[tokens$decl_type %in% c("double", "int", "bool", "auto") & tokens$decl_static==FALSE]
   n_pushable <- length(pushable)
-  cat("n state :", n_state, "\n")
   cat("n pullable :", n_pullable, "\n")
   cat("n pushable :", n_pushable, "\n")
 
@@ -131,16 +143,64 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
   #### get state ####
   cpp <- put_lines(cpp, 1, c("", "state_type get_state ( ) {"))
   cpp <- put_lines(cpp, 2, c("", "state_type current_state;", "", "// return current state"))
-  lines <- paste("current_state[", 0:(n_state-1), "] = ", state, ";", sep="")
-  cpp <- put_lines(cpp, 2, lines)
+  # lines <- paste("current_state[", 0:(n_state-1), "] = ", state, ";", sep="")
+  # cpp <- put_lines(cpp, 2, lines)
+  k <- 0
+  for (j in state){
+    i <- which(tokens$name == j)
+    if (tokens$decl_type[i] == "double"){
+      lines <- paste("current_state[", k, "] = ", j, ";", sep="")
+      cpp <- put_lines(cpp, 2, lines)
+      k <- k + 1
+    } else { # state_array
+      dims <- if_else(tokens$decl_nrows[i]==1, 1, 2)
+      for (row in 1:tokens$decl_nrows[i]){
+        for (col in 1:tokens$decl_ncolumns[i]){
+          if (dims==1){
+            lines <- paste("current_state[", k, "] = ", j, "[", col-1, "] ;", sep="")
+            cpp <- put_lines(cpp, 2, lines)
+            k <- k + 1
+          } else {
+            lines <- paste("current_state[", k, "] = ", j, "[", row-1, "][", col-1, "] ;", sep="")
+            cpp <- put_lines(cpp, 2, lines)
+            k <- k + 1
+          }
+        }
+      }
+    }
+  }
   cpp <- put_lines(cpp, 2, c("", "return( current_state );"))
   cpp <- put_lines(cpp, 1, c("", "} // end get_state", ""))
 
   #### set state ####
   cpp <- put_lines(cpp, 1, c("void set_state ( state_type this_state ) {"))
   cpp <- put_lines(cpp, 2, c("", "// set state"))
-  lines <- paste(state, " = this_state[", 0:(n_state-1), "];", sep="")
-  cpp <- put_lines(cpp, 2, lines)
+  # lines <- paste(state, " = this_state[", 0:(n_state-1), "];", sep="")
+  # cpp <- put_lines(cpp, 2, lines)
+  k <- 0
+  for (j in state){
+    i <- which(tokens$name == j)
+    if (tokens$decl_type[i] == "double"){
+      lines <- paste(j, " = this_state[", k, "];", sep="")
+      cpp <- put_lines(cpp, 2, lines)
+      k <- k + 1
+    } else { # state_array
+      dims <- if_else(tokens$decl_nrows[i]==1, 1, 2)
+      for (row in 1:tokens$decl_nrows[i]){
+        for (col in 1:tokens$decl_ncolumns[i]){
+          if (dims==1){
+            lines <- paste(j, "[", col-1, "] = this_state[", k, "] ;", sep="")
+            cpp <- put_lines(cpp, 2, lines)
+            k <- k + 1
+          } else {
+            lines <- paste(j, "[", row-1, "][", col-1, "] = this_state[", k, "] ;", sep="")
+            cpp <- put_lines(cpp, 2, lines)
+            k <- k + 1
+          }
+        }
+      }
+    }
+  }
   cpp <- put_lines(cpp, 1, c("", "} // end set_state"))
 
 	#### public: create variable maps ####
@@ -221,7 +281,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	                           "print_debug_messages = set_debug_status;",
 	                           ""))
 	# uninitialised variables
-	if (length(assumed_all)>0 & FALSE){
+	if (length(assumed_all)>0 & TRUE){
   	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables"))
   	lines <- paste(assumed_all, "= 0.0;")
   	cpp <- put_lines(cpp, 2, lines)
@@ -240,11 +300,10 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
   	cat("initial calculations lines :", sum(rows), "\n")
   }
 	# state variable initial conditions
-	rows <- csl$line_type == "integ"
+	rows <- csl$line_type %in% c("integ", "intvc")
 	cpp <- put_lines(cpp, 2, c("", "// initialise state variables"))
 	lines <- smoosh(csl$init[rows], csl$delim[rows])
-	indent <- ifelse(csl$label[rows]>"", 1, 2) + pmax(0, csl$indent[rows] - min(csl$indent[rows]))
-	cpp <- put_lines(cpp, indent, lines)
+	cpp <- put_lines(cpp, 2, lines)
 	# numerical derivatives initial conditions
 	if (has_derivt){
 	  rows <- csl$line_type == "derivt"
@@ -404,8 +463,32 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	                           "calculate_rate( );",
 	                           "",
 	                           "// return rate"))
-	lines <- paste("odeint_rate[", 0:(n_state-1), "] ", rate, ";", sep="")
-	cpp <- put_lines(cpp, 2, lines)
+	# lines <- paste("odeint_rate[", 0:(n_state-1), "] ", rate, ";", sep="")
+	# cpp <- put_lines(cpp, 2, lines)
+	k <- 0
+	for (j in rate){
+	  i <- which(tokens$name == j)
+	  if (tokens$decl_type[i] == "double"){
+	    lines <- paste("odeint_rate[", k, "] = ", j, ";", sep="")
+	    cpp <- put_lines(cpp, 2, lines)
+	    k <- k + 1
+	  } else { # state_array
+	    dims <- if_else(tokens$decl_nrows[i]==1, 1, 2)
+	    for (row in 1:tokens$decl_nrows[i]){
+	      for (col in 1:tokens$decl_ncolumns[i]){
+	        if (dims==1){
+	          lines <- paste("odeint_rate[", k, "] = ", j, "[", col-1, "] ;", sep="")
+	          cpp <- put_lines(cpp, 2, lines)
+	          k <- k + 1
+	        } else {
+	          lines <- paste("odeint_rate[", k, "] = ", j, "[", row-1, "][", col-1, "] ;", sep="")
+	          cpp <- put_lines(cpp, 2, lines)
+	          k <- k + 1
+	        }
+	      }
+	    }
+	  }
+	}
 	cpp <- put_lines(cpp, 1, c("", "} // end rate operator", ""))
 
 	#### observer operator ####

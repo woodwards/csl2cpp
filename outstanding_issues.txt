@@ -15,6 +15,7 @@ Notes
 - SCHEDULE must be on its own line
 - INTERVAL must be on its own line
 - INTEG must be on it's own line and of the form x = integ( dx, x0 )
+- INTVC must be on it's own line and of the form x = integ( dx, x0 )
 - DERIVT must be on it's own line and of the form dx = derivt( dx0, x )
 - control variables IALG, CINT, MAXT, MINT, NSTP are treated as parameters, but not used
 - comments (and statements) outside CSL sections are moved to a HEADER section
@@ -24,7 +25,7 @@ Notes
 
 To Do
 
-- include file paths currently ignored
+- implement INTVC
 - link molly.cpp into the WFM
 - version control
 

@@ -2,7 +2,7 @@
 # thoughts:
 # see ACSL Reference Manual Version 11 p3-1, p3-3 (mistake on p3-2)
 # order of execution:
-#   INITIAL, set state, control variables, DERIVATIVE (sorted), DISCRETE, DYNAMIC, TERMINAL
+#   set time?, INITIAL, set state, control variables, DERIVATIVE (sorted), DISCRETE, DYNAMIC, TERMINAL
 # constant statement can be anywhere in the code "they are not executable" (p3-2)
 # integ statement can be anywhere in the code, initial conditions applied after INITIAL (p3-1, 3-3)
 # derivt statement can be anywhere in the code
@@ -25,18 +25,18 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
   csl$assumed <- ""
 
   # extract model state and rate variables
-  integ <- csl$integ[csl$line_type == "integ"]
+  integ <- csl$integ[csl$line_type %in% c("integ", "intvc")]
   state <- str_match(integ, "^[:alpha:]+[[:alnum:]_]*")[,1]
   rate <- str_trim(str_replace(integ, "^[:alpha:]+[[:alnum:]_]*", ""))
   rate <- str_replace_all(rate, "= ", "")
-  derivt <- csl$integ[csl$line_type == "derivt"]
+  derivt <- csl$integ[csl$line_type %in% c("derivt")]
   slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
   slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
   slopeof <- str_replace_all(slopeof, "= ", "")
 
   # create running list
-  token_set_line <- setNames(rep(NA, nrow(tokens)), tokens$name) # when does a var become available?
-  token_set_status <- setNames(rep("uninit", nrow(tokens)), tokens$name) # how is it set?
+  token_set_status <- setNames(rep("uninit", nrow(tokens)), tokens$name) # how is a var first set?
+  token_set_line <- setNames(rep(NA, nrow(tokens)), tokens$name) # when does a var first become available?
 
   # declarations of value (e.g. parameter, constant)
   # "algorithm", "nsteps", "maxterval", "cinterval", "minterval" currently also treated like parameter
@@ -54,33 +54,33 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
 
   # work through remaining code (sections have already been reorganised)
   active <- (csl$set>"" | csl$used>"") &
-    !(csl$line_type %in% c("parameter", "constant", "procedural", "integ", "derivt"))
+    !(csl$line_type %in% c("parameter", "constant",
+                           "algorithm", "nsteps", "maxterval", "cinterval", "minterval",
+                           "procedural", "integ", "intvc", "derivt"))
   rows <- which(active)
   did_continue <- FALSE
   for (i in rows){
+    this_set <- setdiff(comma_split(csl$set[i]), "")
+    this_used <- setdiff(comma_split(csl$used[i]), "")
+    stopifnot(all(this_set %in% names(token_set_status)))
+    stopifnot(all(this_used %in% names(token_set_status)))
     # set t at beginning of initial section
-    if (is.na(token_set_line["t"]) & csl$line_type[i] %in% c("initial")){
-      # only set ones that are not already flagged, we want to know if any are previous assumed
-      set <- "t"
-      bad <- token_set_status[set] == "uninit"
-      token_set_status[set[bad]] <- "set"
-      token_set_line[set[bad]] <- i
+    if (is.na(token_set_line["t"]) && csl$line_type[i] %in% c("initial")){
+      token_set_status["t"] <- "set"
+      token_set_line["t"] <- i - 0.5
     }
     # set state variables and numerical derivatives at end of initial section
-    if (any(is.na(token_set_line[c(state, slope)])) & !(csl$line_type[i] %in% c("header", "initial"))){
-      # only set ones that are not already flagged, we want to know if any are previous assumed
-      set <- c(state, slope)
-      bad <- token_set_status[set] == "uninit"
-      token_set_status[set[bad]] <- "set"
-      token_set_line[set[bad]] <- i
+    if (any(is.na(token_set_line[c(state, slope)])) && !(csl$line_type[i] %in% c("header", "initial"))){
+      token_set_status[c(state, slope)] <- "set"
+      token_set_line[c(state, slope)] <- i - 0.5
     }
     # handle continuations
     if (did_continue){ # accumulate variable lists
-      set <- c(set, comma_split(csl$set[i]))
-      used <- c(used, comma_split(csl$used[i]))
-    } else { # split variable lists
-      set <- comma_split(csl$set[i])
-      used <- comma_split(csl$used[i])
+      set <- c(set, this_set)
+      used <- c(used, this_used)
+    } else { # save variable lists
+      set <- this_set
+      used <- this_used
       line_type <- csl$line_type[i]
     }
     will_continue <- csl$cont[i] > ""
@@ -88,46 +88,48 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
       did_continue <- TRUE
     } else {
       # analyse line
-      set <- set[set>""]
       if (any(set %in% c("t"))){
         stop(paste(csl$file_name[i], csl$line_number[i], ": assignment to t in", csl$section[i], "\n"))
       }
-      if (any(set %in% c(state)) & !silent){
+      if (any(set %in% c(state)) && !silent){
         cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to state variable in", csl$section[i], "\n"))
       }
-      if (any(set %in% c(rate)) & csl$section[i]!="derivative" & !silent){
+      if (any(set %in% c(slope)) && !silent){
+        cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to slope variable in", csl$section[i], "\n"))
+      }
+      if (any(set %in% c(rate)) && csl$section[i] != "derivative" && !silent){
         cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to rate variable in", csl$section[i], "\n"))
       }
-      used <- used[used>""]
-      if (any(used %in% c("t")) & !(csl$section[i] %in% c("dynamic", "discrete", "derivative"))){
-        stop(paste(csl$file_name[i], csl$line_number[i], ": use of t in", csl$section[i], "\n"))
+      if (any(used %in% c("t")) && !(csl$section[i] %in% c("dynamic", "discrete", "derivative"))){
+        cat(paste(csl$file_name[i], csl$line_number[i], ": use of t in", csl$section[i], "\n"))
       }
-      if (any(used %in% c(state)) & !(csl$section[i] %in% c("dynamic", "discrete", "derivative")) & !silent){
+      if (any(used %in% c(state)) && !(csl$section[i] %in% c("dynamic", "discrete", "derivative")) && !silent){
         cat(paste(csl$file_name[i], csl$line_number[i], ": use of state variable in", csl$section[i], "\n"))
       }
-      if (!any(used>"")){ # set only (e.g. initialisation with constant)
+      if (any(set>"") && !any(used>"")){ # set only (e.g. initialisation with constant)
         if (csl$section[i] != "discrete"){ # assume discrete sections do not set anything
           bad <- token_set_status[set] == "uninit"
           token_set_status[set[bad]] <- "set"
           token_set_line[set[bad]] <- i
         }
-      } else if (!any(set>"")){ # used only (e.g. ifthen)
+      } else if (!any(set>"") && any(used>"")){ # used only (e.g. ifgoto, schedule)
         bad <- token_set_status[used] == "uninit"
         token_set_status[used[bad]] <- "assumed"
         token_set_line[used[bad]] <- i
         csl$assumed[i] <- paste_sort(used[bad])
-      } else { # both set and used (e.g. assignment)
+      } else if (any(set>"") && any(used>"")){ # both set and used (e.g. assignment)
         bad <- token_set_status[used] == "uninit"
         token_set_status[used[bad]] <- "assumed"
         token_set_line[used[bad]] <- i
         csl$assumed[i] <- paste_sort(used[bad])
         if (csl$section[i] != "discrete"){ # assume discrete sections do not set anything
-          if (any(token_set_status[used]!="set")){
-            token_set_status[set] <- "from_assumed"
-            token_set_line[set] <- i
+          bad <- token_set_status[set] == "uninit"
+          if (any(token_set_status[used] != "set")){ # at least one used is assumed
+            token_set_status[set[bad]] <- "from_assumed"
+            token_set_line[set[bad]] <- i
           } else { # all set
-            token_set_status[set] <- "set"
-            token_set_line[set] <- i
+            token_set_status[set[bad]] <- "set"
+            token_set_line[set[bad]] <- i
           }
         }
       }

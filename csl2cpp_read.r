@@ -1,19 +1,19 @@
 
 # read csl file and includes
-read_csl <- function(base_dir, csl_file, m_files=""){
+read_csl <- function(input_dir, csl_file, m_files=""){
 
   # options
   drop_comments <- FALSE
   ignore_path <- FALSE
-  cat(file=stderr(), paste("base directory", base_dir), "\n")
-  cat(file=stderr(), paste("reading csl file", csl_file), "\n")
-  cat(file=stderr(), paste("drop_comments", drop_comments), "\n")
-  cat(file=stderr(), paste("ignore_path", ignore_path), "\n")
+  cat(paste("base directory", input_dir), "\n")
+  cat(paste("reading csl file", csl_file), "\n")
+  cat(paste("drop_comments", drop_comments), "\n")
+  cat(paste("ignore_path", ignore_path), "\n")
 
   # set working directory
   original_dir <- getwd()
-  if (!is.null(base_dir)){
-    setwd(base_dir)
+  if (!is.null(input_dir)){
+    setwd(input_dir)
   }
 
   # read base file
@@ -36,13 +36,13 @@ read_csl <- function(base_dir, csl_file, m_files=""){
 
     # read include file
     thisi <- incli[1]
-    cat(paste(thisi, csl$code[thisi], "\n"))
+    cat(paste(csl$file_name[thisi], csl$line_number[thisi], csl$code[thisi], "\n"))
     file_name <- str_extract(csl$code[thisi], "[:alpha:]+[[:alnum:]_[:space:]]*\\.csl")
     # file_path <- paste(path_name, "/", file_name, sep="")
     file_path <- str_extract(csl$code[thisi], "(?<=\').+(?=\')")
     first <- csl$seq_number[thisi]
     last <- csl$seq_number[thisi+1]
-    # cat(file=stderr(), file_name, "\n")
+    # cat(file_name, "\n")
     include_csl <- read_lines(file_path) %>%
       iconv(to="ASCII//TRANSLIT") %>% # remove accents
       as_tibble() %>%
@@ -89,7 +89,7 @@ read_csl <- function(base_dir, csl_file, m_files=""){
   for (file_name in m_files){
 
     # read file
-    cat(file=stderr(), paste("reading", file_name), "\n")
+    cat(paste("reading", file_name), "\n")
     # file_path <- paste(path_name, "/", file_name, sep="")
     # include_mfile <- read_lines(file_path) %>%
     include_mfile <- read_lines(file_name) %>%

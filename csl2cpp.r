@@ -6,32 +6,46 @@
 
 # libraries
 library(tidyverse)
+
+# options
+log_file <- FALSE
 m_files <- c()
 
-# point to csl and mfile source
-# input_dir <- "spring"
-# csl_file <- "Spring.csl"
-# output_dir <- "spring"
-# model_name <- "spring"
+# specify project
+input_dir <- "spring"
+csl_file <- "Spring.csl"
+output_dir <- "spring"
+model_name <- "spring"
+
 input_dir <- "molly"
 csl_file <- "../Molly.csl"
 # csl_file <- "../molly/Molly3.csl"
 # m_files <- c("Params 2014.m")
 output_dir <- "molly"
 model_name <- "molly"
-# csl_file <- "mindy/Molly.csl"
 
-# split file names
-file_name <- str_extract(csl_file,  "[:alpha:]+[[:alnum:]_]*\\.csl")
-# path_name <- str_extract(csl_file, "^[:alpha:]+[[:alnum:]_]*") # fails if path has punctuation
-# model_name <- path_name
+# input_dir <- "mindy"
+# csl_file <- "../Molly.csl"
+# output_dir <- "mindy"
+# model_name <- "molly"
+
+# log file on
+while (sink.number()>0) {
+  sink()
+}
+if (log_file){
+  log_file_name <- paste(output_dir, "/log.txt", sep="")
+  cat("sinking console output to", log_file_name, "\n")
+  sink(file=log_file_name)
+}
 
 # get code
-cat(file=stderr(), "reading code", "\n")
+cat("reading code", "\n")
 source("csl2cpp_read.r") # load functions
 csl <- read_csl(input_dir, csl_file, m_files) # read lines
 
 # write aggregated raw csls
+file_name <- str_extract(csl_file,  "[:alpha:]+[[:alnum:]_]*\\.csl")
 if (file_name == "Molly.csl"){
   source("csl2cpp_write.r") # load functions
   csl2 <- paste(csl$code, "\n", sep="")
@@ -45,7 +59,7 @@ temp_file <- paste(output_dir, "checkpoint_after_read.RData", sep="/")
 save.image(temp_file) # save progress
 
 # parse and translate
-cat(file=stderr(), "parsing code", "\n")
+cat("parsing code", "\n")
 
 # separate code into tokens
 source("csl2cpp_do_parse_one.r")
@@ -66,12 +80,16 @@ source("csl2cpp_do_parse_three.r")
 # make C++ file
 temp_file <- paste(output_dir, "checkpoint_after_parse_three.RData", sep="/")
 load(temp_file)
-cat(file=stderr(), "making cpp code", "\n")
+cat("making cpp code", "\n")
 source("csl2cpp_make.r") # load functions
 cpp <- make_cpp(csl, tokens, model_name, delay_post=FALSE)
 cpp_df <- as_data_frame(cpp)
-cat(file=stderr(), "writing cpp code", "\n")
+cat("writing cpp code", "\n")
 source("csl2cpp_write.r") # load functions
 write_cpp(cpp, output_dir, model_name, "h")
 
+# log file off
+while (sink.number()>0) {
+  sink()
+}
 
