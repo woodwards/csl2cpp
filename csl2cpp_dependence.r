@@ -65,14 +65,14 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
     stopifnot(all(this_set %in% names(token_set_status)))
     stopifnot(all(this_used %in% names(token_set_status)))
     # set t at beginning of initial section
-    if (is.na(token_set_line["t"]) && csl$line_type[i] %in% c("initial")){
+    if (is.na(token_set_line["t"]) && csl$section[i] %in% c("initial")){
       token_set_status["t"] <- "set"
-      token_set_line["t"] <- i - 0.5
+      token_set_line["t"] <- i
     }
     # set state variables and numerical derivatives at end of initial section
-    if (any(is.na(token_set_line[c(state, slope)])) && !(csl$line_type[i] %in% c("header", "initial"))){
+    if (any(is.na(token_set_line[c(state, slope)])) && !(csl$section[i] %in% c("header", "initial"))){
       token_set_status[c(state, slope)] <- "set"
-      token_set_line[c(state, slope)] <- i - 0.5
+      token_set_line[c(state, slope)] <- i
     }
     # handle continuations
     if (did_continue){ # accumulate variable lists

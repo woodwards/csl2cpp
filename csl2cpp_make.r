@@ -283,7 +283,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	# uninitialised variables
 	if (length(assumed_all)>0 & TRUE){
   	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables"))
-  	lines <- paste(assumed_all, "= 0.0;")
+  	lines <- paste(assumed_all, "= 0;") # using 1 might avoid some div by zero and array access errors
   	cpp <- put_lines(cpp, 2, lines)
 	} else {
 	  cat("uninitialised variables not initialised\n")

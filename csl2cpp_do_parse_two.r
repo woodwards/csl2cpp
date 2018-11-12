@@ -61,6 +61,9 @@ token_list[c("then", "end", "endif")] <- c("{", "}", "}") # translate these
 token_list[c("mod", "aint", "sign")] <- c("fmod", "floor", "copysign") # translate these
 token_list[c("integer", "logical", "doubleprecision", "real", "character", "dimension")] <- c("int", "bool", "double", "double", "string", "double") # translate these
 
+# runtime commands
+runtime <- c("pre", "s")
+
 # keeping track of tokens
 # declared, set, used
 # need to identify inputs and outputs from statements/blocks of statements
@@ -129,6 +132,25 @@ for (i in 1:nrow(csl)){
 
   # get tokens for this line
   parse_list <- unlist(str_to_obj(csl$parse_list[i]))
+
+  #### mfile parsing ####
+  # mfiles have different keywords, these may also be abbreviated
+  # FIXME very rudimentary
+  if (major_section == "mfile"){
+    mfile_command <- str_match(parse_list[2], paste("^", runtime, sep=""))
+    mfile_command <- runtime[!is.na(mfile_command)]
+    if (length(mfile_command)>0){ # if no mfile_command detected, assumed to be an assignment
+      if (mfile_command == "s"){ # set
+        # delete mfile_command
+        parse_list <- parse_list[c(-1, -2)]
+        csl$line_type[i] <- "assign"
+      } else { # ignore mfile_command (e.g. pre)
+        csl$line_type[i] <- "comment"
+        csl$tail[i] <- paste("//", csl$code[i], csl$tail[i]) # put original in tail
+        csl$handled[i] <- TRUE
+      }
+    }
+  }
 
   #### general code translation ####
   # note can these slow the loop down a lot
