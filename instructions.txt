@@ -1,0 +1,31 @@
+Instructions on how to use csl2cpp
+csl2cpp is a series of R scripts to translate ACSLX CSL models to C++
+Simon Woodward, DairyNZ 2018
+
+Requires RStudio and tidyverse for the translation into C++.
+Requires RTools and Rcpp if you want to run the C++ model from R.
+Otherwise requires Code::Blocks (or another C++ IDE) to run the C++ model.
+
+To translate CSL to C++ (using the spring example)
+- Open the csl2cpp.RProj RStudio project
+- Open the csl2cpp.r script
+- Put your csl amd m files into a subfolder (e.g. /spring/)
+- Set the appropriate directory and file names at the top of csl2cpp.r
+    input_dir <- "spring"
+    csl_file <- "Spring.csl"
+    output_dir <- "spring"
+    model_name <- "spring"
+- Run/source csl2cpp.r. This should
+    1. Read the csl and m files into the dataframe csl.
+    2. Parse each line of csl
+    3. Translate each line to C++
+    4. Make and write the C++ output file
+    5. Console output can be diverted to log.txt if desired (log_file <- TRUE)
+
+To run the C++ model in RStudio with Rcpp (using the spring example)
+- Open the /spring/spring.RProj project
+- Open the spring_r.r script.
+- Run/source spring_r.r. This should
+    1. Compile main_r.cpp and spring.h using Rcpp and add functions to R
+    2. Run the model and plot the results
+

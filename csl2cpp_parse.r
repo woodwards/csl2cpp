@@ -198,7 +198,7 @@ handle_pow <- function(parse_list){
 # handle mfile tokens
 handle_mfile<- function(parse_list, token_decl_columns, token_decl_rows){
   odds <- seq(1, length(parse_list)-1, 2)
-  kk <- which( parse_list[odds] == "token" & parse_list[odds+1] %in% pullable ) * 2 - 1
+  kk <- which( parse_list[odds] == "token" & parse_list[odds+1] %in% c(pullable, pullable_array) ) * 2 - 1
   for (k in kk){
     if (token_decl_columns[parse_list[k+1]]==""){
       parse_list[k+1] <- paste(model_name, ".variable[\"", parse_list[k+1], "\"]", sep="")

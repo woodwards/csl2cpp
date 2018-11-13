@@ -9,7 +9,7 @@ Notes
 - this translation project only covers the subset of ACSL functionality that we needed
 - IMPLC, IMPVC implicit systems not handled
 - currently uses Runge-Kutta-4 integration method
-- converts int to double in min and max functions since C++ can't mix argument types
+- converts int to double in min and max and sign functions since C++ can't mix argument types
 - strings are not visible to user, string functions not handled
 - TERMINAL section is calculated with DYNAMIC section, not tested
 - SCHEDULE must be on its own line
@@ -17,21 +17,22 @@ Notes
 - INTEG must be on it's own line and of the form x = integ( dx, x0 )
 - INTVC must be on it's own line and of the form x = integ( dx, x0 )
 - DERIVT must be on it's own line and of the form dx = derivt( dx0, x )
-- control variables IALG, CINT, MAXT, MINT, NSTP are treated as parameters, but not used
+- control variables IALG, CINT, MAXT, MINT, NSTP are treated as constants, but not used
 - comments (and statements) outside CSL sections are moved to a HEADER section
+- int arrays are represented as double
 - arrays are represented using std::vector, which means list assignment resets dimensions
 - arrays can be accessed using [] or .at(); the latter provides useful runtime range checking
-- array access in mfiles available but not tested
 
 To Do
 
-- implement INTVC
+- list assignment to arrays in mfiles currently require manual editing
 - link molly.cpp into the WFM
-- version control
+- version/configuration control
 
 Opportunities
 
 - detect instabilities in the model, sudden changes in variables
 - optimise step size and integration method
 - remove redundant code
+- organise model code into separate methods
 

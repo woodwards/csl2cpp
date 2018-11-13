@@ -3,7 +3,9 @@ csl2cpp is a series of R scripts to translate ACSLX CSL models to C++
 Simon Woodward, DairyNZ 2018
 
 project_guide.txt This document
+instructions.txt  Instructions on using the csl2cpp translator
 outstandings_issues.txt List of known issues
+version_control.txt Notes on version/configuration management
 
 csl2cpp.RProj RStudio project file
 csl2cpp.r		Main R script for translating a CSL file to a C++ class
@@ -16,10 +18,7 @@ csl2cpp_do_parse_three.r	Script for sorting code into execution order
 csl2cpp_make.r	Functions for building a C++ class from a parsed dataframe
 csl2cpp_write.r	Functions for writing a C++ class
 
-/docs/		miscellaneous background documents
 /spring/		acslX spring example and equivalent C++ code
-/spring/R/  Rcpp driver for spring.cpp
 /molly/		acslX Molly cow CSL model and equivalent C++ code (original code not shared)
-/molly/R/  Rcpp driver for molly.cpp
 
 csl2cpp.workspace Code::Blocks (C++ IDE) workspace file

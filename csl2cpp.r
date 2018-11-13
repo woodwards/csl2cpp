@@ -21,7 +21,6 @@ input_dir <- "molly"
 csl_file <- "../Molly.csl"
 # csl_file <- "../molly/Molly3.csl"
 # m_files <- c("Params 2014.m")
-# m_files <- c("Molly5z.m")
 output_dir <- "molly"
 model_name <- "molly"
 
@@ -29,9 +28,10 @@ model_name <- "molly"
 # csl_file <- "../Molly.csl"
 # output_dir <- "mindy"
 # model_name <- "molly"
-#
+
 # input_dir <- "mdh"
-# csl_file <- "../Molly.csl"
+# csl_file <- "Molly5yTest.csl"
+# m_files <- c("Molly5z.m")
 # output_dir <- "mdh"
 # model_name <- "molly"
 

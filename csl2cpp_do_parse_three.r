@@ -56,6 +56,9 @@ slope <- str_match(derivt, "^[:alpha:]+[[:alnum:]_]*")[,1]
 slopeof <- str_trim(str_replace(derivt, "^[:alpha:]+[[:alnum:]_]*", ""))
 slopeof <- str_replace_all(slopeof, "= ", "")
 
+# deal with constant rate
+rate <- rate[is.na(as_numeric(rate, NA_real_))]
+
 # paste and unique and sort a vector of comma separated strings (not vectorised)
 # supplying a second argument also allows you to remove elements (using setdiff)
 paste_sort <- function(x,y=""){
@@ -185,9 +188,11 @@ while (length(sortable)>0){
   set_but_not_used <- setdiff(set_here, c(used_here, rate, slopeof))
   available_here <- tokens$name[tokens$set_line<min(base_i)]
   available_here <- setdiff(available_here, c(rate, slopeof)) # rate and slopeof should be calculated (usually, they could be constant)
-  assumed_here <- setdiff(c(used_here, rate, slopeof) , c(available_here, set_here, "t"))
-  message <- paste("*** illegal uninitialised variables :", paste(assumed_here, collapse=" "))
-  cat(message, "\n")
+  assumed_here <- setdiff(c(used_here, rate, slopeof) , c(available_here, state, set_here, "t"))
+  if (length(assumed_here)>0){
+    message <- paste("*** illegal uninitialised variables :", paste(assumed_here, collapse=" "))
+    cat(message, "\n")
+  }
   used_but_not_set <- setdiff(c(used_here, rate, slopeof), c(set_here, available_here, assumed_here, state, "t"))
 
   #### analyse equation dependency in derivative ####
@@ -258,7 +263,7 @@ while (length(sortable)>0){
       index <- index[-j, ] # remove lines
     }
   }
-  cat("\n")
+  if (length(has_goto)>0) cat("\n")
 
   #### collapse other procedurals ####
   cat("collapse other procedurals", "\n")
@@ -290,7 +295,7 @@ while (length(sortable)>0){
       index <- index[-j, ] # remove lines
     }
   }
-  cat("\n")
+  if (length(has_proc)>0) cat("\n")
 
   #### collapse inactive lines except include ####
   # has to be done after blocks
@@ -484,11 +489,20 @@ while (length(sortable)>0){
         # used but not available
         if (index$used[i]>""){
           used <- comma_split(index$used[i])
-          used <- setdiff(used, names(var_set)) # ignore already set or assumed
+          used <- setdiff(used, c(names(var_set), set)) # ignore already set or assumed or set here
+          phantom <- used[is.na(var_set_all[used])] # variable in procedural header does not exist
+          if (length(phantom)>0){
+            message <- paste("phantom variables :", paste(phantom, collapse=" "))
+            cat("\n", message, "\n")
+            var_set[phantom] <- next_save_at
+            used <- setdiff(used, phantom)
+          }
           index$unset[i] <- paste_sort(used)
+          index$unsetline[i] <- paste_sort(var_set_all[used])
         } else {
           used <- c()
           index$unset[i] <- ""
+          index$unsetline[i] <- ""
         }
 
         # save line if all used variables are now available
@@ -528,16 +542,17 @@ while (length(sortable)>0){
   set_but_not_used <- setdiff(set_here, c(used_here, rate, slopeof))
   available_here <- tokens$name[tokens$set_line<min(base_i)]
   available_here <- setdiff(available_here, c(rate, slopeof)) # rate and slopeof should be calculated (usually, they could be constant)
-  assumed_here <- setdiff(c(used_here, rate, slopeof) , c(available_here, set_here, "t"))
-  message <- paste("*** illegal uninitialised variables :", paste(assumed_here, collapse=" "))
-  cat(message, "\n")
+  assumed_here <- setdiff(c(used_here, rate, slopeof) , c(available_here, state, set_here, "t"))
+  if (length(assumed_here)>0){
+    message <- paste("*** illegal uninitialised variables :", paste(assumed_here, collapse=" "))
+    cat(message, "\n")
+  }
   used_but_not_set <- setdiff(c(used_here, rate, slopeof), c(set_here, available_here, assumed_here, state, "t"))
 
   # try to find variables that are used before they are set in derivative section (this is illegal)
   if (base_type=="derivative"){
     both_here <- intersect(set_here, used_here)
     illegal <- c()
-    j <- both_here[[1]]
     for (j in both_here){
       set_line <- which(str_detect(index$set, paste("(?<![[:alnum:]_])", j, "(?![[:alnum:]_])", sep="")))
       used_line <- which(str_detect(index$used, paste("(?<![[:alnum:]_])", j, "(?![[:alnum:]_])", sep="")))
@@ -545,8 +560,10 @@ while (length(sortable)>0){
         illegal <- c(illegal, j)
       }
     }
-    message <- paste("*** illegally updated variables :", paste(illegal, collapse=" "))
-    cat(message, "\n")
+    if (length(illegal)>0){
+      message <- paste("*** illegally updated variables :", paste(illegal, collapse=" "))
+      cat(message, "\n")
+    }
   }
 
   #### post-sort collapse ####
@@ -595,8 +612,10 @@ while (length(sortable)>0){
 cat("analyse variable dependency in derivative - all csl", "\n")
 tokens <- csl_dependence(csl, tokens, silent=FALSE)
 assumed_all <- tokens$name[tokens$set_status=="assumed"]
-message <- paste("*** global uninitialised variables :", paste(assumed_all, collapse=" "))
-cat(message, "\n")
+if (length(assumed_all)>0){
+  message <- paste("*** global uninitialised variables :", paste(assumed_all, collapse=" "))
+  cat(message, "\n")
+}
 
 #### save progress ####
 rm(list=setdiff(ls(), c("csl", "tokens", "output_dir", "model_name", "silent", lsf.str())))

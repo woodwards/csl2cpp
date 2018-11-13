@@ -285,8 +285,6 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
   	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables"))
   	lines <- paste(assumed_all, "= 0;") # using 1 might avoid some div by zero and array access errors
   	cpp <- put_lines(cpp, 2, lines)
-	} else {
-	  cat("uninitialised variables not initialised\n")
 	}
 	# model initialisation
 	rows <- csl$section == "initial" | csl$line_type == "interval"
@@ -468,7 +466,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	k <- 0
 	for (j in rate){
 	  i <- which(tokens$name == j)
-	  if (tokens$decl_type[i] == "double"){
+	  if (length(i)==0 || tokens$decl_type[i] == "double"){
 	    lines <- paste("odeint_rate[", k, "] = ", j, ";", sep="")
 	    cpp <- put_lines(cpp, 2, lines)
 	    k <- k + 1

@@ -5,7 +5,7 @@
 // Boost headers
 // [[Rcpp::depends(BH)]]
 
-#include "spring.cpp"
+#include "spring.h"
 
 spring_class spring;
 

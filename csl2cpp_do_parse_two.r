@@ -55,10 +55,10 @@ keyword <- c(declaration, keyword1, keyword2, keyword3, keyword4)
 reserved <- c(keyword, "t", "integ", "intvc", "derivt",
               "max", "exp", "min", "log", "sqrt", "abs",
               "cos", "sin", "acos", "asin", "tan", "atan") # convert these keywords to lower case
-reserved <- c(reserved, "fmod", "floor", "copysign", "int", "bool", "double", "double", "string") # reserve these too
+reserved <- c(reserved, "fmod", "floor", "round", "copysign", "int", "bool", "double", "double", "string") # reserve these too
 token_list[names(token_list) %in% reserved] <- str_to_lower(token_list[names(token_list) %in% reserved])
 token_list[c("then", "end", "endif")] <- c("{", "}", "}") # translate these
-token_list[c("mod", "aint", "sign")] <- c("fmod", "floor", "copysign") # translate these
+token_list[c("mod", "aint", "anint", "sign")] <- c("fmod", "floor", "round", "copysign") # translate these
 token_list[c("integer", "logical", "doubleprecision", "real", "character", "dimension")] <- c("int", "bool", "double", "double", "string", "double") # translate these
 
 # runtime commands
@@ -78,10 +78,10 @@ token_decl_value <- setNames(rep(NA, length(token_list)), token_list) # record p
 
 # token role analysis
 token_role <- setNames(rep("", length(token_list)), token_list) # record role
-token_role[names(token_list) %in% c(reserved, "mod", "aint", "sign", "then")] <- "reserved"
+token_role[names(token_list) %in% c(reserved, "mod", "aint", "anint", "sign", "then")] <- "reserved"
 labels <- setdiff(str_to_lower(unique(str_replace(csl$label, ":", ""))), "") # lower case
 token_role[names(token_list) %in% labels] <- "label" # note: integer labels are not tokens
-unassignable <- c("reserved", "discrete", "label", "state", "constant", "parameter", "slope", "loop_counter", "constant_array", "dummy", "t")
+unassignable <- c("reserved", "discrete", "label", "state", "parameter", "slope", "loop_counter", "constant_array", "dummy", "t")
 
 # boolean and a few other conversions (WARNING: new values come first, old names come second!)
 bool_list <- setNames(c("true", "false", "||", "&&", "!", ">=", ">", "<=", "<", "==", "!="),
@@ -114,7 +114,9 @@ for (i in 1:nrow(csl)){
     if (major_section == "mfile"){
       # find pullable and pushable variables
       pullable <- tokens$name[token_decl_type %in% c("double", "int", "bool", "auto")]
+      pullable_array <- tokens$name[token_decl_ncolumns>0]
       pushable <- tokens$name[token_decl_type %in% c("double", "int", "bool", "auto") & token_decl_static==FALSE]
+      pushable_array <- tokens$name[token_decl_ncolumns>0]
     }
   } else if (csl$line_type[i] == "end" ){
     # check for end of major section
@@ -144,8 +146,15 @@ for (i in 1:nrow(csl)){
         # delete mfile_command
         parse_list <- parse_list[c(-1, -2)]
         csl$line_type[i] <- "assign"
+        # convert comma to semicolon
+        odds <- seq(1, length(parse_list)-1, 2)
+        k <- which(parse_list[odds] == "comma" & lead(parse_list[odds], 1) == "token" & !(lead(parse_list[odds], 2) == "openarray") ) * 2 - 1
+        if (length(k)>0){
+          parse_list[k] <- "semicolon"
+          parse_list[k+1] <- ";"
+        }
       } else { # ignore mfile_command (e.g. pre)
-        csl$line_type[i] <- "comment"
+        csl$line_type[i] <- "ignored"
         csl$tail[i] <- paste("//", csl$code[i], csl$tail[i]) # put original in tail
         csl$handled[i] <- TRUE
       }
@@ -252,7 +261,7 @@ for (i in 1:nrow(csl)){
   is_continuation <- csl$line_type[i] %in% c("continuation")
   will_continue <- csl$cont[i] > ""
   if (is_continuation){
-    if (csl$line_type[i-1] %in% c("assign", "arrayassign", "constant", "procedural", "ifthen", "elseifthen")){ # might need to handle them differently
+    if (csl$line_type[i-1] %in% c("assign", "arrayassign", "constant", "procedural", "ifthen", "elseifthen", "ifgoto")){ # might need to handle them differently
       csl$line_type[i] <- csl$line_type[i-1]
     } else {
       message <- paste("continuation not handled for :", csl$line_type[i-1])
@@ -286,8 +295,8 @@ for (i in 1:nrow(csl)){
   }
 
 
-  #### pause at specific line ####
-  # stopifnot(i<3376)
+  #### *** pause at specific line *** ####
+  # stopifnot(i<3859)
 
   #### begin handling line types ####
 
@@ -444,6 +453,7 @@ for (i in 1:nrow(csl)){
         # declare
         csl$static[i] <- ""
         csl$type[i] <- paste("std::vector<", parse_list[2], ">") # new version uses std::vector
+        csl$type[i] <- paste("std::vector< double >") # new version uses std::vector
         csl$decl[i] <- parse_list[4]
         csl$dend[i] <- ";"
         csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
@@ -497,6 +507,7 @@ for (i in 1:nrow(csl)){
         # declare
         csl$static[i] <- ""
         csl$type[i] <- paste("std::vector< std::vector<", parse_list[2], "> >") # new version uses std::vector
+        csl$type[i] <- paste("std::vector< std::vector< double > >") # new version uses std::vector
         csl$decl[i] <- parse_list[4]
         csl$dend[i] <- ";"
         csl$tail[i] <- paste("//", parse_str, csl$tail[i]) # put original in tail
@@ -672,7 +683,7 @@ for (i in 1:nrow(csl)){
             k <- seq(8, length(parse_list)-2, 2)
           }
           if ((length(k)+1)/2 != this_array_dim1){
-            stop("wrong number of elements in row")
+            cat("wrong number of elements in row\n")
           }
           temp <- paste(parse_list[k], collapse=" ")
           temp <- paste(parse_list[4], " ", outer, " { ", temp, " } ", ender, sep="")
@@ -843,12 +854,17 @@ for (i in 1:nrow(csl)){
           stop("multiple assignments on a line should have been separated")
         }
         csl$set[i] <- parse_list[k+1]
-        if (token_role[parse_list[k+1]] %in% unassignable){
-          message <- paste(csl$file_name[i], csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1]])
+        bad <- token_role[parse_list[k+1]] %in% unassignable
+        if (any(bad)){
+          message <- paste(csl$file_name[i], csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1][bad]])
           stop(message)
-        } else if (token_role[parse_list[k+1]] == ""){
-          token_role[parse_list[k+1]] <- "assigned"
         }
+        bad <- token_role[parse_list[k+1]] %in% "constant"
+        if (any(bad)){
+          message <- paste(csl$file_name[i], csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1][bad]])
+          cat(message, "\n")
+        }
+        token_role[parse_list[k+1]] <- "assigned"
         bad <- token_decl_line[parse_list[k+1]] != 0 # already declared (actually not bad)
         if (any(!bad)){ # declare these ones
           for (jj in parse_list[k+1][!bad]){
@@ -871,16 +887,6 @@ for (i in 1:nrow(csl)){
         }
       }
     }
-    # some assignments have labels
-    if (csl$label[i]>""){
-      old_label <- str_replace(csl$label[i], ":", "")
-      if (str_to_lower(old_label) %in% names(token_list)){
-        old_label <- token_list[str_to_lower(old_label)]
-      }
-      new_label <- paste("label_", old_label, ":", sep="")
-    } else {
-      new_label=""
-    }
     # assignment
     if (has_power){
       parse_list <- handle_pow(parse_list)
@@ -889,7 +895,11 @@ for (i in 1:nrow(csl)){
       parse_list <- handle_minmaxsign(parse_list, csl$file_name[i], csl$line_number[i])
     }
     odds <- seq(1, length(parse_list)-1, 2)
-    temp <- paste(new_label, paste(parse_list[odds+1], collapse=" "), sep="")
+    if (csl$label[i]>""){
+      temp <- paste(csl$label[i], paste(parse_list[odds+1], collapse=" "))
+    } else {
+      temp <- paste(parse_list[odds+1], collapse=" ")
+    }
     if (major_section == "header"){
       stop("can't assign in header section")
     } else if (major_section == "initial"){
@@ -915,21 +925,10 @@ for (i in 1:nrow(csl)){
     }
 
   }
-  #### handle line_type = assign, arrayassign (mfile) ####
-  if (csl$line_type[i] %in% c("assign", "arrayassign") & csl$section[i] == "mfile"){
+  #### handle line_type = assign (mfile) ####
+  if (csl$line_type[i] %in% c("assign") & csl$section[i] == "mfile"){
 
-    # implicit declaration of left hand side (non-array)
-    if (csl$line_type[i] %in% c("assign")){
-      odds <- seq(1, length(parse_list)-1, 2)
-      k <- which( parse_list[odds] == "token" & lead(parse_list[odds], 1) %in% "equals" ) * 2 - 1
-      if (length(k)>1){
-        stop("multiple assignments on a line should have been separated")
-      }
-    } else { # arrayassign
-      odds <- seq(1, length(parse_list)-1, 2)
-      k <- 1
-    }
-    # assignment to class property
+    # includes arrays
     if (has_power){
       parse_list <- handle_pow(parse_list)
     }
@@ -953,14 +952,19 @@ for (i in 1:nrow(csl)){
       parse_list <- handle_minmaxsign(parse_list, csl$file_name[i], csl$line_number[i])
     }
     odds <- seq(1, length(parse_list)-1, 2)
+    if (csl$label[i]>""){
+      temp <- paste(csl$label[i], paste(parse_list[odds+1], collapse=" "))
+    } else {
+      temp <- paste(parse_list[odds+1], collapse=" ")
+    }
     if (major_section == "initial"){
-      csl$init[i] <- paste(parse_list[odds+1], collapse=" ")
+      csl$init[i] <- temp
       csl$delim[i] <- ";"
     } else if (major_section == "discrete"){
-      csl$disc[i] <- paste(parse_list[odds+1], collapse=" ")
+      csl$disc[i] <- temp
       csl$delim[i] <- ";"
     } else {
-      csl$calc[i] <- paste(parse_list[odds+1], collapse=" ")
+      csl$calc[i] <- temp
       csl$delim[i] <- ";"
     }
     k <- which( parse_list[odds] == "token" & lead(parse_list[odds],1) %in% "equals" ) * 2 - 1
@@ -981,6 +985,10 @@ for (i in 1:nrow(csl)){
       if (token_role[parse_list[k+1]] %in% unassignable){
         message <- paste(csl$file_name[i], csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1]])
         stop(message)
+      } else if (token_role[parse_list[k+1]] == "constant"){
+        message <- paste(csl$file_name[i], csl$line_number[i], ": illegal assignment to", token_role[parse_list[k+1]])
+        cat(message, "\n")
+        token_role[parse_list[k+1]] <- "assigned"
       } else if (token_role[parse_list[k+1]] == ""){
         token_role[parse_list[k+1]] <- "assigned"
       }
@@ -1136,38 +1144,31 @@ for (i in 1:nrow(csl)){
   if (csl$line_type[i] %in% c("goto", "ifgoto")){
 
     # unique(csl$label)
-    k <- which( parse_list == "goto" )
-    label <- parse_list[k+2]
-    labeli <- which(str_detect(csl$label, regex(paste("^", label, "\\:$", sep=""), ignore_case=TRUE))) # label line
-    if (csl$line_type[labeli] %in% c("assign", "continue") == FALSE){
-      stop("goto target is not assign or continue") # catch unhandled cases
+    if (!will_continue){
+      k <- which( parse_list == "goto" )
+      label <- parse_list[k+2]
+      labeli <- which(str_detect(csl$label, regex(paste("^", label, "\\:$", sep=""), ignore_case=TRUE))) # label line
+      new_label <- paste("label_", label, sep="")
+      parse_list[k+2] <- new_label
+      csl$label[labeli] <- paste(new_label, ":", sep="")
     }
-    new_label <- paste("label_", label, sep="")
-    parse_list[k+2] <- new_label
     odds <- seq(1, length(parse_list)-1, 2)
     temp <- paste(parse_list[odds+1], collapse=" ")
     if (major_section == "initial"){
       csl$init[i] <- temp
-      csl$delim[i] <- ";"
-      csl$init[labeli] <- paste(new_label, ":", sep="") # replaces continue statement
-      csl$delim[labeli] <- ""
+      csl$delim[i] <- if_else(will_continue, "", ";")
     } else if (major_section == "discrete"){
       csl$disc[i] <- temp
-      csl$delim[i] <- ";"
-      csl$disc[labeli] <- paste(new_label, ":", sep="") # replaces continue statement
-      csl$delim[labeli] <- ""
+      csl$delim[i] <- if_else(will_continue, "", ";")
     } else {
       csl$calc[i] <- temp
-      csl$delim[i] <- ";"
-      csl$calc[labeli] <- paste(new_label, ":", sep="") # replaces continue statement
-      csl$delim[labeli] <- ""
+      csl$delim[i] <- if_else(will_continue, "", ";")
     }
     if (csl$line_type[i] == "ifgoto" ) {
       k <- which( parse_list[odds] == "token" & !(parse_list[odds+1] %in% c("if", "goto")) & !str_detect(parse_list[odds+1], "^label_") ) * 2 - 1
       csl$used[i] <- paste(setdiff(unique(parse_list[k+1]), reserved), collapse=",")
     }
     csl$handled[i] <- TRUE
-    csl$handled[labeli] <- TRUE
 
   }
   #### handle line_type = program, derivative, initial, discrete, dynamic, terminal, procedural, include, mfile ####
@@ -1292,9 +1293,29 @@ for (i in 1:nrow(csl)){
     }
 
   }
+  #### handle line_type = continue ####
+  if (csl$line_type[i] %in% c("continue")){
+
+    if (csl$label[i]>""){
+      temp <- csl$label[i]
+      if (major_section == "initial"){
+        csl$init[i] <- temp
+        csl$delim[i] <- ""
+      } else if (major_section == "discrete"){
+        csl$disc[i] <- temp
+        csl$delim[i] <- ""
+      } else {
+        csl$calc[i] <- temp
+        csl$delim[i] <- ""
+      }
+    }
+    csl$handled[i] <- TRUE
+
+  }
   #### handle line_type = comment, blank ####
   if (csl$line_type[i] %in% c("comment", "blank")){
 
+    csl$label[i]
     csl$handled[i] <- TRUE
 
   }
