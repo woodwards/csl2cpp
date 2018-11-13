@@ -15,13 +15,13 @@ load(file=temp_file) # recover progress
 cat("sorting derivative section code", "\n")
 
 # options
-collapse_include <- FALSE # might prevent sorting (experimental)
+collapse_included <- FALSE # might prevent sorting (experimental)
 override_proc_set <- TRUE # helps sort
 override_proc_used <- FALSE # would be nice but sort might fail
 # sorting_method <- "simon" # only works for DERIVATIVE, when we know the outputs of the section
 sorting_method <- "acslx"
 # sorting_method <- "none"
-cat("unsortable include blocks :", collapse_include, "\n")
+cat("unsortable included blocks :", collapse_included, "\n")
 cat("override procedural set list :", override_proc_set, "\n")
 cat("override procedural used list :", override_proc_used, "\n")
 cat("sorting method :", sorting_method, "\n")
@@ -129,7 +129,7 @@ while (length(sortable)>0){
 
   # these lines have no effect on sorting of code (at most they effect decl and init)
   inactive <- c("integ", "intvc", "comment", "blank", "derivative", "termt", "sort", "derivt",
-                "derivative_sorted", "sort_sorted", "include", "end",
+                "derivative_sorted", "sort_sorted", "included", "end",
                 "algorithm", "maxterval", "minterval", "cinterval", "nsteps",
                 "constant", "parameter",
                 "integer", "dimension", "logical", "doubleprecision", "real", "character")
@@ -297,9 +297,9 @@ while (length(sortable)>0){
   }
   if (length(has_proc)>0) cat("\n")
 
-  #### collapse inactive lines except include ####
+  #### collapse inactive lines except included ####
   # has to be done after blocks
-  cat("collapse inactive lines except include \n")
+  cat("collapse inactive lines except included \n")
   collapse_down <- c("comment", "derivative", "sort", "derivative_sorted", "sort_sorted",
                       "constant", "parameter",
                       "integer", "dimension", "logical", "doubleprecision", "real", "character")
@@ -318,16 +318,16 @@ while (length(sortable)>0){
     inactive <- index$line_type %in% c(collapse_down, collapse_up) & index$sort
   }
 
-  #### collapse include blocks ####
-  # View(filter(index, line_type %in% c("include", "end")))
+  #### collapse included blocks ####
+  # View(filter(index, line_type %in% c("included", "end")))
   # this feature is experimental and not fully operational
-  # the intention is to see which include blocks do not get shuffled
-  if (collapse_include){
-    cat("collapse include blocks\n")
+  # the intention is to see which included blocks do not get shuffled
+  if (collapse_included){
+    cat("collapse included blocks\n")
     hyphens_base <- str_count(base_block, "-")
     hyphens <- str_count(index$block, "-")
-    collapsible1 <- index$block == lag(index$block, 1) & lag(index$line_type, 1) %in% c("include")
-    collapsible2 <- index$block > lag(index$block, 1) & lag(index$line_type, 1) %in% c("include") &
+    collapsible1 <- index$block == lag(index$block, 1) & lag(index$line_type, 1) %in% c("included")
+    collapsible2 <- index$block > lag(index$block, 1) & lag(index$line_type, 1) %in% c("included") &
       index$block > lead(index$block, 1)
     collapsible2 <- FALSE
     collapsible3 <- (index$set == "" & index$set_hid == "" & index$used == "" & index$used_hid == "") |
@@ -345,8 +345,8 @@ while (length(sortable)>0){
       index$used_hid[i-1] <- paste_sort(c(index$used_hid[i-1], index$used_hid[i]))
       index <- index[-i, ] # remove line
       hyphens <- str_count(index$block, "-")
-      collapsible1 <- index$block == lag(index$block, 1) & lag(index$line_type, 1) %in% c("include")
-      collapsible2 <- index$block > lag(index$block, 1) & lag(index$line_type, 1) %in% c("include") &
+      collapsible1 <- index$block == lag(index$block, 1) & lag(index$line_type, 1) %in% c("included")
+      collapsible2 <- index$block > lag(index$block, 1) & lag(index$line_type, 1) %in% c("included") &
         index$block > lead(index$block, 1)
       collapsible2 <- FALSE
       collapsible3 <- (index$set == "" & index$set_hid == "" & index$used == "" & index$used_hid == "") |
@@ -356,9 +356,9 @@ while (length(sortable)>0){
     }
   }
 
-  #### collapse include and end lines ####
-  cat("collapse include and end lines\n")
-  collapse_down <- c("include")
+  #### collapse included and end lines ####
+  cat("collapse included and end lines\n")
+  collapse_down <- c("included")
   collapse_up <- c("end")
   inactive <- index$line_type %in% c(collapse_down, collapse_up) & index$sort
   while (any(inactive)){

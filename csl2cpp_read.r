@@ -55,7 +55,7 @@ read_csl <- function(input_dir, csl_file, m_files=""){
     opening <- csl[thisi, ] %>%
       mutate(seq_number=first + 1 / (nrow(include_csl) + 3) * (last - first),
              line_number=0,
-             code=paste("INCLUDE ! ", code),
+             code=paste("INCLUDED ! ", code),
              file_name=include_csl$file_name[1])
     closing <- csl[thisi, ] %>%
       mutate(seq_number=first + (nrow(include_csl) + 2) / (nrow(include_csl) + 3) * (last - first),

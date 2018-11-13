@@ -19,7 +19,7 @@ model_name <- "spring"
 
 input_dir <- "molly"
 csl_file <- "../Molly.csl"
-# csl_file <- "../molly/Molly3.csl"
+csl_file <- "Molly3.csl"
 # m_files <- c("Params 2014.m")
 output_dir <- "molly"
 model_name <- "molly"

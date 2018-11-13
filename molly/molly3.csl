@@ -653,7 +653,7 @@ CONSTANT FaCor=1.0,AcCor=1.0,AaCor=10.0,BldUrCor=1.0                     ! unit:
 CONSTANT HcCor=1.0,CeCor=1.0                                             ! unit: unitless
 
 !  INCLUDE 'Constants.csl'
-INCLUDE !  INCLUDE 'Constants.csl'
+INCLUDED !  INCLUDE 'Constants.csl'
 
 ! Constants that need to differ in Mindy can be put here
 
@@ -725,7 +725,7 @@ logNewEvent=ilogNewEvent;	!Set flag to calculate Nutrient inputs to the model
 !to n within column 2 followed by row ... within column z
 
 !  INCLUDE 'Experimental_Bias_Vectors_in_init.csl'
-INCLUDE !  INCLUDE 'Experimental_Bias_Vectors_in_init.csl'
+INCLUDED !  INCLUDE 'Experimental_Bias_Vectors_in_init.csl'
 
 ! Not needed in this project
 END !  INCLUDE 'Experimental_Bias_Vectors_in_init.csl'
@@ -878,7 +878,7 @@ WtGrvUter=WtConc+WtUter
 
 !********** Nutrients in Ration ******************
 !  INCLUDE '..\Molly_ProximateExpand_In_Init.csl'   !Take from the shared root folder, all projects are currently using ProximateExpand
-INCLUDE !  INCLUDE '..\Molly_ProximateExpand_In_Init.csl'   !Take from the shared root folder, all projects are currently using ProximateExpand
+INCLUDED !  INCLUDE '..\Molly_ProximateExpand_In_Init.csl'   !Take from the shared root folder, all projects are currently using ProximateExpand
 !** Include Proximate Nutrient inputs in the Initial Section
 !********** Nutrients in Ration ******************
 !Define the nutrient input arrays
@@ -1036,7 +1036,7 @@ Procedural()
    do AnotherLoop i = 1,NumberOfFeeds
       CurrentFeed = i
 !  Include '../Molly_ProximateExpand_Conversion.csl' ! the included code converts the Ingr* to f*Fd
-INCLUDE !  Include '../Molly_ProximateExpand_Conversion.csl' ! the included code converts the Ingr* to f*Fd
+INCLUDED !  Include '../Molly_ProximateExpand_Conversion.csl' ! the included code converts the Ingr* to f*Fd
 
 	!This is the body of the procedural from proximateExpand in deriv
 
@@ -1161,7 +1161,7 @@ END !  INCLUDE '..\Molly_ProximateExpand_In_Init.csl'   !Take from the shared ro
 
 !******************* Initial Feed Rate (fdrat) *************************
 !  INCLUDE 'FdRat_Constants.csl'
-INCLUDE !  INCLUDE 'FdRat_Constants.csl'
+INCLUDED !  INCLUDE 'FdRat_Constants.csl'
  
 Constant CappingForIntake                    =   0.04555 ! NOT USED BY DO NOT DELETE. OVERWRITTEN BY breedAndAge.csv setting. We nneed it here so it enters the automatically generate cowParameters file, to become optimsable. Used in Smalltalk / WFM
 Constant IntakeVersion                       =    8.7555 ! Gil's required intake model April 2011 replacing RFEED4 etc.
@@ -1187,7 +1187,7 @@ DoublePrecision MaxEnergyForMilk                       ! Eneregy for milk at pea
 
 END !  INCLUDE 'FdRat_Constants.csl'
 !  INCLUDE 'FdRat_Init.csl'
-INCLUDE !  INCLUDE 'FdRat_Init.csl'
+INCLUDED !  INCLUDE 'FdRat_Init.csl'
 
 ! iterate to get close approximation of the mutualy dependent iFdRat <=> iNotUterEbwTarget
 
@@ -1196,14 +1196,14 @@ iFdRat = 10
 NonUterEbw = iBW - iFdRat * ( 4.4 + 1) - WtGrvUter
 NonUterEbwTarget = NonUterEbw - 36.0 * (iBCS - BCSBase)
 !  INCLUDE 'FdRat_deriv.csl'  
-INCLUDE !  INCLUDE 'FdRat_deriv.csl'  
+INCLUDED !  INCLUDE 'FdRat_deriv.csl'  
 
 ! Mindy sets feedInFlag to 2, but still she must not have the if statement
 ! below even though it is inactive it messes things up
 ! Hence the separation deriv (molly) vs. deriv_basic (mindy need RequiredEnergy too)
 
 !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
-INCLUDE !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
+INCLUDED !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
   
 Procedural(MaxEnergyForMilk = MilkSolids270MfAdjusted)
 
@@ -1259,14 +1259,14 @@ fd1 = iFdRat
 NonUterEbw = iBW - iFdRat * ( 4.4 + 1) - WtGrvUter
 NonUterEbwTarget = NonUterEbw - 36.0 * (iBCS - BCSBase)
 !  INCLUDE 'FdRat_deriv.csl'  
-INCLUDE !  INCLUDE 'FdRat_deriv.csl'  
+INCLUDED !  INCLUDE 'FdRat_deriv.csl'  
 
 ! Mindy sets feedInFlag to 2, but still she must not have the if statement
 ! below even though it is inactive it messes things up
 ! Hence the separation deriv (molly) vs. deriv_basic (mindy need RequiredEnergy too)
 
 !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
-INCLUDE !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
+INCLUDED !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
   
 Procedural(MaxEnergyForMilk = MilkSolids270MfAdjusted)
 
@@ -1322,14 +1322,14 @@ fd2 = iFdRat
 NonUterEbw = iBW - iFdRat * ( 4.4 + 1) - WtGrvUter
 NonUterEbwTarget = NonUterEbw - 36.0 * (iBCS - BCSBase)
 !  INCLUDE 'FdRat_deriv.csl'  
-INCLUDE !  INCLUDE 'FdRat_deriv.csl'  
+INCLUDED !  INCLUDE 'FdRat_deriv.csl'  
 
 ! Mindy sets feedInFlag to 2, but still she must not have the if statement
 ! below even though it is inactive it messes things up
 ! Hence the separation deriv (molly) vs. deriv_basic (mindy need RequiredEnergy too)
 
 !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
-INCLUDE !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
+INCLUDED !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
   
 Procedural(MaxEnergyForMilk = MilkSolids270MfAdjusted)
 
@@ -1385,14 +1385,14 @@ fd3 = iFdRat
 NonUterEbw = iBW - iFdRat * ( 4.4 + 1) - WtGrvUter
 NonUterEbwTarget = NonUterEbw - 36.0 * (iBCS - BCSBase)
 !  INCLUDE 'FdRat_deriv.csl'  
-INCLUDE !  INCLUDE 'FdRat_deriv.csl'  
+INCLUDED !  INCLUDE 'FdRat_deriv.csl'  
 
 ! Mindy sets feedInFlag to 2, but still she must not have the if statement
 ! below even though it is inactive it messes things up
 ! Hence the separation deriv (molly) vs. deriv_basic (mindy need RequiredEnergy too)
 
 !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
-INCLUDE !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
+INCLUDED !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
   
 Procedural(MaxEnergyForMilk = MilkSolids270MfAdjusted)
 
@@ -1603,7 +1603,7 @@ iLHor=iLHorF*LHorBase
 CONSTANT iMamLmF=0.1,iMamPmF=0.01,iMilkAve=10.0,TAveMilk=0.1555 
 
 !  INCLUDE 'MamCells_init.csl'
-INCLUDE !  INCLUDE 'MamCells_init.csl'
+INCLUDED !  INCLUDE 'MamCells_init.csl'
 
 CumulativeLowMfDays = 0
 DailyMfDiff=0
@@ -1676,7 +1676,7 @@ MilkSW=0.0
 Schedule DailySummary .AT. 0.0           ! Gil July 2012 changed to from 1 to 0, to make many graphs work OK before T=1
 
 !  INCLUDE 'Intermittent_Eating_Init.csl' 
-INCLUDE !  INCLUDE 'Intermittent_Eating_Init.csl' 
+INCLUDED !  INCLUDE 'Intermittent_Eating_Init.csl' 
 
 ! No intermittent eating for basic Molly
 Constant EatingSupplementsSW = 0.0
@@ -1684,7 +1684,7 @@ CONSTANT SupplementOnOffer = 0      ! Basic Molly does not always eats entry 1 i
 CONSTANT MastJawMoveBolus = 5.0     ! In Mindy it is a function of hunger, ndf, specific feed and bolus size. Bolus size in turn is determined by the size of the cow, availability of feed (e.g. short grass => more severing movements => more saliva => smaller bolus) %DM, and specific saliva inducing properties of the feed
 END !  INCLUDE 'Intermittent_Eating_Init.csl' 
 !  INCLUDE 'Mindy_Init.csl' 
-INCLUDE !  INCLUDE 'Mindy_Init.csl' 
+INCLUDED !  INCLUDE 'Mindy_Init.csl' 
  
 ! No Mindy code in this project
 CONSTANT HMM = 1.0
@@ -1810,12 +1810,12 @@ DrnkWaDiel         = DrnkWaTot      - DrnkWaYest         ! Unit litre. Daily cum
 
 !Include code to allow intermittent feeding of a supplement
 !  Include 'Intermittent_Eating_Discrete.csl'	! Summarize meals
-INCLUDE !  Include 'Intermittent_Eating_Discrete.csl'	! Summarize meals
+INCLUDED !  Include 'Intermittent_Eating_Discrete.csl'	! Summarize meals
 
 ! No intermittent eating for basic Molly
 END !  Include 'Intermittent_Eating_Discrete.csl'	! Summarize meals
 !  Include 'Mindy_Discrete.csl'                ! Discrete include section for changing swards when Mindy intake submodel is used. MDH 6/1/2011
-INCLUDE !  Include 'Mindy_Discrete.csl'                ! Discrete include section for changing swards when Mindy intake submodel is used. MDH 6/1/2011
+INCLUDED !  Include 'Mindy_Discrete.csl'                ! Discrete include section for changing swards when Mindy intake submodel is used. MDH 6/1/2011
 
 ! No Mindy code in this project
 END !  Include 'Mindy_Discrete.csl'                ! Discrete include section for changing swards when Mindy intake submodel is used. MDH 6/1/2011
@@ -1832,20 +1832,20 @@ TIME=T
 !This section transfers values from the Event array to Model variables
 
 !  INCLUDE 'CurrentEvent.csl'
-INCLUDE !  INCLUDE 'CurrentEvent.csl'
+INCLUDED !  INCLUDE 'CurrentEvent.csl'
 
 CONSTANT CurrentEvent = 1
 END !  INCLUDE 'CurrentEvent.csl'
 
 !  INCLUDE 'FdRat_Deriv.csl'
-INCLUDE !  INCLUDE 'FdRat_Deriv.csl'
+INCLUDED !  INCLUDE 'FdRat_Deriv.csl'
 
 ! Mindy sets feedInFlag to 2, but still she must not have the if statement
 ! below even though it is inactive it messes things up
 ! Hence the separation deriv (molly) vs. deriv_basic (mindy need RequiredEnergy too)
 
 !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
-INCLUDE !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
+INCLUDED !  INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl' 
   
 Procedural(MaxEnergyForMilk = MilkSolids270MfAdjusted)
 
@@ -1896,7 +1896,7 @@ endIf
   
 END !  INCLUDE 'FdRat_Deriv.csl'
 !  INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one
-INCLUDE !  INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one
+INCLUDED !  INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one
 !** Include Proximate Nutrient inputs in the Derivative Section
 !4-27-10, added an if statement to trap fStFd .le. 0 before fStsFd calc, mdh
 !28-Feb-11 Added fBuAc and fBuAc instead of the hard wired 0.2 and 0.2   GL
@@ -1941,7 +1941,7 @@ Procedural(PartFd,fDMFd,fCPFd,FCPsFd,FUrFd,FNPNFd,FRUPFd,FPsFd,fPiFd,fNnFd,&
   
 if(SupplementOnOffer.LE.NumberOfFeeds) then
 !  Include '../Molly_ProximateExpand_Conversion.csl'
-INCLUDE !  Include '../Molly_ProximateExpand_Conversion.csl'
+INCLUDED !  Include '../Molly_ProximateExpand_Conversion.csl'
 
 	!This is the body of the procedural from proximateExpand in deriv
 
@@ -2067,13 +2067,13 @@ Procedural(kPiAa,kHaCs,kCeCs1,kHcCs1,fRupCp,fPiCp,fPsCp,fNnCp,fUrCp=fRUPFd, &
 end
 END !  INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one
 !  INCLUDE 'Intermittent_Eating_deriv.csl' 
-INCLUDE !  INCLUDE 'Intermittent_Eating_deriv.csl' 
+INCLUDED !  INCLUDE 'Intermittent_Eating_deriv.csl' 
 
 ! No intermittent eating for basic Molly
 
 END !  INCLUDE 'Intermittent_Eating_deriv.csl' 
 !  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
-INCLUDE !  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
+INCLUDED !  INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements.
 !*************************************************
 !COMPUTATION OF WATER DYNAMICS: different in MIndy
 !*************************************************
@@ -3158,7 +3158,7 @@ MetabPP=MiP*MiPiPi*DCMiPi + PiP*LgutDCPi; !Metabolizable Protein Passage, kg/d, 
 SolOmP=CsP*MwtCs+FaP*MwtFl+RumAaP*MwtRumAa+ChChFd;	!Added ChChFd to be consistent with DMP, MDH. Mar 31, 2014
 
 !  INCLUDE 'EXPERIMENTAL_BIAS_Vectors_in_deriv.csl'
-INCLUDE !  INCLUDE 'EXPERIMENTAL_BIAS_Vectors_in_deriv.csl'
+INCLUDED !  INCLUDE 'EXPERIMENTAL_BIAS_Vectors_in_deriv.csl'
 
 ! Not needed in this project
 END !  INCLUDE 'EXPERIMENTAL_BIAS_Vectors_in_deriv.csl'
@@ -3445,7 +3445,7 @@ END
 !OF PROCEDURAL 
 
 !  INCLUDE 'MamCells_deriv.csl'
-INCLUDE !  INCLUDE 'MamCells_deriv.csl'
+INCLUDED !  INCLUDE 'MamCells_deriv.csl'
   
 ! ****** Modified lactaion sub model GL October 2011 *******************************************
 
@@ -4012,7 +4012,7 @@ NonUterEBW=EBW1-WtGrvUter
 CONSTANT KNaOth=0.1555,HyAcFa=1.7555,AaGlH=0.5555 ! KbasOth was moved so it can be defined diferently by Mindy
 
 !  INCLUDE 'Activity_Energy_Expenditure.csl'
-INCLUDE !  INCLUDE 'Activity_Energy_Expenditure.csl'
+INCLUDED !  INCLUDE 'Activity_Energy_Expenditure.csl'
 
 !! This file has an extracted section of Molly.csl with code that need to be refined and possibly 
 !! re-defined by Mindy. Mindy would reduce KbasOth and simulate energy expenditure for activity 

@@ -37,7 +37,7 @@ csl <- csl %>%
 declaration <- c("constant", "parameter",
                  "algorithm", "nsteps", "maxterval", "minterval", "cinterval",
                  "character", "integer", "logical", "doubleprecision", "real", "dimension")
-keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do", "mfile", "include") # +if_then, increase indent
+keyword1 <- c("program", "derivative", "initial", "discrete", "dynamic", "procedural", "terminal", "do", "mfile", "included") # +if_then, increase indent
 keyword2 <- c("end", "endif", "enddo") # decrease indent
 keyword3 <- c("termt", "schedule", "interval", "if", "goto", "continue", "sort") # + has_label + if_goto, no change to indent
 keyword4 <- c("else") # +else_if_then, decrease and increase indent
