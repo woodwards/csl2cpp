@@ -1,0 +1,52 @@
+reading code 
+base directory spring 
+reading csl file Spring.csl 
+drop_comments FALSE 
+ignore_path FALSE 
+parsing code 
+parsing code for tokens, line type, indent 
+line 1 of 26 
+Spring.csl 9 dropping semicolon 
+line 27 of 27 
+translating declarations, initialisation, calculation 
+array bound checking : TRUE 
+line 1 of 27 
+Spring.csl 2 major section starts: derivative 
+Spring.csl 25 major section ends: derivative 
+line 27 of 27 
+unused tokens :  
+sorting derivative section code 
+unsortable included blocks : FALSE 
+override procedural set list : TRUE 
+override procedural used list : FALSE 
+sorting method : acslx 
+reorganise major sections
+sorting derivative block 1-1 , 25 lines
+	 Spring.csl 
+collapse continuations 
+collapse ifthen and do 
+analyse variable dependency in derivative - pre sort 
+analyse equation dependency in derivative 
+sweep 1 
+sweep 2 
+collapse procedurals with goto, ifgoto 
+collapse other procedurals 
+collapse inactive lines except included 
+collapse included and end lines
+sort using acslx method
+1  
+successfully sorted 1 lines
+analyse variable dependency in derivative - post sort 
+post-sort collapse
+analyse variable dependency in derivative - all csl 
+making cpp code 
+delay post processing : FALSE 
+n state : 3 
+n pullable : 13 
+n pushable : 13 
+header comments : 2 
+declaration lines : 11 
+event lines : 0 
+calculate rate lines : 25 
+total lines : 308 
+writing cpp code 

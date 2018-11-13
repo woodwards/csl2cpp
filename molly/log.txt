@@ -1,0 +1,305 @@
+reading code 
+base directory molly 
+reading csl file ../Molly.csl 
+drop_comments FALSE 
+ignore_path FALSE 
+Molly.csl 657 INCLUDE 'Constants.csl' 
+Molly.csl 725 INCLUDE 'Experimental_Bias_Vectors_in_init.csl' 
+Molly.csl 879 INCLUDE '..\Molly_ProximateExpand_In_Init.csl'   !Take from the shared root folder, all projects are currently using ProximateExpand 
+Molly.csl 882 INCLUDE 'FdRat_Constants.csl' 
+Molly.csl 883 INCLUDE 'FdRat_Init.csl' 
+Molly.csl 1040 INCLUDE 'MamCells_init.csl' 
+Molly.csl 1093 INCLUDE 'Intermittent_Eating_Init.csl'  
+Molly.csl 1094 INCLUDE 'Mindy_Init.csl'  
+Molly.csl 1206 Include 'Intermittent_Eating_Discrete.csl'	! Summarize meals 
+Molly.csl 1207 Include 'Mindy_Discrete.csl'                ! Discrete include section for changing swards when Mindy intake submodel is used. MDH 6/1/2011 
+Molly.csl 1220 INCLUDE 'CurrentEvent.csl' 
+Molly.csl 1224 INCLUDE 'FdRat_Deriv.csl' 
+Molly.csl 1225 INCLUDE '..\Molly_ProximateExpand_In_Deriv.csl'  ! Take from the shared parent folder as all current projects use ths one 
+Molly.csl 1226 INCLUDE 'Intermittent_Eating_deriv.csl'  
+Molly.csl 1227 INCLUDE 'Mindy_Dynamic.csl'                      ! This and the next statement must come be in this order and after the above input include statements. 
+Molly.csl 2226 INCLUDE 'EXPERIMENTAL_BIAS_Vectors_in_deriv.csl' 
+Molly.csl 2511 INCLUDE 'MamCells_deriv.csl' 
+Molly.csl 2889 INCLUDE 'Activity_Energy_Expenditure.csl' 
+Molly_ProximateExpand_In_Init.csl 157 Include '../Molly_ProximateExpand_Conversion.csl' ! the included code converts the Ingr* to f*Fd 
+FdRat_Init.csl 9 INCLUDE 'FdRat_deriv.csl'   
+FdRat_Init.csl 15 INCLUDE 'FdRat_deriv.csl'   
+FdRat_Init.csl 21 INCLUDE 'FdRat_deriv.csl'   
+FdRat_Init.csl 27 INCLUDE 'FdRat_deriv.csl'   
+FdRat_Deriv.csl 6 INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'  
+Molly_ProximateExpand_In_Deriv.csl 46 Include '../Molly_ProximateExpand_Conversion.csl' 
+FdRat_deriv.csl 6 INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'  
+FdRat_deriv.csl 6 INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'  
+FdRat_deriv.csl 6 INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'  
+FdRat_deriv.csl 6 INCLUDE '..\Molly DNZ\Fdrat_deriv_basic.csl'  
+parsing code 
+parsing code for tokens, line type, indent 
+line 1 of 4550 
+line 201 of 4550 
+line 401 of 4550 
+line 601 of 4550 
+Molly.csl 627 dropping semicolon 
+Molly.csl 628 dropping semicolon 
+Molly.csl 629 dropping semicolon 
+Molly.csl 632 dropping semicolon 
+Molly.csl 633 dropping semicolon 
+Molly.csl 634 dropping semicolon 
+Molly.csl 635 dropping semicolon 
+Molly.csl 636 dropping semicolon 
+Molly.csl 637 dropping semicolon 
+Molly.csl 638 dropping semicolon 
+Molly.csl 639 dropping semicolon 
+line 801 of 4561 
+line 1001 of 4561 
+line 1201 of 4561 
+line 1401 of 4561 
+line 1601 of 4561 
+line 1801 of 4561 
+line 2001 of 4561 
+line 2201 of 4561 
+line 2401 of 4561 
+line 2601 of 4561 
+line 2801 of 4561 
+line 3001 of 4561 
+line 3201 of 4561 
+line 3401 of 4561 
+line 3601 of 4561 
+line 3801 of 4561 
+line 4001 of 4561 
+line 4201 of 4561 
+line 4401 of 4561 
+line 4561 of 4561 
+array bound checking : TRUE 
+Molly.csl 596 major section starts: initial 
+Molly.csl 668 parameter on existing variable: MaxInitValues 
+removed declaration of MaxInitValues on code line 660 
+Molly.csl 669 parameter on existing variable: MaxEvents 
+removed declaration of MaxEvents on code line 660 
+Molly.csl 670 parameter on existing variable: MaxAnimals 
+removed declaration of MaxAnimals on code line 660 
+Molly.csl 716 constant on existing variable: ilogNewEvent 
+removed declaration of ilogNewEvent on code line 665 
+Molly.csl 729 redeclaration: Animal 
+updated type of Animal on code line 661 
+Molly.csl 738 redeclaration: Parity 
+updated type of Parity on code line 736 
+Molly.csl 779 converted -300 to -300. in min() or max() or copysign()
+Molly.csl 799 detected 2d array: double InitCond ( MaxInitValues , MaxAnimals ) 
+Molly.csl 805 redeclaration: FirstEvent 
+updated type of FirstEvent on code line 661 
+Molly.csl 807 redeclaration: LastEvent 
+updated type of LastEvent on code line 661 
+Molly.csl 820 detected 1d array: double MamCellsF ( MaxHerds ) 
+Molly.csl 822 detected 1d array: double lambdaMamCellsF ( MaxHerds ) 
+Molly.csl 824 detected 1d array: double LHorPPF ( MaxHerds ) 
+Molly_ProximateExpand_In_Init.csl 12 parameter on existing variable: MaxEventNutrients 
+removed declaration of MaxEventNutrients on code line 10 
+Molly_ProximateExpand_In_Init.csl 14 parameter on existing variable: MaxProtFrac 
+removed declaration of MaxProtFrac on code line 11 
+Molly_ProximateExpand_In_Init.csl 15 parameter on existing variable: MaxCHOFrac 
+removed declaration of MaxCHOFrac on code line 11 
+Molly_ProximateExpand_In_Init.csl 16 detected 2d array: double Event ( MaxEventNutrients , MaxEvents ) 
+Molly_ProximateExpand_In_Init.csl 17 detected 2d array: double Ingr ( MaxCalculatedNutrients , MaxEvents ) 
+Molly_ProximateExpand_In_Init.csl 18 detected 2d array: double IngrProtComp ( MaxProtFrac , MaxEvents ) 
+Molly_ProximateExpand_In_Init.csl 19 detected 2d array: double IngrCHOComp ( MaxCHOFrac , MaxEvents ) 
+Molly_ProximateExpand_In_Init.csl 20 detected 2d array: double SugarAndDmPercent ( 8 , MaxEvents ) 
+Molly_ProximateExpand_In_Init.csl 31 parameter on existing variable: GrassNZ 
+removed declaration of GrassNZ on code line 29 
+Molly_ProximateExpand_In_Init.csl 33 parameter on existing variable: MaizeSilage 
+removed declaration of MaizeSilage on code line 29 
+Molly_ProximateExpand_In_Init.csl 34 parameter on existing variable: TMR 
+removed declaration of TMR on code line 29 
+Molly_ProximateExpand_In_Init.csl 35 parameter on existing variable: SoybeanMeal 
+removed declaration of SoybeanMeal on code line 29 
+Molly_ProximateExpand_In_Init.csl 36 parameter on existing variable: CerealStraw 
+removed declaration of CerealStraw on code line 29 
+Molly_ProximateExpand_In_Init.csl 37 parameter on existing variable: MaizeGrain 
+removed declaration of MaizeGrain on code line 29 
+Molly_ProximateExpand_In_Init.csl 38 parameter on existing variable: BarleyGrain 
+removed declaration of BarleyGrain on code line 29 
+Molly_ProximateExpand_In_Init.csl 39 parameter on existing variable: Lucerne 
+removed declaration of Lucerne on code line 29 
+Molly_ProximateExpand_In_Init.csl 40 parameter on existing variable: LucerneSilage 
+removed declaration of LucerneSilage on code line 29 
+Molly_ProximateExpand_In_Init.csl 45 parameter on existing variable: IngrDM 
+removed declaration of IngrDM on code line 27 
+Molly_ProximateExpand_In_Init.csl 46 parameter on existing variable: IngrCP 
+removed declaration of IngrCP on code line 27 
+Molly_ProximateExpand_In_Init.csl 47 parameter on existing variable: IngrFat 
+removed declaration of IngrFat on code line 27 
+Molly_ProximateExpand_In_Init.csl 48 parameter on existing variable: IngrSt 
+removed declaration of IngrSt on code line 27 
+Molly_ProximateExpand_In_Init.csl 49 parameter on existing variable: IngrNDF 
+removed declaration of IngrNDF on code line 28 
+Molly_ProximateExpand_In_Init.csl 50 parameter on existing variable: IngrADF 
+removed declaration of IngrADF on code line 28 
+Molly_ProximateExpand_In_Init.csl 51 parameter on existing variable: IngrLg 
+removed declaration of IngrLg on code line 28 
+Molly_ProximateExpand_In_Init.csl 52 parameter on existing variable: IngrAsh 
+removed declaration of IngrAsh on code line 28 
+Molly_ProximateExpand_In_Init.csl 53 parameter on existing variable: IngrFor 
+removed declaration of IngrFor on code line 28 
+Molly_ProximateExpand_In_Init.csl 68 redeclaration: NumberOfFeeds 
+updated type of NumberOfFeeds on code line 67 
+Molly_ProximateExpand_In_Init.csl 106 redeclaration: IngrNPN 
+updated type of IngrNPN on code line 27 
+Molly_ProximateExpand_In_Init.csl 108 parameter on existing variable: IngrCPs 
+removed declaration of IngrCPs on code line 106 
+Molly_ProximateExpand_In_Init.csl 109 parameter on existing variable: IngrRUP 
+removed declaration of IngrRUP on code line 106 
+Molly_ProximateExpand_In_Init.csl 110 parameter on existing variable: IngrNPN 
+removed declaration of IngrNPN on code line 27 
+Molly_ProximateExpand_In_Init.csl 111 parameter on existing variable: IngrUr 
+removed declaration of IngrUr on code line 106 
+Molly_ProximateExpand_In_Init.csl 131 parameter on existing variable: IngrSts 
+removed declaration of IngrSts on code line 129 
+Molly_ProximateExpand_In_Init.csl 132 parameter on existing variable: IngrRUSt 
+removed declaration of IngrRUSt on code line 129 
+Molly_ProximateExpand_In_Init.csl 133 parameter on existing variable: IngrRuAdf 
+removed declaration of IngrRuAdf on code line 129 
+Molly_ProximateExpand_In_Init.csl 134 parameter on existing variable: IngrForNDF 
+removed declaration of IngrForNDF on code line 129 
+Molly_ProximateExpand_In_Init.csl 167 parameter on existing variable: maxFdScreens 
+removed declaration of maxFdScreens on code line 166 
+Molly_ProximateExpand_In_Init.csl 169 detected 1d array: double FdBinMeshSize ( 15 ) 
+Molly_ProximateExpand_In_Init.csl 170 detected 1d array: double fBinFd ( maxFdScreens ) 
+Molly_ProximateExpand_In_Init.csl 171 detected 1d array: double fBinFd1 ( maxFdScreens ) 
+Molly_ProximateExpand_In_Init.csl 172 detected 2d array: double iBinFd ( fdSlots , MaxEvents ) 
+Molly.csl 889 constant on existing variable: iTotMeals 
+removed declaration of iTotMeals on code line 888 
+Molly.csl 1078 parameter on existing variable: MaxMilkingPerDay 
+removed declaration of MaxMilkingPerDay on code line 1076 
+Molly.csl 1079 detected 1d array: double MilkingHours ( MaxMilkingPerDay ) 
+Intermittent_Eating_Init.csl 5 constant on existing variable: MastJawMoveBolus 
+removed declaration of MastJawMoveBolus on code line 686 
+Mindy_Init.csl 18 constant on existing variable: CurrHerbage 
+removed declaration of CurrHerbage on code line 17 
+Molly.csl 1103 major section ends: initial 
+Molly.csl 1111 major section starts: dynamic 
+Molly.csl 1116 constant on existing variable: bufferslp 
+removed declaration of bufferslp on code line 1114 
+Molly.csl 1117 constant on existing variable: bufferint 
+removed declaration of bufferint on code line 1115 
+Molly.csl 1127 major section starts: discrete 
+Molly.csl 1138 major section ends: discrete 
+Molly.csl 1140 major section starts: discrete 
+Molly.csl 1147 major section ends: discrete 
+Molly.csl 1160 major section starts: discrete 
+Molly.csl 1194 major section ends: discrete 
+Molly.csl 1209 major section starts: derivative 
+CurrentEvent.csl 2 constant on existing variable: CurrentEvent 
+removed declaration of CurrentEvent on code line 661 
+Molly.csl 1257 converted -300 to -300. in min() or max() or copysign()
+Molly.csl 1291 detected 1d array: double kComminuteOral ( maxFdScreens ) 
+Molly.csl 1312 converted 100 to 100. in min() or max() or copysign()
+Molly.csl 1531 previously declared integ: TNdfIn 
+MamCells_deriv.csl 79 converted 0 to 0. in min() or max() or copysign()
+MamCells_deriv.csl 80 previously declared integ: CumulativeLowMfDays 
+MamCells_deriv.csl 97 converted 0 to 0. in min() or max() or copysign()
+MamCells_deriv.csl 98 previously declared integ: NonUterEbwTarget 
+MamCells_deriv.csl 164 previously declared integ: MilkingFrequencyLag 
+MamCells_deriv.csl 189 converted 4 to 4. in min() or max() or copysign()
+MamCells_deriv.csl 190 converted 4 to 4. in min() or max() or copysign()
+Molly.csl 3079 previously declared integ: tNep 
+Molly.csl 3316 major section ends: derivative 
+Molly.csl 3317 major section ends: dynamic 
+Molly.csl 3320 major section starts: discrete 
+Molly.csl 3323 major section ends: discrete 
+unused tokens : debugtime Expt GlobalDMIEqn jj logCriteria1 Old Silage 
+sorting derivative section code 
+unsortable included blocks : FALSE 
+override procedural set list : TRUE 
+override procedural used list : FALSE 
+sorting method : acslx 
+reorganise major sections
+sorting derivative block 1-2-7 , 2675 lines
+	 Molly.csl 
+ 	 CurrentEvent.csl 
+ 	 FdRat_Deriv.csl 
+ 	 Fdrat_deriv_basic.csl 
+ 	 Molly_ProximateExpand_In_Deriv.csl 
+ 	 Molly_ProximateExpand_Conversion.csl 
+ 	 Intermittent_Eating_deriv.csl 
+ 	 Mindy_Dynamic.csl 
+ 	 EXPERIMENTAL_BIAS_Vectors_in_deriv.csl 
+ 	 MamCells_deriv.csl 
+ 	 Activity_Energy_Expenditure.csl 
+collapse continuations 
+collapse ifthen and do 
+analyse variable dependency in derivative - pre sort 
+*** illegal uninitialised variables : GrowthPerDay ResidMamMilk 
+analyse equation dependency in derivative 
+sweep 1 
+sweep 2 
+sweep 3 
+sweep 4 
+sweep 5 
+collapse procedurals with goto, ifgoto 
+1-2-7-9  1-2-7-11  1-2-7-12  1-2-7-13  1-2-7-14  1-2-7-23  1-2-7-24  
+collapse other procedurals 
+1-2-7-2-1-1  1-2-7-2-1-2  1-2-7-3-1  1-2-7-3-2  1-2-7-5-2  1-2-7-5-3  1-2-7-5-4  1-2-7-6  1-2-7-7  1-2-7-8  1-2-7-10  1-2-7-15  1-2-7-17  1-2-7-18  1-2-7-19  1-2-7-20  1-2-7-21-4  1-2-7-21-5  
+collapse inactive lines except included 
+collapse included and end lines
+sort using acslx method
+1  2  3  4  5  6  7  8  9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99  100  101  102  103  104  105  106  107  108  109  110  111  112  113  114  115  116  117  118  119  120  121  122  123  124  125  126  127  128  129  130  131  132  133  134  135  136  137  138  139  140  141  142  143  144  145  146  147  148  149  150  151  152  153  154  155  156  157  158  159  160  161  162  163  164  165  166  167  168  169  170  171  172  173  174  175  176  177  178  179  180  181  182  183  184  185  186  187  188  189  190  191  192  193  194  195  196  197  198  199  200  201  202  203  204  205  206  207  208  209  210  211  212  213  214  215  216  217  218  219  220  221  222  223  224  225  226  227  228  229  230  231  232  233  234  235  236  237  238  239  240  241  242  243  244  245  246  247  248  249  250  251  252  253  254  255  256  257  258  259  260  261  262  263  264  265  266  267  268  269  270  271  272  273  274  275  276  277  278  279  280  281  282  283  284  285  286  287  288  289  290  291  292  293  294  295  296  297  298  299  300  301  302  303  304  305  306  307  308  309  310  311  312  313  314  315  316  317  318  319  320  321  322  323  324  325  326  327  328  329  330  331  332  333  334  335  336  337  338  339  340  341  342  343  344  345  346  347  348  349  350  351  352  353  354  355  356  357  358  359  360  361  362  363  364  365  366  367  368  369  370  371  372  373  374  375  376  377  378  379  380  381  382  383  384  385  386  387  388  389  390  391  392  393  394  395  396  397  398  399  400  401  402  403  404  405  406  407  408  409  410  411  412  413  414  415  416  417  418  419  420  421  422  423  424  425  426  427  428  429  430  431  432  433  434  435  436  437  438  439  440  441  442  443  444  445  446  447  448  449  450  451  452  453  454  455  456  457  458  459  460  461  462  463  464  465  466  467  468  469  470  471  472  473  474  475  476  477  478  479  480  481  482  483  484  485  486  487  488  489  490  491  492  493  494  495  496  497  498  499  500  501  502  503  504  505  506  507  508  509  510  511  512  513  514  515  516  517  518  519  520  521  522  523  524  525  526  527  528  529  530  531  532  533  534  535  536  537  538  539  540  541  542  543  544  545  546  547  548  549  550  551  552  553  554  555  556  557  558  559  560  561  562  563  564  565  566  567  568  569  570  571  572  573  574  575  576  577  578  579  580  581  582  583  584  585  586  587  588  589  590  591  592  593  594  595  596  597  598  599  600  601  602  603  604  605  606  607  608  609  610  611  612  613  614  615  616  617  618  619  620  621  622  623  624  625  626  627  628  629  630  631  632  633  634  635  636  637  638  639  640  641  642  643  644  645  646  647  648  649  650  651  652  653  654  655  656  657  658  659  660  661  662  663  664  665  666  667  668  669  670  671  672  673  674  675  676  677  678  679  680  681  682  683  684  685  686  687  688  689  690  691  692  693  694  695  696  697  698  699  700  701  702  703  704  705  706  707  708  709  710  711  712  713  714  715  716  717  718  719  720  721  722  723  724  725  726  727  728  729  730  731  732  733  734  735  736  737  738  739  740  741  742  743  744  745  746  747  748  749  750  751  752  753  754  755  756  757  758  759  760  761  762  763  764  765  766  767  768  769  770  771  772  773  774  775  776  777  778  779  780  781  782  783  784  785  786  787  788  789  790  791  792  793  794  795  796  797  798  799  800  801  802  803  804  805  806  807  808  809  810  811  812  813  814  815  816  817  818  819  820  821  
+successfully sorted 821 lines
+analyse variable dependency in derivative - post sort 
+*** illegal uninitialised variables : ResidMamMilk GrowthPerDay 
+*** illegally updated variables : FdDmIn RumDM SolDM WtConcAgeFactor BcsTarget InMilk MilkSolids270MfAdjusted MilkingFrequency TVolMilk MamMilk RequiredEnergy 
+post-sort collapse
+analyse variable dependency in derivative - all csl 
+Molly.csl 684 : assignment to state variable in initial 
+Molly.csl 688 : assignment to rate variable in initial 
+FdRat_Init.csl 8 : assignment to state variable in initial 
+Fdrat_deriv_basic.csl 16 : use of state variable in initial 
+Fdrat_deriv_basic.csl 19 : use of state variable in initial 
+Fdrat_deriv_basic.csl 22 : use of state variable in initial 
+Fdrat_deriv_basic.csl 39 : use of state variable in initial 
+FdRat_deriv.csl 9 : assignment to rate variable in initial 
+FdRat_deriv.csl 11 : assignment to rate variable in initial 
+FdRat_Init.csl 14 : assignment to state variable in initial 
+Fdrat_deriv_basic.csl 16 : use of state variable in initial 
+Fdrat_deriv_basic.csl 19 : use of state variable in initial 
+Fdrat_deriv_basic.csl 22 : use of state variable in initial 
+Fdrat_deriv_basic.csl 39 : use of state variable in initial 
+FdRat_deriv.csl 9 : assignment to rate variable in initial 
+FdRat_deriv.csl 11 : assignment to rate variable in initial 
+FdRat_Init.csl 20 : assignment to state variable in initial 
+Fdrat_deriv_basic.csl 16 : use of state variable in initial 
+Fdrat_deriv_basic.csl 19 : use of state variable in initial 
+Fdrat_deriv_basic.csl 22 : use of state variable in initial 
+Fdrat_deriv_basic.csl 39 : use of state variable in initial 
+FdRat_deriv.csl 9 : assignment to rate variable in initial 
+FdRat_deriv.csl 11 : assignment to rate variable in initial 
+FdRat_Init.csl 26 : assignment to state variable in initial 
+Fdrat_deriv_basic.csl 16 : use of state variable in initial 
+Fdrat_deriv_basic.csl 19 : use of state variable in initial 
+Fdrat_deriv_basic.csl 22 : use of state variable in initial 
+Fdrat_deriv_basic.csl 39 : use of state variable in initial 
+FdRat_deriv.csl 9 : assignment to rate variable in initial 
+FdRat_deriv.csl 11 : assignment to rate variable in initial 
+FdRat_Init.csl 31 : assignment to rate variable in initial 
+FdRat_Init.csl 32 : use of state variable in initial 
+Molly.csl 892 : assignment to state variable in initial 
+MamCells_init.csl 2 : assignment to state variable in initial 
+MamCells_init.csl 3 : assignment to rate variable in initial 
+MamCells_init.csl 10 : assignment to rate variable in initial 
+MamCells_init.csl 13 : assignment to rate variable in initial 
+MamCells_init.csl 14 : assignment to state variable in initial 
+MamCells_init.csl 15 : assignment to rate variable in initial 
+MamCells_init.csl 18 : assignment to state variable in initial 
+Molly.csl 1098 : use of state variable in initial 
+*** global uninitialised variables : Am AtAdh1 BW1 dHiM4 dMaint dOx EBW1 fAcFd fBuFd FCM4z1 fLaFd fOaFd fPeFd fTm1 GlTO LastEA LastEv LastSu LastSw MamMilk ME1 MilkSolids270MfAdjusted ResidMamMilk rtFa1 rtPO Sunrise Sunset TMilkLmYest TMilkPmYest TMilkTmYest 
+making cpp code 
+delay post processing : FALSE 
+n state : 66 
+n pullable : 1834 
+n pushable : 1781 
+header comments : 607 
+declaration lines : 1601 
+initial calculations lines : 1169 
+event lines : 59 
+calculate rate lines : 2675 
+post processing dynamic lines : 52 
+total lines : 10444 
+writing cpp code 

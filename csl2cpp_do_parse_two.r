@@ -13,7 +13,7 @@
 temp_file <- paste(output_dir, "checkpoint_after_parse_one.RData", sep="/")
 load(file=temp_file) # recover progress
 
-cat(file=stderr(), "translating declarations, initialisation, calculation", "\n")
+cat("translating declarations, initialisation, calculation", "\n")
 
 source("csl2cpp_parse.r") # load functions
 
@@ -102,7 +102,7 @@ for (i in 1:nrow(csl)){
 
   # report progress
   if ((i %% 200 == 1 || i == nrow(csl)) && !silent){
-    cat(file=stderr(), "line", i, "of", nrow(csl), "\n")
+    cat("line", i, "of", nrow(csl), "\n")
   }
 
   ##### identify major section ####

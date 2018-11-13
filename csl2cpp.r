@@ -19,7 +19,7 @@ model_name <- "spring"
 
 input_dir <- "molly"
 csl_file <- "../Molly.csl"
-csl_file <- "Molly3.csl"
+# csl_file <- "Molly3.csl"
 # m_files <- c("Params 2014.m")
 output_dir <- "molly"
 model_name <- "molly"
@@ -98,4 +98,5 @@ write_cpp(cpp, output_dir, model_name, "h")
 while (sink.number()>0) {
   sink()
 }
+cat("finished\n")
 
