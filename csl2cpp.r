@@ -8,7 +8,7 @@
 library(tidyverse)
 
 # options
-log_file <- FALSE
+log_file <- TRUE
 m_files <- c()
 
 # specify project
@@ -17,11 +17,13 @@ csl_file <- "Spring.csl"
 output_dir <- "spring"
 model_name <- "spring"
 
-input_dir <- "molly"
+# input_dir <- "molly"
+input_dir <- "I:/Molly/Molly 895/Molly DNZ"
 csl_file <- "../Molly.csl"
 # csl_file <- "Molly3.csl"
-# m_files <- c("Params 2014.m")
-output_dir <- "molly"
+# m_files <- c("Params 2014.m") # optional
+# output_dir <- "molly"
+output_dir <- "molly895"
 model_name <- "molly"
 
 # input_dir <- "mindy"
@@ -29,11 +31,11 @@ model_name <- "molly"
 # output_dir <- "mindy"
 # model_name <- "molly"
 
-# input_dir <- "mdh"
-# csl_file <- "Molly5yTest.csl"
-# m_files <- c("Molly5z.m")
-# output_dir <- "mdh"
-# model_name <- "molly"
+input_dir <- "mdh"
+csl_file <- "Molly5yTest.csl"
+m_files <- c("Molly5z.m") # needed
+output_dir <- "mdh"
+model_name <- "molly"
 
 # log file on
 while (sink.number()>0) {

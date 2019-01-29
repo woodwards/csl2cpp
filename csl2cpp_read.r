@@ -6,9 +6,9 @@ read_csl <- function(input_dir, csl_file, m_files=""){
   drop_comments <- FALSE
   ignore_path <- FALSE
   cat(paste("base directory", input_dir), "\n")
-  cat(paste("reading csl file", csl_file), "\n")
   cat(paste("drop_comments", drop_comments), "\n")
   cat(paste("ignore_path", ignore_path), "\n")
+  cat(paste("reading csl file", csl_file), "\n")
 
   # set working directory
   original_dir <- getwd()

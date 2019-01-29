@@ -58,7 +58,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
   cat("n pushable :", n_pushable, "\n")
 
 	# uninitialised variables after sort
-	assumed_all <- tokens$name[tokens$set_status=="assumed"]
+	assumed_all <- tokens$name[tokens$set_status=="assumed" & tokens$decl_type %in% c("double", "int", "bool")]
 
 	# browser( )
 
@@ -283,7 +283,8 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	# uninitialised variables
 	if (length(assumed_all)>0 & TRUE){
   	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables"))
-  	lines <- paste(assumed_all, "= 0;") # using 1 might avoid some div by zero and array access errors
+  	# lines <- paste(assumed_all, "= 5.5555e33;") # using 1 might avoid some div by zero and array access errors
+  	lines <- paste(assumed_all, "= 1;") # using 1 might avoid some div by zero and array access errors
   	cpp <- put_lines(cpp, 2, lines)
 	}
 	# model initialisation

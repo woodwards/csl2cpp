@@ -137,6 +137,7 @@ for (i in 1:nrow(csl)){
 
   #### mfile parsing ####
   # mfiles have different keywords, these may also be abbreviated
+  # ACSLX BUG if no keyword, variable names must be in caps, otherwise ignored
   # FIXME very rudimentary
   if (major_section == "mfile"){
     mfile_command <- str_match(parse_list[2], paste("^", runtime, sep=""))
@@ -157,6 +158,10 @@ for (i in 1:nrow(csl)){
         csl$line_type[i] <- "ignored"
         csl$tail[i] <- paste("//", csl$code[i], csl$tail[i]) # put original in tail
         csl$handled[i] <- TRUE
+      }
+    } else { # check valid assignment
+      if (parse_list[2]!=str_to_upper(parse_list[2])){ # variable names must be upper case (FIXME ACSLX BUG)
+        cat("non-upper-case token in mfile", parse_list[2], "\n")
       }
     }
   }
