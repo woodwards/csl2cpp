@@ -58,6 +58,8 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
                            "algorithm", "nsteps", "maxterval", "cinterval", "minterval",
                            "procedural", "integ", "intvc", "derivt"))
   rows <- which(active)
+  set_in_derivative <- NA
+  constant_in_derivative <- NA
   did_continue <- FALSE
   for (i in rows){
     this_set <- setdiff(comma_split(csl$set[i]), "")
@@ -73,6 +75,11 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
     if (any(is.na(token_set_line[c(state, slope)])) && !(csl$section[i] %in% c("header", "initial"))){
       token_set_status[c(state, slope)] <- "set"
       token_set_line[c(state, slope)] <- i
+    }
+    # set available variables at start of derivative
+    if (is.na(constant_in_derivative) && csl$section[i] %in% c("derivative")){
+      set_in_derivative <- c("procedural")
+      constant_in_derivative <- c("procedural")
     }
     # handle continuations
     if (did_continue){ # accumulate variable lists
@@ -106,6 +113,21 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
       if (any(used %in% c(state)) && !(csl$section[i] %in% c("dynamic", "discrete", "derivative")) && !silent){
         cat(paste(csl$file_name[i], csl$line_number[i], ": use of state variable in", csl$section[i], "\n"))
       }
+      if (csl$section[i] == "derivative"){ # check for illegally updated variables
+        if (any(used>"")){
+          bad <- !(used %in% set_in_derivative) # used without being set first (ok but can't be changed)
+          constant_in_derivative <- c(constant_in_derivative, used[bad])
+        }
+        if (any(set>"")){
+          bad <- set %in% constant_in_derivative
+          if (any(bad) && !silent){
+            cat(paste(csl$file_name[i], csl$line_number[i], ": illegally updated variables in", csl$section[i], ":", set[bad], "\n"))
+          }
+          if (any(!bad)){
+            set_in_derivative <- c(set_in_derivative, set[!bad])
+          }
+        }
+      }
       if (any(set>"") && !any(used>"")){ # set only (e.g. initialisation with constant)
         if (csl$section[i] != "discrete"){ # assume discrete sections do not set anything
           bad <- token_set_status[set] == "uninit"
@@ -114,11 +136,17 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
         }
       } else if (!any(set>"") && any(used>"")){ # used only (e.g. ifgoto, schedule)
         bad <- token_set_status[used] == "uninit"
+        if (any(bad) && !silent){
+          cat(paste(csl$file_name[i], csl$line_number[i], ": use of uninitialised variable in", csl$section[i], ":", used[bad], "\n"))
+        }
         token_set_status[used[bad]] <- "assumed"
         token_set_line[used[bad]] <- i
         csl$assumed[i] <- paste_sort(used[bad])
       } else if (any(set>"") && any(used>"")){ # both set and used (e.g. assignment)
         bad <- token_set_status[used] == "uninit"
+        if (any(bad) && !silent){
+          cat(paste(csl$file_name[i], csl$line_number[i], ": use of uninitialised variable in", csl$section[i], ":", used[bad], "\n"))
+        }
         token_set_status[used[bad]] <- "assumed"
         token_set_line[used[bad]] <- i
         csl$assumed[i] <- paste_sort(used[bad])

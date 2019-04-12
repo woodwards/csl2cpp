@@ -1342,7 +1342,7 @@ token_decl_line["t"] <- 1
 if (!is.na(token_list["procedural"])){
   token_decl_line["procedural"] <- 1
 }
-tokens <- data_frame(
+tokens <- tibble(
   name=token_list,
   lower=names(token_list),
   decl_line=token_decl_line,

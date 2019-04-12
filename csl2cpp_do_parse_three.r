@@ -105,26 +105,26 @@ while (length(sortable)>0){
 
   # provide index to allow easier sorting
   i <- base_i
-  index <- data_frame(line = i,
-                      file_name = csl$file_name[i],
-                      line_number = csl$line_number[i],
-                      block = csl$block[i],
-                      begin = i,
-                      end = i,
-                      code = csl$calc[i], # only works on derivative code!
-                      line_type = csl$line_type[i],
-                      sort = TRUE,
-                      set = csl$set[i], # outputs
-                      set_hid = "",
-                      used = csl$used[i], # inputs
-                      used_hid = "",
-                      cont = csl$cont[i], # continuation
-                      unset = "", # unsorted
-                      unsetline = "", # where unset is last set
-                      assumed = "",
-                      newline = "",
-                      saved = 0,
-                      dep = "" # equation dependency
+  index <- tibble(line = i,
+				  file_name = csl$file_name[i],
+				  line_number = csl$line_number[i],
+				  block = csl$block[i],
+				  begin = i,
+				  end = i,
+				  code = csl$calc[i], # only works on derivative code!
+				  line_type = csl$line_type[i],
+				  sort = TRUE,
+				  set = csl$set[i], # outputs
+				  set_hid = "",
+				  used = csl$used[i], # inputs
+				  used_hid = "",
+				  cont = csl$cont[i], # continuation
+				  unset = "", # unsorted
+				  unsetline = "", # where unset is last set
+				  assumed = "",
+				  newline = "",
+				  saved = 0,
+				  dep = "" # equation dependency
   )
 
   # these lines have no effect on sorting of code (at most they effect decl and init)
@@ -215,13 +215,13 @@ while (length(sortable)>0){
         if (index$line_type[i] %in% inactive) {
           index$dep[i] <- "inactive"
         } else { # is a known variable getting set?
-          set <- comma_split(paste_sort(c(index$set[i], index$set_hid[i])))
+          set <- comma_split(paste_sort(c(index$set[i])))
           set_types <- var_dep[set]
           if (any(set_types %in% c("state", "t"))){
             stop(paste(index$file_name[i], index$line_number[i], "ff : illegally set state variable or t\n"))
           } else if (any(set_types %in% c("rate", "for_rate"))){
             index$dep[i] <- "for_rate"
-            used <- comma_split(paste_sort(c(index$used[i], index$used_hid[i])))
+            used <- comma_split(paste_sort(c(index$used[i])))
             used_types <- var_dep[used]
             if (any(is.na(used_types))){
               var_dep[used[is.na(used_types)]] <- "for_rate" # new var
@@ -373,78 +373,78 @@ while (length(sortable)>0){
   }
 
   #### simon's sorting algorithm ####
-  if (sorting_method=="simon"){
-
-    # loop until no jumps left
-    cat("sort using simon's method\n")
-    jump_to <- "1"
-    pass <- 0
-    while(any(jump_to>"")){
-
-      if (TRUE){
-
-        # count passes
-        pass <- pass + 1
-        for_rate <- which(index$dep == "for_rate" & index$sort)
-        index$unset <- ""
-        index$unsetline <- ""
-
-        # locate lines where variables are set
-        var_set_all <- c() # set so far (excluding those which are not used in derivative)
-        for (i in for_rate){
-          # record any set that will be used
-          if (index$set[i]>""){
-            set <- index$set[i]
-            set <- comma_split(set)
-            set <- setdiff(set, set_but_not_used)
-            var_set_all[set] <- index$line[i]
-          }
-        }
-        # find unset variables
-        var_set <- c()
-        for (i in for_rate){
-          # record any set that will be used
-          if (index$set[i]>""){
-            set <- index$set[i]
-            set <- comma_split(set)
-            set <- setdiff(set, set_but_not_used)
-            var_set[set] <- index$line[i]
-          }
-          # record any used but not yet set
-          if (index$used[i]>""){
-            used <- index$used[i]
-            used <- comma_split(used)
-            used <- setdiff(used, used_but_not_set)
-            used <- setdiff(used, names(var_set)) # set so far
-            if (length(used)>0){ # record any used but currently unset
-              index$unset[i] <- paste_sort(used)
-              index$unsetline[i] <- paste(var_set_all[used], collapse=",") # line number where last set
-            }
-          }
-        }
-
-        # sort
-        index$newline <- 1:nrow(index)
-        jump_list <- str_split(index$unsetline, ",") # returns matrix of strings
-        jump_to <- unlist(lapply(jump_list, function(x) max(unlist(x)))) # jump for each line
-        jump_line <- jump_to > ""
-        jump_i <- match( as.integer(jump_to) , index$line ) + runif(nrow(index)) # avoid identical
-        cat("sorting pass", pass, ":" , sum(jump_line), "jumps remaining\n")
-
-      }
-
-      if (any(jump_line)){
-
-        j <- which(jump_line) # all lines
-        # j <- head(which(jump_line), 1) # choose jumps
-        index$newline[j] <- jump_i[j]
-        index <- arrange(index, newline)
-
-      }
-
-    }
-
-  } # end of simon's method
+  # if (sorting_method=="simon"){
+  #
+  #   # loop until no jumps left
+  #   cat("sort using simon's method\n")
+  #   jump_to <- "1"
+  #   pass <- 0
+  #   while(any(jump_to>"")){
+  #
+  #     if (TRUE){
+  #
+  #       # count passes
+  #       pass <- pass + 1
+  #       for_rate <- which(index$dep == "for_rate" & index$sort)
+  #       index$unset <- ""
+  #       index$unsetline <- ""
+  #
+  #       # locate lines where variables are set
+  #       var_set_all <- c() # set so far (excluding those which are not used in derivative)
+  #       for (i in for_rate){
+  #         # record any set that will be used
+  #         if (index$set[i]>""){
+  #           set <- index$set[i]
+  #           set <- comma_split(set)
+  #           set <- setdiff(set, set_but_not_used)
+  #           var_set_all[set] <- index$line[i]
+  #         }
+  #       }
+  #       # find unset variables
+  #       var_set <- c()
+  #       for (i in for_rate){
+  #         # record any set that will be used
+  #         if (index$set[i]>""){
+  #           set <- index$set[i]
+  #           set <- comma_split(set)
+  #           set <- setdiff(set, set_but_not_used)
+  #           var_set[set] <- index$line[i]
+  #         }
+  #         # record any used but not yet set
+  #         if (index$used[i]>""){
+  #           used <- index$used[i]
+  #           used <- comma_split(used)
+  #           used <- setdiff(used, used_but_not_set)
+  #           used <- setdiff(used, names(var_set)) # set so far
+  #           if (length(used)>0){ # record any used but currently unset
+  #             index$unset[i] <- paste_sort(used)
+  #             index$unsetline[i] <- paste(var_set_all[used], collapse=",") # line number where last set
+  #           }
+  #         }
+  #       }
+  #
+  #       # sort
+  #       index$newline <- 1:nrow(index)
+  #       jump_list <- str_split(index$unsetline, ",") # returns matrix of strings
+  #       jump_to <- unlist(lapply(jump_list, function(x) max(unlist(x)))) # jump for each line
+  #       jump_line <- jump_to > ""
+  #       jump_i <- match( as.integer(jump_to) , index$line ) + runif(nrow(index)) # avoid identical
+  #       cat("sorting pass", pass, ":" , sum(jump_line), "jumps remaining\n")
+  #
+  #     }
+  #
+  #     if (any(jump_line)){
+  #
+  #       j <- which(jump_line) # all lines
+  #       # j <- head(which(jump_line), 1) # choose jumps
+  #       index$newline[j] <- jump_i[j]
+  #       index <- arrange(index, newline)
+  #
+  #     }
+  #
+  #   }
+  #
+  # } # end of simon's method
 
   #### acslx sorting method ####
   if (sorting_method=="acslx"){
@@ -535,36 +535,37 @@ while (length(sortable)>0){
   } # end of ACSLX method
 
   #### analyse variable dependency in derivative ####
-  cat("analyse variable dependency in derivative - post sort", "\n")
-  tokens <- csl_dependence(csl, tokens, silent=TRUE)
-  used_here <- setdiff(unique(unlist(str_split(index$used[index$sort], ","))), "")
-  set_here <- setdiff(unique(unlist(str_split(index$set[index$sort], ","))), "")
-  set_but_not_used <- setdiff(set_here, c(used_here, rate, slopeof))
-  available_here <- tokens$name[tokens$set_line<min(base_i)]
-  available_here <- setdiff(available_here, c(rate, slopeof)) # rate and slopeof should be calculated (usually, they could be constant)
-  assumed_here <- setdiff(c(used_here, rate, slopeof) , c(available_here, state, set_here, "t"))
-  if (length(assumed_here)>0){
-    message <- paste("*** illegal uninitialised variables :", paste(assumed_here, collapse=" "))
-    cat(message, "\n")
-  }
-  used_but_not_set <- setdiff(c(used_here, rate, slopeof), c(set_here, available_here, assumed_here, state, "t"))
-
-  # try to find variables that are used before they are set in derivative section (this is illegal)
-  if (base_type=="derivative"){
-    both_here <- intersect(set_here, used_here)
-    illegal <- c()
-    for (j in both_here){
-      set_line <- which(str_detect(index$set, paste("(?<![[:alnum:]_])", j, "(?![[:alnum:]_])", sep="")))
-      used_line <- which(str_detect(index$used, paste("(?<![[:alnum:]_])", j, "(?![[:alnum:]_])", sep="")))
-      if (used_line[[1]]<=set_line[[1]]){
-        illegal <- c(illegal, j)
-      }
-    }
-    if (length(illegal)>0){
-      message <- paste("*** illegally updated variables :", paste(illegal, collapse=" "))
-      cat(message, "\n")
-    }
-  }
+  # (FIXME should include set_hid and used_hid)
+  # cat("analyse variable dependency in derivative - post sort", "\n")
+  # tokens <- csl_dependence(csl, tokens, silent=TRUE)
+  # used_here <- setdiff(unique(unlist(str_split(index$used[index$sort], ","))), "")
+  # set_here <- setdiff(unique(unlist(str_split(index$set[index$sort], ","))), "")
+  # set_but_not_used <- setdiff(set_here, c(used_here, rate, slopeof))
+  # available_here <- tokens$name[tokens$set_line<min(base_i)]
+  # available_here <- setdiff(available_here, c(rate, slopeof)) # rate and slopeof should be calculated (usually, they could be constant)
+  # assumed_here <- setdiff(c(used_here, rate, slopeof) , c(available_here, state, set_here, "t"))
+  # if (length(assumed_here)>0){
+  #   message <- paste("*** illegal uninitialised variables :", paste(assumed_here, collapse=" "))
+  #   cat(message, "\n")
+  # }
+  # used_but_not_set <- setdiff(c(used_here, rate, slopeof), c(set_here, available_here, assumed_here, state, "t"))
+  #
+  # # try to find variables that are used before they are set in derivative section (this is illegal)
+  # if (base_type=="derivative"){
+  #   both_here <- intersect(set_here, used_here)
+  #   illegal <- c()
+  #   for (j in both_here){
+  #     set_line <- which(str_detect(index$set, paste("(?<![[:alnum:]_])", j, "(?![[:alnum:]_])", sep="")))
+  #     used_line <- which(str_detect(index$used, paste("(?<![[:alnum:]_])", j, "(?![[:alnum:]_])", sep="")))
+  #     if (used_line[[1]]<=set_line[[1]]){
+  #       illegal <- c(illegal, j)
+  #     }
+  #   }
+  #   if (length(illegal)>0){
+  #     message <- paste("*** illegally updated variables :", paste(illegal, collapse=" "))
+  #     cat(message, "\n")
+  #   }
+  # }
 
   #### post-sort collapse ####
   cat("post-sort collapse\n")

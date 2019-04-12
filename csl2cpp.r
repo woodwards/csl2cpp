@@ -18,12 +18,12 @@ output_dir <- "spring"
 model_name <- "spring"
 
 # input_dir <- "molly"
-input_dir <- "I:/Molly/Molly 895/Molly DNZ"
+input_dir <- "I:/Molly/Molly 900/Molly DNZ"
 csl_file <- "../Molly.csl"
 # csl_file <- "Molly3.csl"
 # m_files <- c("Params 2014.m") # optional
 # output_dir <- "molly"
-output_dir <- "molly895"
+output_dir <- "molly900"
 model_name <- "molly"
 
 # input_dir <- "mindy"
@@ -31,11 +31,11 @@ model_name <- "molly"
 # output_dir <- "mindy"
 # model_name <- "molly"
 
-input_dir <- "mdh"
-csl_file <- "Molly5yTest.csl"
-m_files <- c("Molly5z.m") # needed
-output_dir <- "mdh"
-model_name <- "molly"
+# input_dir <- "mdh"
+# csl_file <- "Molly5yTest.csl"
+# m_files <- c("Molly5z.m") # needed
+# output_dir <- "mdh"
+# model_name <- "molly"
 
 # log file on
 while (sink.number()>0) {
@@ -91,7 +91,7 @@ load(temp_file)
 cat("making cpp code", "\n")
 source("csl2cpp_make.r") # load functions
 cpp <- make_cpp(csl, tokens, model_name, delay_post=FALSE)
-cpp_df <- as_data_frame(cpp)
+cpp_df <- as_tibble(cpp)
 cat("writing cpp code", "\n")
 source("csl2cpp_write.r") # load functions
 write_cpp(cpp, output_dir, model_name, "h")
