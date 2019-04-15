@@ -99,19 +99,23 @@ csl_dependence <- function(csl, tokens, silent=TRUE){
         stop(paste(csl$file_name[i], csl$line_number[i], ": assignment to t in", csl$section[i], "\n"))
       }
       if (any(set %in% c(state)) && !silent){
-        cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to state variable in", csl$section[i], "\n"))
+        bad <- set %in% c(state)
+        cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to state variable in", csl$section[i], ":", set[bad], "\n"))
       }
       if (any(set %in% c(slope)) && !silent){
-        cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to slope variable in", csl$section[i], "\n"))
+        bad <- set %in% c(slope)
+        cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to slope variable in", csl$section[i], ":", set[bad], "\n"))
       }
       if (any(set %in% c(rate)) && csl$section[i] != "derivative" && !silent){
-        cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to rate variable in", csl$section[i], "\n"))
+        bad <- set %in% c(rate)
+        cat(paste(csl$file_name[i], csl$line_number[i], ": assignment to rate variable in", csl$section[i], ":", set[bad], "\n"))
       }
       if (any(used %in% c("t")) && !(csl$section[i] %in% c("dynamic", "discrete", "derivative"))){
         cat(paste(csl$file_name[i], csl$line_number[i], ": use of t in", csl$section[i], "\n"))
       }
       if (any(used %in% c(state)) && !(csl$section[i] %in% c("dynamic", "discrete", "derivative")) && !silent){
-        cat(paste(csl$file_name[i], csl$line_number[i], ": use of state variable in", csl$section[i], "\n"))
+        bad <- used %in% c(state)
+        cat(paste(csl$file_name[i], csl$line_number[i], ": use of state variable in", csl$section[i], ":", used[bad], "\n"))
       }
       if (csl$section[i] == "derivative"){ # check for illegally updated variables
         if (any(used>"")){

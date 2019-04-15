@@ -19,6 +19,7 @@ model_name <- "spring"
 
 # input_dir <- "molly"
 input_dir <- "I:/Molly/Molly 900/Molly DNZ"
+# input_dir <- "I:/Simon/Projects/Molly_Translation/Molly 900s/Molly DNZ"
 csl_file <- "../Molly.csl"
 # csl_file <- "Molly3.csl"
 # m_files <- c("Params 2014.m") # optional
@@ -91,7 +92,7 @@ load(temp_file)
 cat("making cpp code", "\n")
 source("csl2cpp_make.r") # load functions
 cpp <- make_cpp(csl, tokens, model_name, delay_post=FALSE)
-cpp_df <- as_tibble(cpp)
+cpp_df <- enframe(cpp, name=NULL)
 cat("writing cpp code", "\n")
 source("csl2cpp_write.r") # load functions
 write_cpp(cpp, output_dir, model_name, "h")

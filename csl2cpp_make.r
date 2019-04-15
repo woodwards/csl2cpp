@@ -123,8 +123,9 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	           "}",
 	           "",
 	           "// declare boost::odeint stepper",
-             "typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;",
-             "stepper_type stepper;",
+	           "typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;",
+	           "// typedef boost::numeric::odeint::runge_kutta_dopri5< state_type > stepper_type;",
+	           "stepper_type stepper;",
 	           "")
 	cpp <- put_lines(cpp, 1, lines)
 
@@ -283,8 +284,9 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	# uninitialised variables
 	if (length(assumed_all)>0 & TRUE){
   	cpp <- put_lines(cpp, 2, c("", "// initialise illegally used variables"))
-  	# lines <- paste(assumed_all, "= 5.5555e33;") # using 1 might avoid some div by zero and array access errors
-  	lines <- paste(assumed_all, "= 1;") # using 1 might avoid some div by zero and array access errors
+  	lines <- paste(assumed_all, "= 5.5555e33;") # using 1 might avoid some div by zero and array access errors
+  	# lines <- paste(assumed_all, "= 0;") # using 1 might avoid some div by zero and array access errors
+  	# lines <- paste(assumed_all, "= 1;") # using 1 might avoid some div by zero and array access errors
   	cpp <- put_lines(cpp, 2, lines)
 	}
 	# model initialisation
@@ -533,6 +535,7 @@ make_cpp <- function(csl, tokens, model_name, delay_post=FALSE){
 	           "odeint_time = t;",
 	           "// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class",
 	           "nsteps = boost::numeric::odeint::integrate_const( stepper , std::ref(*this) , odeint_state, odeint_time , next_time , time_step , std::ref(*this) );",
+	           "//nsteps = boost::numeric::odeint::integrate_const( make_controlled( 1e-6, 1e-6, stepper_type()) , std::ref(*this) , odeint_state, odeint_time , next_time , time_step , std::ref(*this) );",
 	           "set_state( odeint_state );",
 	           "t = next_time;", "",
 	           "return( nsteps );", "")

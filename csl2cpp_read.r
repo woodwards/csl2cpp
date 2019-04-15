@@ -23,7 +23,7 @@ read_csl <- function(input_dir, csl_file, m_files=""){
   # csl <- read_lines(file_path) %>%
   csl <- read_lines(csl_file) %>%
     iconv(to="ASCII//TRANSLIT") %>% # remove accents
-    as_tibble() %>%
+    enframe(name=NULL) %>%
     rename(code=value) %>%
     mutate(seq_number=as.double(seq(n())),
            line_number=as.double(seq(n())),
@@ -45,7 +45,7 @@ read_csl <- function(input_dir, csl_file, m_files=""){
     # cat(file_name, "\n")
     include_csl <- read_lines(file_path) %>%
       iconv(to="ASCII//TRANSLIT") %>% # remove accents
-      as_tibble() %>%
+      enframe(name=NULL) %>%
       rename(code=value) %>%
       mutate(seq_number=first + as.double(seq(n()) + 1) / (n() + 3) * (last - first),
              line_number=as.double(seq(n())),
@@ -94,7 +94,7 @@ read_csl <- function(input_dir, csl_file, m_files=""){
     # include_mfile <- read_lines(file_path) %>%
     include_mfile <- read_lines(file_name) %>%
       iconv(to="ASCII//TRANSLIT") %>% # remove accents
-      as_tibble() %>%
+      enframe(name=NULL) %>%
       rename(code=value)
     include_mfile <- rbind(tibble(code=paste("MFILE !", file_name)),
                            include_mfile,
