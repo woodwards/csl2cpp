@@ -42,6 +42,7 @@ private:
 	
 	// declare boost::odeint stepper
 	typedef boost::numeric::odeint::runge_kutta4< state_type > stepper_type;
+	// typedef boost::numeric::odeint::runge_kutta_dopri5< state_type > stepper_type;
 	stepper_type stepper;
 	
 	// declare model variables
@@ -271,6 +272,7 @@ public:
 		odeint_time = t;
 		// https://stackoverflow.com/questions/10976078/using-boostnumericodeint-inside-the-class
 		nsteps = boost::numeric::odeint::integrate_const( stepper , std::ref(*this) , odeint_state, odeint_time , next_time , time_step , std::ref(*this) );
+		//nsteps = boost::numeric::odeint::integrate_const( make_controlled( 1e-6, 1e-6, stepper_type()) , std::ref(*this) , odeint_state, odeint_time , next_time , time_step , std::ref(*this) );
 		set_state( odeint_state );
 		t = next_time;
 		

@@ -318,6 +318,6 @@ tokens <- data.frame(name = token, line = token_line, stringsAsFactors = FALSE) 
   )
 
 # save progress
-rm(list=setdiff(ls(), c("csl", "tokens", "output_dir", "model_name", "silent", lsf.str())))
+rm(list=setdiff(ls(), c("csl", "csl_file", "tokens", "output_dir", "model_name", "silent", lsf.str())))
 temp_file <- paste(output_dir, "checkpoint_after_parse_one.RData", sep="/")
 save.image(temp_file)

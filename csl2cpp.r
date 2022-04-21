@@ -8,7 +8,7 @@
 library(tidyverse)
 
 # options
-log_file <- TRUE
+log_file <- FALSE # log to console or log.txt file?
 m_files <- c()
 
 # specify project
@@ -18,14 +18,14 @@ output_dir <- "spring"
 model_name <- "spring"
 
 # input_dir <- "molly"
-input_dir <- "I:/Molly/Molly 900/Molly DNZ"
-# input_dir <- "I:/Simon/Projects/Molly_Translation/Molly 900s/Molly DNZ"
-csl_file <- "../Molly.csl"
-# csl_file <- "Molly3.csl"
-# m_files <- c("Params 2014.m") # optional
-# output_dir <- "molly"
-output_dir <- "molly900"
-model_name <- "molly"
+# input_dir <- "I:/Molly/Molly 910/Molly DNZ"
+# # input_dir <- "I:/Simon/Projects/Molly_Translation/Molly 900s/Molly DNZ"
+# csl_file <- "../Molly.csl"
+# # csl_file <- "Molly3.csl"
+# # m_files <- c("Molly6a.m") # optional
+# # output_dir <- "molly"
+# output_dir <- "molly910"
+# model_name <- "molly"
 
 # input_dir <- "mindy"
 # csl_file <- "../Molly.csl"
@@ -73,12 +73,12 @@ cat("parsing code", "\n")
 # separate code into tokens
 source("csl2cpp_do_parse_one.r")
 # plot code for fun!
-# y <- 1:nrow(csl)
-# plot1 <- ggplot() +
-#   labs(title=csl_file, x="Width", y="Line Number") +
-#   geom_segment(data=csl, mapping=aes(x=indent, xend=indent+length, y=y, yend=y, colour=file_name)) +
-#   scale_y_reverse()
-# print(plot1)
+ y <- 1:nrow(csl)
+ plot1 <- ggplot() +
+   labs(title=csl_file, x="Width", y="Line Number") +
+   geom_segment(data=csl, mapping=aes(x=indent, xend=indent+length, y=y, yend=y, colour=file_name)) +
+   scale_y_reverse()
+ print(plot1)
 
 # translate to C++
 source("csl2cpp_do_parse_two.r")
