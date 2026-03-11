@@ -1,0 +1,30 @@
+Known bugs in Molly.csl
+Simon Woodward, DairyNZ 2018
+
+- missing comma and continuation in the following lines
+
+CONSTANT CsMiG1=6.1555,AmMiG1=7.3555,HyMiG1=2.7555,CdMiG1=0.5555
+         FlMiG=0.2555
+
+CONSTANT CsMiG2=2.1555,AmMiG2=1.1555,AaMiG2=4.9555,HyMiG2=-0.4555
+         CdMiG2=-0.05
+
+CONSTANT MiLiFa=1.2,MiLiBu=0.5,MiLiPr=1.0,MiLiCh=0.8,MiLiGl=0.5
+         MwtMiLi=0.6555
+
+- TMilkLmYest, TMilkPmYest, TMilkTmYest are used before they are set/initialised
+
+- procedural declarations do not always match variable use, this assists with sorting but could cause instability
+
+- fBinFd is modified in a procedural in the derivative section in 'Mindy_Dynamic.csl' and then used in another procedural in 'Molly.csl'  where it has not been declared. This would cause a problem as the compiler would not know to sort these lines correctly.
+
+- a procedural from Molly_ProximateExpand_Conversion.csl in the INITIAL section has the following line but some of these variables have not been initialized
+
+PartFd=fPiFd+fPsFd+fNnFd+fUrFd+fAcFd+fLaFd+fBuFd+fPeFd+fOaFd+ &
+               fHcFd+fCeFd+fLgFd+fLiFd+fFatFd+fAsFd+fAiFd
+
+- quite a few equations have divide by zero error intially.
+
+- missing bracket in MamCells BEFORE.csl and MamCells_deriv.csl
+
+DailyMfDiff              = MAX(0, (2 - MilkingFrequency)* InMilk
